@@ -1,3 +1,8 @@
-<div class="container">
-  <h1>Home</h1>
-</div>
+<app-page-toolbar [title]="title$ | async">
+
+</app-page-toolbar>
+<app-page-container>
+  <mat-card>
+    <h1>Home</h1>
+  </mat-card>
+</app-page-container>

@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-
 import {
   MatInputModule,
   MatCardModule,
@@ -10,36 +9,28 @@ import {
   MatToolbarModule,
   MatProgressSpinnerModule,
   MatTableModule,
-  MatSnackBarModule
+  MatSnackBarModule,
+  MatTooltipModule
 } from '@angular/material';
-import {CdkTableModule} from '@angular/cdk/table';
+import { CdkTableModule } from '@angular/cdk/table';
+
+const MatModules = [
+  CdkTableModule,
+  MatInputModule,
+  MatCardModule,
+  MatButtonModule,
+  MatSidenavModule,
+  MatListModule,
+  MatIconModule,
+  MatToolbarModule,
+  MatProgressSpinnerModule,
+  MatTableModule,
+  MatSnackBarModule,
+  MatTooltipModule
+];
 
 @NgModule({
-  imports: [
-    CdkTableModule,
-    MatInputModule,
-    MatCardModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    MatSnackBarModule
-  ],
-  exports: [
-    CdkTableModule,
-    MatInputModule,
-    MatCardModule,
-    MatButtonModule,
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatProgressSpinnerModule,
-    MatTableModule,
-    MatSnackBarModule
-  ],
+  imports: MatModules,
+  exports: MatModules
 })
-export class MaterialModule {}
+export class MaterialModule { }

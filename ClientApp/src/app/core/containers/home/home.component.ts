@@ -11,13 +11,13 @@ import * as layoutActions from 'app/core/store/actions';
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-
+  title$: Observable<string>;
   constructor(private store: Store<fromRoot.State>) {
     this.store.dispatch(new layoutActions.SetTitle('App Home'));
   }
 
   ngOnInit() {
-
+    this.title$ = this.store.select(fromRoot.getTitle);
   }
 
 }

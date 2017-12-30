@@ -8,6 +8,7 @@ import { Subject } from 'rxjs/Subject';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
+import * as fromRoot from 'app/core/store/reducers';
 import * as fromForecasts from 'app/forecasts/store/reducers';
 import * as forecastsActions from 'app/forecasts/store/actions';
 import * as coreActions from 'app/core/store/actions';
@@ -22,6 +23,7 @@ export class FetchDataComponent implements OnInit, OnDestroy {
   searchQuery$: Observable<string>;
   loading$: Observable<boolean>;
   error$: Observable<HttpErrorResponse | any>;
+  title$: Observable<string>;
   dataSource: MatTableDataSource<WeatherForecast>;
 
   private ngUnsubscribe: Subject<boolean> = new Subject();
@@ -31,6 +33,7 @@ export class FetchDataComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.title$ = this.store.select(fromRoot.getTitle);
     this.forecasts$ = this.store.select(fromForecasts.getForecasts);
     this.searchQuery$ = this.store.select(fromForecasts.getQuery).pipe(take(1));
     this.loading$ = this.store.select(fromForecasts.getLoading);

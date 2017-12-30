@@ -13,12 +13,14 @@ import * as layoutActions from 'app/core/store/actions';
 })
 export class FeatureContainerComponent implements OnInit {
   count$: Observable<number>;
+  title$: Observable<string>;
   constructor(private store: Store<fromRoot.State>) {
     this.store.dispatch(new layoutActions.SetTitle('Lazy Loaded Feature'));
    }
 
   ngOnInit() {
     this.count$ = this.store.select(fromFeature.getCount);
+    this.title$ = this.store.select(fromRoot.getTitle);
   }
 
   incrementCount() {

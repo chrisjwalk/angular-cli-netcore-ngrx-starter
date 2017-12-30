@@ -9,8 +9,7 @@ mat-sidenav-container,
   font-family: 'Roboto', sans-serif;
 }
 
-.my-content {
-  .container {
-      padding: 8px;
-  }
+.flex-spacer {
+  display: flex;
+  flex: 1 1 0.0000001px;
 }

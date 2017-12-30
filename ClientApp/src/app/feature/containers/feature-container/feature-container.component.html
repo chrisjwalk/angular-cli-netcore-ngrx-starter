@@ -1,7 +1,8 @@
-<div class="container">
-  <app-big-button (click)="incrementCount()">
-    Increment!
+<app-page-toolbar [title]="title$ | async">
+  <app-page-toolbar-button (click)="incrementCount()" tooltip="Increment!">
     <mat-icon>add</mat-icon>
-  </app-big-button>
+  </app-page-toolbar-button>
+</app-page-toolbar>
+<app-page-container>
   <app-feature-component [count]="count$ | async"></app-feature-component>
-</div>
+</app-page-container>

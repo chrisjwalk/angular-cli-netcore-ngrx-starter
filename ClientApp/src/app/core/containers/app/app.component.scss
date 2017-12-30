@@ -1,10 +1,7 @@
 .mat-sidenav {
     width: 250px;
 }
-.flex-spacer {
-    display: flex;
-    flex: 1 1 0.0000001px;
-}
+
 a.title {
     color: rgba(0, 0, 0, 0.87);
     text-decoration: none;
@@ -13,26 +10,28 @@ a.title {
     padding-top: 56px;
 }
 .mat-toolbar {
-    position: fixed;
-    top: 0;
-    width: 100%;
-    z-index: 2020;
+    &.app-main-toolbar {
+        position: fixed;
+        top: 0;
+        width: 100%;
+        z-index: 2020;
+    }
     height: 56px;
     background: rgb(35,35,35);
     color: #fff;
-    &::after {
-        bottom: -5px;
-        box-shadow: inset 0px 4px 8px -3px rgba(17, 17, 17, .06);
-        content: "";
-        height: 5px;
-        left: 0px;
-        opacity: 1;
-        pointer-events: none;
-        position: absolute;
-        right: 0px;
-        transition: opacity 0.4s;
-        width: 100%;
-        will-change: opacity;
-        z-index: 2050;
+
+
+    .mat-icon-button {
+        margin: 0 8px;
+        &:first-child {
+            margin-left: 0;
+        }
+        &:last-child {
+            margin-right: 0;
+        }
     }
+}
+
+.app-sidebar-content {
+    padding: 8px;
 }
