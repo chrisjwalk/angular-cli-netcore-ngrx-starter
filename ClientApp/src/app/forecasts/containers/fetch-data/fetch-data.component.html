@@ -1,0 +1,10 @@
+<div class="container">
+  <h1>Weather forecast</h1>
+
+  <p>This component demonstrates fetching data from the server.</p>
+    <app-big-button (click)="getForecasts()">
+        Get Forecasts
+        <mat-icon>refresh</mat-icon>
+    </app-big-button>
+  <app-forecast-table [loading]="loading$ | async" [dataSource]="dataSource"></app-forecast-table>
+</div>
