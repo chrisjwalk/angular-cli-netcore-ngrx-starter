@@ -1,0 +1,21 @@
+{
+  "name": "angular-cli-netcore-ngrx-starter",
+  "version": "0.0.1",
+  "description": "A demo app using Angular CLI, Angular Material, NgRx platform, and .NET Core 2.0 + Optional SSR + Microsoft.AspNetCore.SpaServices.Extensions",
+  "main": "index.js",
+  "scripts": {
+    "start": "npm run dotnet:run",
+    "dotnet:run": "dotnet run --launch-profile AngularCliNetcoreNgrxStarter",
+    "dotnet:run:prod": "dotnet run --launch-profile AngularCliNetcoreNgrxStarterProduction"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter.git"
+  },
+  "author": "Christopher J. Walker - Fresh Pond Media, LLC.",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter/issues"
+  },
+  "homepage": "https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter#readme"
+}
