@@ -22,7 +22,7 @@ export class LayoutEffects {
   .pipe(
     map(action => action.payload),
     tap(title => {
-        this.titleService.setTitle(title);
+        this.titleService.setTitle(title + ' | Demo App');
     })
   );
 }

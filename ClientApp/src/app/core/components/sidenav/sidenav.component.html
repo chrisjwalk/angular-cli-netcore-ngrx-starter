@@ -1,0 +1,13 @@
+<div class="app-sidebar-content">
+  <mat-nav-list>
+    <app-sidenav-list-item (navigate)="closeSidenav.emit()"  routerLink="/" icon="home" hint="">
+      Home
+    </app-sidenav-list-item>
+    <app-sidenav-list-item (navigate)="closeSidenav.emit()"  routerLink="/forecasts" icon="get_app" hint="Get Data Feature">
+      Weather Forecasts
+    </app-sidenav-list-item>
+    <app-sidenav-list-item (navigate)="closeSidenav.emit()"  routerLink="/feature" icon="hotel" hint="Lazy Loaded Feature">
+      Coutner
+    </app-sidenav-list-item>
+  </mat-nav-list>
+</div>

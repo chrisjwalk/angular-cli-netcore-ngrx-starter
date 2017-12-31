@@ -2,7 +2,7 @@ html,
 body,
 app-root,
 mat-sidenav-container,
-.my-content {
+.app-content {
   margin: 0;
   width: 100%;
   height: 100%;
@@ -12,4 +12,27 @@ mat-sidenav-container,
 .flex-spacer {
   display: flex;
   flex: 1 1 0.0000001px;
+}
+
+// .mat-drawer-content {
+//   overflow: unset !important;
+//   height: calc(100% - 56px) !important;
+// }
+
+@media (max-width: 720px) {
+  .hide-mobile {
+    display: none !important;
+  }
+  .show-mobile {
+    display: block;
+  }
+}
+
+@media (min-width: 721px) {
+  .hide-mobile {
+    display: block;
+  }
+  .show-mobile {
+    display: none !important;
+  }
 }

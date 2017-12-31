@@ -8,9 +8,16 @@ import { SharedModule } from 'app/shared';
 import { AppComponent } from 'app/core/containers/app/app.component';
 import { HomeComponent } from 'app/core/containers/home/home.component';
 
+import { MainToolbarComponent } from 'app/core/components/main-toolbar/main-toolbar.component';
+import { SidenavComponent } from 'app/core/components/sidenav/sidenav.component';
+import { SidenavListItemComponent } from 'app/core/components/sidenav-list-item/sidenav-list-item.component';
+
 export const COMPONENTS = [
   AppComponent,
-  HomeComponent
+  HomeComponent,
+  MainToolbarComponent,
+  SidenavComponent,
+  SidenavListItemComponent
 ];
 
 @NgModule({

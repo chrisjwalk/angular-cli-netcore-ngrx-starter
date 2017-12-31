@@ -1,30 +1,10 @@
+<app-main-toolbar (toggleSidenav)="toggleSidenav()"></app-main-toolbar>
+    
 <mat-sidenav-container fullscreen>
   <mat-sidenav mode="over" [opened]="showSidenav$ | async" (openedChange)="sidenavChanged($event)">
-    <mat-toolbar class="app-sidebar-toolbar">
-      <button mat-icon-button (click)="toggleSidenav()">
-        <mat-icon>menu</mat-icon>
-      </button>
-    </mat-toolbar>
-    <div class="app-sidebar-content">
-      You can put sidenav stuff here...
-    </div>
+    <app-sidenav (toggleSidenav)="toggleSidenav()" (closeSidenav)="closeSidenav()"></app-sidenav>
   </mat-sidenav>
-  <div class="my-content">
-    <mat-toolbar class="app-main-toolbar">
-      <button mat-icon-button (click)="toggleSidenav()">
-        <mat-icon>menu</mat-icon>
-      </button>
-      <span class="flex-spacer"></span>
-      <button mat-icon-button [routerLink]="['/']" matTooltip="Home">
-        <mat-icon>home</mat-icon>
-      </button>
-      <button mat-icon-button [routerLink]="['/forecasts']" matTooltip="Get Data Feature">
-        <mat-icon>get_app</mat-icon>
-      </button>
-      <button mat-icon-button [routerLink]="['/feature']" matTooltip="Lazy Loaded Feature">
-        <mat-icon>hotel</mat-icon>
-      </button>
-    </mat-toolbar>
+  <div class="app-content">
     <router-outlet></router-outlet>
   </div>
 </mat-sidenav-container>
