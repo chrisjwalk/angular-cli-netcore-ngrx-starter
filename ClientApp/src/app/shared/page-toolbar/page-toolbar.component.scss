@@ -1,10 +1,12 @@
+@import 'src/styles/app-variables.scss';
+
 .app-page-toolbar {
     padding: 0px 16px;
     // border-bottom: solid 1px rgba(0,0,0,0.12);
     // border-top: solid 1px rgba(0,0,0,0.12);
-    background: #fff;
-    height: 38px;
-    line-height: 38px;
+    background:  $app-page-toolbar-background;
+    height: $app-page-toolbar-height;
+    line-height: $app-page-toolbar-height;
     display: flex;
     box-sizing: border-box;
     flex-direction: row;

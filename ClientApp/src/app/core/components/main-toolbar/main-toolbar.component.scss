@@ -1,30 +1,27 @@
-.mat-toolbar {
-    &.app-main-toolbar {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        z-index: 2020;
-    }
-    height: 56px;
-    background: rgb(35,35,35);
-    color: #fff;
+@import 'src/styles/app-variables.scss';
 
-
-    .mat-icon-button {
-        margin: 0 8px;
-        &:first-child {
-            margin-left: 0;
-        }
-        &:last-child {
-            margin-right: 0;
-        }
+.app-main-toolbar {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 2020;
+  height: $app-main-toolbar-height;
+  background: $app-main-toolbar-background;
+  color: $app-main-toolbar-color;
+  .mat-icon-button {
+    margin: 0 8px;
+    &:first-child {
+      margin-left: 0;
     }
-
-    .logo {
-        height: 56px;
-        img {
-            height: 48px;
-            margin: 4px;
-        }
+    &:last-child {
+      margin-right: 0;
     }
+  }
+  .logo {
+    height: $app-main-toolbar-height;
+    img {
+      height: 48px;
+      margin: 4px;
+    }
+  }
 }

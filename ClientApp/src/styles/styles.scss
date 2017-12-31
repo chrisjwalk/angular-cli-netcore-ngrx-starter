@@ -1,3 +1,5 @@
+@import 'src/styles/app-variables.scss';
+
 html,
 body,
 app-root,
@@ -6,7 +8,7 @@ mat-sidenav-container,
   margin: 0;
   width: 100%;
   height: 100%;
-  font-family: 'Roboto', sans-serif;
+  font-family: $app-font-family;
 }
 
 .flex-spacer {
@@ -16,10 +18,10 @@ mat-sidenav-container,
 
 // .mat-drawer-content {
 //   overflow: unset !important;
-//   height: calc(100% - 56px) !important;
+//   height: calc(100% - $app-main-toolbar-height) !important;
 // }
 
-@media (max-width: 720px) {
+@media (max-width: $app-mobile-max-width) {
   .hide-mobile {
     display: none !important;
   }
@@ -28,7 +30,7 @@ mat-sidenav-container,
   }
 }
 
-@media (min-width: 721px) {
+@media (min-width: $app-non-mobile-min-width) {
   .hide-mobile {
     display: block;
   }
