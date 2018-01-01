@@ -26,5 +26,11 @@ export class FeatureContainerComponent implements OnInit {
   incrementCount() {
     this.store.dispatch(new featureActions.IncrementCount());
   }
+  decrementCount() {
+    this.store.dispatch(new featureActions.DecrementCount());
+  }
+  setCount(value: number) {
+    this.store.dispatch(new featureActions.SetCount(Number(value)));
+  }
 
 }

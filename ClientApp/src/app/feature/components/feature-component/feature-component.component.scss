@@ -1,8 +1,40 @@
-.mat-card {
-    width: 300px;
-    margin: auto;
+.count-row,
+.set-row {
+    display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+    white-space: nowrap;
+    width: 100%;
 }
-p.count {
-    text-align: center;
-    font-size: 120px;
+.count-row {
+    .mat-card {
+        min-width: 300px;
+        text-overflow: ellipsis;
+        overflow: hidden;
+    }
+    p.count {
+        text-align: center;
+        font-size: 120px;
+    }
+    .mat-icon-button {
+        height: 92px;
+        width: 92px;
+        margin: 0 8px;
+    }
+    .mat-icon {
+        font-size: 76px;
+        height: 76px;
+        width: 76px;
+        line-height: 76px;
+    }
+}
+.set-row {
+    margin-top: 8px;
+    .mat-form-field {
+        width: 256px;
+        margin-right: 8px;
+    }
 }

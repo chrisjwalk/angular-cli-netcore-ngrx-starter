@@ -23,6 +23,12 @@ export function reducer(
                 count: state.count + 1,
             };
         }
+        case FeatureActionTypes.DecrementCount: {
+            return {
+                ...state,
+                count: state.count - 1,
+            };
+        }
         default: {
             return state;
         }

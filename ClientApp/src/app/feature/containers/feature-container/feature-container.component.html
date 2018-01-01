@@ -4,5 +4,9 @@
   </app-page-toolbar-button>
 </app-page-toolbar>
 <app-page-container>
-  <app-feature-component [count]="count$ | async"></app-feature-component>
+  <app-feature-component 
+    [count]="count$ | async" 
+    (increment)="incrementCount()" 
+    (decrement)="decrementCount()" 
+    (setCount)="setCount($event)"></app-feature-component>
 </app-page-container>
