@@ -5,6 +5,8 @@ import { RouterModule } from '@angular/router';
 import { MaterialModule } from 'app/shared/material';
 import { SharedModule } from 'app/shared';
 
+import { AppService } from 'app/core/services';
+
 import { AppComponent } from 'app/core/containers/app/app.component';
 import { HomeComponent } from 'app/core/containers/home/home.component';
 
@@ -28,6 +30,7 @@ export const COMPONENTS = [
     SharedModule
   ],
   declarations: COMPONENTS,
-  exports: COMPONENTS
+  exports: COMPONENTS,
+  providers: [AppService]
 })
 export class CoreModule { }

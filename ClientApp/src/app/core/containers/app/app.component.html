@@ -1,6 +1,6 @@
 <app-main-toolbar (toggleSidenav)="toggleSidenav()"></app-main-toolbar>
     
-<mat-sidenav-container fullscreen>
+<mat-sidenav-container id="appSidenavContainer" fullscreen>
   <mat-sidenav mode="over" [opened]="showSidenav$ | async" (openedChange)="sidenavChanged($event)">
     <app-sidenav (toggleSidenav)="toggleSidenav()" (closeSidenav)="closeSidenav()"></app-sidenav>
   </mat-sidenav>

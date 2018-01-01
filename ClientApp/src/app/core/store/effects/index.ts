@@ -1,2 +1,3 @@
 import { LayoutEffects } from './layout.effect';
-export const effects = [LayoutEffects];
+import { RouterEffects } from './router.effect';
+export const effects = [LayoutEffects, RouterEffects];
