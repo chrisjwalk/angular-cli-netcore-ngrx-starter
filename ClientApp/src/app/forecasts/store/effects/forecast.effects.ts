@@ -24,9 +24,9 @@ export const SEARCH_SCHEDULER = new InjectionToken<Scheduler>(
 @Injectable()
 export class ForecastEffects {
   constructor(
-    private actions$: Actions,
-    private weatherService: ForecastsService,
-    private snackBar: MatSnackBar,
+    @Inject(Actions) private actions$: Actions,
+    @Inject(ForecastsService) private weatherService: ForecastsService,
+    @Inject(MatSnackBar) private snackBar: MatSnackBar,
     @Optional()
     @Inject(SEARCH_DEBOUNCE)
     private debounce: number,
