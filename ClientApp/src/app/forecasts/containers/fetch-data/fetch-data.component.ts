@@ -28,7 +28,7 @@ export class FetchDataComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
-  constructor(@Inject(Store) private store: Store<fromForecasts.State>) {
+  constructor(private store: Store<fromForecasts.State>) {
     this.store.dispatch(new coreActions.SetTitle('Weather Forecasts'));
   }
 

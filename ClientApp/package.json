@@ -4,8 +4,8 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --extract-css",
-    "build": "ng build --extract-css",
+    "start": "ng serve --aot --extract-css",
+    "build": "ng build --aot --extract-css",
     "build:prod": "npm run build -- --prod",
     "build:ssr": "npm run build -- --app=ssr --output-hashing=media",
     "build:ssr:prod": "npm run build:ssr -- --prod",

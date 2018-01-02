@@ -1,4 +1,4 @@
-import { Injectable, Inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
 import { Store } from '@ngrx/store';
@@ -12,7 +12,7 @@ import * as forecastsActions from 'app/forecasts/store/actions';
 
 @Injectable()
 export class ForecastsGuard implements CanActivate {
-  constructor(@Inject(Store) private store: Store<fromForecasts.State>) { }
+  constructor(private store: Store<fromForecasts.State>) { }
 
   getFromStoreOrAPI(): Observable<any> {
     return this.store
