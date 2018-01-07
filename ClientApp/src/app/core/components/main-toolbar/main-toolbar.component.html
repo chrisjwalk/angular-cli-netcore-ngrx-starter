@@ -2,17 +2,14 @@
   <button mat-icon-button (click)="emitToggleSidenav($event)" class="show-mobile">
     <mat-icon>menu</mat-icon>
   </button>
-  <span class="logo">
+  <a class="logo" [routerLink]="['/']">
     <img src="https://material.angular.io/assets/img/homepage/angular-white-transparent.svg" />
-  </span>
-  <span class="logo-text">
+  </a>
+  <a class="logo-text" [routerLink]="['/']">
     Demo App
-  </span>
+  </a>
   <span class="flex-spacer"></span>
   <div class="hide-mobile">
-    <button mat-icon-button [routerLink]="['/']" matTooltip="Home">
-      <mat-icon>home</mat-icon>
-    </button>
     <button mat-icon-button [routerLink]="['/forecasts']" matTooltip="Get Data Feature">
       <mat-icon>get_app</mat-icon>
     </button>

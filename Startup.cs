@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Rewrite;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,12 +10,14 @@ namespace AngularCliNetcoreNgrxStarter
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
         {
             Configuration = configuration;
+            HostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
+        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
@@ -25,6 +29,13 @@ namespace AngularCliNetcoreNgrxStarter
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            if (HostingEnvironment.IsProduction()) { 
+                services.Configure<MvcOptions>(options =>
+                {
+                    options.Filters.Add(new RequireHttpsAttribute());
+                });
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +48,11 @@ namespace AngularCliNetcoreNgrxStarter
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                var options = new RewriteOptions()
+                    .AddRedirectToHttps();
+
+                app.UseRewriter(options);
+
             }
 
             app.UseStaticFiles();
@@ -56,14 +72,14 @@ namespace AngularCliNetcoreNgrxStarter
 
                 spa.Options.SourcePath = "ClientApp";
 
-                // spa.UseSpaPrerendering(options =>
-                // {
-                //     options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
-                //     options.BootModuleBuilder = env.IsDevelopment()
-                //         ? new AngularCliBuilder(npmScript: "build:ssr")
-                //         : null;
-                //     options.ExcludeUrls = new[] { "/sockjs-node" };
-                // });
+                spa.UseSpaPrerendering(options =>
+                {
+                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
+                    options.BootModuleBuilder = env.IsDevelopment()
+                        ? new AngularCliBuilder(npmScript: "build:ssr")
+                        : null;
+                    options.ExcludeUrls = new[] { "/sockjs-node" };
+                });
 
 
                 if (env.IsDevelopment())

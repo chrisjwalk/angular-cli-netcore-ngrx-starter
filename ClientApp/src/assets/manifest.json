@@ -1,0 +1,13 @@
+{
+  "name": "Angular Cli Netcore NgRx Starter",
+  "short_name": "Demo App",
+  "lang": "en-US",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#fafafa",
+  "background_color": "#fafafa",
+  "orientation": "portrait-primary",
+  "icons": [{
+    "src": "/assets/favicon.ico"
+  }]
+}

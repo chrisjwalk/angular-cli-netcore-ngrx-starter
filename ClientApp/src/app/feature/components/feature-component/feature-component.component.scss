@@ -11,7 +11,13 @@
 }
 .count-row {
     .mat-card {
-        min-width: 300px;
+        @media (min-width: 600px) {
+            min-width: 300px;    
+        }
+        @media (max-width: 599px) {
+            min-width: calc(100% - 220px);
+        }
+
         text-overflow: ellipsis;
         overflow: hidden;
     }

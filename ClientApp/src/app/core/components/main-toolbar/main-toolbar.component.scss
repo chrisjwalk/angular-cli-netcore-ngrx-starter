@@ -24,4 +24,13 @@
       margin: 4px;
     }
   }
+  a.logo,
+  a.logo:visited,
+  a.logo:hover,
+  a.logo-text,
+  a.logo-text:visited,
+  a.logo-text:hover {
+    text-decoration: none;
+    color: hsla(0,0%,100%,.75);
+  }
 }
