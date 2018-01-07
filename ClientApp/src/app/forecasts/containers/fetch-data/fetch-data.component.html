@@ -1,5 +1,8 @@
 <app-page-toolbar [title]="title$ | async">
-  <app-page-toolbar-button (click)="getForecasts()" tooltip="Get Forecasts">
+  <mat-form-field>
+      <input matInput #count type="number" placeholder="Forecast Days" (keyup.enter)="getForecasts(count.value)" [value]="count$ | async">
+    </mat-form-field>
+  <app-page-toolbar-button (click)="getForecasts(count.value)" tooltip="Get Forecasts">
     <mat-icon>refresh</mat-icon>
   </app-page-toolbar-button>
 </app-page-toolbar>

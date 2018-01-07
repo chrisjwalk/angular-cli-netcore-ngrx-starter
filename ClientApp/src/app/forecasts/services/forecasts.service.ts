@@ -8,10 +8,10 @@ export class ForecastsService {
     @Inject(HttpClient) public http: HttpClient,
     @Inject('BASE_URL') private baseUrl: string) { }
 
-  getWeather<T>() {
+  getWeather<T>(count: number) {
     return this.http.get<T[]>(this.baseUrl + 'api/SampleData/WeatherForecasts', {
         params: {
-            'count': '40'
+            'count': count.toString()
         }
     });
   }

@@ -12,13 +12,13 @@ export enum ForecastActionTypes {
 export class Load implements Action {
   readonly type = ForecastActionTypes.Load;
 
-  constructor(public payload: string) {
+  constructor(public payload: number = 10) {
   }
 }
 export class Refresh implements Action {
   readonly type = ForecastActionTypes.Refresh;
 
-  constructor(public payload: string) {
+  constructor(public payload: number) {
   }
 }
 export class LoadComplete implements Action {

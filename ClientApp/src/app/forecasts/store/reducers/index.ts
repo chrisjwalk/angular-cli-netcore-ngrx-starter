@@ -34,9 +34,9 @@ export const getForecasts = createSelector(
     return (ids as string[]).map(id => entities[id]);
   }
 );
-export const getQuery = createSelector(
+export const getCount = createSelector(
   getForecastEntitiesState,
-  fromForecasts.getQuery
+  fromForecasts.getCount
 );
 export const getLoading = createSelector(
   getForecastEntitiesState,

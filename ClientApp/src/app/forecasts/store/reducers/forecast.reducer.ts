@@ -7,7 +7,7 @@ export interface State extends EntityState<WeatherForecast> {
   loading: boolean;
   loaded: boolean;
   error: HttpErrorResponse | any;
-  query: string;
+  count: number;
 }
 export const adapter = createEntityAdapter<WeatherForecast>({
   selectId: (forecast: WeatherForecast) => forecast.id,
@@ -17,7 +17,7 @@ export const initialState: State = adapter.getInitialState({
   loading: true,
   loaded: false,
   error: '',
-  query: ''
+  count: 0
 });
 
 export function reducer(state = initialState, action: ForecastActions): State {
@@ -28,14 +28,14 @@ export function reducer(state = initialState, action: ForecastActions): State {
         loading: true,
         loaded: false,
         error: null,
-        query: action.payload
+        count: action.payload
       };
     }
     case ForecastActionTypes.Refresh: {
       return {
         ...state,
         error: null,
-        query: action.payload
+        count: action.payload
       };
     }
     case ForecastActionTypes.LoadComplete: {
@@ -44,7 +44,7 @@ export function reducer(state = initialState, action: ForecastActions): State {
         loading: false,
         loaded: true,
         error: null,
-        query: state.query,
+        count: state.count,
       };
     }
 
@@ -62,6 +62,6 @@ export function reducer(state = initialState, action: ForecastActions): State {
   }
 }
 
-export const getQuery = (state: State) => state.query;
+export const getCount = (state: State) => state.count;
 export const getLoading = (state: State) => state.loading;
 export const getError = (state: State) => state.error;

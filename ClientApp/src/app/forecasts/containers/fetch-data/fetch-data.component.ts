@@ -20,7 +20,7 @@ import * as coreActions from 'app/core/store/actions';
 })
 export class FetchDataComponent implements OnInit, OnDestroy {
   forecasts$: Observable<WeatherForecast[]>;
-  searchQuery$: Observable<string>;
+  count$: Observable<number>;
   loading$: Observable<boolean>;
   error$: Observable<HttpErrorResponse | any>;
   title$: Observable<string>;
@@ -35,7 +35,7 @@ export class FetchDataComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.title$ = this.store.select(fromRoot.getTitle);
     this.forecasts$ = this.store.select(fromForecasts.getForecasts);
-    this.searchQuery$ = this.store.select(fromForecasts.getQuery).pipe(take(1));
+    this.count$ = this.store.select(fromForecasts.getCount);
     this.loading$ = this.store.select(fromForecasts.getLoading);
     this.error$ = this.store.select(fromForecasts.getError);
     this.dataSource = new MatTableDataSource<WeatherForecast>([]);
@@ -49,8 +49,8 @@ export class FetchDataComponent implements OnInit, OnDestroy {
     this.ngUnsubscribe.complete();
   }
 
-  getForecasts() {
-    this.store.dispatch(new forecastsActions.Refresh('LOADING!!!'));
+  getForecasts(count: number) {
+    this.store.dispatch(new forecastsActions.Refresh(count));
   }
 }
 

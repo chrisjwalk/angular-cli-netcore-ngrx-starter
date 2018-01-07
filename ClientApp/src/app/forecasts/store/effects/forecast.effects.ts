@@ -45,7 +45,7 @@ export class ForecastEffects {
     .ofType<forecastsActions.Load>(forecastsActions.ForecastActionTypes.Load)
     .pipe(
     map(action => action.payload),
-    switchMap(query => this.runQuery(query))
+    switchMap(count => this.runQuery(count))
     );
 
   @Effect()
@@ -53,14 +53,14 @@ export class ForecastEffects {
     .ofType<forecastsActions.Refresh>(forecastsActions.ForecastActionTypes.Refresh)
     .pipe(
     map(action => action.payload),
-    switchMap(query => this.runQuery(query))
+    switchMap(count => this.runQuery(count))
     );
 
-  runQuery(query) {
+  runQuery(count: number) {
     const nextLoad$ = this.actions$.ofType(forecastsActions.ForecastActionTypes.Load).pipe(skip(1));
 
     return this.weatherService
-      .getWeather<WeatherForecast>()
+      .getWeather<WeatherForecast>(count)
       .pipe(
       takeUntil(nextLoad$),
       map((weatherForecast: WeatherForecast[]) => {
