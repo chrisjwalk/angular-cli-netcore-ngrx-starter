@@ -30,12 +30,12 @@ namespace AngularCliNetcoreNgrxStarter
                 configuration.RootPath = "ClientApp/dist";
             });
 
-            if (HostingEnvironment.IsProduction()) { 
-                services.Configure<MvcOptions>(options =>
-                {
-                    options.Filters.Add(new RequireHttpsAttribute());
-                });
-            }
+            // if (HostingEnvironment.IsProduction()) { 
+            //     services.Configure<MvcOptions>(options =>
+            //     {
+            //         options.Filters.Add(new RequireHttpsAttribute());
+            //     });
+            // }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,7 +51,7 @@ namespace AngularCliNetcoreNgrxStarter
                 var options = new RewriteOptions()
                     .AddRedirectToHttps();
 
-                app.UseRewriter(options);
+                // app.UseRewriter(options);
 
             }
 
@@ -72,14 +72,14 @@ namespace AngularCliNetcoreNgrxStarter
 
                 spa.Options.SourcePath = "ClientApp";
 
-                spa.UseSpaPrerendering(options =>
-                {
-                    options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
-                    options.BootModuleBuilder = env.IsDevelopment()
-                        ? new AngularCliBuilder(npmScript: "build:ssr")
-                        : null;
-                    options.ExcludeUrls = new[] { "/sockjs-node" };
-                });
+                // spa.UseSpaPrerendering(options =>
+                // {
+                //     options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.bundle.js";
+                //     options.BootModuleBuilder = env.IsDevelopment()
+                //         ? new AngularCliBuilder(npmScript: "build:ssr")
+                //         : null;
+                //     options.ExcludeUrls = new[] { "/sockjs-node" };
+                // });
 
 
                 if (env.IsDevelopment())
