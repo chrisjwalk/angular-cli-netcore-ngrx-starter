@@ -54,7 +54,8 @@ namespace AngularCliNetcoreNgrxStarter
                 // app.UseRewriter(options);
 
             }
-
+            
+            // app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
@@ -79,6 +80,11 @@ namespace AngularCliNetcoreNgrxStarter
                 //         ? new AngularCliBuilder(npmScript: "build:ssr")
                 //         : null;
                 //     options.ExcludeUrls = new[] { "/sockjs-node" };
+
+                //     options.SupplyData = (context, data) => {
+                //         // Creates a new value called isHttpsRequest that is passed to TypeScript code
+                //         data["isHttpsRequest"] = context.Request.IsHttps;
+                //     };
                 // });
 
 

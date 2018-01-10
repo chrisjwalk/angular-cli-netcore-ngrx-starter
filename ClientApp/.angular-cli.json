@@ -94,6 +94,9 @@
     },
     "service": {
       "spec": false
+    },
+    "build": {
+      "progress": true
     }
   }
 }
