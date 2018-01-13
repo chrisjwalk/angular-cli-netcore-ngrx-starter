@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { ServerTransferStateModule } from '@angular/platform-server';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
@@ -27,6 +28,8 @@ import { AppComponent } from 'app/core/containers/app/app.component';
   imports: [
     BrowserModule.withServerTransition({appId: 'angular-cli-ngrx-starter'}),
     BrowserAnimationsModule,
+    ServerTransferStateModule,
+    BrowserTransferStateModule,
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
