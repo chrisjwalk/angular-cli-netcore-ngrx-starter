@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import * as fromRoot from 'app/core/store/reducers';
 import * as fromFeature from 'app/feature/store/reducers';
 import * as featureActions from 'app/feature/store/actions';
@@ -16,11 +16,11 @@ export class FeatureContainerComponent implements OnInit {
   title$: Observable<string>;
   constructor(private store: Store<fromRoot.State>) {
     this.store.dispatch(new layoutActions.SetTitle('Lazy Loaded Feature'));
-   }
+    this.count$ = this.store.pipe(select(fromFeature.getCount));
+    this.title$ = this.store.pipe(select(fromRoot.getTitle));
+  }
 
   ngOnInit() {
-    this.count$ = this.store.select(fromFeature.getCount);
-    this.title$ = this.store.select(fromRoot.getTitle);
   }
 
   incrementCount() {

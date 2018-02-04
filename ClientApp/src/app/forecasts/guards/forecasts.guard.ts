@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 
-import { Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
 import { tap, filter, take, switchMap, catchError } from 'rxjs/operators';
@@ -16,14 +16,15 @@ export class ForecastsGuard implements CanActivate {
 
   getFromStoreOrAPI(): Observable<any> {
     return this.store
-      .select(fromForecasts.getForecasts).pipe(
-      tap((data) => {
-        if (!data.length) {
-          this.store.dispatch(new forecastsActions.Load());
-        }
-      }),
-      filter((data) => data.length > 0),
-      take(1)
+      .pipe(
+        select(fromForecasts.getForecasts),
+        tap((data) => {
+          if (!data.length) {
+            this.store.dispatch(new forecastsActions.Load());
+          }
+        }),
+        filter((data) => data.length > 0),
+        take(1)
     );
   }
 
