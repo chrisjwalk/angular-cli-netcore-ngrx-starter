@@ -4,7 +4,7 @@ import { isPlatformBrowser, isPlatformServer } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { MatSnackBar } from '@angular/material';
 
-import { Effect, Actions } from '@ngrx/effects';
+import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 
 import { Observable } from 'rxjs/Observable';
@@ -26,23 +26,24 @@ export class ForecastEffects {
   ) { }
 
   @Effect()
-  load$: Observable<Action> = this.actions$
-    .ofType<forecastsActions.Load>(forecastsActions.ForecastActionTypes.Load)
-    .pipe(
+  load$: Observable<Action> = this.actions$.pipe(
+    ofType<forecastsActions.Load>(forecastsActions.ForecastActionTypes.Load),
     map(action => action.payload),
     switchMap(count => this.runQuery(count))
-    );
+  );
 
   @Effect()
-  refresh$: Observable<Action> = this.actions$
-    .ofType<forecastsActions.Refresh>(forecastsActions.ForecastActionTypes.Refresh)
-    .pipe(
+  refresh$: Observable<Action> = this.actions$.pipe(
+    ofType<forecastsActions.Refresh>(forecastsActions.ForecastActionTypes.Refresh),
     map(action => action.payload),
     switchMap(count => this.runQuery(count))
-    );
+  );
 
   runQuery(count: number) {
-    const nextLoad$ = this.actions$.ofType(forecastsActions.ForecastActionTypes.Load).pipe(skip(1));
+    const nextLoad$ = this.actions$.pipe(
+      ofType(forecastsActions.ForecastActionTypes.Load),
+      skip(1)
+    );
     const stateKey = makeStateKey('getWeather_' + count.toString());
 
     if (this.transferState.hasKey(stateKey)) {
