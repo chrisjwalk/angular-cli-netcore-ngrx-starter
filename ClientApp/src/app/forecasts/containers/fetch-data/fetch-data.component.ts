@@ -36,9 +36,9 @@ export class FetchDataComponent implements OnInit, OnDestroy {
     this.loading$ = this.store.pipe(select(fromForecasts.getLoading));
     this.error$ = this.store.pipe(select(fromForecasts.getError));
     this.dataSource = new MatTableDataSource<WeatherForecast>([]);
-    this.forecasts$.pipe(takeUntil(this.ngUnsubscribe)).subscribe(data => {
-      this.dataSource.data = data;
-    });
+    this.forecasts$.pipe(
+      takeUntil(this.ngUnsubscribe)
+    ).subscribe(data => this.dataSource.data = data);
   }
 
   ngOnInit() {
