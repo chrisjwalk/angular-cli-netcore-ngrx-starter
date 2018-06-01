@@ -1,16 +1,12 @@
-import { Injectable, InjectionToken, Optional, Inject, PLATFORM_ID } from '@angular/core';
-import { TransferState, makeStateKey } from '@angular/platform-browser';
-import { isPlatformBrowser, isPlatformServer } from '@angular/common';
+import { isPlatformServer } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
-
-import { Effect, Actions, ofType } from '@ngrx/effects';
+import { TransferState, makeStateKey } from '@angular/platform-browser';
+import { Actions, Effect, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-
-import { Observable } from 'rxjs/Observable';
-import { of } from 'rxjs/observable/of';
-import { catchError, map, switchMap, skip, takeUntil } from 'rxjs/operators';
-
+import { Observable, of } from 'rxjs';
+import { catchError, map, skip, switchMap, takeUntil } from 'rxjs/operators';
 import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
 import { ForecastsService } from 'app/forecasts/services/forecasts.service';
 import * as forecastsActions from 'app/forecasts/store/actions';

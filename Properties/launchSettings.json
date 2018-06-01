@@ -4,7 +4,7 @@
     "anonymousAuthentication": true,
     "iisExpress": {
       "applicationUrl": "http://localhost:60253/",
-      "sslPort": 0
+      "sslPort": 60254
     }
   },
   "profiles": {
@@ -18,18 +18,18 @@
     "AngularCliNetcoreNgrxStarter": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:60254;http://localhost:60253",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:60254/"
+      }
     },
     "AngularCliNetcoreNgrxStarterProduction": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:60254;http://localhost:60253",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
-      },
-      "applicationUrl": "http://localhost:60254/"
+      }
     }
   }
 }

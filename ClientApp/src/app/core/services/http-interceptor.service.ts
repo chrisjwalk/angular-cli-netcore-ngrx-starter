@@ -1,13 +1,9 @@
+
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  HttpHandler, HttpEvent, HttpInterceptor,
-  HttpRequest, HttpResponse, HttpErrorResponse
-} from '@angular/common/http';
-
-import { Observable } from 'rxjs/Observable';
-import { tap, catchError } from 'rxjs/operators';
-
+import { Observable, throwError } from 'rxjs';
+import { catchError, tap } from 'rxjs/operators';
 import { environment } from 'environments/environment';
 
 @Injectable()
@@ -63,7 +59,6 @@ export class HttpInterceptorService implements HttpInterceptor {
       errMsg = error.message ? error.message : error.toString();
     }
 
-    return Observable.throw(error);
-
+    return throwError(error);
   }
 }

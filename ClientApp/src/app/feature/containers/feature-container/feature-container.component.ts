@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
 import * as fromRoot from 'app/core/store/reducers';
 import * as fromFeature from 'app/feature/store/reducers';

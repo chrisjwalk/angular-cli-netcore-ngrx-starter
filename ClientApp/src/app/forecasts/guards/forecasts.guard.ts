@@ -1,14 +1,10 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
-
 import { Store, select } from '@ngrx/store';
-
-import { Observable } from 'rxjs/Observable';
-import { tap, filter, take, switchMap, catchError } from 'rxjs/operators';
-import { of } from 'rxjs/observable/of';
-
-import * as fromForecasts from 'app/forecasts/store/reducers';
+import { Observable, of } from 'rxjs';
+import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
 import * as forecastsActions from 'app/forecasts/store/actions';
+import * as fromForecasts from 'app/forecasts/store/reducers';
 
 @Injectable()
 export class ForecastsGuard implements CanActivate {

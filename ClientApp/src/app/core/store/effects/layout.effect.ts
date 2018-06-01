@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 
 import { Effect, Actions, ofType } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs';
 import { map, tap, catchError } from 'rxjs/operators';
 
 import * as layoutActions from 'app/core/store/actions';

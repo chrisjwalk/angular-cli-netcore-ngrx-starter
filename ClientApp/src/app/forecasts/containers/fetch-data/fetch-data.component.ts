@@ -1,17 +1,16 @@
-import { Component, ChangeDetectionStrategy, Inject, OnInit, OnDestroy, } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Store, select } from '@ngrx/store';
-
-import { Observable } from 'rxjs/Observable';
-import { Subject } from 'rxjs/Subject';
-import { take, takeUntil } from 'rxjs/operators';
-
-import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
-import * as fromRoot from 'app/core/store/reducers';
-import * as fromForecasts from 'app/forecasts/store/reducers';
-import * as forecastsActions from 'app/forecasts/store/actions';
+import { Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import * as coreActions from 'app/core/store/actions';
+import * as fromRoot from 'app/core/store/reducers';
+import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
+import * as forecastsActions from 'app/forecasts/store/actions';
+import * as fromForecasts from 'app/forecasts/store/reducers';
+
+
 
 @Component({
   selector: 'app-fetch-data',
