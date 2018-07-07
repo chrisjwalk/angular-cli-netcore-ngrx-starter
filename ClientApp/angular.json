@@ -27,7 +27,8 @@
               "src/styles/material.scss",
               "src/styles/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "serviceWorker": true
           },
           "configurations": {
             "production": {
