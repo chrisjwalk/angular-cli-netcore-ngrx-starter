@@ -29,14 +29,6 @@ namespace AngularCliNetcoreNgrxStarter
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-
-            if (HostingEnvironment.IsProduction())
-            {
-                services.Configure<MvcOptions>(options =>
-                {
-                    options.Filters.Add(new RequireHttpsAttribute());
-                });
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
