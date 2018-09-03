@@ -9,8 +9,12 @@ export { AppServerModule } from './app/app.server.module';
 
 enableProdMode();
 
-export default createServerRenderer(params => {
-  const { AppServerModule, AppServerModuleNgFactory, LAZY_MODULE_MAP } = (module as any).exports;
+export default createServerRenderer((params) => {
+  const {
+    AppServerModule,
+    AppServerModuleNgFactory,
+    LAZY_MODULE_MAP,
+  } = (module as any).exports;
 
   const options = {
     document: params.data.originalHtml,
@@ -18,13 +22,13 @@ export default createServerRenderer(params => {
     extraProviders: [
       provideModuleMap(LAZY_MODULE_MAP),
       { provide: APP_BASE_HREF, useValue: params.baseUrl },
-      { provide: 'BASE_URL', useValue: params.origin + params.baseUrl }
-    ]
+      { provide: 'BASE_URL', useValue: params.origin + params.baseUrl },
+    ],
   };
 
   const renderPromise = AppServerModuleNgFactory
     ? /* AoT */ renderModuleFactory(AppServerModuleNgFactory, options)
     : /* dev */ renderModule(AppServerModule, options);
 
-  return renderPromise.then(html => ({ html }));
+  return renderPromise.then((html) => ({ html }));
 });
