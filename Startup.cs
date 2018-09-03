@@ -73,14 +73,18 @@ namespace AngularCliNetcoreNgrxStarter
                 // spa.UseSpaPrerendering(options =>
                 // {
                 //     options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
-                //     options.BootModuleBuilder = env.IsDevelopment()
-                //         ? new AngularCliBuilder(npmScript: "build:ssr")
-                //         : null;
+                    
+                //     // BootModuleBuilder Disabled - Building at runtime in dev enviroment was giving timeouts.
+                //     // options.BootModuleBuilder = env.IsDevelopment()
+                //     //     ? new AngularCliBuilder(npmScript: "build:ssr")
+                //     //     : null;
+                    
                 //     options.ExcludeUrls = new[] { "/sockjs-node" };
 
-                //     options.SupplyData = (context, data) => {
-                //         // Creates a new value called isHttpsRequest that is passed to TypeScript code
-                //         data["isHttpsRequest"] = context.Request.IsHttps;
+                //     options.SupplyData = (context, data) =>
+                //     {
+                //          // Creates a new value called isHttpsRequest that is passed to TypeScript code
+                //          data["isHttpsRequest"] = context.Request.IsHttps;
                 //     };
                 // });
 
