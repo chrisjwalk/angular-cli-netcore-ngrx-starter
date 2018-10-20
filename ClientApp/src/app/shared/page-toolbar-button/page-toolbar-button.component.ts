@@ -6,7 +6,7 @@ import { Component, OnInit, Input } from '@angular/core';
   styleUrls: ['./page-toolbar-button.component.scss']
 })
 export class PageToolbarButtonComponent implements OnInit {
-  @Input('tooltip') tooltip: string;
+  @Input() tooltip: string;
   tooltipDisabled: boolean;
   constructor() { }
 

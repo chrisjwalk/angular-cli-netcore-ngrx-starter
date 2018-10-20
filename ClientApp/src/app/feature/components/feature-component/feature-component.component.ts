@@ -6,7 +6,7 @@ import { Component, Input, Output, EventEmitter } from '@angular/core';
   styleUrls: ['./feature-component.component.scss']
 })
 export class FeatureComponentComponent {
-  @Input('count') count: number;
+  @Input() count: number;
   @Output() increment = new EventEmitter();
   @Output() decrement = new EventEmitter();
   @Output() setCount = new EventEmitter<number>();
