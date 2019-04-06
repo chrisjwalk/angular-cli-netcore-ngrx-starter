@@ -18,7 +18,7 @@ export class ForecastEffects {
     private weatherService: ForecastsService,
     private snackBar: MatSnackBar,
     private transferState: TransferState,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: object
   ) { }
 
   @Effect()

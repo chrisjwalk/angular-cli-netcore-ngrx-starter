@@ -43,11 +43,11 @@ export interface State {
 
 export const reducers: ActionReducerMap<State> = {
     layout: fromLayout.reducer,
-    routerReducer: routerReducer,
+    routerReducer,
 };
 
 export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
-    return function (state: State, action: any): State {
+    return (state: State, action: any): State => {
         console.log('state', state);
         console.log('action', action);
 
@@ -60,8 +60,8 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
     : [];
 
 /**
-* Layout Reducers
-*/
+ * Layout Reducers
+ */
 export const getLayoutState = createFeatureSelector<fromLayout.State>('layout');
 
 export const getShowSidenav = createSelector(
