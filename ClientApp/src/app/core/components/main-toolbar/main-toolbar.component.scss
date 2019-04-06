@@ -8,22 +8,28 @@
   height: $app-main-toolbar-height;
   background: $app-main-toolbar-background;
   color: $app-main-toolbar-color;
+
   .mat-icon-button {
     margin: 0 8px;
+
     &:first-child {
       margin-left: 0;
     }
+
     &:last-child {
       margin-right: 0;
     }
   }
+
   .logo {
     height: $app-main-toolbar-height;
+
     img {
       height: 48px;
       margin: 4px;
     }
   }
+
   a.logo,
   a.logo:visited,
   a.logo:hover,
@@ -31,6 +37,6 @@
   a.logo-text:visited,
   a.logo-text:hover {
     text-decoration: none;
-    color: hsla(0,0%,100%,.75);
+    color: hsla(0, 0%, 100%, .75);
   }
 }

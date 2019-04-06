@@ -6,17 +6,17 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'feature',
-    loadChildren: './feature/feature.module#FeatureModule'
+    loadChildren: './feature/feature.module#FeatureModule',
   },
   {
     path: 'forecasts',
-    loadChildren: './forecasts/forecasts.module#ForecastsModule'
+    loadChildren: './forecasts/forecasts.module#ForecastsModule',
   },
   { path: '**', component: HomeComponent },
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

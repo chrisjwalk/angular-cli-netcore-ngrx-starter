@@ -7,12 +7,12 @@ export interface State {
 
 const initialState: State = {
   showSidenav: false,
-  title: 'Home'
+  title: 'Home',
 };
 
 export function reducer(
   state: State = initialState,
-  action: LayoutActions
+  action: LayoutActions,
 ): State {
   switch (action.type) {
     case LayoutActionTypes.CloseSidenav: {
@@ -28,17 +28,17 @@ export function reducer(
       };
     }
     case LayoutActionTypes.ToggleSidenav: {
-        return {
-          ...state,
-          showSidenav: !state.showSidenav,
-        };
-      }
+      return {
+        ...state,
+        showSidenav: !state.showSidenav,
+      };
+    }
     case LayoutActionTypes.SetTitle: {
-        return {
-          ...state,
-          title: action.payload,
-        };
-      }
+      return {
+        ...state,
+        title: action.payload,
+      };
+    }
     default:
       return state;
   }

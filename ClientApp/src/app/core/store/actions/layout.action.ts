@@ -15,12 +15,16 @@ export class CloseSidenav implements Action {
   readonly type = LayoutActionTypes.CloseSidenav;
 }
 export class ToggleSidenav implements Action {
-    readonly type = LayoutActionTypes.ToggleSidenav;
-  }
+  readonly type = LayoutActionTypes.ToggleSidenav;
+}
 
 export class SetTitle implements Action {
-    readonly type = LayoutActionTypes.SetTitle;
-    constructor(public payload: string) { }
-  }
+  readonly type = LayoutActionTypes.SetTitle;
+  constructor(public payload: string) {}
+}
 
-export type LayoutActions = OpenSidenav | CloseSidenav | ToggleSidenav | SetTitle;
+export type LayoutActions =
+  | OpenSidenav
+  | CloseSidenav
+  | ToggleSidenav
+  | SetTitle;

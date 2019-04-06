@@ -1,46 +1,53 @@
 .count-row,
 .set-row {
-    display: flex;
-    flex-direction: row;
-    box-sizing: border-box;
-    align-items: center;
-    align-content: center;
-    justify-content: center;
-    white-space: nowrap;
-    width: 100%;
+  display: flex;
+  flex-direction: row;
+  box-sizing: border-box;
+  align-items: center;
+  align-content: center;
+  justify-content: center;
+  white-space: nowrap;
+  width: 100%;
 }
-.count-row {
-    .mat-card {
-        @media (min-width: 600px) {
-            min-width: 300px;    
-        }
-        @media (max-width: 599px) {
-            min-width: calc(100% - 220px);
-        }
 
-        text-overflow: ellipsis;
-        overflow: hidden;
+.count-row {
+  .mat-card {
+    @media (min-width: 600px) {
+      min-width: 300px;
     }
-    p.count {
-        text-align: center;
-        font-size: 120px;
+
+    @media (max-width: 599px) {
+      min-width: calc(100% - 220px);
     }
-    .mat-icon-button {
-        height: 92px;
-        width: 92px;
-        margin: 0 8px;
-    }
-    .mat-icon {
-        font-size: 76px;
-        height: 76px;
-        width: 76px;
-        line-height: 76px;
-    }
+
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+
+  p.count {
+    text-align: center;
+    font-size: 120px;
+  }
+
+  .mat-icon-button {
+    height: 92px;
+    width: 92px;
+    margin: 0 8px;
+  }
+
+  .mat-icon {
+    font-size: 76px;
+    height: 76px;
+    width: 76px;
+    line-height: 76px;
+  }
 }
+
 .set-row {
-    margin-top: 8px;
-    .mat-form-field {
-        width: 256px;
-        margin-right: 8px;
-    }
+  margin-top: 8px;
+
+  .mat-form-field {
+    width: 256px;
+    margin-right: 8px;
+  }
 }

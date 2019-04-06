@@ -1,12 +1,12 @@
 <app-page-toolbar [title]="title$ | async">
-  <app-page-toolbar-button (click)="incrementCount()" tooltip="Increment!">
+  <app-page-toolbar-button (click)="incrementCount()"
+                           tooltip="Increment!">
     <mat-icon>add</mat-icon>
   </app-page-toolbar-button>
 </app-page-toolbar>
 <app-page-container>
-  <app-feature-component 
-    [count]="count$ | async" 
-    (increment)="incrementCount()" 
-    (decrement)="decrementCount()" 
-    (setCount)="setCount($event)"></app-feature-component>
+  <app-feature-component [count]="count$ | async"
+                         (increment)="incrementCount()"
+                         (decrement)="decrementCount()"
+                         (setCount)="setCount($event)"></app-feature-component>
 </app-page-container>

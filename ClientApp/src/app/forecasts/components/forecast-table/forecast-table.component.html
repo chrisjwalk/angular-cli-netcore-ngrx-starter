@@ -1,39 +1,41 @@
-<mat-spinner [diameter]="30" *ngIf="loading; else tableBlock"></mat-spinner>
+<mat-spinner [diameter]="30"
+             *ngIf="loading; else tableBlock"></mat-spinner>
 
 <ng-template #tableBlock>
   <div class="example-container mat-elevation-z2">
-    <mat-table #table [dataSource]="dataSource">
-  
+    <mat-table #table
+               [dataSource]="dataSource">
+
       <!--- Note that these columns can be defined in any order.
             The actual rendered columns are set as a property on the row definition" -->
-  
+
       <!-- Position Column -->
       <ng-container matColumnDef="dateFormatted">
         <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
         <mat-cell *matCellDef="let forecast"> {{forecast.dateFormatted}} </mat-cell>
       </ng-container>
-  
+
       <!-- Name Column -->
       <ng-container matColumnDef="temperatureC">
         <mat-header-cell *matHeaderCellDef> Temp. (C) </mat-header-cell>
         <mat-cell *matCellDef="let forecast"> {{forecast.temperatureC}} </mat-cell>
       </ng-container>
-  
+
       <!-- Weight Column -->
       <ng-container matColumnDef="temperatureF">
         <mat-header-cell *matHeaderCellDef> Temp. (F) </mat-header-cell>
         <mat-cell *matCellDef="let forecast"> {{forecast.temperatureF}} </mat-cell>
       </ng-container>
-  
+
       <!-- Color Column -->
       <ng-container matColumnDef="summary">
         <mat-header-cell *matHeaderCellDef> Summary </mat-header-cell>
         <mat-cell *matCellDef="let forecast"> {{forecast.summary}} </mat-cell>
       </ng-container>
-  
+
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
       <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
     </mat-table>
   </div>
-  
+
 </ng-template>

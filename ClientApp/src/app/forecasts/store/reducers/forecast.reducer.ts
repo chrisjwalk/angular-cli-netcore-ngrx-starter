@@ -1,7 +1,11 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
-import { ForecastActionTypes, ForecastActions } from 'app/forecasts/store/actions';
 import { EntityState, createEntityAdapter } from '@ngrx/entity';
+
+import {
+  ForecastActionTypes,
+  ForecastActions,
+} from 'app/forecasts/store/actions';
 
 export interface State extends EntityState<WeatherForecast> {
   loading: boolean;
@@ -9,15 +13,17 @@ export interface State extends EntityState<WeatherForecast> {
   error: HttpErrorResponse | any;
   count: number;
 }
+
 export const adapter = createEntityAdapter<WeatherForecast>({
   selectId: (forecast: WeatherForecast) => forecast.id,
-  sortComparer: false
+  sortComparer: false,
 });
+
 export const initialState: State = adapter.getInitialState({
   loading: true,
   loaded: false,
   error: '',
-  count: 0
+  count: 0,
 });
 
 export function reducer(state = initialState, action: ForecastActions): State {
@@ -28,14 +34,14 @@ export function reducer(state = initialState, action: ForecastActions): State {
         loading: true,
         loaded: false,
         error: null,
-        count: action.payload
+        count: action.payload,
       };
     }
     case ForecastActionTypes.Refresh: {
       return {
         ...state,
         error: null,
-        count: action.payload
+        count: action.payload,
       };
     }
     case ForecastActionTypes.LoadComplete: {
@@ -48,7 +54,7 @@ export function reducer(state = initialState, action: ForecastActions): State {
       };
     }
 
-    case  ForecastActionTypes.LoadError: {
+    case ForecastActionTypes.LoadError: {
       return {
         ...state,
         loading: false,

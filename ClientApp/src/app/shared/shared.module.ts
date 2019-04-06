@@ -10,14 +10,12 @@ const COMPONENTS = [
   BigButtonComponent,
   PageToolbarComponent,
   PageContainerComponent,
-  PageToolbarButtonComponent];
+  PageToolbarButtonComponent,
+];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    MaterialModule
-  ],
+  imports: [CommonModule, MaterialModule],
   declarations: COMPONENTS,
-  exports: COMPONENTS
+  exports: COMPONENTS,
 })
-export class SharedModule { }
+export class SharedModule {}

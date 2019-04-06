@@ -10,7 +10,7 @@ import {
   MatProgressSpinnerModule,
   MatTableModule,
   MatSnackBarModule,
-  MatTooltipModule
+  MatTooltipModule,
 } from '@angular/material';
 import { CdkTableModule } from '@angular/cdk/table';
 
@@ -26,11 +26,11 @@ const MatModules = [
   MatProgressSpinnerModule,
   MatTableModule,
   MatSnackBarModule,
-  MatTooltipModule
+  MatTooltipModule,
 ];
 
 @NgModule({
   imports: MatModules,
-  exports: MatModules
+  exports: MatModules,
 })
-export class MaterialModule { }
+export class MaterialModule {}

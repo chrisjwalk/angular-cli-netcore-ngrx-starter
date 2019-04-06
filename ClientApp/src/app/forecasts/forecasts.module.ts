@@ -21,15 +21,16 @@ import { ForecastTableComponent } from 'app/forecasts/components/forecast-table/
     SharedModule,
     MaterialModule,
     RouterModule.forChild([
-      { path: '', component: FetchDataComponent, canActivate: [ForecastsGuard] },
+      {
+        path: '',
+        component: FetchDataComponent,
+        canActivate: [ForecastsGuard],
+      },
     ]),
     StoreModule.forFeature('forecasts', reducers),
     EffectsModule.forFeature(effects),
   ],
-  declarations: [
-    FetchDataComponent,
-    ForecastTableComponent
-  ],
+  declarations: [FetchDataComponent, ForecastTableComponent],
   providers: [ForecastsGuard, ForecastsService],
 })
 export class ForecastsModule {}

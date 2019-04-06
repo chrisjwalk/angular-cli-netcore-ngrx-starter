@@ -1,15 +1,17 @@
 import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Store, select } from '@ngrx/store';
+
 import * as fromRoot from 'app/core/store/reducers';
 import * as fromFeature from 'app/feature/store/reducers';
 import * as featureActions from 'app/feature/store/actions';
 import * as layoutActions from 'app/core/store/actions';
+
 @Component({
   selector: 'app-feature-container',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './feature-container.component.html',
-  styleUrls: ['./feature-container.component.scss']
+  styleUrls: ['./feature-container.component.scss'],
 })
 export class FeatureContainerComponent implements OnInit {
   count$: Observable<number>;
@@ -20,8 +22,7 @@ export class FeatureContainerComponent implements OnInit {
     this.title$ = this.store.pipe(select(fromRoot.getTitle));
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   incrementCount() {
     this.store.dispatch(new featureActions.IncrementCount());
@@ -32,5 +33,4 @@ export class FeatureContainerComponent implements OnInit {
   setCount(value: number) {
     this.store.dispatch(new featureActions.SetCount(Number(value)));
   }
-
 }

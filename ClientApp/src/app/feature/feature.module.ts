@@ -16,12 +16,10 @@ import { FeatureComponentComponent } from './components/feature-component/featur
     CommonModule,
     MaterialModule,
     SharedModule,
-    RouterModule.forChild([
-      { path: '', component: FeatureContainerComponent },
-    ]),
+    RouterModule.forChild([{ path: '', component: FeatureContainerComponent }]),
     StoreModule.forFeature('lazyFeature', reducers),
-    EffectsModule.forFeature([])
+    EffectsModule.forFeature([]),
   ],
-  declarations: [FeatureContainerComponent, FeatureComponentComponent]
+  declarations: [FeatureContainerComponent, FeatureComponentComponent],
 })
-export class FeatureModule { }
+export class FeatureModule {}

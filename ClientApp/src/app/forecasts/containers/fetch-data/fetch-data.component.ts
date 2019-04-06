@@ -1,21 +1,25 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { MatTableDataSource } from '@angular/material';
 import { Store, select } from '@ngrx/store';
 import { Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+
 import * as coreActions from 'app/core/store/actions';
 import * as fromRoot from 'app/core/store/reducers';
 import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
 import * as forecastsActions from 'app/forecasts/store/actions';
 import * as fromForecasts from 'app/forecasts/store/reducers';
 
-
-
 @Component({
   selector: 'app-fetch-data',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  templateUrl: './fetch-data.component.html'
+  templateUrl: './fetch-data.component.html',
 })
 export class FetchDataComponent implements OnInit, OnDestroy {
   forecasts$: Observable<WeatherForecast[]>;
@@ -35,13 +39,12 @@ export class FetchDataComponent implements OnInit, OnDestroy {
     this.loading$ = this.store.pipe(select(fromForecasts.getLoading));
     this.error$ = this.store.pipe(select(fromForecasts.getError));
     this.dataSource = new MatTableDataSource<WeatherForecast>([]);
-    this.forecasts$.pipe(
-      takeUntil(this.ngUnsubscribe)
-    ).subscribe(data => this.dataSource.data = data);
+    this.forecasts$
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((data) => (this.dataSource.data = data));
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   ngOnDestroy() {
     this.ngUnsubscribe.next(true);
@@ -52,4 +55,3 @@ export class FetchDataComponent implements OnInit, OnDestroy {
     this.store.dispatch(new forecastsActions.Refresh(count));
   }
 }
-

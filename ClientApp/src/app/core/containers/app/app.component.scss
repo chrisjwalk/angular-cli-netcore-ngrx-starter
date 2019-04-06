@@ -1,16 +1,7 @@
 @import 'src/styles/app-variables.scss';
 
-// .mat-sidenav-container {
-//     padding-top: $app-main-toolbar-height;
-// }
-
-// .app-content {
-//     margin-top: $app-main-toolbar-height;
-//     height: calc(100% - $app-main-toolbar-height);
-// }
 .mat-drawer-container {
-    // overflow: visible;
-    margin-top: $app-main-toolbar-height;
-    height: $app-mat-drawer-container-height;
-    background-color: $app-mat-drawer-container-background-color;
+  margin-top: $app-main-toolbar-height;
+  height: $app-mat-drawer-container-height;
+  background-color: $app-mat-drawer-container-background-color;
 }

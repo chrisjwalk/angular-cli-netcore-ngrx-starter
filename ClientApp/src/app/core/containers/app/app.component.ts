@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
-
 import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+
 import * as layoutActions from 'app/core/store/actions';
 import * as fromRoot from 'app/core/store/reducers';
-import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',

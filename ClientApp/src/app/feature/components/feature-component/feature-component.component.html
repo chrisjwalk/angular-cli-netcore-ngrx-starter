@@ -1,22 +1,31 @@
 <div class="count-row">
-  <button mat-icon-button (click)="decrement.emit()" matTooltip="Decrement">
+  <button mat-icon-button
+          (click)="decrement.emit()"
+          matTooltip="Decrement">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
   <mat-card>
     <p class="count">{{count}}</p>
   </mat-card>
-  <button mat-icon-button (click)="increment.emit()" matTooltip="Increment">
+  <button mat-icon-button
+          (click)="increment.emit()"
+          matTooltip="Increment">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
 </div>
 <div class="set-row">
-    <mat-form-field>
-      <input matInput #setvalue type="number" placeholder="Set Count" (keyup.enter)="setCount.emit(setvalue.value)" [value]="count">
-      <mat-hint align="start">
-        <strong>Enter the value you'd like to set the count to here</strong>
-      </mat-hint>
-    </mat-form-field>
-    <app-big-button (click)="setCount.emit(setvalue.value)">
-      Submit
-    </app-big-button>
+  <mat-form-field>
+    <input matInput
+           #setvalue
+           type="number"
+           placeholder="Set Count"
+           (keyup.enter)="setCount.emit(setvalue.value)"
+           [value]="count">
+    <mat-hint align="start">
+      <strong>Enter the value you'd like to set the count to here</strong>
+    </mat-hint>
+  </mat-form-field>
+  <app-big-button (click)="setCount.emit(setvalue.value)">
+    Submit
+  </app-big-button>
 </div>

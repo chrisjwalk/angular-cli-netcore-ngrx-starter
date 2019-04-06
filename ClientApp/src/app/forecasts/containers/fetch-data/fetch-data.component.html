@@ -1,11 +1,18 @@
 <app-page-toolbar [title]="title$ | async">
   <mat-form-field>
-      <input matInput #count type="number" placeholder="Forecast Days" (keyup.enter)="getForecasts(count.value)" [value]="count$ | async">
-    </mat-form-field>
-  <app-page-toolbar-button (click)="getForecasts(count.value)" tooltip="Get Forecasts">
+    <input matInput
+           #count
+           type="number"
+           placeholder="Forecast Days"
+           (keyup.enter)="getForecasts(count.value)"
+           [value]="count$ | async">
+  </mat-form-field>
+  <app-page-toolbar-button (click)="getForecasts(count.value)"
+                           tooltip="Get Forecasts">
     <mat-icon>refresh</mat-icon>
   </app-page-toolbar-button>
 </app-page-toolbar>
 <app-page-container>
-  <app-forecast-table [loading]="loading$ | async" [dataSource]="dataSource"></app-forecast-table>
+  <app-forecast-table [loading]="loading$ | async"
+                      [dataSource]="dataSource"></app-forecast-table>
 </app-page-container>

@@ -1,19 +1,27 @@
 <mat-toolbar class="app-main-toolbar">
-  <button mat-icon-button (click)="emitToggleSidenav($event)" class="show-mobile">
+  <button mat-icon-button
+          (click)="emitToggleSidenav($event)"
+          class="show-mobile">
     <mat-icon>menu</mat-icon>
   </button>
-  <a class="logo" [routerLink]="['/']">
+  <a class="logo"
+     [routerLink]="['/']">
     <img src="https://material.angular.io/assets/img/homepage/angular-white-transparent.svg" />
   </a>
-  <a class="logo-text" [routerLink]="['/']">
+  <a class="logo-text"
+     [routerLink]="['/']">
     Demo App
   </a>
   <span class="flex-spacer"></span>
   <div class="hide-mobile">
-    <button mat-icon-button [routerLink]="['/forecasts']" matTooltip="Get Data Feature">
+    <button mat-icon-button
+            [routerLink]="['/forecasts']"
+            matTooltip="Get Data Feature">
       <mat-icon>get_app</mat-icon>
     </button>
-    <button mat-icon-button [routerLink]="['/feature']" matTooltip="Lazy Loaded Feature">
+    <button mat-icon-button
+            [routerLink]="['/feature']"
+            matTooltip="Lazy Loaded Feature">
       <mat-icon>hotel</mat-icon>
     </button>
   </div>

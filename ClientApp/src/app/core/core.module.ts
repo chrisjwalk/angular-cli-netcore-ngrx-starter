@@ -20,16 +20,11 @@ export const COMPONENTS = [
   HomeComponent,
   MainToolbarComponent,
   SidenavComponent,
-  SidenavListItemComponent
+  SidenavListItemComponent,
 ];
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule,
-    MaterialModule,
-    SharedModule
-  ],
+  imports: [CommonModule, RouterModule, MaterialModule, SharedModule],
   declarations: COMPONENTS,
   exports: COMPONENTS,
   providers: [
@@ -37,8 +32,8 @@ export const COMPONENTS = [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: HttpInterceptorService,
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
-export class CoreModule { }
+export class CoreModule {}
