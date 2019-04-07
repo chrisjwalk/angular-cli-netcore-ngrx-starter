@@ -1,7 +1,9 @@
 import { Injectable, Inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ForecastsService {
   constructor(
     @Inject(HttpClient) public http: HttpClient,

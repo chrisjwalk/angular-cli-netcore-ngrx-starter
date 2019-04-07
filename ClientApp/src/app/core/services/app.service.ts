@@ -3,7 +3,9 @@ import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material';
 import { SwUpdate } from '@angular/service-worker';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AppService {
   constructor(
     private swUpdate: SwUpdate,

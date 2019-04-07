@@ -7,7 +7,9 @@ import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
 import * as forecastsActions from 'app/forecasts/store/actions';
 import * as fromForecasts from 'app/forecasts/store/reducers';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class ForecastsGuard implements CanActivate {
   constructor(private store: Store<fromForecasts.State>) {}
 

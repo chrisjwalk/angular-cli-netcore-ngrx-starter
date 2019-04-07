@@ -33,7 +33,6 @@ import { environment } from 'environments/environment';
     }),
     CoreModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
