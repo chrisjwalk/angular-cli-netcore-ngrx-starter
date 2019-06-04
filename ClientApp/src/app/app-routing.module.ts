@@ -6,11 +6,11 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'feature',
-    loadChildren: './feature/feature.module#FeatureModule',
+    loadChildren: () => import('./feature/feature.module').then(m => m.FeatureModule),
   },
   {
     path: 'forecasts',
-    loadChildren: './forecasts/forecasts.module#ForecastsModule',
+    loadChildren: () => import('./forecasts/forecasts.module').then(m => m.ForecastsModule),
   },
   { path: '**', component: HomeComponent },
 ];
