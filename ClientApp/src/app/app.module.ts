@@ -25,7 +25,7 @@ import { environment } from 'environments/environment';
     HttpClientModule,
     AppRoutingModule,
     StoreModule.forRoot(reducers, { metaReducers }),
-    StoreRouterConnectingModule,
+    StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot(effects),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
     ServiceWorkerModule.register('/ngsw-worker.js', {
