@@ -3,7 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { provideMockActions } from '@ngrx/effects/testing';
-import { cold, hot } from 'jasmine-marbles';
+import { addMatchers, cold, hot, initTestScheduler } from 'jasmine-marbles';
 import { Observable, of } from 'rxjs';
 
 import { WeatherForecast } from '../../models/weather-forecast';
@@ -34,6 +34,8 @@ describe('Forecast Effects', () => {
 
     effects = TestBed.get(ForecastEffects);
     service = TestBed.get(ForecastsService);
+    initTestScheduler();
+    addMatchers();
   });
 
   it('ForecastActions.Load() should return data', () => {
