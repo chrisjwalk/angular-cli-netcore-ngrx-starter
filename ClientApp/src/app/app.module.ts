@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ServerTransferStateModule } from '@angular/platform-server';
+// import { ServerTransferStateModule } from '@angular/platform-server';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
@@ -18,9 +18,9 @@ import { environment } from 'environments/environment';
 
 @NgModule({
   imports: [
-    BrowserModule.withServerTransition({ appId: 'angular-cli-ngrx-starter' }),
+    BrowserModule, // .withServerTransition({ appId: 'angular-cli-ngrx-starter' }),
     BrowserAnimationsModule,
-    ServerTransferStateModule,
+    // ServerTransferStateModule,
     BrowserTransferStateModule,
     HttpClientModule,
     AppRoutingModule,
