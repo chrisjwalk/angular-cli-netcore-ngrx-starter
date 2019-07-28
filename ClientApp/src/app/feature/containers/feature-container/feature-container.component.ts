@@ -17,7 +17,9 @@ export class FeatureContainerComponent implements OnInit {
   count$: Observable<number>;
   title$: Observable<string>;
   constructor(private store: Store<fromRoot.State>) {
-    this.store.dispatch(new layoutActions.SetTitle('Lazy Loaded Feature'));
+    this.store.dispatch(
+      layoutActions.setTitle({ title: 'Lazy Loaded Feature' }),
+    );
     this.count$ = this.store.pipe(select(fromFeature.getCount));
     this.title$ = this.store.pipe(select(fromRoot.getTitle));
   }
@@ -25,12 +27,12 @@ export class FeatureContainerComponent implements OnInit {
   ngOnInit() {}
 
   incrementCount() {
-    this.store.dispatch(new featureActions.IncrementCount());
+    this.store.dispatch(featureActions.incrementCount());
   }
   decrementCount() {
-    this.store.dispatch(new featureActions.DecrementCount());
+    this.store.dispatch(featureActions.decrementCount());
   }
-  setCount(value: number) {
-    this.store.dispatch(new featureActions.SetCount(Number(value)));
+  setCount(count: string) {
+    this.store.dispatch(featureActions.setCount({ count: +count }));
   }
 }

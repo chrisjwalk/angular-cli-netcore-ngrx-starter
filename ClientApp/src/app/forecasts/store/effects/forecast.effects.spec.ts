@@ -8,7 +8,7 @@ import { Observable, of } from 'rxjs';
 
 import { WeatherForecast } from '../../models/weather-forecast';
 import { ForecastsService } from '../../services/forecasts.service';
-import * as ForecastActions from '../actions/forecast.actions';
+import * as forecastActions from '../actions/forecast.actions';
 import { ForecastEffects } from './forecast.effects';
 
 describe('Forecast Effects', () => {
@@ -39,7 +39,7 @@ describe('Forecast Effects', () => {
   });
 
   it('ForecastActions.Load() should return data', () => {
-    const data: WeatherForecast[] = [
+    const weatherForecasts: WeatherForecast[] = [
       {
         id: 'test-0',
         dateFormatted: '',
@@ -48,9 +48,11 @@ describe('Forecast Effects', () => {
         summary: 'Test',
       },
     ];
-    getWeatherSpy = spyOn(service, 'getWeather').and.returnValue(of(data));
-    const action = new ForecastActions.Load();
-    const completion = new ForecastActions.LoadComplete(data);
+    getWeatherSpy = spyOn(service, 'getWeather').and.returnValue(
+      of(weatherForecasts),
+    );
+    const action = forecastActions.load({ count: 10 });
+    const completion = forecastActions.loadComplete({ weatherForecasts });
 
     actions = hot('--a-', { a: action });
     const expected = cold('--b', { b: completion });

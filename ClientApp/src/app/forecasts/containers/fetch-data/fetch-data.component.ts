@@ -32,7 +32,7 @@ export class FetchDataComponent implements OnInit, OnDestroy {
   private ngUnsubscribe: Subject<boolean> = new Subject();
 
   constructor(private store: Store<fromForecasts.State>) {
-    this.store.dispatch(new coreActions.SetTitle('Weather Forecasts'));
+    this.store.dispatch(coreActions.setTitle({ title: 'Weather Forecasts' }));
     this.title$ = this.store.pipe(select(fromRoot.getTitle));
     this.forecasts$ = this.store.pipe(select(fromForecasts.getForecasts));
     this.count$ = this.store.pipe(select(fromForecasts.getCount));
@@ -52,6 +52,6 @@ export class FetchDataComponent implements OnInit, OnDestroy {
   }
 
   getForecasts(count: number) {
-    this.store.dispatch(new forecastsActions.Refresh(count));
+    this.store.dispatch(forecastsActions.refresh({ count }));
   }
 }

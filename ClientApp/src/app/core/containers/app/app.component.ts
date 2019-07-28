@@ -20,13 +20,13 @@ export class AppComponent implements OnInit {
   }
   ngOnInit(): void {}
   openSidenav() {
-    this.store.dispatch(new layoutActions.OpenSidenav());
+    this.store.dispatch(layoutActions.openSidenav());
   }
   closeSidenav() {
-    this.store.dispatch(new layoutActions.CloseSidenav());
+    this.store.dispatch(layoutActions.closeSidenav());
   }
   toggleSidenav() {
-    this.store.dispatch(new layoutActions.ToggleSidenav());
+    this.store.dispatch(layoutActions.toggleSidenav());
   }
   sidenavChanged(sidenavOpened) {
     if (sidenavOpened) {

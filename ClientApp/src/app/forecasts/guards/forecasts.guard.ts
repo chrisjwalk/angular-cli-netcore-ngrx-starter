@@ -18,7 +18,7 @@ export class ForecastsGuard implements CanActivate {
       select(fromForecasts.getForecasts),
       tap((data) => {
         if (!data.length) {
-          this.store.dispatch(new forecastsActions.Load());
+          this.store.dispatch(forecastsActions.load({ count: 10 }));
         }
       }),
       filter((data) => data.length > 0),

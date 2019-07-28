@@ -1,4 +1,5 @@
-import { LayoutActionTypes, LayoutActions } from 'app/core/store/actions';
+import { createReducer, on, Action } from '@ngrx/store';
+import * as layoutActions from 'app/core/store/actions';
 
 export interface State {
   showSidenav: boolean;
@@ -10,38 +11,28 @@ const initialState: State = {
   title: 'Home',
 };
 
-export function reducer(
-  state: State = initialState,
-  action: LayoutActions,
-): State {
-  switch (action.type) {
-    case LayoutActionTypes.CloseSidenav: {
-      return {
-        ...state,
-        showSidenav: false,
-      };
-    }
-    case LayoutActionTypes.OpenSidenav: {
-      return {
-        ...state,
-        showSidenav: true,
-      };
-    }
-    case LayoutActionTypes.ToggleSidenav: {
-      return {
-        ...state,
-        showSidenav: !state.showSidenav,
-      };
-    }
-    case LayoutActionTypes.SetTitle: {
-      return {
-        ...state,
-        title: action.payload,
-      };
-    }
-    default:
-      return state;
-  }
+const layoutReducer = createReducer(
+  initialState,
+  on(layoutActions.closeSidenav, (state) => ({
+    ...state,
+    showSidenav: false,
+  })),
+  on(layoutActions.openSidenav, (state) => ({
+    ...state,
+    showSidenav: true,
+  })),
+  on(layoutActions.toggleSidenav, (state) => ({
+    ...state,
+    showSidenav: !state.showSidenav,
+  })),
+  on(layoutActions.setTitle, (state, { title }) => ({
+    ...state,
+    title,
+  })),
+);
+
+export function reducer(state: State | undefined, action: Action) {
+  return layoutReducer(state, action);
 }
 
 export const getShowSidenav = (state: State) => state.showSidenav;

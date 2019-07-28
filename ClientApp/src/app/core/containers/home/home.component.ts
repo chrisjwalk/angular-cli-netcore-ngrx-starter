@@ -15,7 +15,7 @@ export class HomeComponent implements OnInit {
   title$: Observable<string>;
 
   constructor(private store: Store<fromRoot.State>) {
-    this.store.dispatch(new layoutActions.SetTitle('App Home'));
+    this.store.dispatch(layoutActions.setTitle({ title: 'App Home' }));
     this.title$ = this.store.pipe(select(fromRoot.getTitle));
   }
 

@@ -1,36 +1,22 @@
-import { Action } from '@ngrx/store';
-
+import { createAction, props } from '@ngrx/store';
 import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
 
-export enum ForecastActionTypes {
-  Load = '[WeatherForecast] Load',
-  Refresh = '[WeatherForecast] Refresh',
-  LoadComplete = '[WeatherForecast] Load Complete',
-  LoadError = '[WeatherForecast] Load Error',
-}
+export const load = createAction(
+  '[WeatherForecast] Load',
+  props<{ count: number }>(),
+);
 
-export class Load implements Action {
-  readonly type = ForecastActionTypes.Load;
+export const refresh = createAction(
+  '[WeatherForecast] Refresh',
+  props<{ count: number }>(),
+);
 
-  constructor(public payload: number = 10) {}
-}
+export const loadComplete = createAction(
+  '[WeatherForecast] Load Complete',
+  props<{ weatherForecasts: WeatherForecast[] }>(),
+);
 
-export class Refresh implements Action {
-  readonly type = ForecastActionTypes.Refresh;
-
-  constructor(public payload: number) {}
-}
-
-export class LoadComplete implements Action {
-  readonly type = ForecastActionTypes.LoadComplete;
-
-  constructor(public payload: WeatherForecast[]) {}
-}
-
-export class LoadError implements Action {
-  readonly type = ForecastActionTypes.LoadError;
-
-  constructor(public payload: string) {}
-}
-
-export type ForecastActions = LoadComplete | LoadError | Load | Refresh;
+export const loadError = createAction(
+  '[WeatherForecast] Load Error',
+  props<{ error: string }>(),
+);

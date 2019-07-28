@@ -2,10 +2,9 @@ import { isPlatformServer } from '@angular/common';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TransferState, makeStateKey } from '@angular/platform-browser';
-import { Actions, Effect, ofType } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
+import { makeStateKey, TransferState } from '@angular/platform-browser';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { of } from 'rxjs';
 import { catchError, map, skip, switchMap, takeUntil } from 'rxjs/operators';
 
 import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
@@ -22,47 +21,47 @@ export class ForecastEffects {
     @Inject(PLATFORM_ID) private platformId: object,
   ) {}
 
-  @Effect()
-  load$: Observable<Action> = this.actions$.pipe(
-    ofType<forecastsActions.Load>(forecastsActions.ForecastActionTypes.Load),
-    map((action) => action.payload),
-    switchMap((count) => this.runQuery(count)),
+  load$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(forecastsActions.load),
+      map((action) => action.count),
+      switchMap((count) => this.runQuery(count)),
+    ),
   );
 
-  @Effect()
-  refresh$: Observable<Action> = this.actions$.pipe(
-    ofType<forecastsActions.Refresh>(
-      forecastsActions.ForecastActionTypes.Refresh,
+  refresh$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(forecastsActions.refresh),
+      map((action) => action.count),
+      switchMap((count) => this.runQuery(count)),
     ),
-    map((action) => action.payload),
-    switchMap((count) => this.runQuery(count)),
   );
 
   runQuery(count: number) {
     const nextLoad$ = this.actions$.pipe(
-      ofType(forecastsActions.ForecastActionTypes.Load),
+      ofType(forecastsActions.load),
       skip(1),
     );
     const stateKey = makeStateKey('getWeather_' + count.toString());
 
     if (this.transferState.hasKey(stateKey)) {
-      const weatherForecast = this.transferState.get<WeatherForecast[]>(
+      const weatherForecasts = this.transferState.get<WeatherForecast[]>(
         stateKey,
         [],
       );
       this.transferState.remove(stateKey);
-      return of(new forecastsActions.LoadComplete(weatherForecast));
+      return of(forecastsActions.loadComplete({ weatherForecasts }));
     } else {
       return this.weatherService.getWeather<WeatherForecast>(count).pipe(
         takeUntil(nextLoad$),
-        map((weatherForecast: WeatherForecast[]) => {
+        map((weatherForecasts: WeatherForecast[]) => {
           if (isPlatformServer(this.platformId)) {
             this.transferState.set<WeatherForecast[]>(
               stateKey,
-              weatherForecast,
+              weatherForecasts,
             );
           }
-          return new forecastsActions.LoadComplete(weatherForecast);
+          return forecastsActions.loadComplete({ weatherForecasts });
         }),
         catchError((err) => {
           if (err instanceof HttpErrorResponse) {
@@ -73,7 +72,7 @@ export class ForecastEffects {
               duration: 6000,
             });
           }
-          return of(new forecastsActions.LoadError(err));
+          return of(forecastsActions.loadError(err));
         }),
       );
     }

@@ -1,4 +1,5 @@
-import { FeatureActions, FeatureActionTypes } from 'app/feature/store/actions';
+import { createReducer, on, Action } from '@ngrx/store';
+import * as featureActions from 'app/feature/store/actions';
 
 export interface State {
   count: number;
@@ -8,30 +9,21 @@ const initialState: State = {
   count: 0,
 };
 
-export function reducer(state = initialState, action: FeatureActions): State {
-  switch (action.type) {
-    case FeatureActionTypes.SetCount: {
-      return {
-        ...state,
-        count: action.payload,
-      };
-    }
-    case FeatureActionTypes.IncrementCount: {
-      return {
-        ...state,
-        count: state.count + 1,
-      };
-    }
-    case FeatureActionTypes.DecrementCount: {
-      return {
-        ...state,
-        count: state.count - 1,
-      };
-    }
-    default: {
-      return state;
-    }
-  }
+const featureReducer = createReducer(
+  initialState,
+  on(featureActions.incrementCount, (state) => ({
+    ...state,
+    count: state.count + 1,
+  })),
+  on(featureActions.decrementCount, (state) => ({
+    ...state,
+    count: state.count - 1,
+  })),
+  on(featureActions.setCount, (state, { count }) => ({ ...state, count })),
+);
+
+export function reducer(state: State | undefined, action: Action) {
+  return featureReducer(state, action);
 }
 
 export const getCount = (state: State) => state.count;

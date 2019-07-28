@@ -1,11 +1,9 @@
 import { HttpErrorResponse } from '@angular/common/http';
-import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
-import { EntityState, createEntityAdapter } from '@ngrx/entity';
+import { createEntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createReducer, on } from '@ngrx/store';
 
-import {
-  ForecastActionTypes,
-  ForecastActions,
-} from 'app/forecasts/store/actions';
+import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
+import * as forecastActions from 'app/forecasts/store/actions';
 
 export interface State extends EntityState<WeatherForecast> {
   loading: boolean;
@@ -26,46 +24,37 @@ export const initialState: State = adapter.getInitialState({
   count: 0,
 });
 
-export function reducer(state = initialState, action: ForecastActions): State {
-  switch (action.type) {
-    case ForecastActionTypes.Load: {
-      return {
-        ...state,
-        loading: true,
-        loaded: false,
-        error: null,
-        count: action.payload,
-      };
-    }
-    case ForecastActionTypes.Refresh: {
-      return {
-        ...state,
-        error: null,
-        count: action.payload,
-      };
-    }
-    case ForecastActionTypes.LoadComplete: {
-      return {
-        ...adapter.addAll(action.payload, state),
-        loading: false,
-        loaded: true,
-        error: null,
-        count: state.count,
-      };
-    }
+const forecastsReducer = createReducer(
+  initialState,
+  on(forecastActions.load, (state, { count }) => ({
+    ...state,
+    loading: true,
+    loaded: false,
+    error: null,
+    count,
+  })),
 
-    case ForecastActionTypes.LoadError: {
-      return {
-        ...state,
-        loading: false,
-        error: action.payload,
-      };
-    }
+  on(forecastActions.refresh, (state, { count }) => ({
+    ...state,
+    error: null,
+    count,
+  })),
+  on(forecastActions.loadComplete, (state, { weatherForecasts }) => ({
+    ...adapter.addAll(weatherForecasts, state),
+    loading: false,
+    loaded: true,
+    error: null,
+  })),
 
-    default: {
-      return state;
-    }
-  }
+  on(forecastActions.loadError, (state, { error }) => ({
+    ...state,
+    loading: false,
+    error,
+  })),
+);
+
+export function reducer(state: State | undefined, action: Action) {
+  return forecastsReducer(state, action);
 }
 
 export const getCount = (state: State) => state.count;

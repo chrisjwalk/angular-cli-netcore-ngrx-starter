@@ -1,45 +1,28 @@
-import { Action } from '@ngrx/store';
 import { NavigationExtras } from '@angular/router';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
+import { createAction, props } from '@ngrx/store';
+
 import { RouterStateUrl } from 'app/core/store/reducers';
 
 export const NAVIGATION = ROUTER_NAVIGATION;
 
-export enum RouterActionTypes {
-  GO = '[Router] Go',
-  BACK = '[Router] Back',
-  FORWARD = '[Router] Forward',
-}
+export const routerNavigation = createAction(
+  ROUTER_NAVIGATION,
+  props<{
+    event: any;
+    routerState: RouterStateUrl;
+  }>(),
+);
 
-export class RouterNavigation implements Action {
-  readonly type = ROUTER_NAVIGATION;
+export const go = createAction(
+  '[Router] Go',
+  props<{
+    path: any[];
+    query?: object;
+    extras?: NavigationExtras;
+  }>(),
+);
 
-  constructor(
-    public payload: {
-      event: any;
-      routerState: RouterStateUrl;
-    },
-  ) {}
-}
+export const back = createAction('[Router] Back');
 
-export class Go implements Action {
-  readonly type = RouterActionTypes.GO;
-
-  constructor(
-    public payload: {
-      path: any[];
-      query?: object;
-      extras?: NavigationExtras;
-    },
-  ) {}
-}
-
-export class Back implements Action {
-  readonly type = RouterActionTypes.BACK;
-}
-
-export class Forward implements Action {
-  readonly type = RouterActionTypes.FORWARD;
-}
-
-export type RouterActions = Go | Back | Forward;
+export const forward = createAction('[Router] Forward');

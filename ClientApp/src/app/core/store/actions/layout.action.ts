@@ -1,30 +1,12 @@
-import { Action } from '@ngrx/store';
+import { createAction, props } from '@ngrx/store';
 
-export enum LayoutActionTypes {
-  OpenSidenav = '[Layout] Open Sidenav',
-  CloseSidenav = '[Layout] Close Sidenav',
-  ToggleSidenav = '[Layout] Toggle Sidenav',
-  SetTitle = '[Layout] Set Title',
-}
+export const openSidenav = createAction('[Layout] Open Sidenav');
 
-export class OpenSidenav implements Action {
-  readonly type = LayoutActionTypes.OpenSidenav;
-}
+export const closeSidenav = createAction('[Layout] Close Sidenav');
 
-export class CloseSidenav implements Action {
-  readonly type = LayoutActionTypes.CloseSidenav;
-}
-export class ToggleSidenav implements Action {
-  readonly type = LayoutActionTypes.ToggleSidenav;
-}
+export const toggleSidenav = createAction('[Layout] Toggle Sidenav');
 
-export class SetTitle implements Action {
-  readonly type = LayoutActionTypes.SetTitle;
-  constructor(public payload: string) {}
-}
-
-export type LayoutActions =
-  | OpenSidenav
-  | CloseSidenav
-  | ToggleSidenav
-  | SetTitle;
+export const setTitle = createAction(
+  '[Layout] Set Title',
+  props<{ title: string }>(),
+);
