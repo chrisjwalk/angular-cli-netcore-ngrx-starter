@@ -184,6 +184,8 @@ orleans.codegen.cs
 /ClientApp/node_modules
 /ClientApp/dist-server
 /ClientApp/dist
+/ClientApp/coverage
+/ClientApp/junit
 /node_modules
 
 /yarn.lock

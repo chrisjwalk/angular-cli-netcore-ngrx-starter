@@ -11,6 +11,7 @@
     "build:ssr:prod": "ng run angular-cli-netcore-ngrx-starter:server:production",
     "build:both:prod": "npm run build:prod && npm run build:ssr:prod",
     "test": "ng test",
+    "test:ci": "ng test --configuration ci",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },
@@ -60,6 +61,7 @@
     "karma-coverage-istanbul-reporter": "^2.1.0",
     "karma-jasmine": "^2.0.1",
     "karma-jasmine-html-reporter": "^1.4.2",
+    "karma-junit-reporter": "^1.2.0",
     "protractor": "^5.4.2",
     "ts-node": "^8.3.0",
     "tslint": "^5.18.0",
