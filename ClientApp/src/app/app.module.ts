@@ -24,7 +24,10 @@ import { environment } from 'environments/environment';
     BrowserTransferStateModule,
     HttpClientModule,
     AppRoutingModule,
-    StoreModule.forRoot(reducers, { metaReducers }),
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: { strictStateImmutability: true, strictActionImmutability: true },
+    }),
     StoreRouterConnectingModule.forRoot(),
     EffectsModule.forRoot(effects),
     !environment.production ? StoreDevtoolsModule.instrument() : [],
