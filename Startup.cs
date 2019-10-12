@@ -52,11 +52,10 @@ namespace AngularCliNetcoreNgrxStarter
             };
 
             app.UseStaticFiles(staticFileOptions);
-            app.UseSpaStaticFiles(staticFileOptions);
-
+            
             if (!env.IsDevelopment())
             {
-                app.UseSpaStaticFiles();
+                app.UseSpaStaticFiles(staticFileOptions);
             }
 
             app.UseRouting();
