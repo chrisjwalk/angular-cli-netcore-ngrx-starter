@@ -1,46 +1,36 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 
 namespace AngularCliNetcoreNgrxStarter
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration, IHostingEnvironment hostingEnvironment)
+        public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-            HostingEnvironment = hostingEnvironment;
         }
 
         public IConfiguration Configuration { get; }
-        public IHostingEnvironment HostingEnvironment { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-
+            services.AddControllersWithViews();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
                 configuration.RootPath = "ClientApp/dist";
             });
-
-            if (HostingEnvironment.IsProduction())
-            {
-                services.AddHttpsRedirection(options =>
-                {
-                    options.HttpsPort = 443;
-                });
-            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -52,7 +42,7 @@ namespace AngularCliNetcoreNgrxStarter
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-            
+
             app.UseHttpsRedirection();
             
             FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
@@ -62,13 +52,19 @@ namespace AngularCliNetcoreNgrxStarter
             };
 
             app.UseStaticFiles(staticFileOptions);
-            app.UseSpaStaticFiles(staticFileOptions);
-
-            app.UseMvc(routes =>
+            
+            if (!env.IsDevelopment())
             {
-                routes.MapRoute(
+                app.UseSpaStaticFiles(staticFileOptions);
+            }
+
+            app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllerRoute(
                     name: "default",
-                    template: "{controller}/{action=Index}/{id?}");
+                    pattern: "{controller}/{action=Index}/{id?}");
             });
 
             app.UseSpa(spa =>
@@ -77,25 +73,6 @@ namespace AngularCliNetcoreNgrxStarter
                 // see https://go.microsoft.com/fwlink/?linkid=864501
 
                 spa.Options.SourcePath = "ClientApp";
-
-                // spa.UseSpaPrerendering(options =>
-                // {
-                //     options.BootModulePath = $"{spa.Options.SourcePath}/dist-server/main.js";
-                    
-                //     // BootModuleBuilder Disabled - Building at runtime in dev enviroment was giving timeouts.
-                //     // options.BootModuleBuilder = env.IsDevelopment()
-                //     //     ? new AngularCliBuilder(npmScript: "build:ssr")
-                //     //     : null;
-                    
-                //     options.ExcludeUrls = new[] { "/sockjs-node" };
-
-                //     options.SupplyData = (context, data) =>
-                //     {
-                //          // Creates a new value called isHttpsRequest that is passed to TypeScript code
-                //          data["isHttpsRequest"] = context.Request.IsHttps;
-                //     };
-                // });
-
 
                 if (env.IsDevelopment())
                 {

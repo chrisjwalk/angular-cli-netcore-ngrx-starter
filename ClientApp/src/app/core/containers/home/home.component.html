@@ -3,21 +3,21 @@
 </app-page-toolbar>
 <app-page-container>
   <mat-card>
-    <h1 id="angular51angularcli16ngrxplatformnetcore20serversiderenderingoptionalstarter">Angular 8 + Angular Cli 8 + NgRx Platform + .NET Core 2.2.0 + Server Side Rendering (optional) Starter</h1>
+    <h1 id="angular51angularcli16ngrxplatformnetcore20serversiderenderingoptionalstarter">Angular 8 + Angular Cli 8 + NgRx Platform + .NET Core 3.0</h1>
 
-    <p>This is basic demo of how to use an Angualr SPA and .NET Core 2.2 with <a href="https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular">Microsoft.AspNetCore.SpaServices.Extensions</a>.</p>
+    <p>This is basic demo of how to use an Angualr SPA and .NET Core 3.0 with <a href="https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular">Microsoft.AspNetCore.SpaServices.Extensions</a>.</p>
 
     <h1 id="gettingstarted">Getting Started?</h1>
 
     <ul>
       <li><strong>Make sure you have at least Node 10.x or higher (w/ npm 6+) installed!</strong> </li>
 
-      <li><strong>This repository uses ASP.Net Core 2.2.0, which has a hard requirement on .NET Core SDK 2.2.x. Please install these items from <a href="https://dotnet.microsoft.com/download">here</a></strong></li>
+      <li><strong>This repository uses ASP.Net Core 3.0, which has a hard requirement on .NET Core SDK 3.x.x. Please install these items from <a href="https://dotnet.microsoft.com/download">here</a></strong></li>
     </ul>
 
     <h3 id="visualstudio2017">Visual Studio 2017</h3>
 
-    <p>Make sure you have .NET Core 2.2.0 installed and/or VS2017 15.9.5.
+    <p>Make sure you have .NET Core 3.0 installed and/or VS2017 15.9.5.
       VS2017 should automatically install all the necessary npm &amp; .NET dependencies when you open the project.</p>
 
     <p>Simply push F5 to start debugging !</p>
@@ -46,45 +46,14 @@ dotnet restore
 # with a pre-configured launch profile to run in dev mode.
 npm start</code></pre>
 
-    <p></p>
-
-    <h3 id="ssrserversiderendering">SSR (Server Side Rendering)</h3>
-
-    <p>To enable SSR, simply uncomment the following block of code in startup.cs:</p>
-
-    <pre><code>// spa.UseSpaPrerendering(...);</code></pre>
-
-    <p>And enable this flag in the .csproj file so the server version of client app will be built upon publishing, and the necessary node_modules folder will be deployed:</p>
-
-    <pre><code>&lt;!-- Set this to true if you enable server-side prerendering --&gt;
-&lt;BuildServerSideRenderer&gt;false&lt;/BuildServerSideRenderer&gt;</code></pre>
-
     <h3 id="runproductionapp">Run Production App</h3>
 
     <p>To run the production app locally, you'll first need to build the client app in production mode, and the server app if using SSR.</p>
-
-    <h4 id="notusingssr">Not Using SSR</h4>
 
     <p>Build the client app in production mode:</p>
 
     <pre><code class="bash language-bash"># cd ./ClientApp/
 npm run build:prod</code></pre>
-
-    <p>
-      Then start dotnet in production mode by using the supplied launch settings and npm script to load them:</p>
-
-    <pre><code class="bash language-bash"># cd ../
-npm run dotnet:run:prod</code></pre>
-
-    <p></p>
-
-    <h4 id="usingssr">Using SSR</h4>
-
-    <p>Build the client app and server app in production mode:</p>
-
-    <pre><code class="bash language-bash"># cd ./ClientApp/
-npm run build:prod
-npm run build:ssr:prod</code></pre>
 
     <p>
       Then start dotnet in production mode by using the supplied launch settings and npm script to load them:</p>
