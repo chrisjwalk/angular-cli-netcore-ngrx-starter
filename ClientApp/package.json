@@ -23,7 +23,7 @@
     "@angular/material": "^8.2.3",
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
-    "@angular/pwa": "^0.803.19",
+    "@angular/pwa": "^0.803.20",
     "@angular/router": "~8.2.14",
     "@angular/service-worker": "~8.2.14",
     "@ngrx/effects": "^8.5.2",
@@ -39,13 +39,13 @@
     "zone.js": "~0.9.1"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.803.19",
-    "@angular/cli": "~8.3.19",
+    "@angular-devkit/build-angular": "~0.803.20",
+    "@angular/cli": "~8.3.20",
     "@angular/compiler-cli": "~8.2.14",
     "@angular/language-service": "~8.2.14",
     "@types/jasmine": "^3.5.0",
     "@types/jasminewd2": "~2.0.3",
-    "@types/node": "^10.17.5",
+    "@types/node": "^10.17.6",
     "codelyzer": "^5.2.0",
     "jasmine-core": "^3.5.0",
     "jasmine-spec-reporter": "^4.2.1",
@@ -56,7 +56,7 @@
     "karma-jasmine-html-reporter": "^1.4.2",
     "karma-junit-reporter": "^2.0.1",
     "protractor": "^5.4.2",
-    "ts-node": "^8.5.2",
+    "ts-node": "^8.5.4",
     "tslint": "^5.20.1",
     "typescript": "~3.5.3"
   }
