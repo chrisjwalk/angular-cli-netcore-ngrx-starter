@@ -11,7 +11,7 @@ describe('workspace-project App', () => {
   it('should display welcome message', () => {
     page.navigateTo();
     expect(page.getTitleText()).toEqual(
-      'Angular 8 + Angular Cli 8 + NgRx Platform + .NET Core 3.0',
+      'Angular 9 + Angular Cli 9 + NgRx Platform + .NET Core 3.1',
     );
   });
 
