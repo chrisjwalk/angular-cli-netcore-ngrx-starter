@@ -4,7 +4,7 @@
   "license": "MIT",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "start": "echo \"starting ng serve\" && ng serve",
     "build": "ng build",
     "build:prod": "ng run angular-cli-netcore-ngrx-starter:build:production",
     "test": "ng test",
