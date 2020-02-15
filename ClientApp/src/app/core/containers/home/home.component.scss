@@ -1,8 +1,18 @@
+@import 'src/styles/app-variables.scss';
+
 pre {
   padding: 16px;
   overflow: auto;
   font-size: 85%;
   line-height: 1.45;
-  background-color: #f6f8fa;
+  background-color: $app-pre-background;
   border-radius: 3px;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::ng-deep {
+    pre {
+      background-color: $app-dark-pre-background !important;
+    }
+  }
 }

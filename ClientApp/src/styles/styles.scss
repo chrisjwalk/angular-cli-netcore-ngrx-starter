@@ -16,6 +16,10 @@ mat-sidenav-container,
   flex: 1 1 0.0000001px;
 }
 
+a, a:hover, a:visited {
+  color: #94ddff;
+}
+
 // .mat-drawer-content {
 //   overflow: unset !important;
 //   height: calc(100% - $app-main-toolbar-height) !important;

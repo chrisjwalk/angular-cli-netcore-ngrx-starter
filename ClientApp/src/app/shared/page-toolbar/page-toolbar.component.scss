@@ -16,3 +16,11 @@
     font-size: 18px;
   }
 }
+
+@media (prefers-color-scheme: dark) {
+  ::ng-deep {
+    .app-page-toolbar {
+      background: $app-dark-page-toolbar-background !important;
+    }
+  }
+}
