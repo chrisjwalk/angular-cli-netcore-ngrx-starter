@@ -16,14 +16,19 @@ mat-sidenav-container,
   flex: 1 1 0.0000001px;
 }
 
-a, a:hover, a:visited {
-  color: #94ddff;
+@media (prefers-color-scheme: dark) {
+  a,
+  a:hover,
+  a:visited {
+    color: #94ddff;
+  }
 }
 
 @media (max-width: $app-mobile-max-width) {
   .hide-mobile {
     display: none !important;
   }
+
   .show-mobile {
     display: block;
   }
@@ -33,6 +38,7 @@ a, a:hover, a:visited {
   .hide-mobile {
     display: block;
   }
+
   .show-mobile {
     display: none !important;
   }
