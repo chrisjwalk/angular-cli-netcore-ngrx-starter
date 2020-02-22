@@ -7,12 +7,9 @@ pre {
   line-height: 1.45;
   background-color: $app-pre-background;
   border-radius: 3px;
-}
 
-@media (prefers-color-scheme: dark) {
-  ::ng-deep {
-    pre {
-      background-color: $app-dark-pre-background !important;
-    }
+
+  @media (prefers-color-scheme: dark) {
+    background-color: $app-dark-pre-background;
   }
 }

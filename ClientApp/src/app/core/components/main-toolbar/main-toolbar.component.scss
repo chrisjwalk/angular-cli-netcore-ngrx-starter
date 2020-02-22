@@ -9,6 +9,10 @@
   background: $app-main-toolbar-background;
   color: $app-main-toolbar-color;
 
+  @media (prefers-color-scheme: dark) {
+    background: $app-dark-main-toolbar-background;
+  }
+
   .mat-icon-button {
     margin: 0 8px;
 
@@ -38,13 +42,5 @@
   a.logo-text:hover {
     text-decoration: none;
     color: hsla(0, 0%, 100%, .75);
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  ::ng-deep {
-    .app-main-toolbar {
-      background: $app-dark-main-toolbar-background;
-    }
   }
 }

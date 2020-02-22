@@ -20,11 +20,6 @@ a, a:hover, a:visited {
   color: #94ddff;
 }
 
-// .mat-drawer-content {
-//   overflow: unset !important;
-//   height: calc(100% - $app-main-toolbar-height) !important;
-// }
-
 @media (max-width: $app-mobile-max-width) {
   .hide-mobile {
     display: none !important;

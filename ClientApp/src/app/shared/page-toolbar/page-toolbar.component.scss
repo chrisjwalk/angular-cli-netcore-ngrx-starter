@@ -12,15 +12,11 @@
   white-space: nowrap;
   margin-bottom: 8px;
 
+  @media (prefers-color-scheme: dark) {
+    background: $app-dark-page-toolbar-background;
+  }
+
   .title {
     font-size: 18px;
-  }
-}
-
-@media (prefers-color-scheme: dark) {
-  ::ng-deep {
-    .app-page-toolbar {
-      background: $app-dark-page-toolbar-background !important;
-    }
   }
 }

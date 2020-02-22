@@ -4,12 +4,8 @@
   margin-top: $app-main-toolbar-height;
   height: $app-mat-drawer-container-height;
   background-color: $app-mat-drawer-container-background-color;
-}
 
-@media (prefers-color-scheme: dark) {
-  ::ng-deep {
-    .mat-drawer-container {
-      background-color: $app-dark-mat-drawer-container-background-color !important;
-    }
+  @media (prefers-color-scheme: dark) {
+    background-color: $app-dark-mat-drawer-container-background-color;
   }
 }
