@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Net.Http.Headers;
 
 namespace AngularCliNetcoreNgrxStarter
 {
@@ -44,15 +44,22 @@ namespace AngularCliNetcoreNgrxStarter
             }
 
             app.UseHttpsRedirection();
-            
+
             FileExtensionContentTypeProvider provider = new FileExtensionContentTypeProvider();
             provider.Mappings[".webmanifest"] = "application/manifest+json";
-            StaticFileOptions staticFileOptions = new StaticFileOptions() {
-                ContentTypeProvider = provider
+            StaticFileOptions staticFileOptions = new StaticFileOptions()
+            {
+                ContentTypeProvider = provider,
+                OnPrepareResponse = ctx =>
+                {
+                    const int durationInSeconds = 60 * 60 * 24;
+                    ctx.Context.Response.Headers[HeaderNames.CacheControl] =
+                        "public,max-age=" + durationInSeconds;
+                }
             };
 
             app.UseStaticFiles(staticFileOptions);
-            
+
             if (!env.IsDevelopment())
             {
                 app.UseSpaStaticFiles(staticFileOptions);
