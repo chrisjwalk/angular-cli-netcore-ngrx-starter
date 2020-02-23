@@ -5,8 +5,10 @@
     <mat-icon>menu</mat-icon>
   </button>
   <a class="logo"
+     aria-label="Home Page"
      [routerLink]="['/']">
-    <img src="https://material.angular.io/assets/img/homepage/angular-white-transparent.svg" />
+    <img src="https://material.angular.io/assets/img/homepage/angular-white-transparent.svg"
+         alt="Angular Logo" />
   </a>
   <a class="logo-text"
      [routerLink]="['/']">
@@ -16,12 +18,14 @@
   <div class="hide-mobile">
     <button mat-icon-button
             [routerLink]="['/forecasts']"
-            matTooltip="Get Data Feature">
+            matTooltip="Get Data Feature"
+            aria-label="Get Data Feature">
       <mat-icon>get_app</mat-icon>
     </button>
     <button mat-icon-button
             [routerLink]="['/feature']"
-            matTooltip="Lazy Loaded Feature">
+            matTooltip="Lazy Loaded Feature"
+            aria-label="Lazy Loaded Feature">
       <mat-icon>hotel</mat-icon>
     </button>
   </div>
