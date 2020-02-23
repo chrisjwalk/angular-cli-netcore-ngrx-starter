@@ -1,7 +1,8 @@
 <div class="count-row">
   <button mat-icon-button
           (click)="decrement.emit()"
-          matTooltip="Decrement">
+          matTooltip="Decrement"
+          aria-label="Decrement">
     <mat-icon>keyboard_arrow_left</mat-icon>
   </button>
   <mat-card>
@@ -9,7 +10,8 @@
   </mat-card>
   <button mat-icon-button
           (click)="increment.emit()"
-          matTooltip="Increment">
+          matTooltip="Increment"
+          aria-label="Increment">
     <mat-icon>keyboard_arrow_right</mat-icon>
   </button>
 </div>

@@ -16,7 +16,13 @@
     background: $app-dark-page-toolbar-background;
   }
 
-  .title {
-    font-size: 18px;
+  h1 {
+    &.title {
+      font-size: 18px;
+      font-weight: normal;
+      margin-block-start: 0;
+      margin-block-end: 0;
+      display: inline;
+    }
   }
 }
