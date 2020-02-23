@@ -52,7 +52,9 @@ namespace AngularCliNetcoreNgrxStarter
                 ContentTypeProvider = provider,
                 OnPrepareResponse = ctx =>
                 {
-                    const int durationInSeconds = 60 * 60 * 24;
+                    // set cache-control header to 1 year or
+                    // cache-control: public, max-age=31536000 
+                    const int durationInSeconds = 60 * 60 * 24 * 365;
                     ctx.Context.Response.Headers[HeaderNames.CacheControl] =
                         "public,max-age=" + durationInSeconds;
                 }
