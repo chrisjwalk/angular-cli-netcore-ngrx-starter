@@ -34,7 +34,7 @@
     "moment": "^2.24.0",
     "rxjs": "^6.5.4",
     "tslib": "^1.11.1",
-    "zone.js": "~0.10.2"
+    "zone.js": "^0.10.3"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.900.7",
@@ -54,7 +54,7 @@
     "karma-jasmine-html-reporter": "^1.5.1",
     "karma-junit-reporter": "^2.0.1",
     "protractor": "^5.4.2",
-    "ts-node": "^8.6.2",
+    "ts-node": "^8.7.0",
     "tslint": "^5.20.1",
     "typescript": "~3.7.5"
   }
