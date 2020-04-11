@@ -1,0 +1,14 @@
+{
+  "builders": {
+    "build": {
+      "implementation": "./build",
+      "schema": "./build/schema.json",
+      "description": "Builds dotnet project."
+    },
+    "run": {
+      "implementation": "./run",
+      "schema": "./run/schema.json",
+      "description": "Runs dotnet project."
+    }
+  }
+}
