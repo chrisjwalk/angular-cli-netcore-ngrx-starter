@@ -44,13 +44,13 @@ steps:
     pathToSources: 'coverage'
     failIfCoverageEmpty: true
 
-- task: DotNetCoreCLI@2
-  displayName: Publish
+- task: ArchiveFiles@2
   inputs:
-    command: publish
-    publishWebProjects: True
-    arguments: '--configuration $(BuildConfiguration) --output $(build.artifactstagingdirectory)'
-    zipAfterPublish: True
+    rootFolderOrFile: 'dist'
+    includeRootFolder: true
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
 
 - task: PublishBuildArtifacts@1
   displayName: 'Publish Artifact'
