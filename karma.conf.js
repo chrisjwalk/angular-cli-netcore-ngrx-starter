@@ -21,7 +21,7 @@ module.exports = () => {
     },
     coverageIstanbulReporter: {
       dir: join(__dirname, './coverage'),
-      reports: ['html', 'lcovonly'],
+      reports: ['html', 'lcovonly', 'cobertura'],
       fixWebpackSourcePaths: true
     },
     junitReporter: {

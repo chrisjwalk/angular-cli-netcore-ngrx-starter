@@ -23,7 +23,6 @@ steps:
 - script: |
     npm install -g @angular/cli @nrwl/cli
     npm install
-    npm run build:dotnet-builder
     npm run lint
     npm run test:ci
     npm run build:prod
@@ -34,15 +33,15 @@ steps:
   displayName: 'Publish Test Results **/TESTS-*.xml'
   inputs:
     testResultsFiles: '**/TESTS-*.xml'
-    searchFolder: '$(System.DefaultWorkingDirectory)/ClientApp/junit'
+    searchFolder: 'junit'
     failTaskOnFailedTests: true
 
 - task: PublishCodeCoverageResults@1
   displayName: 'Publish Code Coverage'
   inputs:
     codeCoverageTool: Cobertura
-    summaryFileLocation: '$(System.DefaultWorkingDirectory)/ClientApp/coverage/cobertura-coverage.xml'
-    pathToSources: '$(System.DefaultWorkingDirectory)/ClientApp/src'
+    summaryFileLocation: '**/cobertura-coverage.xml'
+    pathToSources: 'coverage'
     failIfCoverageEmpty: true
 
 - task: DotNetCoreCLI@2
