@@ -24,18 +24,17 @@ steps:
     npm install
   displayName: 'npm install'
 
-  - script: |
+- script: |
     npm run lint
   displayName: 'Lint'
 
-  - script: |
+- script: |
     npm run test:ci
   displayName: 'Run Tests'
 
-  - script: |
+- script: |
     npm run build:prod
   displayName: 'Build'
-
 
 - task: PublishTestResults@2
   displayName: 'Publish Test Results **/TESTS-*.xml'
