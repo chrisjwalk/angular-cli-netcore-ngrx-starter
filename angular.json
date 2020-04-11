@@ -150,7 +150,13 @@
           "builder": "tools/builders/dotnet-builder:build",
           "options": {
             "project": "apps/api",
-            "outputPath": "dist/apps/api"
+            "outputPath": "dist/apps/api",
+            "configuration": "Debug"
+          },
+          "configurations": {
+            "production": {
+              "configuration": "Release"
+            }
           }
         },
         "serve": {

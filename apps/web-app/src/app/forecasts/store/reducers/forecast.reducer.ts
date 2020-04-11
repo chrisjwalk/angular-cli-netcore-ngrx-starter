@@ -40,7 +40,7 @@ const forecastsReducer = createReducer(
     count,
   })),
   on(forecastActions.loadComplete, (state, { weatherForecasts }) => ({
-    ...adapter.addAll(weatherForecasts, state),
+    ...adapter.setAll(weatherForecasts, state),
     loading: false,
     loaded: true,
     error: null,

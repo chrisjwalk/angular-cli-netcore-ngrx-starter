@@ -6,6 +6,7 @@ interface Options extends JsonObject {
   project: string;
   outputPath: string | null;
   verbosityLevel: string | null;
+  configuration: string | null;
   interactive: boolean;
   noRestore: boolean;
 }
@@ -21,6 +22,10 @@ export default createBuilder<Options>((options, context) => {
     if (options.verbosityLevel) {
       dotnetArgs.push("--verbosity");
       dotnetArgs.push(options.verbosityLevel);
+    }
+    if (options.configuration) {
+      dotnetArgs.push("--configuration");
+      dotnetArgs.push(options.configuration);
     }
     if (options.interactive) {
       dotnetArgs.push("--interactive");

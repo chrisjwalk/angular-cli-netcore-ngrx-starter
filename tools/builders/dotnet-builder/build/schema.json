@@ -11,6 +11,9 @@
     "verbosityLevel": {
       "type": "string"
     },
+    "configuration": {
+      "type": "string"
+    },
     "interactive": {
       "type": "boolean"
     },

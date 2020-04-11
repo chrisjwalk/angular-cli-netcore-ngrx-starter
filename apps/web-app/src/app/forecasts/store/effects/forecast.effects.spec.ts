@@ -32,8 +32,8 @@ describe('Forecast Effects', () => {
       ],
     });
 
-    effects = TestBed.get(ForecastEffects);
-    service = TestBed.get(ForecastsService);
+    effects = TestBed.inject(ForecastEffects);
+    service = TestBed.inject(ForecastsService);
     initTestScheduler();
     addMatchers();
   });
