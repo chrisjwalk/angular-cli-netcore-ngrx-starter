@@ -21,12 +21,20 @@ steps:
     version: 3.1.x
 
 - script: |
-    npm install -g @angular/cli @nrwl/cli
     npm install
+  displayName: 'npm install'
+
+  - script: |
     npm run lint
+  displayName: 'Lint'
+
+  - script: |
     npm run test:ci
+  displayName: 'Run Tests'
+
+  - script: |
     npm run build:prod
-  displayName: 'npm install, lint, test, and build'
+  displayName: 'Build'
 
 
 - task: PublishTestResults@2
@@ -47,7 +55,7 @@ steps:
 - task: ArchiveFiles@2
   inputs:
     rootFolderOrFile: 'dist'
-    includeRootFolder: true
+    includeRootFolder: false
     archiveType: 'zip'
     archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
     replaceExistingArchive: true
