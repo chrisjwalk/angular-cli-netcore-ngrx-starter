@@ -10,8 +10,9 @@
     "build": "nx run-many --target=build --projects=web-app,api --parallel",
     "build:prod": "npm run build -- --configuration production",
     "build:api": "nx build api",
-    "build:dotnet-builder": "tsc -p ./tools/builders/dotnet-builder",
+    "build:dotnet-builder": "rimraf ./tools/builders/dotnet-builder/dist && tsc -p ./tools/builders/dotnet-builder",
     "test:dotnet-builder": "ts-node node_modules/jasmine/bin/jasmine ./tools/builders/dotnet-builder/build/index_spec.ts",
+    "clean": "rimraf ./dist",
     "serve:api": "nx serve api",
     "test": "nx test web-app",
     "test:ci": "nx test web-app --configuration ci",
@@ -88,6 +89,7 @@
     "karma-junit-reporter": "^2.0.1",
     "prettier": "^2.0.2",
     "protractor": "^5.4.0",
+    "rimraf": "^3.0.2",
     "ts-node": "^8.8.2",
     "tslint": "^6.1.1",
     "typescript": "~3.8.3"

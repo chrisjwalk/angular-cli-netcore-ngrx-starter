@@ -1,0 +1,24 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string"
+    },
+    "outputPath": {
+      "type": "string"
+    },
+    "verbosityLevel": {
+      "type": "string"
+    },
+    "configuration": {
+      "type": "string"
+    },
+    "interactive": {
+      "type": "boolean"
+    },
+    "noRestore": {
+      "type": "boolean"
+    }
+  }
+}

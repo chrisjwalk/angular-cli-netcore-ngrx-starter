@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "./dist",
     "baseUrl": "tsconfig",
     "target": "es6",
     "declaration": true,

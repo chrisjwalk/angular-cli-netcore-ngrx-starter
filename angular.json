@@ -147,10 +147,10 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "tools/builders/dotnet-builder:build",
+          "builder": "tools/builders/dotnet-builder:publish",
           "options": {
             "project": "apps/api",
-            "outputPath": "dist/apps/api",
+            "outputPath": "dist",
             "configuration": "Debug"
           },
           "configurations": {
