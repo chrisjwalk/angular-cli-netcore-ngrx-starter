@@ -1,15 +1,39 @@
 @import 'apps/web-app/src/styles/app-variables.scss';
 
-pre {
-  padding: 16px;
-  overflow: auto;
-  font-size: 85%;
-  line-height: 1.45;
-  background-color: $app-pre-background;
-  border-radius: 3px;
-  border: 1px solid #e1e1e8;
+::ng-deep {
+  pre {
+    padding: 16px;
+    overflow: auto;
+    font-size: 85%;
+    line-height: 1.45;
+    background-color: $app-pre-background;
+    border-radius: 3px;
+    border: 1px solid #e1e1e8;
 
-  @media (prefers-color-scheme: dark) {
-    background-color: $app-dark-pre-background;
+    @media (prefers-color-scheme: dark) {
+      background-color: $app-dark-pre-background;
+    }
+  }
+
+  blockquote {
+    background-color: $app-pre-background;
+    padding: 1px 16px;
+    margin-left: 0;
+    margin-right: 0;
+    border-left: #e1e1e8 solid 10px;
+    border-radius: 3px;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: $app-dark-pre-background;
+    }
+  }
+
+  code {
+    padding: 2px 4px;
+    background-color: $app-pre-background;
+
+    @media (prefers-color-scheme: dark) {
+      background-color: $app-dark-pre-background;
+    }
   }
 }

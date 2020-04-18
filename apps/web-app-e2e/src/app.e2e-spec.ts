@@ -8,10 +8,10 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should load readme.md', () => {
     page.navigateTo();
-    expect(page.getTitleText()).toEqual(
-      'Angular 9 + Angular Cli 9 + NgRx Platform + .NET Core 3.1',
+    expect(page.getPageMarkdownSrc()).toEqual(
+      '/readme.md',
     );
   });
 

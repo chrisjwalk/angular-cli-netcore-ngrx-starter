@@ -8,4 +8,10 @@ export class AppPage {
   getTitleText() {
     return element(by.id('home-title')).getText() as Promise<string>;
   }
+
+  getPageMarkdownSrc() {
+    return element(by.id('page-markdown')).getAttribute('src') as Promise<
+      string
+    >;
+  }
 }

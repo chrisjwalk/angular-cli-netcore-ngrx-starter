@@ -24,6 +24,7 @@
             "assets": [
               "apps/web-app/src/favicon.ico",
               "apps/web-app/src/robots.txt",
+              "apps/web-app/src/readme.md",
               "apps/web-app/src/assets",
               "apps/web-app/src/manifest.webmanifest"
             ],
@@ -31,7 +32,9 @@
               "apps/web-app/src/styles/styles.scss",
               "apps/web-app/src/styles/material.scss"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/marked/lib/marked.js"
+            ]
           },
           "configurations": {
             "production": {

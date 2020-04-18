@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { MainToolbarComponent } from 'app/core/components/main-toolbar/main-toolbar.component';
 import { SidenavListItemComponent } from 'app/core/components/sidenav-list-item/sidenav-list-item.component';
@@ -21,7 +22,13 @@ export const COMPONENTS = [
 ];
 
 @NgModule({
-  imports: [CommonModule, RouterModule, MaterialModule, SharedModule],
+  imports: [
+    CommonModule,
+    RouterModule,
+    MaterialModule,
+    MarkdownModule.forRoot(),
+    SharedModule,
+  ],
   declarations: COMPONENTS,
   exports: COMPONENTS,
   providers: [
@@ -36,7 +43,7 @@ export class CoreModule {
   constructor(@Optional() @SkipSelf() parentModule: CoreModule) {
     if (parentModule) {
       throw new Error(
-        'CoreModule is already loaded. Import it in the AppModule only',
+        'CoreModule is already loaded. Import it in the AppModule only'
       );
     }
   }
