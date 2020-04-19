@@ -8,10 +8,10 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should load readme.md', () => {
+  it('should load home.component.md', () => {
     page.navigateTo();
     expect(page.getPageMarkdownSrc()).toEqual(
-      '/readme.md',
+      '/assets/home.component.md',
     );
   });
 
