@@ -51,6 +51,8 @@ namespace AngularCliNetcoreNgrxStarter
       PhysicalFileProvider fileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app"));
       FileExtensionContentTypeProvider contentTypeProvider = new FileExtensionContentTypeProvider();
       contentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
+      contentTypeProvider.Mappings[".md"] = "text/markdown";
+
       StaticFileOptions staticFileOptions = new StaticFileOptions()
       {
         ContentTypeProvider = contentTypeProvider,
