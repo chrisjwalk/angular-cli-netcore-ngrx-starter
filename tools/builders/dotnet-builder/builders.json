@@ -1,0 +1,19 @@
+{
+  "builders": {
+    "build": {
+      "implementation": "./dist/build",
+      "schema": "./src/build/schema.json",
+      "description": "Builds dotnet project."
+    },
+    "publish": {
+      "implementation": "./dist/publish",
+      "schema": "./src/publish/schema.json",
+      "description": "Publishes dotnet project."
+    },
+    "run": {
+      "implementation": "./dist/run",
+      "schema": "./src/run/schema.json",
+      "description": "Runs dotnet project."
+    }
+  }
+}

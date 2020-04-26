@@ -1,0 +1,65 @@
+# Node.js with Angular
+# Build a Node.js project that uses Angular.
+# Add steps that analyze code, save build artifacts, deploy, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/languages/javascript
+
+trigger:
+- nx-refactor
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+steps:
+- task: NodeTool@0
+  inputs:
+    versionSpec: '10.x'
+  displayName: 'Install Node.js'
+
+- task: UseDotNet@2
+  displayName: 'Use .NET Core SDK  3.1.x'
+  inputs:
+    version: 3.1.x
+
+- script: |
+    npm install
+  displayName: 'npm install'
+
+- script: |
+    npm run lint
+  displayName: 'Lint'
+
+- script: |
+    npm run test:ci
+  displayName: 'Run Tests'
+
+- script: |
+    npm run build:prod
+  displayName: 'Build'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **/TESTS-*.xml'
+  inputs:
+    testResultsFiles: '**/TESTS-*.xml'
+    searchFolder: 'junit'
+    failTaskOnFailedTests: true
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Code Coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '**/cobertura-coverage.xml'
+    pathToSources: 'coverage'
+    failIfCoverageEmpty: true
+
+- task: ArchiveFiles@2
+  inputs:
+    rootFolderOrFile: 'dist'
+    includeRootFolder: false
+    archiveType: 'zip'
+    archiveFile: '$(Build.ArtifactStagingDirectory)/$(Build.BuildId).zip'
+    replaceExistingArchive: true
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
