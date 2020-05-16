@@ -8,22 +8,22 @@ using Microsoft.Extensions.Logging;
 namespace AngularCliNetcoreNgrxStarter.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
-    public class SampleDataController : ControllerBase
+    [Route("api")]
+    public class WeatherForecastController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<SampleDataController> _logger;
+        private readonly ILogger<WeatherForecastController> _logger;
 
-        public SampleDataController(ILogger<SampleDataController> logger)
+        public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
             _logger = logger;
         }
 
-        [HttpGet("[action]")]
+        [HttpGet("weatherforecasts")]
         public IEnumerable<WeatherForecast> WeatherForecasts(int count = 10)
         {
             var rng = new Random();
