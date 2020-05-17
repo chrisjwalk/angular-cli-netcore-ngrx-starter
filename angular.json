@@ -149,7 +149,7 @@
       "schematics": {},
       "architect": {
         "build": {
-          "builder": "tools/builders/dotnet-builder:publish",
+          "builder": "./tools/builders/dotnet-builder:publish",
           "options": {
             "project": "apps/api",
             "outputPath": "dist",
@@ -162,7 +162,7 @@
           }
         },
         "serve": {
-          "builder": "tools/builders/dotnet-builder:run",
+          "builder": "./tools/builders/dotnet-builder:run",
           "options": {
             "project": "apps/api"
           }
