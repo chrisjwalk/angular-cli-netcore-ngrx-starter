@@ -9,8 +9,8 @@ const routes: Routes = [
     loadChildren: () => import('./feature/feature.module').then(m => m.FeatureModule),
   },
   {
-    path: 'forecasts',
-    loadChildren: () => import('./forecasts/forecasts.module').then(m => m.ForecastsModule),
+    path: 'weather-forecast',
+    loadChildren: () => import('./weather-forecast/weather-forecast.module').then(m => m.WeatherForecastModule),
   },
   { path: '**', component: HomeComponent },
 ];

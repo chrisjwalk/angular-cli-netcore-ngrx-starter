@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
+import { WeatherForecast } from 'app/weather-forecast/models/weather-forecast';
 
 @Component({
   selector: 'app-forecast-table',
@@ -10,8 +10,11 @@ import { WeatherForecast } from 'app/forecasts/models/weather-forecast';
 })
 export class ForecastTableComponent implements OnInit {
   @Input() loading: boolean;
-  @Input() dataSource: MatTableDataSource<WeatherForecast>;
-
+  @Input() set data(data: WeatherForecast[]) {
+    this.dataSource.data = data;
+  };
+  
+  dataSource = new MatTableDataSource<WeatherForecast>([]);
   displayedColumns = [];
 
   constructor() {}
