@@ -14,7 +14,6 @@ import { EffectsModule } from '@ngrx/effects';
 import { switchMap } from 'rxjs/operators';
 
 describe('WeatherForecastService', () => {
-  let actions: Observable<any>;
   let service: WeatherForecastService;
   let getWeatherSpy: any;
 

@@ -19,7 +19,7 @@
     "serve:api": "nx serve api",
     "test": "nx test web-app",
     "test:ci": "nx test web-app --configuration ci",
-    "lint": "nx lint web-app",
+    "lint": "nx lint",
     "lint:workspace": "nx workspace-lint && ng lint",
     "e2e": "nx e2e web-app-e2e",
     "affected:apps": "nx affected:apps",
