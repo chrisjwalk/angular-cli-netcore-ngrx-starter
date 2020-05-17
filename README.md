@@ -9,7 +9,7 @@ See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](
 
 ### Getting Started?
 
-*  **Make sure you have at least Node 10.x or higher (w/ npm 6+) installed!**
+*  **Make sure you have at least Node 12.x or higher (w/ npm 6+) installed!**
 *  **This repository uses ASP.Net Core 3.1, which has a hard requirement on .NET Core SDK 3.1.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
 
 ### Visual Studio 2019
