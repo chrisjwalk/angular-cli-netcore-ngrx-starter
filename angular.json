@@ -31,9 +31,7 @@
               "apps/web-app/src/styles/styles.scss",
               "apps/web-app/src/styles/material.scss"
             ],
-            "scripts": [
-              "node_modules/marked/lib/marked.js"
-            ]
+            "scripts": ["node_modules/marked/lib/marked.js"]
           },
           "configurations": {
             "production": {
@@ -93,7 +91,7 @@
               "apps/web-app/tsconfig.app.json",
               "apps/web-app/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/web-app/**"]
+            "exclude": ["**/node_modules/**", "!apps/web-app/**/*"]
           }
         },
         "test": {
@@ -136,7 +134,7 @@
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
             "tsConfig": "apps/web-app-e2e/tsconfig.e2e.json",
-            "exclude": ["**/node_modules/**", "!apps/web-app-e2e/**"]
+            "exclude": ["**/node_modules/**", "!apps/web-app-e2e/**/*"]
           }
         }
       }
@@ -174,7 +172,7 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/api/**"]
+            "exclude": ["**/node_modules/**", "!apps/api/**/*"]
           }
         },
         "test": {
