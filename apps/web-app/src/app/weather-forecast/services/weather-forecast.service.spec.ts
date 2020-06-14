@@ -1,21 +1,19 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HttpParams } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
-import { EntityDataModule } from '@ngrx/data';
-import { addMatchers, cold, hot, initTestScheduler } from 'jasmine-marbles';
-import { Observable, of } from 'rxjs';
+import { DefaultHttpUrlGenerator, DefaultPluralizer, EntityDataModule } from '@ngrx/data';
+import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
+import { entityConfig } from 'app/core/store/data/entity-metadata';
+import { addMatchers, initTestScheduler } from 'jasmine-marbles';
 
 import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from '../services/weather-forecast.service';
-import { entityConfig } from 'app/core/store/data/entity-metadata';
-import { StoreModule } from '@ngrx/store';
-import { EffectsModule } from '@ngrx/effects';
-import { switchMap } from 'rxjs/operators';
 
 describe('WeatherForecastService', () => {
   let service: WeatherForecastService;
-  let getWeatherSpy: any;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -25,6 +23,7 @@ describe('WeatherForecastService', () => {
         StoreModule.forRoot({}),
         EffectsModule.forRoot([]),
         EntityDataModule.forRoot(entityConfig),
+        HttpClientTestingModule,
       ],
       providers: [
         WeatherForecastService,
@@ -33,9 +32,18 @@ describe('WeatherForecastService', () => {
     });
 
     service = TestBed.inject(WeatherForecastService);
+    httpTestingController = TestBed.inject(HttpTestingController);
     initTestScheduler();
     addMatchers();
   });
+
+  const getServiceUrl = (count: number) => {
+    const serviceUrlRoot = 'api';
+    const serviceUrlGenerator = new DefaultHttpUrlGenerator(new DefaultPluralizer([]));
+    const serviceUrl = serviceUrlGenerator.collectionResource(service.entityName, serviceUrlRoot);
+    const serviceUrlParams = new HttpParams({fromObject: {count: count.toString()}}).toString();
+    return `${serviceUrl}?${serviceUrlParams}`;
+  }
 
   it('WeatherForecastService.getForecasts() should return data', () => {
     const weatherForecasts: WeatherForecast[] = [
@@ -47,14 +55,17 @@ describe('WeatherForecastService', () => {
         summary: 'Test',
       },
     ];
-    getWeatherSpy = spyOn(service, 'getWithQuery').and.returnValue(
-      of(weatherForecasts)
-    );
-    const expected = cold('(a|)', { a: weatherForecasts });
-    expect(service.getForecasts(1)).toBeObservable(expected);
+    
+    service.getForecasts(1).subscribe(result => {
+      expect(result).toEqual(weatherForecasts);
+    });
+
+    const req = httpTestingController.expectOne(getServiceUrl(1));
+    expect(req.request.method).toEqual('GET');
+    req.flush(weatherForecasts);
   });
 
-  fit('WeatherForecastService.refresh(count) should return data of length count', () => {
+  it('WeatherForecastService.refresh(count) should return data of length count', () => {
     const weatherForecasts: WeatherForecast[] = [
       {
         id: '1f86db2a-1c72-4fec-bada-c0e52e29a897',
@@ -127,11 +138,13 @@ describe('WeatherForecastService', () => {
         temperatureF: 37,
       },
     ];
-    getWeatherSpy = spyOn(service, 'getWithQuery').and.returnValue(
-      of(weatherForecasts)
-    );
+
     service.refresh(10).subscribe(data => {
       expect(data.length).toBe(10);
-    })
+    });
+
+    const req = httpTestingController.expectOne(getServiceUrl(10));
+    expect(req.request.method).toEqual('GET');
+    req.flush(weatherForecasts);
   });
 });
