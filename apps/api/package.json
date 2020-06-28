@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "npm run dotnet:run",
-    "dotnet:run": "dotnet run --launch-profile AngularCliNetcoreNgrxStarter",
-    "dotnet:run:prod": "dotnet run --launch-profile AngularCliNetcoreNgrxStarterProduction"
+    "dotnet:run": "dotnet run --launch-profile Api",
+    "dotnet:run:prod": "dotnet run --launch-profile ApiProduction"
   },
   "repository": {
     "type": "git",

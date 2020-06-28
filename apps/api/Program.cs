@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
-namespace AngularCliNetcoreNgrxStarter
+namespace Api
 {
   public class Program
   {

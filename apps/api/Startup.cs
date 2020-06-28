@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 
-namespace AngularCliNetcoreNgrxStarter
+namespace Api
 {
   public class Startup
   {

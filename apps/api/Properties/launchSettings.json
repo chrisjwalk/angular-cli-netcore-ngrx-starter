@@ -15,7 +15,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AngularCliNetcoreNgrxStarter": {
+    "Api": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:60254;http://localhost:60253",
@@ -23,7 +23,7 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       }
     },
-    "AngularCliNetcoreNgrxStarterProduction": {
+    "ApiProduction": {
       "commandName": "Project",
       "launchBrowser": true,
       "applicationUrl": "https://localhost:60254;http://localhost:60253",

@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "taskName": "build",
+            "label": "build",
             "command": "dotnet",
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/AngularCliNetcoreNgrxStarter.csproj"
+                "${workspaceFolder}/apps/api/Api.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
