@@ -6,9 +6,9 @@
       "dependencies": "*",
       "devDependencies": "*"
     },
-    "tsconfig.json": "*",
     "tslint.json": "*",
-    "nx.json": "*"
+    "nx.json": "*",
+    "tsconfig.base.json": "*"
   },
   "tasksRunnerOptions": {
     "default": {
@@ -25,9 +25,12 @@
     "web-app-e2e": {
       "tags": [],
       "implicitDependencies": ["web-app"]
-    }, 
+    },
     "api": {
       "tags": []
     }
+  },
+  "affected": {
+    "defaultBase": "master"
   }
 }
