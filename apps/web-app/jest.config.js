@@ -6,10 +6,10 @@ module.exports = {
     'ts-jest': {
       tsConfig: '<rootDir>/tsconfig.spec.json',
       stringifyContentPathRegex: '\\.(html|svg)$',
-      astTransformers: [
-        'jest-preset-angular/build/InlineFilesTransformer',
-        'jest-preset-angular/build/StripStylesTransformer',
-      ],
+      astTransformers: {
+        inlineFiles: ['jest-preset-angular/build/InlineFilesTransformer'],
+        stripStyles: ['jest-preset-angular/build/StripStylesTransformer'],
+      },
     },
   },
   coverageDirectory: '../../coverage/apps/web-app',
