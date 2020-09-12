@@ -98,9 +98,7 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/web-app/jest.config.js",
-            "tsConfig": "apps/web-app/tsconfig.spec.json",
-            "passWithNoTests": true,
-            "setupFile": "apps/web-app/src/test-setup.ts"
+            "passWithNoTests": true
           },
           "configurations": {
             "ci": {
@@ -177,7 +175,6 @@
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/api/jest.config.js",
-            "tsConfig": "apps/api/tsconfig.spec.json",
             "passWithNoTests": true
           }
         }
