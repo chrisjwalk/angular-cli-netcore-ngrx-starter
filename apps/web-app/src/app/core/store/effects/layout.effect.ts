@@ -3,7 +3,7 @@ import { Title } from '@angular/platform-browser';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
 
-import * as layoutActions from 'app/core/store/actions';
+import * as layoutActions from '../../store/actions';
 
 @Injectable()
 export class LayoutEffects {

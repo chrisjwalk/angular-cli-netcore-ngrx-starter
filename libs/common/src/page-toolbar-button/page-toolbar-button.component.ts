@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-page-toolbar-button',
@@ -8,7 +8,6 @@ import { Component, OnInit, Input } from '@angular/core';
 export class PageToolbarButtonComponent implements OnInit {
   @Input() tooltip: string;
   tooltipDisabled: boolean;
-  constructor() {}
 
   ngOnInit() {
     this.tooltipDisabled = !this.tooltip;

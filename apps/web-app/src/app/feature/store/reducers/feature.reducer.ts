@@ -1,5 +1,5 @@
 import { createReducer, on, Action } from '@ngrx/store';
-import * as featureActions from 'app/feature/store/actions';
+import * as featureActions from '../actions';
 
 export interface State {
   count: number;

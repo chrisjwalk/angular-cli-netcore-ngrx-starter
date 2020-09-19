@@ -1,15 +1,14 @@
-import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { StoreModule } from '@ngrx/store';
 
-import { SharedModule } from 'app/shared';
-import { MaterialModule } from 'app/shared/material';
-import { reducers } from './store/reducers';
-
-import { FeatureContainerComponent } from './containers/feature-container/feature-container.component';
+import { SharedModule } from '../shared';
+import { MaterialModule } from '../shared/material';
 import { FeatureComponentComponent } from './components/feature-component/feature-component.component';
+import { FeatureContainerComponent } from './containers/feature-container/feature-container.component';
+import { reducers } from './store/reducers';
 
 @NgModule({
   imports: [

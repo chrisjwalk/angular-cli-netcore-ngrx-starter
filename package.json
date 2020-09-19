@@ -79,6 +79,7 @@
     "@angular/compiler-cli": "^10.1.2",
     "@angular/language-service": "^10.1.2",
     "@nrwl/cypress": "10.2.1",
+    "@nrwl/eslint-plugin-nx": "10.2.1",
     "@nrwl/jest": "10.2.1",
     "@nrwl/node": "^10.2.1",
     "@nrwl/workspace": "10.2.1",
@@ -86,10 +87,13 @@
     "@types/jasminewd2": "^2.0.3",
     "@types/jest": "^26.0.14",
     "@types/node": "^13.13.21",
+    "@typescript-eslint/eslint-plugin": "2.19.2",
+    "@typescript-eslint/parser": "2.19.2",
     "codelyzer": "^6.0.0",
     "cypress": "^5.2.0",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
+    "eslint": "^7.9.0",
+    "eslint-config-prettier": "6.0.0",
     "jest": "^26.4.2",
     "jest-junit": "^11.1.0",
     "jest-preset-angular": "^8.3.1",
@@ -98,10 +102,6 @@
     "ts-jest": "^26.3.0",
     "ts-node": "^9.0.0",
     "tslint": "^6.1.3",
-    "typescript": "^4.0.3",
-    "@nrwl/eslint-plugin-nx": "10.2.1",
-    "@typescript-eslint/parser": "2.19.2",
-    "@typescript-eslint/eslint-plugin": "2.19.2",
-    "eslint-config-prettier": "6.0.0"
+    "typescript": "^4.0.3"
   }
 }

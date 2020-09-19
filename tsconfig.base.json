@@ -16,7 +16,8 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@myorg/common": ["libs/common/src/index.ts"]
+      "@myorg/common": ["libs/common/src/index.ts"],
+      "@myorg/common/*": ["libs/common/src/*"]
     }
   },
   "exclude": ["node_modules", "tmp"]

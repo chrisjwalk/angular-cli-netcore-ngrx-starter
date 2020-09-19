@@ -1,5 +1,6 @@
-import { createReducer, on, Action } from '@ngrx/store';
-import * as layoutActions from 'app/core/store/actions';
+import { Action, createReducer, on } from '@ngrx/store';
+
+import * as layoutActions from '../actions';
 
 export interface State {
   showSidenav: boolean;

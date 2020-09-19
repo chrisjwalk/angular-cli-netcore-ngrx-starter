@@ -8,13 +8,14 @@ import { EffectsModule } from '@ngrx/effects';
 import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { AppRoutingModule } from 'app/app-routing.module';
-import { AppComponent } from 'app/core/containers/app/app.component';
-import { CoreModule } from 'app/core/core.module';
-import { entityConfig } from 'app/core/store/data/entity-metadata';
-import { effects } from 'app/core/store/effects';
-import { metaReducers, reducers } from 'app/core/store/reducers';
-import { environment } from 'environments/environment';
+
+import { environment } from '../environments/environment';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './core/containers/app/app.component';
+import { CoreModule } from './core/core.module';
+import { entityConfig } from './core/store/data/entity-metadata';
+import { effects } from './core/store/effects';
+import { metaReducers, reducers } from './core/store/reducers';
 
 @NgModule({
   imports: [

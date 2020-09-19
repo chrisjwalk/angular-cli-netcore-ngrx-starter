@@ -1,7 +1,7 @@
-import { createSelector, createFeatureSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 
-import * as fromFeature from 'app/feature/store/reducers/feature.reducer';
-import * as fromRoot from 'app/core/store/reducers';
+import * as fromRoot from '../../../core/store/reducers';
+import * as fromFeature from './feature.reducer';
 
 export interface FeatureState {
     feature: fromFeature.State;

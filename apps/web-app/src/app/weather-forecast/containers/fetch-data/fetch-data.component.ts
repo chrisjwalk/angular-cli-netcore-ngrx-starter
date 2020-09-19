@@ -1,11 +1,12 @@
 import { HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { select, Store } from '@ngrx/store';
-import * as coreActions from 'app/core/store/actions';
-import * as fromRoot from 'app/core/store/reducers';
-import { WeatherForecast } from 'app/weather-forecast/models/weather-forecast';
-import { WeatherForecastService } from 'app/weather-forecast/services/weather-forecast.service';
 import { Observable } from 'rxjs';
+
+import * as coreActions from '../../../core/store/actions';
+import * as fromRoot from '../../../core/store/reducers';
+import { WeatherForecast } from '../../../weather-forecast/models/weather-forecast';
+import { WeatherForecastService } from '../../../weather-forecast/services/weather-forecast.service';
 
 @Component({
   selector: 'app-fetch-data',

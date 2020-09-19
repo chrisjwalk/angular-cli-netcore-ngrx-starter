@@ -2,7 +2,7 @@ import { NavigationExtras } from '@angular/router';
 import { ROUTER_NAVIGATION } from '@ngrx/router-store';
 import { createAction, props } from '@ngrx/store';
 
-import { RouterStateUrl } from 'app/core/store/reducers';
+import { RouterStateUrl } from '../reducers';
 
 export const NAVIGATION = ROUTER_NAVIGATION;
 

@@ -1,1 +1,1 @@
-export * from 'app/core/store/actions/layout.action';
+export * from './layout.action';

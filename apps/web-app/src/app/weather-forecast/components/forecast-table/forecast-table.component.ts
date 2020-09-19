@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatTableDataSource } from '@angular/material/table';
 
-import { WeatherForecast } from 'app/weather-forecast/models/weather-forecast';
+import { WeatherForecast } from '../../../weather-forecast/models/weather-forecast';
 
 @Component({
   selector: 'app-forecast-table',

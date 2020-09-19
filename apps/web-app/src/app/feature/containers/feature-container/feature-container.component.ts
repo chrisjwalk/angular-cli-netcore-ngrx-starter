@@ -1,11 +1,11 @@
-import { Component, ChangeDetectionStrategy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import { Store, select } from '@ngrx/store';
 
-import * as fromRoot from 'app/core/store/reducers';
-import * as fromFeature from 'app/feature/store/reducers';
-import * as featureActions from 'app/feature/store/actions';
-import * as layoutActions from 'app/core/store/actions';
+import * as layoutActions from '../../../core/store/actions';
+import * as fromRoot from '../../../core/store/reducers';
+import * as featureActions from '../../store/actions';
+import * as fromFeature from '../../store/reducers';
 
 @Component({
   selector: 'app-feature-container',

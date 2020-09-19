@@ -5,9 +5,9 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DefaultHttpUrlGenerator, DefaultPluralizer, EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { entityConfig } from 'app/core/store/data/entity-metadata';
 import { addMatchers, initTestScheduler } from 'jasmine-marbles';
 
+import { entityConfig } from '../../core/store/data/entity-metadata';
 import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from '../services/weather-forecast.service';
 
