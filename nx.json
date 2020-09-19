@@ -1,5 +1,5 @@
 {
-  "npmScope": "nx-ng-net-core",
+  "npmScope": "myorg",
   "implicitDependencies": {
     "angular.json": "*",
     "package.json": {
@@ -27,6 +27,9 @@
       "implicitDependencies": ["web-app"]
     },
     "api": {
+      "tags": []
+    },
+    "common": {
       "tags": []
     }
   },
