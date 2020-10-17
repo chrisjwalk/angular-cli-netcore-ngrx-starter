@@ -1,18 +1,20 @@
 module.exports = {
-  name: 'web-app',
-  preset: '../../jest.config.js',
-  setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
+  displayName: 'api',
+  preset: '../../jest.preset.js',
+  setupFilesAfterEnv: ['<rootDir>/test-setup.ts'],
   globals: {
     'ts-jest': {
       tsConfig: '<rootDir>/tsconfig.spec.json',
       stringifyContentPathRegex: '\\.(html|svg)$',
       astTransformers: {
-        inlineFiles: ['jest-preset-angular/build/InlineFilesTransformer'],
-        stripStyles: ['jest-preset-angular/build/StripStylesTransformer'],
+        before: [
+          'jest-preset-angular/build/InlineFilesTransformer',
+          'jest-preset-angular/build/StripStylesTransformer',
+        ],
       },
     },
   },
-  coverageDirectory: '../../coverage/apps/web-app',
+  coverageDirectory: '../../coverage/apps/api',
   coverageReporters: ['text', 'cobertura'],
   snapshotSerializers: [
     'jest-preset-angular/build/AngularNoNgAttributesSnapshotSerializer.js',
@@ -20,7 +22,13 @@ module.exports = {
     'jest-preset-angular/build/HTMLCommentSerializer.js',
   ],
   reporters: [
-    "default",
-    ["jest-junit", {outputDirectory: "junit/apps/web-app", outputName: `TESTS-${Date.now()}.xml`}]
+    'default',
+    [
+      'jest-junit',
+      {
+        outputDirectory: 'junit/apps/api',
+        outputName: `TESTS-${Date.now()}.xml`,
+      },
+    ],
   ],
 };

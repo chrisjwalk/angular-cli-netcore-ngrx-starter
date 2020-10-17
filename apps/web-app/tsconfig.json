@@ -1,7 +1,6 @@
 {
   "extends": "../../tsconfig.base.json",
-  "compilerOptions": {
-  },
+  "compilerOptions": {},
   "files": [],
   "include": [],
   "references": [
@@ -10,6 +9,9 @@
     },
     {
       "path": "./tsconfig.spec.json"
+    },
+    {
+      "path": "./tsconfig.editor.json"
     }
   ]
 }
