@@ -18,7 +18,7 @@ export const go = createAction(
   '[Router] Go',
   props<{
     path: any[];
-    query?: object;
+    query?: any;
     extras?: NavigationExtras;
   }>(),
 );

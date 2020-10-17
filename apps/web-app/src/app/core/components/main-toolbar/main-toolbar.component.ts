@@ -1,18 +1,14 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-main-toolbar',
   templateUrl: './main-toolbar.component.html',
   styleUrls: ['./main-toolbar.component.scss'],
 })
-export class MainToolbarComponent implements OnInit {
+export class MainToolbarComponent {
   @Output() toggleSidenav = new EventEmitter<boolean>();
 
-  constructor() {}
-
-  ngOnInit() {}
-
-  emitToggleSidenav($event) {
+  emitToggleSidenav() {
     this.toggleSidenav.emit(true);
   }
 }

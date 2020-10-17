@@ -17,7 +17,7 @@ export class AppService {
 
   checkForSwUpdate() {
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.available.subscribe((event) => {
+      this.swUpdate.available.subscribe(() => {
         const message = `App update avalable! Reload?`;
         this.snackBar
           .open(message, 'OK', {

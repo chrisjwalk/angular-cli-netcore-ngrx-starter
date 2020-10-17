@@ -10,6 +10,4 @@ export class SidenavListItemComponent {
   @Input() hint = '';
   @Input() routerLink: string | any[] = '/';
   @Output() navigate = new EventEmitter();
-
-  constructor() {}
 }

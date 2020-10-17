@@ -20,7 +20,7 @@ export class RouterEffects {
     () =>
       this.actions$.pipe(
         ofType(RouterActions.routerNavigation),
-        tap(({ event, routerState }) => {
+        tap(() => {
           this.appService.scrollToTop(false);
         }),
       ),

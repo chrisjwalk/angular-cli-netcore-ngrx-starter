@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanActivate } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { catchError, filter, switchMap, take, tap } from 'rxjs/operators';
+import { catchError, switchMap, take, tap } from 'rxjs/operators';
 
 import { WeatherForecastService } from '../services/weather-forecast.service';
 

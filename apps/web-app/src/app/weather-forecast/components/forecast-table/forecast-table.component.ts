@@ -12,12 +12,10 @@ export class ForecastTableComponent implements OnInit {
   @Input() loading: boolean;
   @Input() set data(data: WeatherForecast[]) {
     this.dataSource.data = data;
-  };
-  
+  }
+
   dataSource = new MatTableDataSource<WeatherForecast>([]);
   displayedColumns = [];
-
-  constructor() {}
 
   ngOnInit() {
     this.displayedColumns = [

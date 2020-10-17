@@ -1,5 +1,13 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest, HttpResponse } from '@angular/common/http';
+import {
+  HttpErrorResponse,
+  HttpEvent,
+  HttpHandler,
+  HttpInterceptor,
+  HttpRequest,
+  HttpResponse,
+} from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { Observable, throwError } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
@@ -9,7 +17,7 @@ import { environment } from '../../../environments/environment';
 @Injectable()
 export class HttpInterceptorService implements HttpInterceptor {
   logDebug: boolean;
-  constructor(private router: Router) {
+  constructor(private router: Router, private snackBar: MatSnackBar) {
     this.logDebug = !environment.production;
   }
   intercept(
@@ -63,7 +71,8 @@ export class HttpInterceptorService implements HttpInterceptor {
     } else {
       errMsg = error.message ? error.message : error.toString();
     }
+    this.snackBar.open(errMsg);
 
     return throwError(error);
-  }
+  };
 }
