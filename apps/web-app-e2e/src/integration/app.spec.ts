@@ -4,7 +4,7 @@ describe('web-app', () => {
   beforeEach(() => cy.visit('/'));
 
   it('should display welcome message', () => {
-    getGreeting().contains('Nx + Angular + NgRx Platform + .NET Core 3.1');
+    getGreeting().contains('Nx + Angular + NgRx Platform + .NET 5.0');
   });
 
   it('should load home.component.md', () => {

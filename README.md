@@ -1,8 +1,8 @@
 [![Build status](https://freshpondmedia.visualstudio.com/FreshPondMediaGit/_apis/build/status/chrisjwalk.angular-cli-netcore-ngrx-starter)](https://freshpondmedia.visualstudio.com/FreshPondMediaGit/_build/latest?definitionId=43)
 
-# Nx + Angular + NgRx Platform + .NET Core 3.1
+# Nx + Angular + NgRx Platform + .NET 5.0
 
-This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/angular) with [Angular](https://angular.io) and .NET Core 3.1 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
+This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/angular) with [Angular](https://angular.io) and .NET 5.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
 
 ### Demo
 See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](https://angularclinetcorengrxstarter.azurewebsites.net/)
@@ -10,15 +10,15 @@ See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](
 ### Getting Started?
 
 *  **Make sure you have at least Node 12.x or higher (w/ npm 6+) installed!**
-*  **This repository uses ASP.Net Core 3.1, which has a hard requirement on .NET Core SDK 3.1.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
+*  **This repository uses ASP.NET Core 5.0, which has a hard requirement on .NET SDK 5.0.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
 
 ### Visual Studio 2019
 
-Make sure you have .NET Core 3.1 installed and/or the latest VS2019. 
+Make sure you have .NET 5.0 installed and/or the latest VS2019. 
 
 ### Visual Studio Code
 
-> Note: Make sure you have the C# extension & .NET Core Debugger installed.
+> Note: Make sure you have the C# extension & .NET Debugger installed.
 
     npm install
 
