@@ -16,7 +16,7 @@ steps:
   displayName: 'Install Node.js'
 
 - task: UseDotNet@2
-  displayName: 'Use .NET SDK  5.0.x'
+  displayName: 'Use .NET SDK 5.0.x'
   inputs:
     version: 5.0.x
 
