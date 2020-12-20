@@ -31,7 +31,9 @@
               "apps/web-app/src/styles/styles.scss",
               "apps/web-app/src/styles/material.scss"
             ],
-            "scripts": ["node_modules/marked/lib/marked.js"]
+            "scripts": [
+              "node_modules/marked/lib/marked.js"
+            ]
           },
           "configurations": {
             "production": {
@@ -64,7 +66,10 @@
               "serviceWorker": true,
               "ngswConfigPath": "apps/web-app/ngsw-config.json"
             }
-          }
+          },
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -87,7 +92,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/web-app/src/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/web-app/src/**/*.ts"
+            ]
           }
         },
         "test": {
@@ -100,7 +107,10 @@
             "ci": {
               "codeCoverage": true
             }
-          }
+          },
+          "outputs": [
+            "coverage/apps/web-app"
+          ]
         }
       }
     },
@@ -128,8 +138,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/web-app-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/web-app-e2e/**/*"]
+            "tsConfig": [
+              "apps/web-app-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/web-app-e2e/**/*"
+            ]
           }
         }
       }
@@ -167,7 +182,10 @@
               "apps/api/tsconfig.app.json",
               "apps/api/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/api/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/api/**/*"
+            ]
           }
         },
         "test": {
@@ -175,7 +193,10 @@
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/apps/api"
+          ]
         }
       }
     },
@@ -192,7 +213,10 @@
               "libs/common/tsconfig.lib.json",
               "libs/common/tsconfig.spec.json"
             ],
-            "exclude": ["**/node_modules/**", "!libs/common/**/*"],
+            "exclude": [
+              "**/node_modules/**",
+              "!libs/common/**/*"
+            ],
             "linter": "eslint"
           }
         },
@@ -201,7 +225,10 @@
           "options": {
             "jestConfig": "libs/common/jest.config.js",
             "passWithNoTests": true
-          }
+          },
+          "outputs": [
+            "coverage/libs/common"
+          ]
         }
       },
       "schematics": {
