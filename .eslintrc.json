@@ -22,14 +22,23 @@
     "@typescript-eslint/no-parameter-properties": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-inferrable-types": "off",
-    "@typescript-eslint/quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "@typescript-eslint/quotes": [
+      "error",
+      "single",
+      {
+        "allowTemplateLiterals": true
+      }
+    ],
     "@nrwl/nx/enforce-module-boundaries": [
       "error",
       {
         "enforceBuildableLibDependency": true,
         "allow": [],
         "depConstraints": [
-          { "sourceTag": "*", "onlyDependOnLibsWithTags": ["*"] }
+          {
+            "sourceTag": "*",
+            "onlyDependOnLibsWithTags": ["*"]
+          }
         ]
       }
     ]
