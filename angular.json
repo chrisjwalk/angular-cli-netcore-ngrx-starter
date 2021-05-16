@@ -20,7 +20,6 @@
             "main": "apps/web-app/src/main.ts",
             "polyfills": "apps/web-app/src/polyfills.ts",
             "tsConfig": "apps/web-app/tsconfig.app.json",
-            "aot": true,
             "assets": [
               "apps/web-app/src/favicon.ico",
               "apps/web-app/src/robots.txt",
@@ -33,7 +32,14 @@
             ],
             "scripts": [
               "node_modules/marked/lib/marked.js"
-            ]
+            ],
+            "vendorChunk": true,
+            "extractLicenses": false,
+            "buildOptimizer": false,
+            "sourceMap": true,
+            "optimization": false,
+            "namedChunks": true,
+            "aot": false
           },
           "configurations": {
             "production": {

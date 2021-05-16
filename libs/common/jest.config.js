@@ -3,7 +3,6 @@ module.exports = {
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   globals: {
     'ts-jest': {
-      tsConfig: '<rootDir>/tsconfig.spec.json',
       stringifyContentPathRegex: '\\.(html|svg)$',
       astTransformers: {
         before: [
@@ -11,6 +10,7 @@ module.exports = {
           'jest-preset-angular/build/StripStylesTransformer',
         ],
       },
+      tsconfig: '<rootDir>/tsconfig.spec.json',
     },
   },
   coverageDirectory: '../../coverage/libs/common',
