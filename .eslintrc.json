@@ -37,7 +37,8 @@
           {
             "allowTemplateLiterals": true
           }
-        ]
+        ],
+        "comma-dangle": ["error", "always-multiline"]
       }
     },
     {

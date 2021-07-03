@@ -19,6 +19,7 @@
     "test": "nx test web-app",
     "test:ci": "nx test web-app --configuration ci",
     "lint": "nx lint",
+    "lint:fix": "nx lint --fix",
     "lint:workspace": "nx workspace-lint && ng lint",
     "e2e": "nx e2e web-app-e2e",
     "e2e:ci": "npm run e2e -- --configuration production",

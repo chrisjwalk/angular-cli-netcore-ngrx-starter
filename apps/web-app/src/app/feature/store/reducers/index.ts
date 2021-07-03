@@ -11,17 +11,17 @@ export interface State extends fromRoot.State {
     feature: FeatureState;
 }
 export const reducers = {
-    feature: fromFeature.reducer
+    feature: fromFeature.reducer,
   };
 
 export const getFeatureState = createFeatureSelector<FeatureState>('lazyFeature');
 
 export const getFeatureEntitiesState = createSelector(
     getFeatureState,
-    state => state.feature
+    state => state.feature,
 );
 
 export const getCount = createSelector(
     getFeatureEntitiesState,
-    fromFeature.getCount
+    fromFeature.getCount,
   );

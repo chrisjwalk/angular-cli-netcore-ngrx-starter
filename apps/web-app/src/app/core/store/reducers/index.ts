@@ -69,6 +69,6 @@ export const getLayoutState = createFeatureSelector<fromLayout.State>('layout');
 
 export const getShowSidenav = createSelector(
   getLayoutState,
-  fromLayout.getShowSidenav
+  fromLayout.getShowSidenav,
 );
 export const getTitle = createSelector(getLayoutState, fromLayout.getTitle);

@@ -21,7 +21,7 @@ export class FetchDataComponent implements OnInit {
   title$: Observable<string>;
   constructor(
     private store: Store<fromRoot.State>,
-    private weatherForecastService: WeatherForecastService
+    private weatherForecastService: WeatherForecastService,
   ) {}
 
   ngOnInit() {
