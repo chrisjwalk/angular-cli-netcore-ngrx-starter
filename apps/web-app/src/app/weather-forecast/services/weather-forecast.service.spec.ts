@@ -5,7 +5,6 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { DefaultHttpUrlGenerator, DefaultPluralizer, EntityDataModule } from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
-import { addMatchers, initTestScheduler } from 'jasmine-marbles';
 
 import { entityConfig } from '../../core/store/data/entity-metadata';
 import { WeatherForecast } from '../models/weather-forecast';
@@ -33,8 +32,6 @@ describe('WeatherForecastService', () => {
 
     service = TestBed.inject(WeatherForecastService);
     httpTestingController = TestBed.inject(HttpTestingController);
-    initTestScheduler();
-    addMatchers();
   });
 
   const getServiceUrl = (count: number) => {

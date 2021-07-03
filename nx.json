@@ -19,21 +19,29 @@
     }
   },
   "projects": {
+    "api": {
+      "tags": []
+    },
+    "common": {
+      "tags": []
+    },
     "web-app": {
       "tags": []
     },
     "web-app-e2e": {
       "tags": [],
       "implicitDependencies": ["web-app"]
-    },
-    "api": {
-      "tags": []
-    },
-    "common": {
-      "tags": []
     }
   },
   "affected": {
     "defaultBase": "master"
+  },
+  "targetDependencies": {
+    "build": [
+      {
+        "target": "build",
+        "projects": "dependencies"
+      }
+    ]
   }
 }
