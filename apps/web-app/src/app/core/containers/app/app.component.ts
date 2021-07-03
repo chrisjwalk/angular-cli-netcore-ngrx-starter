@@ -32,7 +32,7 @@ export class AppComponent {
     this.store.dispatch(layoutActions.toggleSidenav());
   }
 
-  sidenavChanged(sidenavOpened) {
+  sidenavChanged(sidenavOpened: boolean) {
     if (sidenavOpened) {
       this.openSidenav();
     } else {

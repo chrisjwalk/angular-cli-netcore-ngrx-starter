@@ -32,7 +32,7 @@ export class FeatureContainerComponent {
     this.store.dispatch(featureActions.decrementCount());
   }
 
-  setCount(count: string) {
-    this.store.dispatch(featureActions.setCount({ count: +count }));
+  setCount(count: number) {
+    this.store.dispatch(featureActions.setCount({ count }));
   }
 }

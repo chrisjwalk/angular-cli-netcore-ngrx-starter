@@ -4,10 +4,10 @@
            #count
            type="number"
            placeholder="Forecast Days"
-           (keyup.enter)="getForecasts(count.value)"
+           (keyup.enter)="getForecasts(+count.value)"
            [value]="count$ | async">
   </mat-form-field>
-  <app-page-toolbar-button (click)="getForecasts(count.value)"
+  <app-page-toolbar-button (click)="getForecasts(+count.value)"
                            tooltip="Get Forecasts">
     <mat-icon>refresh</mat-icon>
   </app-page-toolbar-button>
