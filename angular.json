@@ -41,7 +41,8 @@
           },
           "outputs": ["coverage/apps/api"]
         }
-      }
+      },
+      "tags": []
     },
     "common": {
       "projectType": "library",
@@ -68,7 +69,8 @@
         "@schematics/angular:component": {
           "style": "scss"
         }
-      }
+      },
+      "tags": []
     },
     "web-app": {
       "projectType": "application",
@@ -182,7 +184,8 @@
           },
           "outputs": ["coverage/apps/web-app"]
         }
-      }
+      },
+      "tags": []
     },
     "web-app-e2e": {
       "root": "apps/web-app-e2e",
@@ -212,38 +215,9 @@
             "lintFilePatterns": ["apps/web-app-e2e/**/*.{js,ts}"]
           }
         }
-      }
-    }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "schematics": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
       },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/angular:application": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "style": "scss",
-      "linter": "eslint",
-      "unitTestRunner": "jest"
-    },
-    "@nrwl/angular:component": {
-      "style": "scss"
+      "tags": [],
+      "implicitDependencies": ["web-app"]
     }
-  },
-  "defaultProject": "web-app"
+  }
 }

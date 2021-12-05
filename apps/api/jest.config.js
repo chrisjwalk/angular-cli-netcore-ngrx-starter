@@ -26,5 +26,8 @@ module.exports = {
       },
     ],
   ],
-  transform: { '^.+\\.(ts|js|html)$': 'jest-preset-angular' },
+  transform: {
+    '^.+.(ts|mjs|js|html)$': 'jest-preset-angular',
+  },
+  transformIgnorePatterns: ['node_modules/(?!.*.mjs$)'],
 };
