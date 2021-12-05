@@ -20,7 +20,7 @@
     }
   },
   "affected": {
-    "defaultBase": "master"
+    "defaultBase": "main"
   },
   "targetDependencies": {
     "build": [
