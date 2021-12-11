@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { PageContainerComponent } from './page-container.component';
 
-
 @NgModule({
   imports: [CommonModule],
   declarations: [PageContainerComponent],

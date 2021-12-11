@@ -40,9 +40,8 @@ export class AppService {
         'appSidenavContainer',
       );
       if (appSidenavContainer) {
-        const sideNavContent = appSidenavContainer.getElementsByClassName(
-          'mat-drawer-content',
-        );
+        const sideNavContent =
+          appSidenavContainer.getElementsByClassName('mat-drawer-content');
         if (sideNavContent.length) {
           mdSidenavContent = sideNavContent[0];
         }

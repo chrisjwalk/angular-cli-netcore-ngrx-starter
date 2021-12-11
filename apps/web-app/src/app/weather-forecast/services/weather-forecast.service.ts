@@ -1,13 +1,13 @@
 import { Injectable } from '@angular/core';
-import { EntityCollectionServiceBase, EntityCollectionServiceElementsFactory } from '@ngrx/data';
+import {
+  EntityCollectionServiceBase,
+  EntityCollectionServiceElementsFactory,
+} from '@ngrx/data';
 import { WeatherForecast } from '../models/weather-forecast';
 import { Observable } from 'rxjs';
 
-
 @Injectable({ providedIn: 'root' })
-export class WeatherForecastService extends EntityCollectionServiceBase<
-  WeatherForecast
-> {
+export class WeatherForecastService extends EntityCollectionServiceBase<WeatherForecast> {
   constructor(serviceElementsFactory: EntityCollectionServiceElementsFactory) {
     super('WeatherForecast', serviceElementsFactory);
   }

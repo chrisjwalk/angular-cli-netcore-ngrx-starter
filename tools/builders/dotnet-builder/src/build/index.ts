@@ -13,29 +13,29 @@ interface Options extends JsonObject {
 
 export default createBuilder<Options>((options, context) => {
   return new Promise<BuilderOutput>((resolve, reject) => {
-    const dotnetArgs = ["build"];
+    const dotnetArgs = ['build'];
     dotnetArgs.push('--nologo');
     if (options.outputPath) {
-      dotnetArgs.push("--output");
+      dotnetArgs.push('--output');
       dotnetArgs.push(options.outputPath);
     }
     if (options.verbosityLevel) {
-      dotnetArgs.push("--verbosity");
+      dotnetArgs.push('--verbosity');
       dotnetArgs.push(options.verbosityLevel);
     }
     if (options.configuration) {
-      dotnetArgs.push("--configuration");
+      dotnetArgs.push('--configuration');
       dotnetArgs.push(options.configuration);
     }
     if (options.interactive) {
-      dotnetArgs.push("--interactive");
+      dotnetArgs.push('--interactive');
     }
     if (options.noRestore) {
-      dotnetArgs.push("--no-restore");
+      dotnetArgs.push('--no-restore');
     }
     dotnetArgs.push(options.project);
     console.log(`Executing "dotnet ${dotnetArgs.join(' ')}"...`);
-    const child = childProcess.spawn("dotnet", dotnetArgs, { stdio: 'pipe' });
+    const child = childProcess.spawn('dotnet', dotnetArgs, { stdio: 'pipe' });
 
     child.stdout.on('data', (data) => {
       context.logger.info(data.toString());
@@ -46,7 +46,7 @@ export default createBuilder<Options>((options, context) => {
     });
 
     context.reportStatus(`Done.`);
-    child.on('close', code => {
+    child.on('close', (code) => {
       resolve({ success: code === 0 });
     });
   });

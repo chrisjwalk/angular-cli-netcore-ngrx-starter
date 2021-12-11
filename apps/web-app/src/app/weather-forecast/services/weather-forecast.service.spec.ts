@@ -1,8 +1,15 @@
 import { HttpClientModule, HttpParams } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import {
+  HttpClientTestingModule,
+  HttpTestingController,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { DefaultHttpUrlGenerator, DefaultPluralizer, EntityDataModule } from '@ngrx/data';
+import {
+  DefaultHttpUrlGenerator,
+  DefaultPluralizer,
+  EntityDataModule,
+} from '@ngrx/data';
 import { EffectsModule } from '@ngrx/effects';
 import { StoreModule } from '@ngrx/store';
 
@@ -36,11 +43,18 @@ describe('WeatherForecastService', () => {
 
   const getServiceUrl = (count: number) => {
     const serviceUrlRoot = 'api';
-    const serviceUrlGenerator = new DefaultHttpUrlGenerator(new DefaultPluralizer([]));
-    const serviceUrl = serviceUrlGenerator.collectionResource(service.entityName, serviceUrlRoot);
-    const serviceUrlParams = new HttpParams({fromObject: {count: count.toString()}}).toString();
+    const serviceUrlGenerator = new DefaultHttpUrlGenerator(
+      new DefaultPluralizer([]),
+    );
+    const serviceUrl = serviceUrlGenerator.collectionResource(
+      service.entityName,
+      serviceUrlRoot,
+    );
+    const serviceUrlParams = new HttpParams({
+      fromObject: { count: count.toString() },
+    }).toString();
     return `${serviceUrl}?${serviceUrlParams}`;
-  }
+  };
 
   it('WeatherForecastService.getForecasts() should return data', () => {
     const weatherForecasts: WeatherForecast[] = [
@@ -52,8 +66,8 @@ describe('WeatherForecastService', () => {
         summary: 'Test',
       },
     ];
-    
-    service.getForecasts(1).subscribe(result => {
+
+    service.getForecasts(1).subscribe((result) => {
       expect(result).toEqual(weatherForecasts);
     });
 
@@ -136,7 +150,7 @@ describe('WeatherForecastService', () => {
       },
     ];
 
-    service.refresh(10).subscribe(data => {
+    service.refresh(10).subscribe((data) => {
       expect(data.length).toBe(10);
     });
 

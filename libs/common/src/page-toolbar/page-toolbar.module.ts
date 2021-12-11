@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 
 import { PageToolbarComponent } from './page-toolbar.component';
 
-
 @NgModule({
   imports: [CommonModule],
   declarations: [PageToolbarComponent],

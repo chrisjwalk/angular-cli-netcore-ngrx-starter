@@ -12,26 +12,26 @@ interface Options extends JsonObject {
 
 export default createBuilder<Options>((options, context) => {
   return new Promise<BuilderOutput>((resolve, reject) => {
-    const dotnetArgs = ["run"];
-    
+    const dotnetArgs = ['run'];
+
     if (options.launchProfile) {
-      dotnetArgs.push("--launch-profile");
+      dotnetArgs.push('--launch-profile');
       dotnetArgs.push(options.launchProfile);
     }
     if (options.verbosityLevel) {
-      dotnetArgs.push("--verbosity");
+      dotnetArgs.push('--verbosity');
       dotnetArgs.push(options.verbosityLevel);
     }
     if (options.noBuild) {
-      dotnetArgs.push("--no-build");
+      dotnetArgs.push('--no-build');
     }
     if (options.noRestore) {
-      dotnetArgs.push("--no-restore");
+      dotnetArgs.push('--no-restore');
     }
     dotnetArgs.push('--project');
     dotnetArgs.push(options.project);
     console.log(`Executing "dotnet ${dotnetArgs.join(' ')}"...`);
-    const child = childProcess.spawn("dotnet", dotnetArgs, { stdio: 'pipe' });
+    const child = childProcess.spawn('dotnet', dotnetArgs, { stdio: 'pipe' });
 
     child.stdout.on('data', (data) => {
       context.logger.info(data.toString());
@@ -42,7 +42,7 @@ export default createBuilder<Options>((options, context) => {
     });
 
     context.reportStatus(`Done.`);
-    child.on('close', code => {
+    child.on('close', (code) => {
       resolve({ success: code === 0 });
     });
   });

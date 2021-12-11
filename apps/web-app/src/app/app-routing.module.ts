@@ -6,11 +6,15 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   {
     path: 'feature',
-    loadChildren: () => import('./feature/feature.module').then(m => m.FeatureModule),
+    loadChildren: () =>
+      import('./feature/feature.module').then((m) => m.FeatureModule),
   },
   {
     path: 'weather-forecast',
-    loadChildren: () => import('./weather-forecast/weather-forecast.module').then(m => m.WeatherForecastModule),
+    loadChildren: () =>
+      import('./weather-forecast/weather-forecast.module').then(
+        (m) => m.WeatherForecastModule,
+      ),
   },
   { path: '**', component: HomeComponent },
 ];

@@ -1,18 +1,26 @@
 {
   "$schema": "http://json.schemastore.org/template",
-  "classifications": [ "Angular", "Ngrx", "Reactive" ],
+  "classifications": ["Angular", "Ngrx", "Reactive"],
   "author": "chrisjwalk",
   "identity": "Api",
   "name": "Angular Ngrx Starter",
   "shortName": "ngrx",
   "sourceName": "Api",
   "preferNameDirectory": true,
-  "sources":[{
-    "modifiers": [{
-      "exclude": [ ".git/**/*", ".vs/**/*", "ClientApp/node_modules/**", "ClientApp/package-lock.json"]
-      }
-    ]
-  }],
+  "sources": [
+    {
+      "modifiers": [
+        {
+          "exclude": [
+            ".git/**/*",
+            ".vs/**/*",
+            "ClientApp/node_modules/**",
+            "ClientApp/package-lock.json"
+          ]
+        }
+      ]
+    }
+  ],
   "symbols": {
     "package-json-name": {
       "type": "parameter",
