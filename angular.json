@@ -201,8 +201,7 @@
           },
           "configurations": {
             "production": {
-              "devServerTarget": "web-app:serve:production",
-              "headless": true
+              "devServerTarget": "web-app:serve:production"
             },
             "watch": {
               "watch": true
