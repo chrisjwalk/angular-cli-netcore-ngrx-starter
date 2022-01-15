@@ -91,6 +91,7 @@
     "@nrwl/tao": "13.3.9",
     "@nrwl/workspace": "13.3.9",
     "@testing-library/angular": "^11.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^3.1.1",
     "@types/jest": "^27.0.2",
     "@types/node": "^16.10.2",
     "@typescript-eslint/eslint-plugin": "~5.3.0",

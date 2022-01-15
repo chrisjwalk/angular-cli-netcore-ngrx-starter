@@ -2,5 +2,9 @@
     "trailingComma": "all",
     "tabWidth": 2,
     "semi": true,
-    "singleQuote": true
+    "singleQuote": true,
+    "importOrderParserPlugins": ["typescript", "decorators-legacy"],
+    "importOrder": ["<THIRD_PARTY_MODULES>", "^[./]"],
+    "importOrderSeparation": true,
+    "importOrderSortSpecifiers": true
   }
