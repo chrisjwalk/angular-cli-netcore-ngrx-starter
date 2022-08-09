@@ -199,9 +199,10 @@
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/web-app-e2e/cypress.json",
+            "cypressConfig": "apps/web-app-e2e/cypress.config.ts",
             "tsConfig": "apps/web-app-e2e/tsconfig.e2e.json",
-            "devServerTarget": "web-app:serve"
+            "devServerTarget": "web-app:serve",
+            "testingType": "e2e"
           },
           "configurations": {
             "production": {
