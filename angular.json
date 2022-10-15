@@ -40,7 +40,7 @@
             "jestConfig": "apps/api/jest.config.ts",
             "passWithNoTests": true
           },
-          "outputs": ["coverage/apps/api"]
+          "outputs": ["{workspaceRoot}/coverage/apps/api"]
         }
       },
       "tags": []
@@ -64,7 +64,7 @@
             "jestConfig": "libs/common/jest.config.ts",
             "passWithNoTests": true
           },
-          "outputs": ["coverage/libs/common"]
+          "outputs": ["{workspaceRoot}/coverage/libs/common"]
         }
       },
       "schematics": {
@@ -185,7 +185,7 @@
               "codeCoverage": true
             }
           },
-          "outputs": ["coverage/apps/web-app"]
+          "outputs": ["{workspaceRoot}/coverage/apps/web-app"]
         }
       },
       "tags": []
