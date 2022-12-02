@@ -1,26 +1,33 @@
-@import '@angular/material/theming';
-@include mat-core();
+@use '@angular/material' as mat;
 
-$light-app-primary: mat-palette($mat-indigo);
-$light-app-accent: mat-palette($mat-pink, A200, A100, A400);
-$light-app-warn: mat-palette($mat-red);
-$light-app-theme: mat-light-theme(
-  $light-app-primary,
-  $light-app-accent,
-  $light-app-warn
-);
+@include mat.core();
 
-@include angular-material-theme($light-app-theme);
+// Define a dark theme
+$dark-theme: mat.define-dark-theme((
+ color: (
+   primary: mat.define-palette(mat.$blue-grey-palette),
+   accent: mat.define-palette(mat.$orange-palette),
+ ),
+  // Only include `typography` and `density` in the default dark theme.
+  typography: mat.define-typography-config(),
+  density: 0,
+));
 
-$dark-app-primary: mat-palette($mat-blue-grey);
-$dark-app-accent: mat-palette($mat-orange, A200, A100, A400);
-$dark-app-warn: mat-palette($mat-red);
-$dark-app-theme: mat-dark-theme(
-  $dark-app-primary,
-  $dark-app-accent,
-  $dark-app-warn
-);
+// Define a light theme
+$light-theme: mat.define-light-theme((
+ color: (
+   primary: mat.define-palette(mat.$indigo-palette),
+   accent: mat.define-palette(mat.$pink-palette),
+ ),
+));
 
-@media (prefers-color-scheme: dark) {
-  @include angular-material-theme($dark-app-theme);
+// Apply the dark theme by default
+@include mat.all-component-themes($dark-theme);
+
+// Apply the light theme only when the user prefers light themes.
+@media (prefers-color-scheme: light) {
+ // Use the `-color` mixins to only apply color styles without reapplying the same
+ // typography and density styles.
+ @include mat.all-component-colors($light-theme);
 }
+

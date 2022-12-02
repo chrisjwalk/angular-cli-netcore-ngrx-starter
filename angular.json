@@ -31,7 +31,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/api/src/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/api/src/**/*.ts"
+            ]
           }
         },
         "test": {
@@ -40,7 +42,9 @@
             "jestConfig": "apps/api/jest.config.ts",
             "passWithNoTests": true
           },
-          "outputs": ["{workspaceRoot}/coverage/apps/api"]
+          "outputs": [
+            "{workspaceRoot}/coverage/apps/api"
+          ]
         }
       },
       "tags": []
@@ -55,7 +59,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/common/src/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/common/src/**/*.ts"
+            ]
           }
         },
         "test": {
@@ -64,7 +70,9 @@
             "jestConfig": "libs/common/jest.config.ts",
             "passWithNoTests": true
           },
-          "outputs": ["{workspaceRoot}/coverage/libs/common"]
+          "outputs": [
+            "{workspaceRoot}/coverage/libs/common"
+          ]
         }
       },
       "schematics": {
@@ -145,7 +153,9 @@
               "ngswConfigPath": "apps/web-app/ngsw-config.json"
             }
           },
-          "outputs": ["{options.outputPath}"]
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -185,7 +195,9 @@
               "codeCoverage": true
             }
           },
-          "outputs": ["{workspaceRoot}/coverage/apps/web-app"]
+          "outputs": [
+            "{workspaceRoot}/coverage/apps/web-app"
+          ]
         }
       },
       "tags": []
@@ -216,12 +228,16 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/web-app-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "apps/web-app-e2e/**/*.{js,ts}"
+            ]
           }
         }
       },
       "tags": [],
-      "implicitDependencies": ["web-app"]
+      "implicitDependencies": [
+        "web-app"
+      ]
     }
   }
 }

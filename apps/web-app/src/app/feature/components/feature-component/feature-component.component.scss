@@ -11,7 +11,7 @@
 }
 
 .count-row {
-  .mat-card {
+  .mat-mdc-card {
     @media (min-width: 600px) {
       min-width: 300px;
     }
@@ -27,15 +27,16 @@
   p.count {
     text-align: center;
     font-size: 120px;
+    margin: 0;
   }
 
-  .mat-icon-button {
+  .mat-mdc-icon-button {
     height: 92px;
     width: 92px;
     margin: 0 8px;
   }
 
-  .mat-icon {
+  .mat-mdc-icon {
     font-size: 76px;
     height: 76px;
     width: 76px;
@@ -45,9 +46,11 @@
 
 .set-row {
   margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 
-  .mat-form-field {
-    width: 256px;
-    margin-right: 8px;
+  .mat-mdc-form-field {
+    width: 320px;
   }
 }
