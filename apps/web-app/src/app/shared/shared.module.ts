@@ -1,23 +1,21 @@
-import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { BigButtonModule } from '@myorg/common/big-button';
-import { PageContainerModule } from '@myorg/common/page-container';
-import { PageToolbarModule } from '@myorg/common/page-toolbar';
-import { PageToolbarButtonModule } from '@myorg/common/page-toolbar-button';
+import { BigButtonComponent } from '@myorg/common/big-button';
+import { PageContainerComponent } from '@myorg/common/page-container';
+import { PageToolbarComponent } from '@myorg/common/page-toolbar';
+import { PageToolbarButtonComponent } from '@myorg/common/page-toolbar-button';
 
 @NgModule({
   imports: [
-    CommonModule,
-    BigButtonModule,
-    PageContainerModule,
-    PageToolbarModule,
-    PageToolbarButtonModule,
+    BigButtonComponent,
+    PageContainerComponent,
+    PageToolbarComponent,
+    PageToolbarButtonComponent,
   ],
   exports: [
-    BigButtonModule,
-    PageContainerModule,
-    PageToolbarModule,
-    PageToolbarButtonModule,
+    BigButtonComponent,
+    PageContainerComponent,
+    PageToolbarComponent,
+    PageToolbarButtonComponent,
   ],
 })
 export class SharedModule {}

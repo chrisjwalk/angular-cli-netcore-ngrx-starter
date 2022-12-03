@@ -1,1 +1,1 @@
-export * from './page-toolbar.module';
+export * from './page-toolbar.component';

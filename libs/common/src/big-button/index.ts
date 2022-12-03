@@ -1,1 +1,1 @@
-export * from './big-button.module';
+export * from './big-button.component';

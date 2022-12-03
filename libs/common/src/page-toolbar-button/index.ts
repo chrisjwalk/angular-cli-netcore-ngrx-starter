@@ -1,1 +1,1 @@
-export * from './page-toolbar-button.module';
+export * from './page-toolbar-button.component';

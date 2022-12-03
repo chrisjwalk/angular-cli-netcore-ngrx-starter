@@ -4,7 +4,6 @@ import { NgModule, Optional, SkipSelf } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 
-import { SharedModule } from '../shared';
 import { MaterialModule } from '../shared/material';
 import { MainToolbarComponent } from './components/main-toolbar/main-toolbar.component';
 import { SidenavListItemComponent } from './components/sidenav-list-item/sidenav-list-item.component';
@@ -27,7 +26,6 @@ export const COMPONENTS = [
     RouterModule,
     MaterialModule,
     MarkdownModule.forRoot(),
-    SharedModule,
   ],
   declarations: COMPONENTS,
   exports: COMPONENTS,

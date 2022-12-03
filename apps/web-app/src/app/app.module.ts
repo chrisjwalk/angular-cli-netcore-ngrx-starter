@@ -41,7 +41,6 @@ import { metaReducers, reducers } from './core/store/reducers';
     }),
     CoreModule,
   ],
-  providers: [],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

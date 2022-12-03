@@ -1,1 +1,1 @@
-export * from './page-container.module';
+export * from './page-container.component';
