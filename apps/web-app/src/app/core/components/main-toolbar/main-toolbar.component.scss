@@ -9,20 +9,13 @@
   background: $app-main-toolbar-background;
   color: $app-main-toolbar-color;
 
-  @media (prefers-color-scheme: dark) {
-    background: $app-dark-main-toolbar-background;
+  .hide-mobile {
+    display: flex;
+    gap: 8px;
   }
 
-  .mat-mdc-icon-button {
-    margin: 0 8px;
-
-    &:first-child {
-      margin-left: 0;
-    }
-
-    &:last-child {
-      margin-right: 0;
-    }
+  @media (prefers-color-scheme: dark) {
+    background: $app-dark-main-toolbar-background;
   }
 
   .logo {

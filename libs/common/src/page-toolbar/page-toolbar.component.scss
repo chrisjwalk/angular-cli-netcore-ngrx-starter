@@ -10,7 +10,7 @@
   flex-direction: row;
   align-items: center;
   white-space: nowrap;
-  margin-bottom: 8px;
+  gap: 8px;
 
   @media (prefers-color-scheme: dark) {
     background: $app-dark-page-toolbar-background;
@@ -31,7 +31,8 @@
       display: none;
     }
 
-    .mat-mdc-text-field-wrapper.mdc-text-field--outlined .mat-mdc-form-field-infix {
+    .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+      .mat-mdc-form-field-infix {
       padding-top: 4px;
       padding-bottom: 4px;
       min-height: 34px;

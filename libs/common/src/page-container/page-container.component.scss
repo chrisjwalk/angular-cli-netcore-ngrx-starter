@@ -1,3 +1,5 @@
-.app-page-container {
-  padding: 8px;
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 16px;
 }
