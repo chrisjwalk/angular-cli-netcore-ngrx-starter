@@ -1,13 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import * as layoutActions from '../../../core/store/actions';
 import * as fromRoot from '../../../core/store/reducers';
+import { SharedModule } from '../../../shared';
+import { MaterialModule } from '../../../shared/material';
+import { FeatureComponentComponent } from '../../components/feature-component/feature-component.component';
+import { FeatureModule } from '../../feature.module';
 import * as featureActions from '../../store/actions';
 import * as fromFeature from '../../store/reducers';
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    MaterialModule,
+    SharedModule,
+    FeatureModule,
+    FeatureComponentComponent,
+  ],
   selector: 'app-feature-container',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './feature-container.component.html',

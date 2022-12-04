@@ -1,6 +1,12 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+
+import { SharedModule } from '../../../shared';
+import { MaterialModule } from '../../../shared/material';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MaterialModule, SharedModule],
   selector: 'app-feature-component',
   templateUrl: './feature-component.component.html',
   styleUrls: ['./feature-component.component.scss'],
