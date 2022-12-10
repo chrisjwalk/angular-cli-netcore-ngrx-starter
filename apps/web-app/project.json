@@ -48,7 +48,8 @@
             }
           ],
           "serviceWorker": true,
-          "ngswConfigPath": "apps/web-app/ngsw-config.json"
+          "ngswConfigPath": "apps/web-app/ngsw-config.json",
+          "outputHashing": "all"
         },
         "development": {
           "buildOptimizer": false,

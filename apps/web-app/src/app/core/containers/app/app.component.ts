@@ -4,8 +4,8 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-import { Store, select } from '@ngrx/store';
-import { Observable, take } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 
 import { MainToolbarComponent } from '../../components/main-toolbar/main-toolbar.component';
 import { SidenavListItemComponent } from '../../components/sidenav-list-item/sidenav-list-item.component';
@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
 
   checkForSwUpdate() {
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.versionUpdates.pipe(take(1)).subscribe(() => {
+      this.swUpdate.versionUpdates.subscribe(() => {
         const message = `App update avalable! Reload?`;
         this.snackBar
           .open(message, 'OK', {
