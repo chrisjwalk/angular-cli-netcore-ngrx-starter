@@ -1,14 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { Store, select } from '@ngrx/store';
+import { MatIconModule } from '@angular/material/icon';
+import { PageContainerComponent } from '@myorg/common';
+import { PageToolbarComponent } from '@myorg/common/page-toolbar';
+import { PageToolbarButtonComponent } from '@myorg/common/page-toolbar-button';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 
 import * as layoutActions from '../../../core/store/actions';
 import * as fromRoot from '../../../core/store/reducers';
-import { SharedModule } from '../../../shared';
-import { MaterialModule } from '../../../shared/material';
 import { FeatureComponentComponent } from '../../components/feature-component/feature-component.component';
-import { FeatureModule } from '../../feature.module';
 import * as featureActions from '../../store/actions';
 import * as fromFeature from '../../store/reducers';
 
@@ -16,9 +17,10 @@ import * as fromFeature from '../../store/reducers';
   standalone: true,
   imports: [
     CommonModule,
-    MaterialModule,
-    SharedModule,
-    FeatureModule,
+    MatIconModule,
+    PageContainerComponent,
+    PageToolbarComponent,
+    PageToolbarButtonComponent,
     FeatureComponentComponent,
   ],
   selector: 'app-feature-container',

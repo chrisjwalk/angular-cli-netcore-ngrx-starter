@@ -1,6 +1,10 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
+import { RouterModule } from '@angular/router';
 
 @Component({
+  standalone: true,
+  imports: [MatIconModule, RouterModule],
   selector: 'app-sidenav-list-item',
   templateUrl: './sidenav-list-item.component.html',
   styleUrls: ['./sidenav-list-item.component.scss'],

@@ -1,12 +1,23 @@
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Input, Output } from '@angular/core';
-
-import { SharedModule } from '../../../shared';
-import { MaterialModule } from '../../../shared/material';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { BigButtonComponent } from '@myorg/common/big-button';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MaterialModule, SharedModule],
+  imports: [
+    CommonModule,
+    MatButtonModule,
+    MatCardModule,
+    MatIconModule,
+    MatFormFieldModule,
+    MatInputModule,
+    BigButtonComponent,
+  ],
   selector: 'app-feature-component',
   templateUrl: './feature-component.component.html',
   styleUrls: ['./feature-component.component.scss'],

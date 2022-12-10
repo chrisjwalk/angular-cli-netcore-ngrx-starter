@@ -1,11 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { select, Store } from '@ngrx/store';
+import { MatCardModule } from '@angular/material/card';
+import { PageContainerComponent } from '@myorg/common';
+import { PageToolbarComponent } from '@myorg/common/page-toolbar';
+import { Store, select } from '@ngrx/store';
+import { MarkdownModule } from 'ngx-markdown';
 import { Observable } from 'rxjs';
 
+import { SidenavComponent } from '../../components/sidenav/sidenav.component';
 import * as layoutActions from '../../store/actions';
 import * as fromRoot from '../../store/reducers';
 
 @Component({
+  standalone: true,
+  imports: [
+    CommonModule,
+    MarkdownModule,
+    MatCardModule,
+    PageContainerComponent,
+    PageToolbarComponent,
+    SidenavComponent,
+  ],
   selector: 'app-home',
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './home.component.html',

@@ -1,5 +1,7 @@
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { NgModule } from '@angular/core';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -11,8 +13,11 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 import { environment } from '../environments/environment';
 import { AppRoutingModule } from './app-routing.module';
+import { MainToolbarComponent } from './core/components/main-toolbar/main-toolbar.component';
+import { SidenavListItemComponent } from './core/components/sidenav-list-item/sidenav-list-item.component';
+import { SidenavComponent } from './core/components/sidenav/sidenav.component';
 import { AppComponent } from './core/containers/app/app.component';
-import { CoreModule } from './core/core.module';
+import { HttpInterceptorService } from './core/services';
 import { entityConfig } from './core/store/data/entity-metadata';
 import { effects } from './core/store/effects';
 import { metaReducers, reducers } from './core/store/reducers';
@@ -39,8 +44,20 @@ import { metaReducers, reducers } from './core/store/reducers';
     ServiceWorkerModule.register('/ngsw-worker.js', {
       enabled: environment.production,
     }),
-    CoreModule,
+    MatSidenavModule,
+    SidenavComponent,
+    MainToolbarComponent,
+    SidenavListItemComponent,
+    MatSnackBarModule,
   ],
+  providers: [
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: HttpInterceptorService,
+      multi: true,
+    },
+  ],
+  declarations: [AppComponent],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
