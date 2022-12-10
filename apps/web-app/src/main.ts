@@ -11,7 +11,7 @@ import { RouterState, StoreRouterConnectingModule } from '@ngrx/router-store';
 import { StoreModule } from '@ngrx/store';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
-import { routes } from './app/app-routing.module';
+import { routes } from './app/app-routes';
 import { AppComponent } from './app/core/containers/app/app.component';
 import { entityConfig } from './app/core/store/data/entity-metadata';
 import { effects } from './app/core/store/effects';
