@@ -1,7 +1,5 @@
+import { getJestProjects } from '@nrwl/jest';
+
 export default {
-  projects: [
-    '<rootDir>/apps/web-app',
-    '<rootDir>/apps/api',
-    '<rootDir>/libs/common',
-  ],
+  projects: getJestProjects(),
 };

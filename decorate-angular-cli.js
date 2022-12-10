@@ -12,8 +12,7 @@
  * Every command you run should work the same when using the Nx CLI, except faster.
  *
  * Because of symlinking you can still type `ng build/test/lint` in the terminal. The ng command, in this case,
- * will point to nx, which will perform optimizations before invoking ng. So the Angular CLI is always invoked.
- * The Nx CLI simply does some optimizations before invoking the Angular CLI.
+ * will point to nx, which will perform optimizations before running your task.
  *
  * To opt out of this patch:
  * - Replace occurrences of nx with ng in your package.json
@@ -29,9 +28,7 @@ let output;
 try {
   output = require('@nrwl/workspace').output;
 } catch (e) {
-  console.warn(
-    'Angular CLI could not be decorated to enable computation caching. Please ensure @nrwl/workspace is installed.',
-  );
+  console.warn('Angular CLI could not be decorated to enable computation caching. Please ensure @nrwl/workspace is installed.');
   process.exit(0);
 }
 
@@ -48,32 +45,24 @@ function symlinkNgCLItoNxCLI() {
        * This is the most reliable way to create symlink-like behavior on Windows.
        * Such that it works in all shells and works with npx.
        */
-      ['', '.cmd', '.ps1'].forEach((ext) => {
-        if (fs.existsSync(nxPath + ext))
-          fs.writeFileSync(ngPath + ext, fs.readFileSync(nxPath + ext));
+      ['', '.cmd', '.ps1'].forEach(ext => {
+        if (fs.existsSync(nxPath + ext)) fs.writeFileSync(ngPath + ext, fs.readFileSync(nxPath + ext));
       });
     } else {
       // If unix-based, symlink
       cp.execSync(`ln -sf ./nx ${ngPath}`);
     }
-  } catch (e) {
-    output.error({
-      title:
-        'Unable to create a symlink from the Angular CLI to the Nx CLI:' +
-        e.message,
-    });
+  }
+  catch(e) {
+    output.error({ title: 'Unable to create a symlink from the Angular CLI to the Nx CLI:' + e.message });
     throw e;
   }
 }
 
 try {
   symlinkNgCLItoNxCLI();
-  require('@nrwl/cli/lib/decorate-cli').decorateCli();
-  output.log({
-    title: 'Angular CLI has been decorated to enable computation caching.',
-  });
-} catch (e) {
-  output.error({
-    title: 'Decoration of the Angular CLI did not complete successfully',
-  });
+  require('nx/src/adapter/decorate-cli').decorateCli();
+  output.log({ title: 'Angular CLI has been decorated to enable computation caching.' });
+} catch(e) {
+  output.error({ title: 'Decoration of the Angular CLI did not complete successfully' });
 }
