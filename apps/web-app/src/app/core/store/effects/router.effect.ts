@@ -1,10 +1,9 @@
-import { Location } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Location, isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { tap } from 'rxjs/operators';
 
-import { AppService } from '../../../core/services';
 import * as RouterActions from '../../../core/store/actions/router.action';
 
 @Injectable()
@@ -13,7 +12,7 @@ export class RouterEffects {
     private actions$: Actions,
     private router: Router,
     private location: Location,
-    private appService: AppService,
+    @Inject(PLATFORM_ID) private platformId,
   ) {}
 
   routerNavigation = createEffect(
@@ -21,7 +20,7 @@ export class RouterEffects {
       this.actions$.pipe(
         ofType(RouterActions.routerNavigation),
         tap(() => {
-          this.appService.scrollToTop(false);
+          this.scrollToTop(false);
         }),
       ),
     { dispatch: false },
@@ -55,4 +54,57 @@ export class RouterEffects {
       ),
     { dispatch: false },
   );
+
+  private getMdSidenavContent(): Element {
+    let mdSidenavContent: Element = null;
+    if (isPlatformBrowser(this.platformId)) {
+      const appSidenavContainer: HTMLElement = document.getElementById(
+        'appSidenavContainer',
+      );
+      if (appSidenavContainer) {
+        const sideNavContent =
+          appSidenavContainer.getElementsByClassName('mat-drawer-content');
+        if (sideNavContent.length) {
+          mdSidenavContent = sideNavContent[0];
+        }
+      }
+    }
+
+    return mdSidenavContent;
+  }
+
+  private scrollToTop(animate: boolean = false) {
+    if (isPlatformBrowser(this.platformId)) {
+      window.scrollTo(0, 0);
+      const mdSidenavContent = this.getMdSidenavContent();
+      if (mdSidenavContent) {
+        if (animate) {
+          // t: current time, b: begInnIng value, c: change In value, d: duration
+          const easeOutExpo = (x, t, b, c, d) => {
+            return t === d ? b + c : c * (-Math.pow(2, (-10 * t) / d) + 1) + b;
+          };
+          const start = Date.now();
+          const duration = 1000;
+          const ease = (x) => {
+            const t = (Date.now() - start) / 10;
+            const b = mdSidenavContent.scrollTop;
+            const c = -b;
+            const d = duration;
+            return Math.floor(easeOutExpo(x, t, b, c, d));
+          };
+          const loop = () => {
+            if (mdSidenavContent.scrollTop > 0) {
+              mdSidenavContent.scrollTop = ease(mdSidenavContent.scrollTop);
+              setTimeout(() => {
+                loop();
+              }, 0);
+            }
+          };
+          loop();
+        } else {
+          mdSidenavContent.scrollTop = 0;
+        }
+      }
+    }
+  }
 }
