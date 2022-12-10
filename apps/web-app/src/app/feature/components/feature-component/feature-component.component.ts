@@ -5,6 +5,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { BigButtonComponent } from '@myorg/common/big-button';
 
 @Component({
@@ -17,6 +18,7 @@ import { BigButtonComponent } from '@myorg/common/big-button';
     MatFormFieldModule,
     MatInputModule,
     BigButtonComponent,
+    MatTooltipModule,
   ],
   selector: 'app-feature-component',
   templateUrl: './feature-component.component.html',

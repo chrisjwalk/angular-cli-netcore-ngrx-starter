@@ -5,14 +5,11 @@ import { FeatureComponentComponent } from './feature-component.component';
 describe('Counter', () => {
   test('should render counter', async () => {
     const count = 5;
-    const { container } = await render(FeatureComponentComponent, {
+    await render(FeatureComponentComponent, {
       componentProperties: { count },
-      imports: [],
     });
 
-    expect(container.getElementsByClassName('count')[0].innerHTML).toBe(
-      `${count}`,
-    );
+    expect(screen.getByTestId('count').innerHTML).toBe(`${count}`);
   });
 
   test('should emit increment event on click', async () => {
@@ -21,7 +18,6 @@ describe('Counter', () => {
 
     await render(FeatureComponentComponent, {
       componentProperties: { count, increment: { emit: increment } as any },
-      imports: [],
     });
 
     fireEvent.click(screen.getByText('keyboard_arrow_right'));
