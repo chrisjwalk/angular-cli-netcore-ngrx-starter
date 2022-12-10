@@ -3,9 +3,9 @@ import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
-import { select, Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
+import { Store, select } from '@ngrx/store';
+import { Observable, filter, take } from 'rxjs';
 
 import { MainToolbarComponent } from '../../components/main-toolbar/main-toolbar.component';
 import { SidenavListItemComponent } from '../../components/sidenav-list-item/sidenav-list-item.component';
@@ -67,19 +67,24 @@ export class AppComponent implements OnInit {
 
   checkForSwUpdate() {
     if (this.swUpdate.isEnabled) {
-      this.swUpdate.versionUpdates.subscribe(() => {
-        const message = `App update avalable! Reload?`;
-        this.snackBar
-          .open(message, 'OK', {
-            duration: 15000,
-          })
-          .onAction()
-          .subscribe(() => {
-            this.swUpdate
-              .activateUpdate()
-              .then(() => document.location.reload());
-          });
-      });
+      this.swUpdate.versionUpdates
+        .pipe(
+          filter(
+            (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
+          ),
+        )
+        .subscribe(() =>
+          this.snackBar
+            .open(`App update avalable! Reload?`, 'OK', {
+              duration: 15000,
+            })
+            .onAction()
+            .subscribe(() =>
+              this.swUpdate
+                .activateUpdate()
+                .then(() => document.location.reload()),
+            ),
+        );
     }
   }
 }
