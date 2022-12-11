@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
@@ -11,6 +16,7 @@ import { WeatherForecast } from '../../../weather-forecast/models/weather-foreca
   selector: 'app-forecast-table',
   templateUrl: './forecast-table.component.html',
   styleUrls: ['./forecast-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastTableComponent implements OnInit {
   @Input() loading: boolean;

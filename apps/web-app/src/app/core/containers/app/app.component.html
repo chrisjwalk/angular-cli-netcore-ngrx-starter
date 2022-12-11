@@ -1,14 +1,14 @@
-<app-main-toolbar (toggleSidenav)="toggleSidenav()"></app-main-toolbar>
+<app-main-toolbar (toggleSidenav)="layoutFacade.toggleSidenav()"></app-main-toolbar>
 
 <mat-sidenav-container id="appSidenavContainer"
                        class="mat-app-background"
                        fullscreen>
   <mat-sidenav mode="over"
-               [opened]="showSidenav$ | async"
+               [opened]="layoutFacade.showSidenav$ | async"
                (openedChange)="sidenavChanged($event)"
                class="mat-app-background">
-    <app-sidenav (toggleSidenav)="toggleSidenav()"
-                 (closeSidenav)="closeSidenav()"></app-sidenav>
+    <app-sidenav (toggleSidenav)="layoutFacade.toggleSidenav()"
+                 (closeSidenav)="layoutFacade.closeSidenav()"></app-sidenav>
   </mat-sidenav>
   <div class="app-content">
     <router-outlet></router-outlet>

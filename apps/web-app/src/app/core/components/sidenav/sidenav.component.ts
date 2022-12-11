@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 
 import { SidenavListItemComponent } from '../sidenav-list-item/sidenav-list-item.component';
@@ -9,6 +14,7 @@ import { SidenavListItemComponent } from '../sidenav-list-item/sidenav-list-item
   selector: 'app-sidenav',
   templateUrl: './sidenav.component.html',
   styleUrls: ['./sidenav.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavComponent {
   @Output() toggleSidenav = new EventEmitter();

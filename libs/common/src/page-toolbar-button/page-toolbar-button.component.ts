@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Input,
+  OnInit,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -10,6 +15,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-page-toolbar-button',
   templateUrl: './page-toolbar-button.component.html',
   styleUrls: ['./page-toolbar-button.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarButtonComponent implements OnInit {
   @Input() tooltip: string;

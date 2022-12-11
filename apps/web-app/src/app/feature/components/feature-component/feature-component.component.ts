@@ -1,5 +1,11 @@
 import { CommonModule } from '@angular/common';
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Input,
+  Output,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -23,6 +29,7 @@ import { BigButtonComponent } from '@myorg/common/big-button';
   selector: 'app-feature-component',
   templateUrl: './feature-component.component.html',
   styleUrls: ['./feature-component.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeatureComponentComponent {
   @Input() count: number;

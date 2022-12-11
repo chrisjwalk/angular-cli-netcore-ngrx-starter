@@ -4,14 +4,12 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
-import { Store, select } from '@ngrx/store';
-import { Observable, filter, take } from 'rxjs';
+import { filter } from 'rxjs';
 
 import { MainToolbarComponent } from '../../components/main-toolbar/main-toolbar.component';
 import { SidenavListItemComponent } from '../../components/sidenav-list-item/sidenav-list-item.component';
 import { SidenavComponent } from '../../components/sidenav/sidenav.component';
-import * as layoutActions from '../../store/actions';
-import * as fromRoot from '../../store/reducers';
+import { LayoutFacade } from '../../store/facades';
 
 @Component({
   standalone: true,
@@ -25,43 +23,26 @@ import * as fromRoot from '../../store/reducers';
     MatSnackBarModule,
   ],
   selector: 'app-root',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
-  showSidenav$: Observable<boolean>;
-  title$: Observable<string>;
-
   constructor(
-    private store: Store<fromRoot.State>,
+    public layoutFacade: LayoutFacade,
     private swUpdate: SwUpdate,
     private snackBar: MatSnackBar,
   ) {}
 
   ngOnInit() {
-    this.showSidenav$ = this.store.pipe(select(fromRoot.getShowSidenav));
-    this.title$ = this.store.pipe(select(fromRoot.getTitle));
     this.checkForSwUpdate();
-  }
-
-  openSidenav() {
-    this.store.dispatch(layoutActions.openSidenav());
-  }
-
-  closeSidenav() {
-    this.store.dispatch(layoutActions.closeSidenav());
-  }
-
-  toggleSidenav() {
-    this.store.dispatch(layoutActions.toggleSidenav());
   }
 
   sidenavChanged(sidenavOpened: boolean) {
     if (sidenavOpened) {
-      this.openSidenav();
+      this.layoutFacade.openSidenav();
     } else {
-      this.closeSidenav();
+      this.layoutFacade.closeSidenav();
     }
   }
 

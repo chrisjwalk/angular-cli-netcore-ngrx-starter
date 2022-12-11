@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -7,5 +7,6 @@ import { Component } from '@angular/core';
   selector: 'app-page-container',
   templateUrl: './page-container.component.html',
   styleUrls: ['./page-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageContainerComponent {}

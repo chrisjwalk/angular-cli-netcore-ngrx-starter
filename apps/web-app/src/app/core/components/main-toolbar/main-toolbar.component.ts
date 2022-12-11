@@ -1,4 +1,9 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  EventEmitter,
+  Output,
+} from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -17,6 +22,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-main-toolbar',
   templateUrl: './main-toolbar.component.html',
   styleUrls: ['./main-toolbar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbarComponent {
   @Output() toggleSidenav = new EventEmitter<boolean>();
