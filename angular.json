@@ -1,9 +1,0 @@
-{
-  "version": 2,
-  "projects": {
-    "api": "apps/api",
-    "common": "libs/common",
-    "web-app": "apps/web-app",
-    "web-app-e2e": "apps/web-app-e2e"
-  }
-}
