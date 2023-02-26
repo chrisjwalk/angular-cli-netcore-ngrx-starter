@@ -1,12 +1,11 @@
 {
   "name": "web-app-e2e",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "root": "apps/web-app-e2e",
   "sourceRoot": "apps/web-app-e2e/src",
   "projectType": "application",
-  "architect": {
+  "targets": {
     "e2e": {
-      "builder": "@nrwl/cypress:cypress",
+      "executor": "@nrwl/cypress:cypress",
       "options": {
         "cypressConfig": "apps/web-app-e2e/cypress.config.ts",
         "tsConfig": "apps/web-app-e2e/tsconfig.e2e.json",
@@ -23,7 +22,7 @@
       }
     },
     "lint": {
-      "builder": "@nrwl/linter:eslint",
+      "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": ["apps/web-app-e2e/**/*.{js,ts}"]
       }

@@ -2,13 +2,12 @@
   "name": "api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "root": "apps/api",
-  "sourceRoot": "apps/api/src",
   "projectType": "application",
   "prefix": "api",
   "schematics": {},
-  "architect": {
+  "targets": {
     "build": {
-      "builder": "./tools/builders/dotnet-builder:publish",
+      "executor": "./tools/builders/dotnet-builder:publish",
       "options": {
         "project": "apps/api",
         "outputPath": "dist",
@@ -21,19 +20,13 @@
       }
     },
     "serve": {
-      "builder": "./tools/builders/dotnet-builder:run",
+      "executor": "./tools/builders/dotnet-builder:run",
       "options": {
         "project": "apps/api"
       }
     },
-    "lint": {
-      "builder": "@nrwl/linter:eslint",
-      "options": {
-        "lintFilePatterns": ["apps/api/src/**/*.ts"]
-      }
-    },
     "test": {
-      "builder": "@nrwl/jest:jest",
+      "executor": "@nrwl/jest:jest",
       "options": {
         "jestConfig": "apps/api/jest.config.ts",
         "passWithNoTests": true

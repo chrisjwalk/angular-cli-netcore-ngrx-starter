@@ -3,17 +3,16 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
   "root": "libs/common",
-  "sourceRoot": "libs/common/src",
   "prefix": "myorg",
-  "architect": {
+  "targets": {
     "lint": {
-      "builder": "@nrwl/linter:eslint",
+      "executor": "@nrwl/linter:eslint",
       "options": {
         "lintFilePatterns": ["libs/common/src/**/*.ts"]
       }
     },
     "test": {
-      "builder": "@nrwl/jest:jest",
+      "executor": "@nrwl/jest:jest",
       "options": {
         "jestConfig": "libs/common/jest.config.ts",
         "passWithNoTests": true
