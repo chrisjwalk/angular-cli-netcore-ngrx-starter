@@ -26,12 +26,15 @@
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "./tools/builders/dotnet-builder:test",
       "options": {
-        "jestConfig": "apps/api/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "outputs": ["{workspaceRoot}/coverage/apps/api"]
+        "solutionFolder": "apps/api",
+        "resultsDirectory": "TestResults",
+        "configuration": "Release",
+        "coverage": true,
+        "coverageOutputFormat": "xml",
+        "coverageOutputFileName": "coverage.xml"
+      }
     }
   },
   "tags": []
