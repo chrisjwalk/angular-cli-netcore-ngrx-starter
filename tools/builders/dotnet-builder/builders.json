@@ -5,6 +5,11 @@
       "schema": "./src/build/schema.json",
       "description": "Builds dotnet project."
     },
+    "test": {
+      "implementation": "./dist/test",
+      "schema": "./src/test/schema.json",
+      "description": "Runs dotnet tests."
+    },
     "publish": {
       "implementation": "./dist/publish",
       "schema": "./src/publish/schema.json",
