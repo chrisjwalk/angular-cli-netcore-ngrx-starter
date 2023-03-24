@@ -9,7 +9,7 @@
     "build": {
       "executor": "./tools/builders/dotnet-builder:publish",
       "options": {
-        "project": "apps/api",
+        "project": "apps/api/Api",
         "outputPath": "dist",
         "configuration": "Debug"
       },
@@ -22,16 +22,19 @@
     "serve": {
       "executor": "./tools/builders/dotnet-builder:run",
       "options": {
-        "project": "apps/api"
+        "project": "apps/api/Api"
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "./tools/builders/dotnet-builder:test",
       "options": {
-        "jestConfig": "apps/api/jest.config.ts",
-        "passWithNoTests": true
-      },
-      "outputs": ["{workspaceRoot}/coverage/apps/api"]
+        "solutionFolder": "apps/api",
+        "resultsDirectory": "TestResults",
+        "configuration": "Release",
+        "coverage": true,
+        "coverageOutputFormat": "xml",
+        "coverageOutputFileName": "coverage.xml"
+      }
     }
   },
   "tags": []

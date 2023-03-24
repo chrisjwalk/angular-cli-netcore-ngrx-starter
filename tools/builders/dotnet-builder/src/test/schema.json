@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "solutionFolder": {
+      "type": "string"
+    },
+    "resultsDirectory": {
+      "type": "string"
+    },
+    "verbosityLevel": {
+      "type": "string"
+    },
+    "configuration": {
+      "type": "string"
+    },
+    "interactive": {
+      "type": "boolean"
+    },
+    "noRestore": {
+      "type": "boolean"
+    },
+    "noBuild": {
+      "type": "boolean"
+    },
+    "logger": {
+      "type": "string"
+    },
+    "coverage": {
+      "type": "boolean"
+    },
+    "coverageOutputFormat": {
+      "type": "string"
+    },
+    "coverageOutputFileName": {
+      "type": "string"
+    }
+  }
+}

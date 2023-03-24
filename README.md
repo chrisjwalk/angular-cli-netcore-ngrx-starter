@@ -45,6 +45,14 @@ Run unit tests by executing:
 npm run test
 ```
 
+Please note that for test coverage you need dotnet-coverage to be installed:
+
+```
+dotnet tool install --global dotnet-coverage
+```
+
+More information is available on https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
+
 ## End-to-end Tests
 
 Run e2e tests by executing:
