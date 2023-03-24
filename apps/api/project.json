@@ -9,7 +9,7 @@
     "build": {
       "executor": "./tools/builders/dotnet-builder:publish",
       "options": {
-        "project": "apps/api",
+        "project": "apps/api/Api",
         "outputPath": "dist",
         "configuration": "Debug"
       },
@@ -22,7 +22,7 @@
     "serve": {
       "executor": "./tools/builders/dotnet-builder:run",
       "options": {
-        "project": "apps/api"
+        "project": "apps/api/Api"
       }
     },
     "test": {
