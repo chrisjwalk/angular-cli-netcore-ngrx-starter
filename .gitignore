@@ -1,12 +1,12 @@
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # compiled output
-/dist
-/tmp
+dist
+tmp
 /out-tsc
 
 # dependencies
-/node_modules
+node_modules
 
 # IDEs and editors
 /.idea
@@ -25,10 +25,10 @@
 !.vscode/extensions.json
 
 # misc
-/.angular/cache
 /.sass-cache
 /connect.lock
 /coverage
+coverage.xml
 /junit
 /libpeerconnection.log
 npm-debug.log
@@ -39,3 +39,5 @@ testem.log
 # System Files
 .DS_Store
 Thumbs.db
+
+.angular
