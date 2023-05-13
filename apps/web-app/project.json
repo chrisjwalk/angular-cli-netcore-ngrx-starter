@@ -62,7 +62,6 @@
       },
       "defaultConfiguration": "production"
     },
-
     "serve": {
       "executor": "@angular-devkit/build-angular:dev-server",
       "options": {
@@ -85,14 +84,14 @@
       }
     },
     "lint": {
-      "executor": "@nrwl/linter:eslint",
+      "executor": "@nx/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/web-app/**/*.ts", "apps/web-app/**/*.html"]
       }
     },
     "test": {
-      "executor": "@nrwl/jest:jest",
+      "executor": "@nx/jest:jest",
       "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
       "options": {
         "jestConfig": "apps/web-app/jest.config.ts",
