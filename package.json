@@ -14,7 +14,7 @@
     "build:web-app": "nx build web-app",
     "build:web-app:prod": "nx build web-app --configuration production",
     "build:dotnet-builder": "rimraf ./tools/builders/dotnet-builder/dist && tsc -p ./tools/builders/dotnet-builder",
-    "clean": "rimraf ./dist ./junit",
+    "clean": "rimraf ./dist ./junit ./coverage ./.angular",
     "serve:api": "nx serve api",
     "test": "nx test web-app",
     "test:ci": "nx test web-app --configuration ci",
@@ -105,7 +105,7 @@
     "jest": "^29.5.0",
     "jest-environment-jsdom": "^29.5.0",
     "jest-junit": "^16.0.0",
-    "jest-preset-angular": "13.1.0",
+    "jest-preset-angular": "^13.1.1",
     "js-beautify": "^1.14.7",
     "nx": "16.1.4",
     "prettier": "^2.8.4",
@@ -115,4 +115,3 @@
     "typescript": "5.0.4"
   }
 }
-
