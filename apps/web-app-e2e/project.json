@@ -8,8 +8,7 @@
       "executor": "@nx/cypress:cypress",
       "options": {
         "cypressConfig": "apps/web-app-e2e/cypress.config.ts",
-        "tsConfig": "apps/web-app-e2e/tsconfig.e2e.json",
-        "devServerTarget": "web-app:serve",
+        "devServerTarget": "web-app:serve:development",
         "testingType": "e2e"
       },
       "configurations": {
@@ -18,11 +17,15 @@
         },
         "watch": {
           "watch": true
+        },
+        "ci": {
+          "devServerTarget": "web-app:serve-static"
         }
       }
     },
     "lint": {
       "executor": "@nx/linter:eslint",
+      "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["apps/web-app-e2e/**/*.{js,ts}"]
       }
