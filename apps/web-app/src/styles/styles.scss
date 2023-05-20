@@ -1,4 +1,4 @@
-@import 'apps/web-app/src/styles/app-variables.scss';
+@import './app-variables.scss';
 
 html,
 body,
@@ -9,6 +9,7 @@ mat-sidenav-container,
   width: 100%;
   height: 100%;
   font-family: $app-font-family;
+  font-display: swap;
 }
 
 .flex-spacer {
