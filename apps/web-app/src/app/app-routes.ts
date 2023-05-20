@@ -1,11 +1,8 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { HomeComponent } from './core/containers/home/home.component';
-import { reducers } from './feature/store/reducers';
 import { ForecastsGuard } from './weather-forecast/guards/weather-forecast.guard';
 
 export const routes: Routes = [
@@ -23,12 +20,7 @@ export const routes: Routes = [
       import(
         './feature/containers/feature-container/feature-container.component'
       ).then((m) => m.FeatureContainerComponent),
-    providers: [
-      importProvidersFrom(
-        StoreModule.forFeature('lazyFeature', reducers),
-        EffectsModule.forFeature([]),
-      ),
-    ],
+    providers: [],
   },
   {
     path: 'weather-forecast',

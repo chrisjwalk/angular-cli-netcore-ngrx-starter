@@ -3,8 +3,9 @@ import {
   EntityCollectionServiceBase,
   EntityCollectionServiceElementsFactory,
 } from '@ngrx/data';
-import { WeatherForecast } from '../models/weather-forecast';
 import { Observable } from 'rxjs';
+
+import { WeatherForecast } from '../models/weather-forecast';
 
 @Injectable({ providedIn: 'root' })
 export class WeatherForecastService extends EntityCollectionServiceBase<WeatherForecast> {

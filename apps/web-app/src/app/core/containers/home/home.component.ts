@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { PageContainerComponent } from '@myorg/common';
 import { PageToolbarComponent } from '@myorg/common/page-toolbar';
@@ -23,6 +23,10 @@ import { LayoutFacade } from '../../store/facades';
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   constructor(public layoutFacade: LayoutFacade) {}
+
+  ngOnInit() {
+    this.layoutFacade.setTitle('Home');
+  }
 }

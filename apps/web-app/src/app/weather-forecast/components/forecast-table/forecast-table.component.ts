@@ -1,10 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
@@ -18,21 +13,17 @@ import { WeatherForecast } from '../../../weather-forecast/models/weather-foreca
   styleUrls: ['./forecast-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ForecastTableComponent implements OnInit {
+export class ForecastTableComponent {
   @Input() loading: boolean;
   @Input() set data(data: WeatherForecast[]) {
     this.dataSource.data = data;
   }
 
   dataSource = new MatTableDataSource<WeatherForecast>([]);
-  displayedColumns = [];
-
-  ngOnInit() {
-    this.displayedColumns = [
-      'dateFormatted',
-      'temperatureC',
-      'temperatureF',
-      'summary',
-    ];
-  }
+  displayedColumns = [
+    'dateFormatted',
+    'temperatureC',
+    'temperatureF',
+    'summary',
+  ];
 }

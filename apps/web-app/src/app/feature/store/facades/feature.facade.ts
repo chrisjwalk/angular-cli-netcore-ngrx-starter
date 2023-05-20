@@ -1,24 +1,18 @@
-import { Injectable } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-
-import * as actions from '../actions';
-import * as reducer from '../reducers';
+import { Injectable, signal } from '@angular/core';
 
 @Injectable({ providedIn: 'root' })
 export class FeatureFacade {
-  count$ = this.store.pipe(select(reducer.getCount));
-
-  constructor(private store: Store<reducer.State>) {}
+  count = signal(0);
 
   setCount(count: number) {
-    this.store.dispatch(actions.setCount({ count }));
+    this.count.set(count);
   }
 
   incrementCount() {
-    this.store.dispatch(actions.incrementCount());
+    this.count.update((value) => value + 1);
   }
 
   decrementCount() {
-    this.store.dispatch(actions.decrementCount());
+    this.count.update((value) => value - 1);
   }
 }

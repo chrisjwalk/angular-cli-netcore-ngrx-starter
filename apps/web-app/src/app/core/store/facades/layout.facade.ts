@@ -1,28 +1,30 @@
-import { Injectable } from '@angular/core';
-import { Store, select } from '@ngrx/store';
-
-import * as actions from '../actions';
-import * as reducer from '../reducers';
+import { Injectable, effect, signal } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Injectable({ providedIn: 'root' })
 export class LayoutFacade {
-  title$ = this.store.pipe(select(reducer.getTitle));
-  showSidenav$ = this.store.pipe(select(reducer.getShowSidenav));
+  title = signal<string>('');
+  showSidenav = signal<boolean>(false);
 
-  constructor(private store: Store<reducer.State>) {}
+  constructor(private titleService: Title) {
+    effect(() => {
+      this.titleService.setTitle(this.title() + ' | Demo App');
+    });
+  }
 
   setTitle(title: string) {
-    this.store.dispatch(actions.setTitle({ title }));
+    this.title.set(title);
   }
+
   openSidenav() {
-    this.store.dispatch(actions.openSidenav());
+    this.showSidenav.set(true);
   }
 
   closeSidenav() {
-    this.store.dispatch(actions.closeSidenav());
+    this.showSidenav.set(false);
   }
 
   toggleSidenav() {
-    this.store.dispatch(actions.toggleSidenav());
+    this.showSidenav.update((showSidenav) => !showSidenav);
   }
 }

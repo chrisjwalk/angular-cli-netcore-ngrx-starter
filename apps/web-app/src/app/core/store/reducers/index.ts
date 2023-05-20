@@ -1,19 +1,12 @@
 import { Params, RouterStateSnapshot } from '@angular/router';
 import {
-  routerReducer,
   RouterReducerState,
   RouterStateSerializer,
+  routerReducer,
 } from '@ngrx/router-store';
-import {
-  ActionReducer,
-  ActionReducerMap,
-  createFeatureSelector,
-  createSelector,
-  MetaReducer,
-} from '@ngrx/store';
+import { ActionReducer, ActionReducerMap, MetaReducer } from '@ngrx/store';
 
 import { environment } from '../../../../environments/environment';
-import * as fromLayout from '../../store/reducers/layout.reducer';
 
 export interface RouterStateUrl {
   url: string;
@@ -41,12 +34,10 @@ export class CustomRouterStateSerializer
 }
 
 export interface State {
-  layout: fromLayout.State;
   routerReducer: RouterReducerState<RouterStateUrl>;
 }
 
 export const reducers: ActionReducerMap<State> = {
-  layout: fromLayout.reducer,
   routerReducer,
 };
 
@@ -62,14 +53,3 @@ export function logger(reducer: ActionReducer<State>): ActionReducer<State> {
 export const metaReducers: MetaReducer<State>[] = !environment.production
   ? [logger]
   : [];
-
-/**
- * Layout Reducers
- */
-export const getLayoutState = createFeatureSelector<fromLayout.State>('layout');
-
-export const getShowSidenav = createSelector(
-  getLayoutState,
-  fromLayout.getShowSidenav,
-);
-export const getTitle = createSelector(getLayoutState, fromLayout.getTitle);

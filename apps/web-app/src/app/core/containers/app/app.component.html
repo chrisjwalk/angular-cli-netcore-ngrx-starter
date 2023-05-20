@@ -4,7 +4,7 @@
                        class="mat-app-background"
                        fullscreen>
   <mat-sidenav mode="over"
-               [opened]="layoutFacade.showSidenav$ | async"
+               [opened]="layoutFacade.showSidenav()"
                (openedChange)="sidenavChanged($event)"
                class="mat-app-background">
     <app-sidenav (toggleSidenav)="layoutFacade.toggleSidenav()"
