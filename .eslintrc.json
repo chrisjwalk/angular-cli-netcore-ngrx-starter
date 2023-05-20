@@ -38,7 +38,8 @@
             "allowTemplateLiterals": true
           }
         ],
-        "comma-dangle": ["error", "always-multiline"]
+        "comma-dangle": ["error", "always-multiline"],
+        "eqeqeq": "error"
       }
     },
     {
