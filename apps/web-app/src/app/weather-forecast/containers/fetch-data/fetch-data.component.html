@@ -14,5 +14,5 @@
 </app-page-toolbar>
 <app-page-container>
   <app-forecast-table [loading]="weatherForecastService.loading$ | async"
-                      [data]="weatherForecastService.entities$ | async"></app-forecast-table>
+                      [data]="weatherForecastService.weatherForecasts$ | async"></app-forecast-table>
 </app-page-container>

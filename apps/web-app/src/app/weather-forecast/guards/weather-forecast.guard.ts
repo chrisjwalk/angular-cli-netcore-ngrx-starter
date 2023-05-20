@@ -1,31 +1,16 @@
-import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { catchError, switchMap, take, tap } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { CanActivateFn } from '@angular/router';
+import { of } from 'rxjs';
+import { catchError, map, tap } from 'rxjs/operators';
 
-import { WeatherForecastService } from '../services/weather-forecast.service';
+import { WeatherForecastStore } from '../services/weather-forecast.store';
 
-@Injectable({
-  providedIn: 'root',
-})
-export class ForecastsGuard implements CanActivate {
-  constructor(private weatherForecastService: WeatherForecastService) {}
+export const forecastsCanActivateFn: CanActivateFn = () => {
+  const weatherForecastService = inject(WeatherForecastStore);
 
-  getFromStoreOrAPI(): Observable<any> {
-    return this.weatherForecastService.count$.pipe(
-      tap((count) => {
-        if (!count) {
-          this.weatherForecastService.getForecasts();
-        }
-      }),
-      take(1),
-    );
-  }
-
-  canActivate(): Observable<boolean> {
-    return this.getFromStoreOrAPI().pipe(
-      switchMap(() => of(true)),
-      catchError(() => of(false)),
-    );
-  }
-}
+  return weatherForecastService.count$.pipe(
+    tap((count) => (!count ? weatherForecastService.getForecasts(10) : null)),
+    map(() => true),
+    catchError(() => of(false)),
+  );
+};

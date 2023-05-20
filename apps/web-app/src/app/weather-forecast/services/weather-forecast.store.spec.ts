@@ -1,60 +1,28 @@
-import { HttpClientModule, HttpParams } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import {
   HttpClientTestingModule,
   HttpTestingController,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import {
-  DefaultHttpUrlGenerator,
-  DefaultPluralizer,
-  EntityDataModule,
-} from '@ngrx/data';
-import { EffectsModule } from '@ngrx/effects';
-import { StoreModule } from '@ngrx/store';
+import { filter } from 'rxjs';
 
-import { entityConfig } from '../../core/store/data/entity-metadata';
 import { WeatherForecast } from '../models/weather-forecast';
-import { WeatherForecastService } from '../services/weather-forecast.service';
+import { WeatherForecastStore } from './weather-forecast.store';
 
 describe('WeatherForecastService', () => {
-  let service: WeatherForecastService;
+  let service: WeatherForecastStore;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [
-        HttpClientModule,
-        MatSnackBarModule,
-        StoreModule.forRoot({}),
-        EffectsModule.forRoot([]),
-        EntityDataModule.forRoot(entityConfig),
-        HttpClientTestingModule,
-      ],
-      providers: [
-        WeatherForecastService,
-        { provide: 'BASE_URL', useValue: '' },
-      ],
+      imports: [HttpClientModule, MatSnackBarModule, HttpClientTestingModule],
+      providers: [WeatherForecastStore, { provide: 'BASE_URL', useValue: '' }],
     });
 
-    service = TestBed.inject(WeatherForecastService);
+    service = TestBed.inject(WeatherForecastStore);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
-
-  const getServiceUrl = (count: number) => {
-    const serviceUrlRoot = 'api';
-    const serviceUrlGenerator = new DefaultHttpUrlGenerator(
-      new DefaultPluralizer([]),
-    );
-    const serviceUrl = serviceUrlGenerator.collectionResource(
-      service.entityName,
-      serviceUrlRoot,
-    );
-    const serviceUrlParams = new HttpParams({
-      fromObject: { count: count.toString() },
-    }).toString();
-    return `${serviceUrl}?${serviceUrlParams}`;
-  };
 
   it('WeatherForecastService.getForecasts() should return data', () => {
     const weatherForecasts: WeatherForecast[] = [
@@ -67,11 +35,16 @@ describe('WeatherForecastService', () => {
       },
     ];
 
-    service.getForecasts(1).subscribe((result) => {
-      expect(result).toEqual(weatherForecasts);
-    });
+    service.getForecasts(1);
+    service.weatherForecasts$
+      .pipe(filter((result) => !!result))
+      .subscribe((result) => {
+        expect(result).toEqual(weatherForecasts);
+      });
 
-    const req = httpTestingController.expectOne(getServiceUrl(1));
+    const req = httpTestingController.expectOne(
+      '/api/weatherforecasts?count=1',
+    );
     expect(req.request.method).toEqual('GET');
     req.flush(weatherForecasts);
   });
@@ -150,11 +123,16 @@ describe('WeatherForecastService', () => {
       },
     ];
 
-    service.refresh(10).subscribe((data) => {
-      expect(data.length).toBe(10);
-    });
+    service.getForecasts(10);
+    service.weatherForecasts$
+      .pipe(filter((result) => !!result))
+      .subscribe((data) => {
+        expect(data.length).toBe(10);
+      });
 
-    const req = httpTestingController.expectOne(getServiceUrl(10));
+    const req = httpTestingController.expectOne(
+      '/api/weatherforecasts?count=10',
+    );
     expect(req.request.method).toEqual('GET');
     req.flush(weatherForecasts);
   });

@@ -3,7 +3,7 @@ import { Routes } from '@angular/router';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { HomeComponent } from './core/containers/home/home.component';
-import { ForecastsGuard } from './weather-forecast/guards/weather-forecast.guard';
+import { forecastsCanActivateFn } from './weather-forecast/guards/weather-forecast.guard';
 
 export const routes: Routes = [
   {
@@ -28,7 +28,7 @@ export const routes: Routes = [
       import(
         './weather-forecast/containers/fetch-data/fetch-data.component'
       ).then((m) => m.FetchDataComponent),
-    canActivate: [ForecastsGuard],
+    canActivate: [forecastsCanActivateFn],
   },
   { path: '**', component: HomeComponent },
 ];

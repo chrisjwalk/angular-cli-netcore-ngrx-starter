@@ -8,8 +8,8 @@ import { PageToolbarComponent } from '@myorg/common/page-toolbar';
 import { PageToolbarButtonComponent } from '@myorg/common/page-toolbar-button';
 
 import { LayoutFacade } from '../../../core/store/facades/layout.facade';
-import { WeatherForecastService } from '../../../weather-forecast/services/weather-forecast.service';
 import { ForecastTableComponent } from '../../components/forecast-table/forecast-table.component';
+import { WeatherForecastStore } from '../../services/weather-forecast.store';
 
 @Component({
   standalone: true,
@@ -30,7 +30,7 @@ import { ForecastTableComponent } from '../../components/forecast-table/forecast
 export class FetchDataComponent implements OnInit {
   constructor(
     public layoutFacade: LayoutFacade,
-    public weatherForecastService: WeatherForecastService,
+    public weatherForecastService: WeatherForecastStore,
   ) {}
 
   ngOnInit() {
@@ -38,6 +38,6 @@ export class FetchDataComponent implements OnInit {
   }
 
   getForecasts(count: number) {
-    this.weatherForecastService.refresh(count);
+    this.weatherForecastService.getForecasts(count);
   }
 }
