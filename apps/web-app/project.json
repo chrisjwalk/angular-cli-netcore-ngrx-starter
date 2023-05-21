@@ -2,8 +2,9 @@
   "name": "web-app",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "application",
-  "sourceRoot": "apps/web-app/src",
   "prefix": "app",
+  "sourceRoot": "apps/web-app/src",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@angular-devkit/build-angular:browser",
@@ -14,7 +15,6 @@
         "main": "apps/web-app/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/web-app/tsconfig.app.json",
-        "inlineStyleLanguage": "scss",
         "assets": [
           "apps/web-app/src/favicon.ico",
           "apps/web-app/src/robots.txt",
@@ -110,6 +110,5 @@
         "buildTarget": "web-app:build"
       }
     }
-  },
-  "tags": []
+  }
 }
