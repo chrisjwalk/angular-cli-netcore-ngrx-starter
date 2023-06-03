@@ -1,4 +1,4 @@
-# Nx + Angular + NgRx Platform + .NET 7.0
+# Nx + Angular + .NET 7.0
 
 This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/angular) with [Angular](https://angular.io) and .NET 7.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
 
