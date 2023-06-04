@@ -1,7 +1,9 @@
 import { Injectable, effect, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class LayoutFacade {
   title = signal<string>('');
   showSidenav = signal<boolean>(false);

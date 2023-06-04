@@ -8,7 +8,9 @@ import {
   WeatherForecastState,
 } from '../models/weather-forecast';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class WeatherForecastStore extends ComponentStore<WeatherForecastState> {
   readonly weatherForecasts$ = this.select((state) => state?.weatherForecasts);
   readonly count$ = this.select((state) => state?.count);

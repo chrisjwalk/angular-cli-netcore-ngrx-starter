@@ -1,6 +1,8 @@
 import { Injectable, signal } from '@angular/core';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({
+  providedIn: 'root',
+})
 export class FeatureFacade {
   count = signal(0);
 

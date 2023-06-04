@@ -30,7 +30,7 @@ import { WeatherForecastStore } from '../../services/weather-forecast.store';
 export class FetchDataComponent implements OnInit {
   constructor(
     public layoutFacade: LayoutFacade,
-    public weatherForecastService: WeatherForecastStore,
+    public weatherForecastStore: WeatherForecastStore,
   ) {}
 
   ngOnInit() {
@@ -38,6 +38,6 @@ export class FetchDataComponent implements OnInit {
   }
 
   getForecasts(count: number) {
-    this.weatherForecastService.getForecasts(count);
+    this.weatherForecastStore.getForecasts(count);
   }
 }
