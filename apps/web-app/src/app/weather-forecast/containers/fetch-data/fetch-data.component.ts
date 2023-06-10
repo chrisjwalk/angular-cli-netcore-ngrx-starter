@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  OnInit,
+} from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -28,6 +33,10 @@ import { WeatherForecastStore } from '../../services/weather-forecast.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FetchDataComponent implements OnInit {
+  @HostBinding('attr.data-testid') get testId() {
+    return 'app-fetch-data';
+  }
+
   constructor(
     public layoutFacade: LayoutFacade,
     public weatherForecastStore: WeatherForecastStore,

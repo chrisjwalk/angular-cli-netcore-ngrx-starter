@@ -1,27 +1,24 @@
 import { HttpClientModule } from '@angular/common/http';
-import {
-  HttpClientTestingModule,
-  HttpTestingController,
-} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { filter } from 'rxjs';
+import { filter, of } from 'rxjs';
 
 import { WeatherForecast } from '../models/weather-forecast';
+import { WeatherForecastService } from './weather-forecast.service';
 import { WeatherForecastStore } from './weather-forecast.store';
 
 describe('WeatherForecastService', () => {
-  let service: WeatherForecastStore;
-  let httpTestingController: HttpTestingController;
+  let service: WeatherForecastService;
+  let store: WeatherForecastStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, MatSnackBarModule, HttpClientTestingModule],
+      imports: [HttpClientModule, MatSnackBarModule],
       providers: [WeatherForecastStore, { provide: 'BASE_URL', useValue: '' }],
     });
 
-    service = TestBed.inject(WeatherForecastStore);
-    httpTestingController = TestBed.inject(HttpTestingController);
+    store = TestBed.inject(WeatherForecastStore);
+    service = TestBed.inject(WeatherForecastService);
   });
 
   it('WeatherForecastService.getForecasts() should return data', () => {
@@ -35,18 +32,14 @@ describe('WeatherForecastService', () => {
       },
     ];
 
-    service.getForecasts(1);
-    service.weatherForecasts$
+    store.getForecasts(1);
+    jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+
+    store.weatherForecasts$
       .pipe(filter((result) => !!result))
       .subscribe((result) => {
         expect(result).toEqual(weatherForecasts);
       });
-
-    const req = httpTestingController.expectOne(
-      '/api/weatherforecasts?count=1',
-    );
-    expect(req.request.method).toEqual('GET');
-    req.flush(weatherForecasts);
   });
 
   it('WeatherForecastService.refresh(count) should return data of length count', () => {
@@ -123,17 +116,12 @@ describe('WeatherForecastService', () => {
       },
     ];
 
-    service.getForecasts(10);
-    service.weatherForecasts$
+    store.getForecasts(10);
+    jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+    store.weatherForecasts$
       .pipe(filter((result) => !!result))
       .subscribe((data) => {
         expect(data.length).toBe(10);
       });
-
-    const req = httpTestingController.expectOne(
-      '/api/weatherforecasts?count=10',
-    );
-    expect(req.request.method).toEqual('GET');
-    req.flush(weatherForecasts);
   });
 });

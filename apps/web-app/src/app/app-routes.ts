@@ -1,9 +1,11 @@
 import { importProvidersFrom } from '@angular/core';
 import { Routes } from '@angular/router';
+import { provideComponentStore } from '@ngrx/component-store';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { HomeComponent } from './core/containers/home/home.component';
 import { forecastsCanActivateFn } from './weather-forecast/guards/weather-forecast.guard';
+import { WeatherForecastStore } from './weather-forecast/services/weather-forecast.store';
 
 export const routes: Routes = [
   {
@@ -29,6 +31,7 @@ export const routes: Routes = [
         './weather-forecast/containers/fetch-data/fetch-data.component'
       ).then((m) => m.FetchDataComponent),
     canActivate: [forecastsCanActivateFn],
+    providers: [provideComponentStore(WeatherForecastStore)],
   },
   { path: '**', component: HomeComponent },
 ];
