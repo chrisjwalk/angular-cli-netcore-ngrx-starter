@@ -18,6 +18,6 @@ describe('weather-forecast', () => {
 
   it('should display 10 rows', () => {
     cy.wait('@getWeatherforecasts');
-    cy.get('[data-cy="table-row"]').should('have.length', 10);
+    cy.get('[data-testid="table-row"]').should('have.length', 10);
   });
 });

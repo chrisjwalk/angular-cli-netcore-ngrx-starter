@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+} from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 
@@ -14,6 +19,10 @@ import { WeatherForecast } from '../../../weather-forecast/models/weather-foreca
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastTableComponent {
+  @HostBinding('attr.data-testid') get testId() {
+    return 'app-forecast-table';
+  }
+
   @Input() loading: boolean;
   @Input() set data(data: WeatherForecast[]) {
     this.dataSource.data = data;
