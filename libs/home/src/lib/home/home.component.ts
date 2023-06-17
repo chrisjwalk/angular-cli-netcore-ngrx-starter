@@ -6,9 +6,12 @@ import {
   OnInit,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
-import { PageContainerComponent } from '@myorg/common';
-import { PageToolbarComponent } from '@myorg/common/page-toolbar';
-import { LayoutFacade, SidenavComponent } from '@myorg/shared';
+import {
+  LayoutFacade,
+  PageContainerComponent,
+  PageToolbarComponent,
+  SidenavComponent,
+} from '@myorg/shared';
 import { MarkdownModule } from 'ngx-markdown';
 
 @Component({

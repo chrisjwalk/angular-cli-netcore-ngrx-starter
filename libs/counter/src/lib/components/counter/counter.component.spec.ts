@@ -1,11 +1,11 @@
 import { fireEvent, render, screen } from '@testing-library/angular';
 
-import { FeatureComponentComponent } from './feature-component.component';
+import { CounterComponent } from './counter.component';
 
-describe('Counter', () => {
+describe('CounterComponent', () => {
   test('should render counter', async () => {
     const count = 5;
-    await render(FeatureComponentComponent, {
+    await render(CounterComponent, {
       componentProperties: { count },
     });
 
@@ -16,7 +16,7 @@ describe('Counter', () => {
     const count = 5;
     const increment = jest.fn();
 
-    await render(FeatureComponentComponent, {
+    await render(CounterComponent, {
       componentProperties: { count, increment: { emit: increment } as any },
     });
 

@@ -1,0 +1,13 @@
+<lib-page-toolbar [title]="layoutFacade.title()">
+  <lib-page-toolbar-button (click)="CounterFacade.incrementCount()"
+                           tooltip="Increment!">
+    <mat-icon>add</mat-icon>
+  </lib-page-toolbar-button>
+</lib-page-toolbar>
+<lib-page-container>
+  <lib-counter [count]="CounterFacade.count()"
+               (increment)="CounterFacade.incrementCount()"
+               (decrement)="CounterFacade.decrementCount()"
+               (setCount)="CounterFacade.setCount($event)">
+  </lib-counter>
+</lib-page-container>

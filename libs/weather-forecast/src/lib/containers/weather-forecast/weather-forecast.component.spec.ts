@@ -4,11 +4,11 @@ import { provideComponentStore } from '@ngrx/component-store';
 import { render, screen } from '@testing-library/angular';
 
 import { WeatherForecastStore } from '../../services/weather-forecast.store';
-import { FetchDataComponent } from './fetch-data.component';
+import { WeatherForecastComponent } from './weather-forecast.component';
 
-describe('FetchDataComponent', () => {
+describe('WeatherForecastComponent', () => {
   test('should exist', async () => {
-    await render(FetchDataComponent, {
+    await render(WeatherForecastComponent, {
       providers: [
         provideComponentStore(WeatherForecastStore),
         provideHttpClient(),
@@ -16,6 +16,6 @@ describe('FetchDataComponent', () => {
       ],
     });
 
-    expect(screen.getByTestId('lib-fetch-data')).toBeTruthy();
+    expect(screen.getByTestId('lib-weather-forecast')).toBeTruthy();
   });
 });

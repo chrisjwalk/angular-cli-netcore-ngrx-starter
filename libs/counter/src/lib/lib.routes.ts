@@ -1,7 +1,7 @@
 import { Route } from '@angular/router';
 
-import { FeatureContainerComponent } from './containers/feature-container/feature-container.component';
+import { CounterContainerComponent } from './containers/counter-container/counter-container.component';
 
 export const counterRoutes: Route[] = [
-  { path: '', component: FeatureContainerComponent },
+  { path: '', component: CounterContainerComponent },
 ];

@@ -3,7 +3,7 @@ import { Injectable, computed, signal } from '@angular/core';
 @Injectable({
   providedIn: 'root',
 })
-export class FeatureFacade {
+export class CounterFacade {
   #count = signal(0);
   count = computed(this.#count);
 

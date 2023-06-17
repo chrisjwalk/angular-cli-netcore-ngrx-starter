@@ -12,7 +12,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BigButtonComponent } from '@myorg/common/big-button';
+import { BigButtonComponent } from '@myorg/shared';
 
 @Component({
   standalone: true,
@@ -26,12 +26,12 @@ import { BigButtonComponent } from '@myorg/common/big-button';
     BigButtonComponent,
     MatTooltipModule,
   ],
-  selector: 'lib-feature-component',
-  templateUrl: './feature-component.component.html',
-  styleUrls: ['./feature-component.component.scss'],
+  selector: 'lib-counter',
+  templateUrl: './counter.component.html',
+  styleUrls: ['./counter.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FeatureComponentComponent {
+export class CounterComponent {
   @Input() count: number;
   @Output() increment = new EventEmitter();
   @Output() decrement = new EventEmitter();

@@ -8,10 +8,12 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
-import { PageContainerComponent } from '@myorg/common';
-import { PageToolbarComponent } from '@myorg/common/page-toolbar';
-import { PageToolbarButtonComponent } from '@myorg/common/page-toolbar-button';
-import { LayoutFacade } from '@myorg/shared';
+import {
+  LayoutFacade,
+  PageContainerComponent,
+  PageToolbarButtonComponent,
+  PageToolbarComponent,
+} from '@myorg/shared';
 
 import { ForecastTableComponent } from '../../components/forecast-table/forecast-table.component';
 import { WeatherForecastStore } from '../../services/weather-forecast.store';
@@ -28,13 +30,13 @@ import { WeatherForecastStore } from '../../services/weather-forecast.store';
     MatIconModule,
     ForecastTableComponent,
   ],
-  selector: 'lib-fetch-data',
-  templateUrl: './fetch-data.component.html',
+  selector: 'lib-weather-forecast',
+  templateUrl: './weather-forecast.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FetchDataComponent implements OnInit {
+export class WeatherForecastComponent implements OnInit {
   @HostBinding('attr.data-testid') get testId() {
-    return 'lib-fetch-data';
+    return 'lib-weather-forecast';
   }
 
   constructor(

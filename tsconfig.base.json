@@ -16,8 +16,6 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
-      "@myorg/common": ["libs/common/src/index.ts"],
-      "@myorg/common/*": ["libs/common/src/*"],
       "@myorg/counter": ["libs/counter/src/index.ts"],
       "@myorg/home": ["libs/home/src/index.ts"],
       "@myorg/shared": ["libs/shared/src/index.ts"],
