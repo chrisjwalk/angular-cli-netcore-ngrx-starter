@@ -49,12 +49,7 @@
           ],
           "serviceWorker": true,
           "ngswConfigPath": "apps/web-app/ngsw-config.json",
-          "outputHashing": "all",
-          "optimization": {
-            "styles": {
-              "inlineCritical": false
-            }
-          }
+          "outputHashing": "all"
         },
         "development": {
           "buildOptimizer": false,
