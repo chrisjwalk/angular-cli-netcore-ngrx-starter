@@ -12,7 +12,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 @Component({
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule],
-  selector: 'app-page-toolbar-button',
+  selector: 'lib-page-toolbar-button',
   templateUrl: './page-toolbar-button.component.html',
   styleUrls: ['./page-toolbar-button.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 @Component({
   standalone: true,
   imports: [CommonModule],
-  selector: 'app-page-toolbar',
+  selector: 'lib-page-toolbar',
   templateUrl: './page-toolbar.component.html',
   styleUrls: ['./page-toolbar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,

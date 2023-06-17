@@ -1,0 +1,18 @@
+<lib-page-toolbar [title]="layoutFacade.title()">
+  <mat-form-field appearance="outline">
+    <input matInput
+           #count
+           type="number"
+           placeholder="Forecast Days"
+           (keyup.enter)="getForecasts(+count.value)"
+           [value]="weatherForecastStore.count$ | async" />
+  </mat-form-field>
+  <lib-page-toolbar-button (click)="getForecasts(+count.value)"
+                           tooltip="Get Forecasts">
+    <mat-icon>refresh</mat-icon>
+  </lib-page-toolbar-button>
+</lib-page-toolbar>
+<lib-page-container>
+  <lib-forecast-table [loading]="weatherForecastStore.loading$ | async"
+                      [data]="weatherForecastStore.weatherForecasts$ | async"></lib-forecast-table>
+</lib-page-container>
