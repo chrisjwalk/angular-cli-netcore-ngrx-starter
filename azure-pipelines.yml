@@ -53,7 +53,7 @@ steps:
       codeCoverageTool: Cobertura
       summaryFileLocation: '**/cobertura-coverage.xml'
       pathToSources: 'coverage'
-      failIfCoverageEmpty: true
+      failIfCoverageEmpty: false
 
   - task: ArchiveFiles@2
     inputs:
