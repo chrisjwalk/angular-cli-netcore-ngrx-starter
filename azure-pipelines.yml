@@ -21,6 +21,10 @@ steps:
       version: 7.0.x
 
   - script: |
+      npm run dotnet:coverage
+    displayName: 'Install dotnet-coverage'
+
+  - script: |
       npm install
     displayName: 'npm install'
 
