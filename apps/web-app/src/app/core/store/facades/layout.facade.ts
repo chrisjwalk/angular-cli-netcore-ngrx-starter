@@ -1,12 +1,14 @@
-import { Injectable, effect, signal } from '@angular/core';
+import { Injectable, computed, effect, signal } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
 @Injectable({
   providedIn: 'root',
 })
 export class LayoutFacade {
-  title = signal<string>('');
-  showSidenav = signal<boolean>(false);
+  #title = signal<string>('');
+  #showSidenav = signal<boolean>(false);
+  title = computed(this.#title);
+  showSidenav = computed(this.#showSidenav);
 
   constructor(private titleService: Title) {
     effect(() => {
@@ -15,18 +17,18 @@ export class LayoutFacade {
   }
 
   setTitle(title: string) {
-    this.title.set(title);
+    this.#title.set(title);
   }
 
   openSidenav() {
-    this.showSidenav.set(true);
+    this.#showSidenav.set(true);
   }
 
   closeSidenav() {
-    this.showSidenav.set(false);
+    this.#showSidenav.set(false);
   }
 
   toggleSidenav() {
-    this.showSidenav.update((showSidenav) => !showSidenav);
+    this.#showSidenav.update((showSidenav) => !showSidenav);
   }
 }
