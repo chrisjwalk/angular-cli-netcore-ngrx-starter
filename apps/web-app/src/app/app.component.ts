@@ -1,5 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  inject,
+} from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
@@ -69,6 +74,10 @@ export class AppComponent {
 
   private swUpdate = inject(SwUpdate);
   private snackBar = inject(MatSnackBar);
+
+  @HostBinding('attr.data-testid') get testId() {
+    return 'app-root';
+  }
 
   updateReady$ = this.swUpdate.isEnabled
     ? this.swUpdate.versionUpdates.pipe(

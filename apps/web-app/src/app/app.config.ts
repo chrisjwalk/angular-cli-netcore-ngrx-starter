@@ -3,30 +3,13 @@ import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-  Routes,
   provideRouter,
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { ServiceWorkerModule } from '@angular/service-worker';
 
-import { environment } from './environments/environment';
-
-const routes: Routes = [
-  {
-    path: '',
-    loadChildren: () => import('@myorg/home').then((m) => m.homeRoutes),
-  },
-  {
-    path: 'feature',
-    loadChildren: () => import('@myorg/counter').then((m) => m.counterRoutes),
-  },
-  {
-    path: 'weather-forecast',
-    loadChildren: () =>
-      import('@myorg/weather-forecast').then((m) => m.weatherForecastRoutes),
-  },
-  { path: '**', redirectTo: '' },
-];
+import { environment } from '../environments/environment';
+import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
