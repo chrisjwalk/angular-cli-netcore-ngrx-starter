@@ -25,6 +25,7 @@
           "apps/web-app/src/styles/styles.scss",
           "apps/web-app/src/styles/material.scss"
         ],
+        "inlineStyleLanguage": "scss",
         "scripts": []
       },
       "configurations": {

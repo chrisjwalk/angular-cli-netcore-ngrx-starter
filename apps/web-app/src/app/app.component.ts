@@ -54,15 +54,15 @@ import { map, of, tap } from 'rxjs';
   `,
   styles: [
     `
-      @use './styles/app-variables' as variables;
+      @use '../styles/app-variables' as vars;
 
       .mat-drawer-container {
-        margin-top: variables.$app-main-toolbar-height;
-        height: variables.$app-mat-drawer-container-height;
-        background-color: variables.$app-mat-drawer-container-background-color;
+        margin-top: vars.$app-main-toolbar-height;
+        height: vars.$app-mat-drawer-container-height;
+        background-color: vars.$app-mat-drawer-container-background-color;
 
         @media (prefers-color-scheme: dark) {
-          background-color: variables.$app-dark-mat-drawer-container-background-color;
+          background-color: vars.$app-dark-mat-drawer-container-background-color;
         }
       }
     `,
