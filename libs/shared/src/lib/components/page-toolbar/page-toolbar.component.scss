@@ -1,10 +1,10 @@
-@import 'apps/web-app/src/styles/app-variables.scss';
+@use 'variables' as vars;
 
 .app-page-toolbar {
   padding: 0px 16px;
-  background: $app-page-toolbar-background;
-  height: $app-page-toolbar-height;
-  line-height: $app-page-toolbar-height;
+  background: vars.$app-page-toolbar-background;
+  height: vars.$app-page-toolbar-height;
+  line-height: vars.$app-page-toolbar-height;
   display: flex;
   box-sizing: border-box;
   flex-direction: row;
@@ -13,7 +13,7 @@
   gap: 8px;
 
   @media (prefers-color-scheme: dark) {
-    background: $app-dark-page-toolbar-background;
+    background: vars.$app-dark-page-toolbar-background;
   }
 
   h1 {

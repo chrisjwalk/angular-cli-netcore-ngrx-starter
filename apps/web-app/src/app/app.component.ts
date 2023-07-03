@@ -54,7 +54,7 @@ import { map, of, tap } from 'rxjs';
   `,
   styles: [
     `
-      @use '../styles/app-variables' as vars;
+      @use 'variables' as vars;
 
       .mat-drawer-container {
         margin-top: vars.$app-main-toolbar-height;

@@ -1,4 +1,4 @@
-@import 'apps/web-app/src/styles/app-variables.scss';
+@use 'variables' as vars;
 
 ::ng-deep {
   pre {
@@ -6,34 +6,58 @@
     overflow: auto;
     font-size: 85%;
     line-height: 1.45;
-    background-color: $app-pre-background;
+    background-color: vars.$app-pre-background;
     border-radius: 3px;
     border: 1px solid #e1e1e8;
 
     @media (prefers-color-scheme: dark) {
-      background-color: $app-dark-pre-background;
+      background-color: vars.$app-dark-pre-background;
     }
   }
 
   blockquote {
-    background-color: $app-pre-background;
+    background-color: vars.$app-pre-background;
     padding: 1px 16px;
-    margin-left: 0;
-    margin-right: 0;
+    @apply mx-0;
+    @apply my-3;
     border-left: #e1e1e8 solid 10px;
     border-radius: 3px;
 
     @media (prefers-color-scheme: dark) {
-      background-color: $app-dark-pre-background;
+      background-color: vars.$app-dark-pre-background;
     }
   }
 
   code {
     padding: 2px 4px;
-    background-color: $app-pre-background;
+    background-color: vars.$app-pre-background;
 
     @media (prefers-color-scheme: dark) {
-      background-color: $app-dark-pre-background;
+      background-color: vars.$app-dark-pre-background;
     }
+  }
+
+  h1 {
+    @apply text-3xl font-bold my-4 md:text-4xl;
+  }
+
+  h2 {
+    @apply text-2xl font-bold my-3 md:text-3xl;
+  }
+
+  h3 {
+    @apply text-xl font-bold my-2 md:text-2xl;
+  }
+
+  h4 {
+    @apply text-base text-lg font-bold my-1 md:text-lg;
+  }
+
+  p {
+    @apply my-3;
+  }
+
+  ul {
+    @apply list-disc pl-10;
   }
 }

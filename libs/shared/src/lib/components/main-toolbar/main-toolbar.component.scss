@@ -1,13 +1,13 @@
-@import 'apps/web-app/src/styles/app-variables.scss';
+@use 'variables' as vars;
 
 .app-main-toolbar {
   position: fixed;
   top: 0;
   width: 100%;
   z-index: 2020;
-  height: $app-main-toolbar-height;
-  background: $app-main-toolbar-background;
-  color: $app-main-toolbar-color;
+  height: vars.$app-main-toolbar-height;
+  background: vars.$app-main-toolbar-background;
+  color: vars.$app-main-toolbar-color;
 
   .hide-mobile {
     display: flex;
@@ -15,11 +15,11 @@
   }
 
   @media (prefers-color-scheme: dark) {
-    background: $app-dark-main-toolbar-background;
+    background: vars.$app-dark-main-toolbar-background;
   }
 
   .logo {
-    height: $app-main-toolbar-height;
+    height: vars.$app-main-toolbar-height;
 
     img {
       height: 48px;
