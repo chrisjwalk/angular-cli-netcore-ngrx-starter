@@ -8,10 +8,11 @@ module.exports = {
     ...createGlobPatternsForDependencies(__dirname),
   ],
   theme: {
-    fontFamily: {
-      sans: ['Roboto', 'sans-serif'],
+    extend: {
+      fontFamily: {
+        sans: ['Roboto', 'sans-serif'],
+      },
     },
-    extend: {},
   },
   plugins: [],
 };
