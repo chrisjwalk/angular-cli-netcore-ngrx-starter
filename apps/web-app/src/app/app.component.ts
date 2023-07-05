@@ -5,12 +5,13 @@ import {
   HostBinding,
   inject,
 } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import {
-  LayoutFacade,
+  LayoutService,
   MainToolbarComponent,
   SidenavComponent,
   SidenavListItemComponent,
@@ -32,18 +33,18 @@ import { map, of, tap } from 'rxjs';
   template: `
     <ng-container *ngIf="{ updateReady: updateReady$ | async } as vm">
       <lib-main-toolbar
-        (toggleSidenav)="layoutFacade.toggleSidenav()"
+        (toggleSidenav)="layoutService.toggleSidenav()"
       ></lib-main-toolbar>
       <mat-sidenav-container class="mat-app-background" fullscreen>
         <mat-sidenav
           mode="over"
-          [opened]="layoutFacade.showSidenav()"
+          [opened]="layoutService.showSidenav()"
           (openedChange)="sidenavChanged($event)"
           class="mat-app-background"
         >
           <lib-sidenav
-            (toggleSidenav)="layoutFacade.toggleSidenav()"
-            (closeSidenav)="layoutFacade.closeSidenav()"
+            (toggleSidenav)="layoutService.toggleSidenav()"
+            (closeSidenav)="layoutService.closeSidenav()"
           ></lib-sidenav>
         </mat-sidenav>
         <div class="app-content">
@@ -55,6 +56,14 @@ import { map, of, tap } from 'rxjs';
   styles: [
     `
       @use 'variables' as vars;
+
+      :host,
+      mat-sidenav-container,
+      .app-content {
+        margin: 0;
+        width: 100%;
+        height: 100%;
+      }
 
       .mat-drawer-container {
         margin-top: vars.$app-main-toolbar-height;
@@ -70,7 +79,7 @@ import { map, of, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  layoutFacade = inject(LayoutFacade);
+  layoutService = inject(LayoutService);
 
   private swUpdate = inject(SwUpdate);
   private snackBar = inject(MatSnackBar);
@@ -89,6 +98,7 @@ export class AppComponent {
                   duration: 15000,
                 })
                 .onAction()
+                .pipe(takeUntilDestroyed())
                 .subscribe(() =>
                   this.swUpdate
                     .activateUpdate()
@@ -101,9 +111,9 @@ export class AppComponent {
 
   sidenavChanged(sidenavOpened: boolean) {
     if (sidenavOpened) {
-      this.layoutFacade.openSidenav();
+      this.layoutService.openSidenav();
     } else {
-      this.layoutFacade.closeSidenav();
+      this.layoutService.closeSidenav();
     }
   }
 }

@@ -4,10 +4,11 @@ import {
   Component,
   HostBinding,
   OnInit,
+  inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import {
-  LayoutFacade,
+  LayoutService,
   PageContainerComponent,
   PageToolbarComponent,
   SidenavComponent,
@@ -30,13 +31,13 @@ import { MarkdownModule } from 'ngx-markdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
+  layoutService = inject(LayoutService);
+
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-home';
   }
 
-  constructor(public layoutFacade: LayoutFacade) {}
-
   ngOnInit() {
-    this.layoutFacade.setTitle('Home');
+    this.layoutService.setTitle('Home');
   }
 }

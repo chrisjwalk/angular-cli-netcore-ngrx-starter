@@ -8,14 +8,14 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {
-  LayoutFacade,
+  LayoutService,
   PageContainerComponent,
   PageToolbarButtonComponent,
   PageToolbarComponent,
 } from '@myorg/shared';
 
 import { CounterComponent } from '../../components/counter/counter.component';
-import { CounterFacade } from '../../store/facades';
+import { CounterService } from '../../data-access';
 
 @Component({
   standalone: true,
@@ -36,10 +36,10 @@ export class CounterContainerComponent implements OnInit {
     return 'lib-counter-container';
   }
 
-  CounterFacade = inject(CounterFacade);
-  layoutFacade = inject(LayoutFacade);
+  counterService = inject(CounterService);
+  layoutService = inject(LayoutService);
 
   ngOnInit() {
-    this.layoutFacade.setTitle('Lazy Loaded Feature');
+    this.layoutService.setTitle('Lazy Loaded Feature');
   }
 }

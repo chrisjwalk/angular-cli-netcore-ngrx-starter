@@ -1,10 +1,11 @@
 <mat-toolbar class="app-main-toolbar">
-  <button mat-icon-button
-          aria-label="Toggle side menu"
-          (click)="emitToggleSidenav()"
-          class="show-mobile">
-    <mat-icon>menu</mat-icon>
-  </button>
+  <span class="md:hidden flex items-center justify-center">
+    <button mat-icon-button
+            aria-label="Toggle side menu"
+            (click)="emitToggleSidenav()">
+      <mat-icon>menu</mat-icon>
+    </button>
+  </span>
   <a class="logo"
      aria-label="Home Page"
      [routerLink]="['/']">
@@ -14,7 +15,7 @@
   <a class="logo-text"
      [routerLink]="['/']"> Demo App </a>
   <span class="flex-1"></span>
-  <div class="hide-mobile">
+  <div class="hidden md:block">
     <button mat-icon-button
             [routerLink]="['/weather-forecast']"
             matTooltip="Get Data Feature"

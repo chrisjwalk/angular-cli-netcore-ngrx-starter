@@ -1,10 +1,7 @@
-$app-font-family: 'Roboto', sans-serif;
-$app-mobile-max-width: 720px;
-$app-non-mobile-min-width: 721px;
-
-$app-mat-drawer-container-height: calc(100% - 56px);
-$app-mat-drawer-container-background-color: rgb(250, 250, 250);
 $app-main-toolbar-height: 56px;
+$app-mat-drawer-container-height: calc(100% - #{$app-main-toolbar-height});
+$app-mat-drawer-container-background-color: rgb(250, 250, 250);
+
 $app-main-toolbar-color: rgba(255, 255, 255, 0.75);
 $app-main-toolbar-background: rgb(35, 35, 35);
 

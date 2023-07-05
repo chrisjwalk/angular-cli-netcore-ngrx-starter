@@ -9,7 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
-  LayoutFacade,
+  LayoutService,
   PageContainerComponent,
   PageToolbarButtonComponent,
   PageToolbarComponent,
@@ -40,12 +40,12 @@ export class WeatherForecastComponent implements OnInit {
   }
 
   constructor(
-    public layoutFacade: LayoutFacade,
+    public layoutService: LayoutService,
     public weatherForecastStore: WeatherForecastStore,
   ) {}
 
   ngOnInit() {
-    this.layoutFacade.setTitle('Weather Forecasts');
+    this.layoutService.setTitle('Weather Forecasts');
   }
 
   getForecasts(count: number) {

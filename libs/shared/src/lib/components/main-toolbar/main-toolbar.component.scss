@@ -9,7 +9,7 @@
   background: vars.$app-main-toolbar-background;
   color: vars.$app-main-toolbar-color;
 
-  .hide-mobile {
+  .hidden.md:block {
     display: flex;
     gap: 8px;
   }
