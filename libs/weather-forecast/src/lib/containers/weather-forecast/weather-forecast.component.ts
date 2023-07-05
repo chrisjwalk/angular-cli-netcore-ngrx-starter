@@ -4,6 +4,7 @@ import {
   Component,
   HostBinding,
   OnInit,
+  inject,
 } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
@@ -35,14 +36,12 @@ import { WeatherForecastStore } from '../../services/weather-forecast.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {
+  layoutService = inject(LayoutService);
+  weatherForecastStore = inject(WeatherForecastStore);
+
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-weather-forecast';
   }
-
-  constructor(
-    public layoutService: LayoutService,
-    public weatherForecastStore: WeatherForecastStore,
-  ) {}
 
   ngOnInit() {
     this.layoutService.setTitle('Weather Forecasts');

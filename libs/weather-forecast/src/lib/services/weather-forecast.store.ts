@@ -18,7 +18,7 @@ export class WeatherForecastStore
 
   ngrxOnStoreInit() {
     this.setState({
-      weatherForecasts: [],
+      weatherForecasts: null,
       error: null,
       count: null,
       loading: null,

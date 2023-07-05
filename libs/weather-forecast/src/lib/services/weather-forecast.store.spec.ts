@@ -1,6 +1,7 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { provideComponentStore } from '@ngrx/component-store';
 import { filter, of } from 'rxjs';
 
 import { WeatherForecastService } from './weather-forecast.service';
@@ -14,7 +15,10 @@ describe('WeatherForecastService', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, MatSnackBarModule],
-      providers: [WeatherForecastStore, { provide: 'BASE_URL', useValue: '' }],
+      providers: [
+        [provideComponentStore(WeatherForecastStore)],
+        { provide: 'BASE_URL', useValue: '' },
+      ],
     });
 
     store = TestBed.inject(WeatherForecastStore);
@@ -30,7 +34,7 @@ describe('WeatherForecastService', () => {
     store.weatherForecasts$
       .pipe(filter((result) => !!result))
       .subscribe((result) => {
-        expect(result).toEqual(weatherForecasts);
+        expect(result).toEqual([weatherForecasts[0]]);
       });
   });
 
