@@ -26,25 +26,17 @@ describe('WeatherForecastService', () => {
   });
 
   it('WeatherForecastStore.getForecasts() should return data', () => {
-    store.getForecasts(1);
     jest
       .spyOn(service, 'getForecasts')
       .mockReturnValue(of([weatherForecasts[0]]));
+    store.getForecasts(1);
 
-    store.weatherForecasts$
-      .pipe(filter((result) => !!result))
-      .subscribe((result) => {
-        expect(result).toEqual([weatherForecasts[0]]);
-      });
+    expect(store.weatherForecasts()).toEqual([weatherForecasts[0]]);
   });
 
   it('WeatherForecastStore.getForecasts(count) should return data of length count', () => {
-    store.getForecasts(10);
     jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
-    store.weatherForecasts$
-      .pipe(filter((result) => !!result))
-      .subscribe((data) => {
-        expect(data.length).toBe(10);
-      });
+    store.getForecasts(10);
+    expect(store.weatherForecasts().length).toBe(10);
   });
 });

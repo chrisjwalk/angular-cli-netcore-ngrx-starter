@@ -5,7 +5,7 @@
            type="number"
            placeholder="Forecast Days"
            (keyup.enter)="getForecasts(+count.value)"
-           [value]="weatherForecastStore.count$ | async" />
+           [value]="weatherForecastStore.count()" />
   </mat-form-field>
   <lib-page-toolbar-button (click)="getForecasts(+count.value)"
                            tooltip="Get Forecasts">
@@ -13,6 +13,6 @@
   </lib-page-toolbar-button>
 </lib-page-toolbar>
 <lib-page-container>
-  <lib-forecast-table [loading]="weatherForecastStore.loading$ | async"
-                      [data]="weatherForecastStore.weatherForecasts$ | async"></lib-forecast-table>
+  <lib-forecast-table [loading]="weatherForecastStore.loading()"
+                      [data]="weatherForecastStore.weatherForecasts()"></lib-forecast-table>
 </lib-page-container>

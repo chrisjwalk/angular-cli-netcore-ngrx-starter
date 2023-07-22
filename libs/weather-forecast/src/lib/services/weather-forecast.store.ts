@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable, computed, inject } from '@angular/core';
 import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
 import { EMPTY, Observable, catchError, switchMap, tap } from 'rxjs';
 
@@ -12,9 +12,9 @@ export class WeatherForecastStore
 {
   private weatherForecastService = inject(WeatherForecastService);
 
-  readonly weatherForecasts$ = this.select((state) => state?.weatherForecasts);
-  readonly count$ = this.select((state) => state?.count);
-  readonly loading$ = this.select((state) => state?.loading);
+  readonly weatherForecasts = computed(() => this.state()?.weatherForecasts);
+  readonly count = this.selectSignal((state) => state?.count);
+  readonly loading = this.selectSignal((state) => state?.loading);
 
   ngrxOnStoreInit() {
     this.setState({

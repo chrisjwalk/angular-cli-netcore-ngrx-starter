@@ -34,7 +34,7 @@
     "affected:lint": "nx affected:lint",
     "affected:dep-graph": "nx affected:dep-graph",
     "affected": "nx affected",
-    "format": "npm run lint:fix && npm run format:write && npm run beautify",
+    "format": "npm run lint && npm run format:write && npm run beautify",
     "format:write": "nx format:write",
     "format:check": "nx format:check",
     "beautify": "js-beautify --type=html -r -f ./**/*.html",
@@ -135,4 +135,3 @@
     "*.html": "js-beautify --type=html -r"
   }
 }
-
