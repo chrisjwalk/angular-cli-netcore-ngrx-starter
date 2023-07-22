@@ -50,7 +50,8 @@
           ],
           "serviceWorker": true,
           "ngswConfigPath": "apps/web-app/ngsw-config.json",
-          "outputHashing": "all"
+          "outputHashing": "all",
+          "sourceMap": true
         },
         "development": {
           "buildOptimizer": false,
