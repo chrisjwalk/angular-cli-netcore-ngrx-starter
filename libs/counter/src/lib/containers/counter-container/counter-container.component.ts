@@ -32,12 +32,12 @@ import { CounterService } from '../../data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
+  counterService = inject(CounterService);
+  layoutService = inject(LayoutService);
+
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-counter-container';
   }
-
-  counterService = inject(CounterService);
-  layoutService = inject(LayoutService);
 
   ngOnInit() {
     this.layoutService.setTitle('Lazy Loaded Feature');

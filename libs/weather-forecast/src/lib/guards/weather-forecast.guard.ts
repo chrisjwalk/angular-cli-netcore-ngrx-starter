@@ -5,8 +5,10 @@ import { WeatherForecastStore } from '../services/weather-forecast.store';
 
 export const forecastsCanActivateFn: CanActivateFn = () => {
   const weatherForecastStore = inject(WeatherForecastStore);
+
   if (!weatherForecastStore.count()) {
     weatherForecastStore.getForecasts(10);
   }
+
   return true;
 };
