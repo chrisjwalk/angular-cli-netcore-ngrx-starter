@@ -15,7 +15,7 @@ import {
 } from '@myorg/shared';
 
 import { CounterComponent } from '../../components/counter/counter.component';
-import { CounterService } from '../../data-access';
+import { CounterStore } from '../../data-access';
 
 @Component({
   standalone: true,
@@ -32,7 +32,7 @@ import { CounterService } from '../../data-access';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
-  counterService = inject(CounterService);
+  counterService = inject(CounterStore);
   layoutService = inject(LayoutService);
 
   @HostBinding('attr.data-testid') get testId() {
