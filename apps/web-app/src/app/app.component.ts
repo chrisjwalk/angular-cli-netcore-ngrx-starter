@@ -5,7 +5,6 @@ import {
   HostBinding,
   inject,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
@@ -98,7 +97,6 @@ export class AppComponent {
                   duration: 15000,
                 })
                 .onAction()
-                .pipe(takeUntilDestroyed())
                 .subscribe(() =>
                   this.swUpdate
                     .activateUpdate()
