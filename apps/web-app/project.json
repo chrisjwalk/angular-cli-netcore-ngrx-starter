@@ -33,11 +33,14 @@
       },
       "configurations": {
         "production": {
-          "fileReplacements": [{
-            "replace": "apps/web-app/src/environments/environment.ts",
-            "with": "apps/web-app/src/environments/environment.prod.ts"
-          }],
-          "budgets": [{
+          "fileReplacements": [
+            {
+              "replace": "apps/web-app/src/environments/environment.ts",
+              "with": "apps/web-app/src/environments/environment.prod.ts"
+            }
+          ],
+          "budgets": [
+            {
               "type": "initial",
               "maximumWarning": "2mb",
               "maximumError": "5mb"

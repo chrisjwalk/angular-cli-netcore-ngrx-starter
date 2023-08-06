@@ -1,7 +1,6 @@
 {
   "name": "api",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "root": "apps/api",
   "projectType": "application",
   "prefix": "api",
   "schematics": {},
