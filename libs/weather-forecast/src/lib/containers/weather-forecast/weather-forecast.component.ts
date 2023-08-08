@@ -10,7 +10,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import {
-  LayoutService,
+  LayoutStore,
   PageContainerComponent,
   PageToolbarButtonComponent,
   PageToolbarComponent,
@@ -36,7 +36,7 @@ import { WeatherForecastStore } from '../../services/weather-forecast.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {
-  layoutService = inject(LayoutService);
+  layoutService = inject(LayoutStore);
   weatherForecastStore = inject(WeatherForecastStore);
 
   @HostBinding('attr.data-testid') get testId() {

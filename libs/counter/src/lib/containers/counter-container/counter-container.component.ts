@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {
-  LayoutService,
+  LayoutStore,
   PageContainerComponent,
   PageToolbarButtonComponent,
   PageToolbarComponent,
@@ -33,7 +33,7 @@ import { CounterStore } from '../../data-access';
 })
 export class CounterContainerComponent implements OnInit {
   counterService = inject(CounterStore);
-  layoutService = inject(LayoutService);
+  layoutService = inject(LayoutStore);
 
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-counter-container';

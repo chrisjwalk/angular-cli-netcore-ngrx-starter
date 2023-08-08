@@ -10,7 +10,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import {
-  LayoutService,
+  LayoutStore,
   MainToolbarComponent,
   SidenavComponent,
   SidenavListItemComponent,
@@ -32,18 +32,18 @@ import { map, of, tap } from 'rxjs';
   template: `
     <ng-container *ngIf="{ updateReady: updateReady$ | async } as vm">
       <lib-main-toolbar
-        (toggleSidenav)="layoutService.toggleSidenav()"
+        (toggleSidenav)="layoutStore.toggleSidenav()"
       ></lib-main-toolbar>
       <mat-sidenav-container class="mat-app-background" fullscreen>
         <mat-sidenav
           mode="over"
-          [opened]="layoutService.showSidenav()"
+          [opened]="layoutStore.showSidenav()"
           (openedChange)="sidenavChanged($event)"
           class="mat-app-background"
         >
           <lib-sidenav
-            (toggleSidenav)="layoutService.toggleSidenav()"
-            (closeSidenav)="layoutService.closeSidenav()"
+            (toggleSidenav)="layoutStore.toggleSidenav()"
+            (closeSidenav)="layoutStore.closeSidenav()"
           ></lib-sidenav>
         </mat-sidenav>
         <div class="app-content">
@@ -78,7 +78,7 @@ import { map, of, tap } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  layoutService = inject(LayoutService);
+  layoutStore = inject(LayoutStore);
 
   private swUpdate = inject(SwUpdate);
   private snackBar = inject(MatSnackBar);
@@ -109,9 +109,9 @@ export class AppComponent {
 
   sidenavChanged(sidenavOpened: boolean) {
     if (sidenavOpened) {
-      this.layoutService.openSidenav();
+      this.layoutStore.openSidenav();
     } else {
-      this.layoutService.closeSidenav();
+      this.layoutStore.closeSidenav();
     }
   }
 }

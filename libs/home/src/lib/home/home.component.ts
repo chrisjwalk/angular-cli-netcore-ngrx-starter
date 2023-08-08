@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import {
-  LayoutService,
+  LayoutStore,
   PageContainerComponent,
   PageToolbarComponent,
   SidenavComponent,
@@ -31,7 +31,7 @@ import { MarkdownModule } from 'ngx-markdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
-  layoutService = inject(LayoutService);
+  layoutService = inject(LayoutStore);
 
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-home';
