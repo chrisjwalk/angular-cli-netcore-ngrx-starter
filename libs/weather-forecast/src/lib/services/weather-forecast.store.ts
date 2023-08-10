@@ -1,6 +1,10 @@
 import { Injectable, computed, inject } from '@angular/core';
-import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
-import { EMPTY, Observable, catchError, switchMap, tap } from 'rxjs';
+import {
+  ComponentStore,
+  OnStoreInit,
+  tapResponse,
+} from '@ngrx/component-store';
+import { Observable, switchMap, tap } from 'rxjs';
 
 import { WeatherForecastState } from '../models/weather-forecast';
 import { WeatherForecastService } from './weather-forecast.service';
@@ -30,17 +34,18 @@ export class WeatherForecastStore
       tap((count) => this.patchState({ count, loading: true })),
       switchMap((count) =>
         this.weatherForecastService.getForecasts(count).pipe(
-          tap({
+          tapResponse({
             next: (weatherForecasts) =>
               this.patchState({ weatherForecasts, loading: false }),
-            error: (error) => {
-              console.error(error);
-              this.patchState({ error, loading: false });
-            },
+            error: (error) => this.patchError(error, { error, loading: false }),
           }),
-          catchError(() => EMPTY),
         ),
       ),
     );
   });
+
+  private patchError(error: any, partialState: Partial<WeatherForecastState>) {
+    console.error(error);
+    this.patchState(partialState);
+  }
 }

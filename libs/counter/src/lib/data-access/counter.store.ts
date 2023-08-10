@@ -20,14 +20,11 @@ export class CounterStore
     });
   }
 
-  count = computed(() => this.state().count);
-  loading = computed(() => this.state().loading);
-  error = computed(() => this.state().error);
+  readonly count = computed(() => this.state().count);
+  readonly loading = computed(() => this.state().loading);
+  readonly error = computed(() => this.state().error);
 
-  readonly setCount = this.updater((state, count: number) => ({
-    ...state,
-    count,
-  }));
+  readonly setCount = (count: number) => this.patchState({ count });
 
   readonly incrementCount = this.updater((state) => ({
     ...state,

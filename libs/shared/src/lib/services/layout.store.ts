@@ -21,21 +21,13 @@ export class LayoutStore extends SignalStore<LayoutState> {
   readonly title = this.select((state) => state?.title);
   readonly showSidenav = this.select((state) => state?.showSidenav);
 
-  readonly titleChanged = effect(() => {
-    this.titleService.setTitle(this.title() + ' | Demo App');
-  });
+  readonly titleChanged = effect(() =>
+    this.titleService.setTitle(this.title() + ' | Demo App'),
+  );
 
-  setTitle(title: string) {
-    this.patchState({ title });
-  }
-
-  openSidenav() {
-    this.patchState({ showSidenav: true });
-  }
-
-  closeSidenav() {
-    this.patchState({ showSidenav: false });
-  }
+  readonly setTitle = (title: string) => this.patchState({ title });
+  readonly openSidenav = () => this.patchState({ showSidenav: true });
+  readonly closeSidenav = () => this.patchState({ showSidenav: false });
 
   readonly toggleSidenav = this.updater((state) => ({
     ...state,
