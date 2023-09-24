@@ -1,40 +1,21 @@
-@use 'variables' as vars;
-
 .app-page-toolbar {
-  padding: 0px 16px;
-  background: vars.$app-page-toolbar-background;
-  height: vars.$app-page-toolbar-height;
-  line-height: vars.$app-page-toolbar-height;
-  display: flex;
-  box-sizing: border-box;
-  flex-direction: row;
-  align-items: center;
-  white-space: nowrap;
-  gap: 8px;
-
-  @media (prefers-color-scheme: dark) {
-    background: vars.$app-dark-page-toolbar-background;
-  }
+  @apply bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center;
+  height: 46px;
 
   h1 {
     &.title {
-      font-size: 18px;
-      font-weight: normal;
-      margin-block-start: 0;
-      margin-block-end: 0;
-      display: inline;
+      @apply text-lg font-normal inline;
     }
   }
 
   ::ng-deep {
     .mat-mdc-form-field-subscript-wrapper {
-      display: none;
+      @apply hidden;
     }
 
     .mat-mdc-text-field-wrapper.mdc-text-field--outlined
       .mat-mdc-form-field-infix {
-      padding-top: 4px;
-      padding-bottom: 4px;
+      @apply py-1;
       min-height: 34px;
     }
   }

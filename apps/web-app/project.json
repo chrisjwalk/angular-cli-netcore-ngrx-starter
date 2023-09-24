@@ -25,9 +25,6 @@
           "apps/web-app/src/styles/styles.scss",
           "apps/web-app/src/styles/material.scss"
         ],
-        "stylePreprocessorOptions": {
-          "includePaths": ["libs/shared/src/lib/styles"]
-        },
         "inlineStyleLanguage": "scss",
         "scripts": []
       },

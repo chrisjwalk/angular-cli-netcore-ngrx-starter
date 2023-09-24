@@ -1,39 +1,28 @@
-@use 'variables' as vars;
-
 ::ng-deep {
   pre {
-    padding: 16px;
-    overflow: auto;
-    font-size: 85%;
-    line-height: 1.45;
-    background-color: vars.$app-pre-background;
-    border-radius: 3px;
-    border: 1px solid #e1e1e8;
+    @apply p-4 overflow-auto rounded border text-sm;
+    @apply border-neutral-900 bg-neutral-50;
 
     @media (prefers-color-scheme: dark) {
-      background-color: vars.$app-dark-pre-background;
+      @apply bg-neutral-900 border-neutral-50;
     }
   }
 
   blockquote {
-    background-color: vars.$app-pre-background;
-    padding: 1px 16px;
-    @apply mx-0;
-    @apply my-3;
-    border-left: #e1e1e8 solid 10px;
-    border-radius: 3px;
+    @apply py-0.5 px-4 mx-0 my-3 border-l-8 rounded;
+    @apply border-neutral-900 bg-neutral-50;
 
     @media (prefers-color-scheme: dark) {
-      background-color: vars.$app-dark-pre-background;
+      @apply bg-neutral-900 border-neutral-50;
     }
   }
 
   code {
-    padding: 2px 4px;
-    background-color: vars.$app-pre-background;
+    @apply py-0.5 px-1;
+    @apply bg-neutral-50;
 
     @media (prefers-color-scheme: dark) {
-      background-color: vars.$app-dark-pre-background;
+      @apply bg-neutral-900;
     }
   }
 
@@ -50,7 +39,7 @@
   }
 
   h4 {
-    @apply text-base text-lg font-bold my-1 md:text-lg;
+    @apply text-lg font-bold my-1 md:text-lg;
   }
 
   p {

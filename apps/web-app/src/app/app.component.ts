@@ -54,24 +54,9 @@ import { map, of, tap } from 'rxjs';
   `,
   styles: [
     `
-      @use 'variables' as vars;
-
-      :host,
-      mat-sidenav-container,
-      .app-content {
-        margin: 0;
-        width: 100%;
-        height: 100%;
-      }
-
       .mat-drawer-container {
-        margin-top: vars.$app-main-toolbar-height;
-        height: vars.$app-mat-drawer-container-height;
-        background-color: vars.$app-mat-drawer-container-background-color;
-
-        @media (prefers-color-scheme: dark) {
-          background-color: vars.$app-dark-mat-drawer-container-background-color;
-        }
+        margin-top: var(--mat-toolbar-standard-height);
+        height: calc(100% - var(--mat-toolbar-standard-height));
       }
     `,
   ],
