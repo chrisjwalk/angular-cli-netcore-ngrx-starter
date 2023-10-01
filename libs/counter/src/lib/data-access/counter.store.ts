@@ -20,9 +20,9 @@ export class CounterStore
     });
   }
 
-  readonly count = computed(() => this.state().count);
-  readonly loading = computed(() => this.state().loading);
-  readonly error = computed(() => this.state().error);
+  readonly count = this.selectSignal((state) => state.count);
+  readonly loading = this.selectSignal((state) => state.loading);
+  readonly error = this.selectSignal((state) => state.error);
 
   readonly setCount = (count: number) => this.patchState({ count });
 
