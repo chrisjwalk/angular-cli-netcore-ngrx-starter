@@ -7,12 +7,12 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:browser",
+      "executor": "@angular-devkit/build-angular:application",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/apps/web-app",
         "index": "apps/web-app/src/index.html",
-        "main": "apps/web-app/src/main.ts",
+        "browser": "apps/web-app/src/main.ts",
         "polyfills": ["zone.js"],
         "tsConfig": "apps/web-app/tsconfig.app.json",
         "assets": [
@@ -48,14 +48,11 @@
               "maximumError": "10kb"
             }
           ],
-          "serviceWorker": true,
-          "ngswConfigPath": "apps/web-app/ngsw-config.json",
+          "serviceWorker": "apps/web-app/ngsw-config.json",
           "outputHashing": "all"
         },
         "development": {
-          "buildOptimizer": false,
           "optimization": false,
-          "vendorChunk": true,
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
