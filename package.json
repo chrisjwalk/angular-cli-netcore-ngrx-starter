@@ -17,6 +17,7 @@
     "clean": "rimraf ./dist ./junit ./coverage ./.angular",
     "clean:node_modules": "rimraf ./node_modules ./package-lock.json",
     "serve:api": "nx serve api",
+    "serve:prod": "nx serve-static web-app",
     "test": "nx affected --target=test",
     "test:ci": "npm run test -- --configuration ci",
     "test:all": "nx run-many --target=test --all --configuration ci",

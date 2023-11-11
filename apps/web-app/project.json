@@ -98,7 +98,9 @@
     "serve-static": {
       "executor": "@nx/web:file-server",
       "options": {
-        "buildTarget": "web-app:build"
+        "buildTarget": "web-app:build",
+        "staticFilePath": "dist/apps/web-app/browser",
+        "spa": true
       }
     }
   }
