@@ -48,7 +48,7 @@ namespace Api
 
       app.UseHttpsRedirection();
 
-      PhysicalFileProvider fileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app"));
+      PhysicalFileProvider fileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app", "browser"));
       FileExtensionContentTypeProvider contentTypeProvider = new FileExtensionContentTypeProvider();
       contentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
       contentTypeProvider.Mappings[".md"] = "text/markdown";
