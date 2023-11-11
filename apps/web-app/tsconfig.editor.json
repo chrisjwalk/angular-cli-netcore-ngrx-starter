@@ -1,6 +1,6 @@
 {
   "extends": "./tsconfig.json",
-  "include": ["src/**/*.ts"],
+  "include": ["src/**/*.ts", "../../libs/shared/src/lib/services/sw-update.store.ts"],
   "compilerOptions": {
     "types": ["jest", "node"]
   }

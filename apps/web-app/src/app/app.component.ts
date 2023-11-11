@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  effect,
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -13,8 +14,9 @@ import {
   MainToolbarComponent,
   SidenavComponent,
   SidenavListItemComponent,
+  SwUpdateStore,
 } from '@myorg/shared';
-import { AppStore } from './app.component.store';
+import { provideComponentStore } from '@ngrx/component-store';
 
 @Component({
   standalone: true,
@@ -49,20 +51,24 @@ import { AppStore } from './app.component.store';
       </div>
     </mat-sidenav-container>
   `,
-  styles: [
-    `
-      .mat-drawer-container {
-        margin-top: var(--mat-toolbar-standard-height);
-        height: calc(100% - var(--mat-toolbar-standard-height));
-      }
-    `,
-  ],
+  styles: `
+    .mat-drawer-container {
+      margin-top: var(--mat-toolbar-standard-height);
+      height: calc(100% - var(--mat-toolbar-standard-height));
+    }
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [AppStore],
+  providers: [provideComponentStore(SwUpdateStore)],
 })
 export class AppComponent {
   layoutStore = inject(LayoutStore);
-  appStore = inject(AppStore);
+  swUpdateStore = inject(SwUpdateStore);
+
+  updateReady = effect(() => {
+    if (this.swUpdateStore.updateReady()) {
+      this.swUpdateStore.openReloadAppSnackbar();
+    }
+  });
 
   @HostBinding('attr.data-testid') get testId() {
     return 'app-root';
