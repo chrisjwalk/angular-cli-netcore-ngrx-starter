@@ -26,7 +26,7 @@ steps:
 
   - script: |
       npm ci
-    displayName: 'npm ci --force'
+    displayName: 'npm ci'
 
   - script: |
       npm run lint:all
