@@ -2,7 +2,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { provideComponentStore } from '@ngrx/component-store';
-import { filter, of } from 'rxjs';
+import { of } from 'rxjs';
 
 import { WeatherForecastService } from './weather-forecast.service';
 import { weatherForecasts } from './weather-forecast.service.spec';

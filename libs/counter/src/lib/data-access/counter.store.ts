@@ -1,4 +1,4 @@
-import { Injectable, computed } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
 
 export interface CounterState {
