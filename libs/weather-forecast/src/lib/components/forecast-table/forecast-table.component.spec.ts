@@ -10,8 +10,8 @@ describe('ForecastTableComponent', () => {
     });
 
     expect(screen.getByTestId('lib-forecast-table')).toBeTruthy();
-    // expect(screen.getAllByTestId('table-row')).toHaveLength(
-    //   weatherForecasts.length,
-    // );
+    expect(screen.getAllByTestId('table-row')).toHaveLength(
+      weatherForecasts.length,
+    );
   });
 });
