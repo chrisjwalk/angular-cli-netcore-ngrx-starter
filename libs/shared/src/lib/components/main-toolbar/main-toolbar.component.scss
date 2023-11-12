@@ -8,12 +8,6 @@
 
   .logo {
     height: var(--mat-toolbar-standard-height);
-
-    img {
-      height: 48px;
-      width: 48px;
-      @apply m-1;
-    }
   }
 
   a.logo,
