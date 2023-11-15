@@ -1,5 +1,10 @@
-@defer (when !loading) {
-<div class="example-container mat-elevation-z2">
+@if (loading) {
+<div class="flex flex-col gap-4">
+  <div class="loading h-12 bg-neutral-300 dark:bg-neutral-700"></div>
+  <div class="loading h-96 bg-neutral-300 dark:bg-neutral-700"></div>
+</div>
+} @else {
+<div class="mat-elevation-z2">
   <mat-table #table
              [dataSource]="dataSource">
     <ng-container matColumnDef="dateFormatted">
@@ -29,6 +34,4 @@
              data-testid="table-row"></mat-row>
   </mat-table>
 </div>
-} @placeholder {
-<mat-spinner [diameter]="30"></mat-spinner>
 }
