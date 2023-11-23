@@ -1,8 +1,8 @@
 [![Build status](https://freshpondmedia.visualstudio.com/FreshPondMediaGit/_apis/build/status/chrisjwalk.angular-cli-netcore-ngrx-starter)](https://freshpondmedia.visualstudio.com/FreshPondMediaGit/_build/latest?definitionId=43)
 
-# Nx + Angular + .NET 7.0
+# Nx + Angular + .NET 8.0
 
-This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/angular) with [Angular](https://angular.io) and .NET 7.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
+This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/angular) with [Angular](https://angular.io) and .NET 8.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
 
 ## Demo
 
@@ -10,12 +10,12 @@ See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](
 
 ## Getting Started?
 
-- **Make sure you have at least Node 16.x or higher (w/ npm 8+) installed!**
-- **This repository uses ASP.NET 7.0, which has a hard requirement on .NET SDK 7.0.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
+- **Make sure you have at least Node 20.x or higher (w/ npm 10+) installed!**
+- **This repository uses ASP.NET 8.0, which has a hard requirement on .NET SDK 8.0.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
 
 ## Visual Studio 2022
 
-Make sure you have .NET 7.0 installed and/or the latest VS2022.
+Make sure you have .NET 8.0 installed and/or the latest VS2022.
 
 ## Visual Studio Code
 
