@@ -1,47 +1,57 @@
 import { Injectable, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
-import { ComponentStore } from '@ngrx/component-store';
-import { EMPTY, map, tap } from 'rxjs';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { EMPTY, map, pipe, switchMap, tap } from 'rxjs';
 
 export type SwUpdateState = { updateReady: boolean };
 
-@Injectable()
-export class SwUpdateStore extends ComponentStore<SwUpdateState> {
-  private swUpdate = inject(SwUpdate);
-  private snackBar = inject(MatSnackBar);
+const SwUpdateSignalStore = signalStore(
+  withState<SwUpdateState>({ updateReady: false }),
+  withMethods((store) => {
+    const swUpdate = inject(SwUpdate);
+    const snackBar = inject(MatSnackBar);
 
-  constructor() {
-    super({ updateReady: false });
-  }
-
-  updateReady = this.selectSignal((state) => state.updateReady);
-
-  readonly versionUpdates = this.effect(() =>
-    this.swUpdate.isEnabled
-      ? this.swUpdate.versionUpdates.pipe(
-          map((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
-          map((updateReady) => {
-            this.patchState({ updateReady });
-          }),
-        )
-      : EMPTY,
-  );
-
-  openReloadAppSnackbar() {
-    this.effect(() =>
-      this.snackBar
-        .open(`App update avalable! Reload?`, 'OK', {
-          duration: 15000,
-        })
-        .onAction()
-        .pipe(
-          tap(() =>
-            this.swUpdate
-              .activateUpdate()
-              .then(() => document.location.reload()),
-          ),
-        ),
+    const versionUpdates = rxMethod<void>(() =>
+      swUpdate.isEnabled
+        ? swUpdate.versionUpdates.pipe(
+            tap((evt) => console.log(evt)),
+            map(
+              (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
+            ),
+            map((updateReady) => {
+              patchState(store, { updateReady });
+            }),
+          )
+        : EMPTY,
     );
-  }
+
+    const openReloadAppSnackbar = rxMethod<void>(
+      pipe(
+        switchMap(() =>
+          snackBar
+            .open(`App update avalable! Reload?`, 'OK', {
+              duration: 15000,
+            })
+            .onAction()
+            .pipe(
+              tap(() =>
+                swUpdate
+                  .activateUpdate()
+                  .then(() => document.location.reload()),
+              ),
+            ),
+        ),
+      ),
+    );
+    return { versionUpdates, openReloadAppSnackbar };
+  }),
+);
+@Injectable()
+export class SwUpdateStore {
+  private store = new SwUpdateSignalStore();
+
+  readonly updateReady = this.store.updateReady;
+  readonly openReloadAppSnackbar = this.store.openReloadAppSnackbar;
 }

@@ -1,7 +1,7 @@
-import { Injectable, effect, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { patchState, signalStore, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 
 export type LayoutState = {
   title: string;
@@ -10,6 +10,23 @@ export type LayoutState = {
 
 const LayoutSignalStore = signalStore(
   withState<LayoutState>({ title: '', showSidenav: false }),
+  withMethods((store) => {
+    const titleService = inject(Title);
+
+    const setTitle = (title: string) => {
+      titleService.setTitle(`${title}${title ? ' | ' : ''}Demo App`);
+      patchState(store, { title });
+    };
+    const openSidenav = () => patchState(store, { showSidenav: true });
+    const closeSidenav = () => patchState(store, { showSidenav: false });
+    const toggleSidenav = () =>
+      patchState(store, (state) => ({
+        ...state,
+        showSidenav: !state.showSidenav,
+      }));
+
+    return { setTitle, openSidenav, closeSidenav, toggleSidenav };
+  }),
 );
 
 @Injectable({
@@ -17,23 +34,12 @@ const LayoutSignalStore = signalStore(
 })
 export class LayoutStore {
   private store = new LayoutSignalStore();
-  private titleService = inject(Title);
 
   readonly title = this.store.title;
   readonly showSidenav = this.store.showSidenav;
 
-  readonly titleChanged = effect(() =>
-    this.titleService.setTitle(
-      `${this.title()}${this.title() ? ' | ' : ''}Demo App`,
-    ),
-  );
-
-  readonly setTitle = (title: string) => patchState(this.store, { title });
-  readonly openSidenav = () => patchState(this.store, { showSidenav: true });
-  readonly closeSidenav = () => patchState(this.store, { showSidenav: false });
-  readonly toggleSidenav = () =>
-    patchState(this.store, (state) => ({
-      ...state,
-      showSidenav: !state.showSidenav,
-    }));
+  readonly setTitle = this.store.setTitle;
+  readonly openSidenav = this.store.openSidenav;
+  readonly closeSidenav = this.store.closeSidenav;
+  readonly toggleSidenav = this.store.toggleSidenav;
 }

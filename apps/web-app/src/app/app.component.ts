@@ -16,7 +16,6 @@ import {
   SidenavListItemComponent,
   SwUpdateStore,
 } from '@myorg/shared';
-import { provideComponentStore } from '@ngrx/component-store';
 
 @Component({
   standalone: true,
@@ -58,7 +57,7 @@ import { provideComponentStore } from '@ngrx/component-store';
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [provideComponentStore(SwUpdateStore)],
+  providers: [SwUpdateStore],
 })
 export class AppComponent {
   layoutStore = inject(LayoutStore);

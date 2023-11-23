@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
+import { patchState, signalStore, withState } from '@ngrx/signals';
 
 export type CounterState = {
   count: number;
@@ -7,32 +7,29 @@ export type CounterState = {
   error: any;
 };
 
+const CounterSignalStore = signalStore(
+  withState<CounterState>({ count: 0, loading: null, error: null }),
+);
+
 @Injectable()
-export class CounterStore
-  extends ComponentStore<CounterState>
-  implements OnStoreInit
-{
-  ngrxOnStoreInit() {
-    this.setState({
-      count: 0,
-      loading: null,
-      error: null,
-    });
-  }
+export class CounterStore {
+  private store = new CounterSignalStore();
 
-  readonly count = this.selectSignal((state) => state.count);
-  readonly loading = this.selectSignal((state) => state.loading);
-  readonly error = this.selectSignal((state) => state.error);
+  readonly count = this.store.count;
+  readonly loading = this.store.loading;
+  readonly error = this.store.error;
 
-  readonly setCount = (count: number) => this.patchState({ count });
+  readonly setCount = (count: number) => patchState(this.store, { count });
 
-  readonly incrementCount = this.updater((state) => ({
-    ...state,
-    count: state.count + 1,
-  }));
+  readonly incrementCount = () =>
+    patchState(this.store, (state) => ({
+      ...state,
+      count: state.count + 1,
+    }));
 
-  readonly decrementCount = this.updater((state) => ({
-    ...state,
-    count: state.count - 1,
-  }));
+  readonly decrementCount = () =>
+    patchState(this.store, (state) => ({
+      ...state,
+      count: state.count - 1,
+    }));
 }
