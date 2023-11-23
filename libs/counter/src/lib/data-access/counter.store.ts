@@ -9,7 +9,7 @@ import {
 export type CounterState = {
   count: number;
   loading: boolean;
-  error: any;
+  error: unknown;
 };
 
 export function withCounterFeature() {

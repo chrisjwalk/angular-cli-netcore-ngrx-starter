@@ -8,7 +8,7 @@ export type WeatherForecast = {
 
 export type WeatherForecastState = {
   weatherForecasts: WeatherForecast[];
-  error: any;
+  error: unknown;
   count: number;
   loading: boolean;
 };
