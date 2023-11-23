@@ -52,7 +52,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         }
       }),
       catchError((error, caught) => {
-        console.log('Interceptor caught error', error, caught);
+        console.error('Interceptor caught error', error, caught);
         return this.handleServiceError(error);
       }),
     );

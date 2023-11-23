@@ -16,7 +16,6 @@ const SwUpdateSignalStore = signalStore(
     const versionUpdates = rxMethod<void>(() =>
       swUpdate.isEnabled
         ? swUpdate.versionUpdates.pipe(
-            tap((evt) => console.log(evt)),
             map(
               (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
             ),
