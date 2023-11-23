@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { ComponentStore, OnStoreInit } from '@ngrx/component-store';
 
-export interface CounterState {
+export type CounterState = {
   count: number;
   loading: boolean;
   error: any;
-}
+};
 
 @Injectable()
 export class CounterStore

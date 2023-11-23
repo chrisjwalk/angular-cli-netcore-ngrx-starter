@@ -1,36 +1,39 @@
 import { Injectable, effect, inject } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 
-import { SignalStore } from './signal-store';
+import { patchState, signalStore, withState } from '@ngrx/signals';
 
-export interface LayoutState {
+export type LayoutState = {
   title: string;
   showSidenav: boolean;
-}
+};
+
+const LayoutSignalStore = signalStore(
+  withState<LayoutState>({ title: '', showSidenav: false }),
+);
 
 @Injectable({
   providedIn: 'root',
 })
-export class LayoutStore extends SignalStore<LayoutState> {
+export class LayoutStore {
+  private store = new LayoutSignalStore();
   private titleService = inject(Title);
 
-  constructor() {
-    super({ title: '', showSidenav: false });
-  }
-
-  readonly title = this.select((state) => state?.title);
-  readonly showSidenav = this.select((state) => state?.showSidenav);
+  readonly title = this.store.title;
+  readonly showSidenav = this.store.showSidenav;
 
   readonly titleChanged = effect(() =>
-    this.titleService.setTitle(this.title() + ' | Demo App'),
+    this.titleService.setTitle(
+      `${this.title()}${this.title() ? ' | ' : ''}Demo App`,
+    ),
   );
 
-  readonly setTitle = (title: string) => this.patchState({ title });
-  readonly openSidenav = () => this.patchState({ showSidenav: true });
-  readonly closeSidenav = () => this.patchState({ showSidenav: false });
-
-  readonly toggleSidenav = this.updater((state) => ({
-    ...state,
-    showSidenav: !state.showSidenav,
-  }));
+  readonly setTitle = (title: string) => patchState(this.store, { title });
+  readonly openSidenav = () => patchState(this.store, { showSidenav: true });
+  readonly closeSidenav = () => patchState(this.store, { showSidenav: false });
+  readonly toggleSidenav = () =>
+    patchState(this.store, (state) => ({
+      ...state,
+      showSidenav: !state.showSidenav,
+    }));
 }

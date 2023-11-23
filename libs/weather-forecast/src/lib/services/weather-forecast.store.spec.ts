@@ -1,7 +1,6 @@
 import { HttpClientModule } from '@angular/common/http';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { provideComponentStore } from '@ngrx/component-store';
 import { of } from 'rxjs';
 
 import { WeatherForecastService } from './weather-forecast.service';
@@ -16,7 +15,7 @@ describe('WeatherForecastService', () => {
     TestBed.configureTestingModule({
       imports: [HttpClientModule, MatSnackBarModule],
       providers: [
-        [provideComponentStore(WeatherForecastStore)],
+        [WeatherForecastStore],
         { provide: 'BASE_URL', useValue: '' },
       ],
     });
