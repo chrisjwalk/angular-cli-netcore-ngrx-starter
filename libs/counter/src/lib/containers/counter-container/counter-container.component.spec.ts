@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 
-import { CounterStore } from '../../data-access';
+import { CounterStore } from '../../state';
 import { CounterContainerComponent } from './counter-container.component';
 
 describe('CounterContainerComponent', () => {
