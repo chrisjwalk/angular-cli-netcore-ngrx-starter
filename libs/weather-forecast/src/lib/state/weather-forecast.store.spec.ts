@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { of } from 'rxjs';
 
-import { WeatherForecastService } from './weather-forecast.service';
-import { weatherForecasts } from './weather-forecast.service.spec';
+import { WeatherForecastService } from '../services/weather-forecast.service';
+import { weatherForecasts } from '../services/weather-forecast.service.spec';
 import { WeatherForecastStore } from './weather-forecast.store';
 
 describe('WeatherForecastService', () => {

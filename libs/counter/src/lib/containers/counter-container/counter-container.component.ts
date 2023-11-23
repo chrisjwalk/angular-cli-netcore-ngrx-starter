@@ -15,7 +15,7 @@ import {
 } from '@myorg/shared';
 
 import { CounterComponent } from '../../components/counter/counter.component';
-import { CounterStore } from '../../data-access';
+import { CounterStore } from '../../state';
 
 @Component({
   standalone: true,

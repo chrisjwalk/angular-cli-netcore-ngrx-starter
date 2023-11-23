@@ -15,22 +15,19 @@ export type CounterState = {
 export function withCounterFeature() {
   return signalStoreFeature(
     withState<CounterState>({ count: 0, loading: null, error: null }),
-    withMethods((store) => {
-      const setCount = (count: number) => patchState(store, { count });
-
-      const incrementCount = () =>
+    withMethods((store) => ({
+      setCount: (count: number) => patchState(store, { count }),
+      incrementCount: () =>
         patchState(store, (state) => ({
           ...state,
           count: state.count + 1,
-        }));
-
-      const decrementCount = () =>
+        })),
+      decrementCount: () =>
         patchState(store, (state) => ({
           ...state,
           count: state.count - 1,
-        }));
-      return { setCount, incrementCount, decrementCount };
-    }),
+        })),
+    })),
   );
 }
 

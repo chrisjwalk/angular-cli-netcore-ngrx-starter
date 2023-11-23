@@ -20,19 +20,19 @@ export function withLayoutFeature() {
     withMethods((store) => {
       const titleService = inject(Title);
 
-      const setTitle = (title: string) => {
-        titleService.setTitle(`${title}${title ? ' | ' : ''}Demo App`);
-        patchState(store, { title });
+      return {
+        setTitle: (title: string) => {
+          titleService.setTitle(`${title}${title ? ' | ' : ''}Demo App`);
+          patchState(store, { title });
+        },
+        openSidenav: () => patchState(store, { showSidenav: true }),
+        closeSidenav: () => patchState(store, { showSidenav: false }),
+        toggleSidenav: () =>
+          patchState(store, (state) => ({
+            ...state,
+            showSidenav: !state.showSidenav,
+          })),
       };
-      const openSidenav = () => patchState(store, { showSidenav: true });
-      const closeSidenav = () => patchState(store, { showSidenav: false });
-      const toggleSidenav = () =>
-        patchState(store, (state) => ({
-          ...state,
-          showSidenav: !state.showSidenav,
-        }));
-
-      return { setTitle, openSidenav, closeSidenav, toggleSidenav };
     }),
   );
 }

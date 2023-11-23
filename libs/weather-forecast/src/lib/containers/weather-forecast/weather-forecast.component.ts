@@ -17,7 +17,7 @@ import {
 } from '@myorg/shared';
 
 import { ForecastTableComponent } from '../../components/forecast-table/forecast-table.component';
-import { WeatherForecastStore } from '../../services/weather-forecast.store';
+import { WeatherForecastStore } from '../../state/weather-forecast.store';
 
 @Component({
   standalone: true,
