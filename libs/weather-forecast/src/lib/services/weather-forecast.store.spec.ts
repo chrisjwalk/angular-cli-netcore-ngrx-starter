@@ -9,7 +9,7 @@ import { WeatherForecastStore } from './weather-forecast.store';
 
 describe('WeatherForecastService', () => {
   let service: WeatherForecastService;
-  let store: WeatherForecastStore;
+  let store: any;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

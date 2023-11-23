@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
@@ -7,7 +7,7 @@ import { EMPTY, map, pipe, switchMap, tap } from 'rxjs';
 
 export type SwUpdateState = { updateReady: boolean };
 
-const SwUpdateSignalStore = signalStore(
+export const SwUpdateStore = signalStore(
   withState<SwUpdateState>({ updateReady: false }),
   withMethods((store) => {
     const swUpdate = inject(SwUpdate);
@@ -47,10 +47,3 @@ const SwUpdateSignalStore = signalStore(
     return { versionUpdates, openReloadAppSnackbar };
   }),
 );
-@Injectable()
-export class SwUpdateStore {
-  private store = new SwUpdateSignalStore();
-
-  readonly updateReady = this.store.updateReady;
-  readonly openReloadAppSnackbar = this.store.openReloadAppSnackbar;
-}
