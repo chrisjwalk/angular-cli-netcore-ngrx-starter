@@ -46,4 +46,10 @@ $light-theme: mat.define-light-theme(
   }
 
   --mat-toolbar-standard-height: 56px;
+
+  .mat-mdc-form-field {
+    .mdc-notched-outline__notch {
+      border-right: none;
+    }
+  }
 }

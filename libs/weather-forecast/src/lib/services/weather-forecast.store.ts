@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
-import { setEntities, withEntities } from '@ngrx/signals/entities';
+import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { pipe, switchMap, tap } from 'rxjs';
 
@@ -24,9 +24,13 @@ const WeatherForecastSignalStore = signalStore(
           weatherForecastService.getForecasts(count).pipe(
             tapResponse(
               (weatherForecasts) =>
-                patchState(store, setEntities(weatherForecasts), {
-                  loading: false,
-                }),
+                patchState(
+                  store,
+                  setAllEntities(weatherForecasts, { idKey: 'dateFormatted' }),
+                  {
+                    loading: false,
+                  },
+                ),
               (error) => patchState(store, { error, loading: false }),
             ),
           ),
