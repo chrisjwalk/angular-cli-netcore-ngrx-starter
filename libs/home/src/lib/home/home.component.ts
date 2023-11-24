@@ -31,13 +31,13 @@ import { MarkdownModule } from 'ngx-markdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
-  layoutService = inject(LayoutStore);
+  layoutStore = inject(LayoutStore);
 
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-home';
   }
 
   ngOnInit() {
-    this.layoutService.setTitle('Home');
+    this.layoutStore.setTitle('Home');
   }
 }

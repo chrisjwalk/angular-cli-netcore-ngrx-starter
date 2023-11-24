@@ -30,12 +30,12 @@ describe('WeatherForecastService', () => {
       .mockReturnValue(of([weatherForecasts[0]]));
     store.getForecasts(1);
 
-    expect(store.weatherForecasts()).toEqual([weatherForecasts[0]]);
+    expect(store.entities()).toEqual([weatherForecasts[0]]);
   });
 
   it('WeatherForecastStore.getForecasts(count) should return data of length count', () => {
     jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
     store.getForecasts(10);
-    expect(store.weatherForecasts().length).toBe(10);
+    expect(store.entities().length).toBe(10);
   });
 });

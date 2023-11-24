@@ -14,7 +14,7 @@
     "build:web-app": "nx build web-app",
     "build:web-app:prod": "nx build web-app --configuration production",
     "build:dotnet-builder": "rimraf ./tools/builders/dotnet-builder/dist && tsc -p ./tools/builders/dotnet-builder",
-    "clean": "rimraf ./dist ./junit ./coverage ./.angular",
+    "clean": "rimraf ./dist ./junit ./coverage ./.angular && nx reset",
     "clean:node_modules": "rimraf ./node_modules ./package-lock.json",
     "serve:api": "nx serve api",
     "serve:prod": "nx serve-static web-app",

@@ -1,10 +1,10 @@
-import { computed, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
   signalStore,
   signalStoreFeature,
-  withComputed,
+  withHooks,
   withMethods,
   withState,
 } from '@ngrx/signals';
@@ -23,13 +23,8 @@ export function withWeatherForecastFeature() {
       count: null,
       loading: null,
     }),
-    withComputed((store) => ({
-      weatherForecasts: computed(() => store.entities()),
-    })),
-    withMethods((store) => {
-      const weatherForecastService = inject(WeatherForecastService);
-
-      return {
+    withMethods(
+      (store, weatherForecastService = inject(WeatherForecastService)) => ({
         getForecasts: rxMethod<number>(
           pipe(
             tap((count) => patchState(store, { count, loading: true })),
@@ -52,7 +47,12 @@ export function withWeatherForecastFeature() {
             ),
           ),
         ),
-      };
+      }),
+    ),
+    withHooks({
+      onInit({ getForecasts }) {
+        getForecasts(10);
+      },
     }),
   );
 }

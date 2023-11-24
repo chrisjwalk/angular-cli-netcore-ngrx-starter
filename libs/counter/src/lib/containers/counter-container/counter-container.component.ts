@@ -4,6 +4,7 @@ import {
   Component,
   HostBinding,
   OnInit,
+  computed,
   inject,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
@@ -13,6 +14,7 @@ import {
   PageToolbarButtonComponent,
   PageToolbarComponent,
 } from '@myorg/shared';
+import { getState } from '@ngrx/signals';
 
 import { CounterComponent } from '../../components/counter/counter.component';
 import { CounterStore } from '../../state';
@@ -32,14 +34,19 @@ import { CounterStore } from '../../state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
-  counterService = inject(CounterStore);
-  layoutService = inject(LayoutStore);
+  counterStore = inject(CounterStore);
+  layoutStore = inject(LayoutStore);
+
+  vm = computed(() => ({
+    ...getState(this.layoutStore),
+    ...getState(this.counterStore),
+  }));
 
   @HostBinding('attr.data-testid') get testId() {
     return 'lib-counter-container';
   }
 
   ngOnInit() {
-    this.layoutService.setTitle('Lazy Loaded Feature');
+    this.layoutStore.setTitle('Lazy Loaded Feature');
   }
 }

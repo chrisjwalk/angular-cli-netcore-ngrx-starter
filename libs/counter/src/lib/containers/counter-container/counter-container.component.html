@@ -1,13 +1,15 @@
-<lib-page-toolbar [title]="layoutService.title()">
-  <lib-page-toolbar-button (click)="counterService.incrementCount()"
-                           tooltip="Increment!">
-    <mat-icon>add</mat-icon>
-  </lib-page-toolbar-button>
-</lib-page-toolbar>
-<lib-page-container>
-  <lib-counter [count]="counterService.count()"
-               (increment)="counterService.incrementCount()"
-               (decrement)="counterService.decrementCount()"
-               (setCount)="counterService.setCount($event)">
-  </lib-counter>
-</lib-page-container>
+<ng-container *ngIf="vm() as vm">
+  <lib-page-toolbar [title]="vm.title">
+    <lib-page-toolbar-button (click)="counterStore.incrementCount()"
+                             tooltip="Increment!">
+      <mat-icon>add</mat-icon>
+    </lib-page-toolbar-button>
+  </lib-page-toolbar>
+  <lib-page-container>
+    <lib-counter [count]="vm.count"
+                 (increment)="counterStore.incrementCount()"
+                 (decrement)="counterStore.decrementCount()"
+                 (setCount)="counterStore.setCount($event)">
+    </lib-counter>
+  </lib-page-container>
+</ng-container>

@@ -1,18 +1,20 @@
-<lib-page-toolbar [title]="layoutService.title()">
-  <mat-form-field appearance="outline">
-    <input matInput
-           #count
-           type="number"
-           placeholder="Forecast Days"
-           (keyup.enter)="getForecasts(+count.value)"
-           [value]="weatherForecastStore.count()" />
-  </mat-form-field>
-  <lib-page-toolbar-button (click)="getForecasts(+count.value)"
-                           tooltip="Get Forecasts">
-    <mat-icon>refresh</mat-icon>
-  </lib-page-toolbar-button>
-</lib-page-toolbar>
-<lib-page-container>
-  <lib-forecast-table [loading]="weatherForecastStore.loading()"
-                      [data]="weatherForecastStore.weatherForecasts()"></lib-forecast-table>
-</lib-page-container>
+<ng-container *ngIf="vm() as vm">
+  <lib-page-toolbar [title]="vm.title">
+    <mat-form-field appearance="outline">
+      <input matInput
+             #count
+             type="number"
+             placeholder="Forecast Days"
+             (keyup.enter)="weatherForecastStore.getForecasts(+count.value)"
+             [value]="vm.count" />
+    </mat-form-field>
+    <lib-page-toolbar-button (click)="weatherForecastStore.getForecasts(+count.value)"
+                             tooltip="Get Forecasts">
+      <mat-icon>refresh</mat-icon>
+    </lib-page-toolbar-button>
+  </lib-page-toolbar>
+  <lib-page-container>
+    <lib-forecast-table [loading]="vm.loading"
+                        [data]="vm.weatherForecasts" />
+  </lib-page-container>
+</ng-container>
