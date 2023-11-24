@@ -13,20 +13,29 @@ import {
   PageToolbarComponent,
   SidenavComponent,
 } from '@myorg/shared';
-import { MarkdownModule } from 'ngx-markdown';
+import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   standalone: true,
   imports: [
     CommonModule,
-    MarkdownModule,
+    MarkdownComponent,
     MatCardModule,
     PageContainerComponent,
     PageToolbarComponent,
     SidenavComponent,
   ],
   selector: 'lib-home',
-  templateUrl: './home.component.html',
+  template: `
+    <lib-page-toolbar [title]="layoutStore.title()" />
+    <lib-page-container>
+      <mat-card>
+        <mat-card-content>
+          <markdown id="page-markdown" src="/assets/home.component.md" />
+        </mat-card-content>
+      </mat-card>
+    </lib-page-container>
+  `,
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
