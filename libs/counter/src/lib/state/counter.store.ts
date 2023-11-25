@@ -10,11 +10,11 @@ export type CounterState = {
   count: number;
 };
 
-export const conuterInitialState = { count: 0 };
+export const conuterInitialState: CounterState = { count: 0 };
 
 export function withCounterFeature() {
   return signalStoreFeature(
-    withState<CounterState>(conuterInitialState),
+    withState(conuterInitialState),
     withMethods((store) => ({
       setCount: (count: number) => patchState(store, { count }),
       incrementCount: () =>

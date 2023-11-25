@@ -18,8 +18,8 @@ import {
 } from '@myorg/shared';
 import { getState } from '@ngrx/signals';
 
-import { ForecastTableComponent } from '../forecast-table/forecast-table.component';
 import { WeatherForecastStore } from '../../state/weather-forecast.store';
+import { ForecastTableComponent } from '../forecast-table/forecast-table.component';
 
 @Component({
   standalone: true,
@@ -43,12 +43,12 @@ import { WeatherForecastStore } from '../../state/weather-forecast.store';
             #count
             type="number"
             placeholder="Forecast Days"
-            (keyup.enter)="weatherForecastStore.getForecasts(+count.value)"
+            (keyup.enter)="store.getForecasts(+count.value)"
             [value]="vm.count"
           />
         </mat-form-field>
         <lib-page-toolbar-button
-          (click)="weatherForecastStore.getForecasts(+count.value)"
+          (click)="store.getForecasts(+count.value)"
           tooltip="Get Forecasts"
         >
           <mat-icon>refresh</mat-icon>
@@ -65,18 +65,16 @@ import { WeatherForecastStore } from '../../state/weather-forecast.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {
-  layoutStore = inject(LayoutStore);
-  weatherForecastStore = inject(WeatherForecastStore);
+  private layoutStore = inject(LayoutStore);
 
+  store = inject(WeatherForecastStore);
   vm = computed(() => ({
     ...getState(this.layoutStore),
-    ...getState(this.weatherForecastStore),
-    weatherForecasts: this.weatherForecastStore.entities(),
+    ...getState(this.store),
+    weatherForecasts: this.store.entities(),
   }));
 
-  @HostBinding('attr.data-testid') get testId() {
-    return 'lib-weather-forecast';
-  }
+  @HostBinding('attr.data-testid') testid = 'lib-weather-forecast';
 
   ngOnInit() {
     this.layoutStore.setTitle('Weather Forecasts');

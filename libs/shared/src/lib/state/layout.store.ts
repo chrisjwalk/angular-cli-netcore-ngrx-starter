@@ -14,9 +14,14 @@ export type LayoutState = {
   showSidenav: boolean;
 };
 
+export const layoutInitialState: LayoutState = {
+  title: null,
+  showSidenav: false,
+};
+
 export function withLayoutFeature() {
   return signalStoreFeature(
-    withState<LayoutState>({ title: '', showSidenav: false }),
+    withState(layoutInitialState),
     withMethods((store) => {
       const titleService = inject(Title);
 
@@ -25,6 +30,8 @@ export function withLayoutFeature() {
           titleService.setTitle(`${title}${title ? ' | ' : ''}Demo App`);
           patchState(store, { title });
         },
+        setShowSidenav: (showSidenav: boolean) =>
+          patchState(store, { showSidenav }),
         openSidenav: () => patchState(store, { showSidenav: true }),
         closeSidenav: () => patchState(store, { showSidenav: false }),
         toggleSidenav: () =>

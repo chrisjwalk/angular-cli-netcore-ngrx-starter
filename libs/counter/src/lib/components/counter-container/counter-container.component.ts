@@ -16,8 +16,8 @@ import {
 } from '@myorg/shared';
 import { getState } from '@ngrx/signals';
 
-import { CounterComponent } from '../counter/counter.component';
 import { CounterStore } from '../../state';
+import { CounterComponent } from '../counter/counter.component';
 
 @Component({
   standalone: true,
@@ -34,7 +34,7 @@ import { CounterStore } from '../../state';
     <ng-container *ngIf="vm() as vm">
       <lib-page-toolbar [title]="vm.title">
         <lib-page-toolbar-button
-          (click)="counterStore.incrementCount()"
+          (click)="store.incrementCount()"
           tooltip="Increment!"
         >
           <mat-icon>add</mat-icon>
@@ -43,9 +43,9 @@ import { CounterStore } from '../../state';
       <lib-page-container>
         <lib-counter
           [count]="vm.count"
-          (increment)="counterStore.incrementCount()"
-          (decrement)="counterStore.decrementCount()"
-          (setCount)="counterStore.setCount($event)"
+          (increment)="store.incrementCount()"
+          (decrement)="store.decrementCount()"
+          (setCount)="store.setCount($event)"
         >
         </lib-counter>
       </lib-page-container>
@@ -54,17 +54,15 @@ import { CounterStore } from '../../state';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
-  counterStore = inject(CounterStore);
-  layoutStore = inject(LayoutStore);
+  private layoutStore = inject(LayoutStore);
 
+  store = inject(CounterStore);
   vm = computed(() => ({
     ...getState(this.layoutStore),
-    ...getState(this.counterStore),
+    ...getState(this.store),
   }));
 
-  @HostBinding('attr.data-testid') get testId() {
-    return 'lib-counter-container';
-  }
+  @HostBinding('attr.data-testid') testid = 'lib-counter-container';
 
   ngOnInit() {
     this.layoutStore.setTitle('Lazy Loaded Feature');

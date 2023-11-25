@@ -15,7 +15,13 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from '../services/weather-forecast.service';
 
-export const weatherForecastsInitialState = {
+export type WeatherForecastState = {
+  error: unknown;
+  count: number;
+  loading: boolean;
+};
+
+export const weatherForecastsInitialState: WeatherForecastState = {
   error: null,
   count: null,
   loading: null,

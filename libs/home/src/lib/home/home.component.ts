@@ -4,6 +4,7 @@ import {
   Component,
   HostBinding,
   OnInit,
+  computed,
   inject,
 } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
@@ -13,6 +14,7 @@ import {
   PageToolbarComponent,
   SidenavComponent,
 } from '@myorg/shared';
+import { getState, signalState } from '@ngrx/signals';
 import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
@@ -27,14 +29,16 @@ import { MarkdownComponent } from 'ngx-markdown';
   ],
   selector: 'lib-home',
   template: `
-    <lib-page-toolbar [title]="layoutStore.title()" />
-    <lib-page-container>
-      <mat-card>
-        <mat-card-content>
-          <markdown id="page-markdown" src="/assets/home.component.md" />
-        </mat-card-content>
-      </mat-card>
-    </lib-page-container>
+    <ng-container *ngIf="vm() as vm">
+      <lib-page-toolbar [title]="vm.title" />
+      <lib-page-container>
+        <mat-card>
+          <mat-card-content>
+            <markdown [src]="vm.src" />
+          </mat-card-content>
+        </mat-card>
+      </lib-page-container>
+    </ng-container>
   `,
   styles: [
     `
@@ -95,11 +99,15 @@ import { MarkdownComponent } from 'ngx-markdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
-  layoutStore = inject(LayoutStore);
+  private layoutStore = inject(LayoutStore);
+  private state = signalState({ src: '/assets/home.component.md' });
 
-  @HostBinding('attr.data-testid') get testId() {
-    return 'lib-home';
-  }
+  vm = computed(() => ({
+    ...getState(this.layoutStore),
+    ...getState(this.state),
+  }));
+
+  @HostBinding('attr.data-testid') testid = 'lib-home';
 
   ngOnInit() {
     this.layoutStore.setTitle('Home');

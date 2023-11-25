@@ -6,9 +6,10 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { EMPTY, map, pipe, switchMap, tap } from 'rxjs';
 
 export type SwUpdateState = { updateReady: boolean };
+export const swUpdateInitialState: SwUpdateState = { updateReady: false };
 
 export const SwUpdateStore = signalStore(
-  withState<SwUpdateState>({ updateReady: false }),
+  withState(swUpdateInitialState),
   withMethods((store) => {
     const swUpdate = inject(SwUpdate);
     const snackBar = inject(MatSnackBar);

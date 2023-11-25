@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  computed,
   effect,
   inject,
 } from '@angular/core';
@@ -16,6 +17,7 @@ import {
   SidenavListItemComponent,
   SwUpdateStore,
 } from '@myorg/shared';
+import { getState } from '@ngrx/signals';
 
 @Component({
   standalone: true,
@@ -30,25 +32,27 @@ import {
   ],
   selector: 'app-root',
   template: `
-    <lib-main-toolbar
-      (toggleSidenav)="layoutStore.toggleSidenav()"
-    ></lib-main-toolbar>
-    <mat-sidenav-container class="mat-app-background" fullscreen>
-      <mat-sidenav
-        mode="over"
-        [opened]="layoutStore.showSidenav()"
-        (openedChange)="sidenavChanged($event)"
-        class="mat-app-background"
-      >
-        <lib-sidenav
-          (toggleSidenav)="layoutStore.toggleSidenav()"
-          (closeSidenav)="layoutStore.closeSidenav()"
-        ></lib-sidenav>
-      </mat-sidenav>
-      <div class="app-content">
-        <router-outlet></router-outlet>
-      </div>
-    </mat-sidenav-container>
+    <ng-container *ngIf="vm() as vm">
+      <lib-main-toolbar
+        (toggleSidenav)="store.toggleSidenav()"
+      ></lib-main-toolbar>
+      <mat-sidenav-container class="mat-app-background" fullscreen>
+        <mat-sidenav
+          mode="over"
+          [opened]="vm.showSidenav"
+          (openedChange)="store.setShowSidenav($event)"
+          class="mat-app-background"
+        >
+          <lib-sidenav
+            (toggleSidenav)="store.toggleSidenav()"
+            (closeSidenav)="store.closeSidenav()"
+          ></lib-sidenav>
+        </mat-sidenav>
+        <div class="app-content">
+          <router-outlet></router-outlet>
+        </div>
+      </mat-sidenav-container>
+    </ng-container>
   `,
   styles: [
     `
@@ -62,8 +66,12 @@ import {
   providers: [SwUpdateStore],
 })
 export class AppComponent {
-  layoutStore = inject(LayoutStore);
-  swUpdateStore = inject(SwUpdateStore);
+  private swUpdateStore = inject(SwUpdateStore);
+
+  store = inject(LayoutStore);
+  vm = computed(() => ({
+    ...getState(this.store),
+  }));
 
   updateReady = effect(() => {
     if (this.swUpdateStore.updateReady()) {
@@ -71,15 +79,5 @@ export class AppComponent {
     }
   });
 
-  @HostBinding('attr.data-testid') get testId() {
-    return 'app-root';
-  }
-
-  sidenavChanged(sidenavOpened: boolean) {
-    if (sidenavOpened) {
-      this.layoutStore.openSidenav();
-    } else {
-      this.layoutStore.closeSidenav();
-    }
-  }
+  @HostBinding('attr.data-testid') testid = 'app-root';
 }

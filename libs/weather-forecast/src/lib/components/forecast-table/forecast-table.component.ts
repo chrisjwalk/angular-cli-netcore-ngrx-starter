@@ -6,7 +6,7 @@ import {
   Input,
 } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { MatTableModule } from '@angular/material/table';
 
 import { WeatherForecast } from '../../models/weather-forecast';
 
@@ -22,7 +22,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
       </div>
     } @else {
       <div class="mat-elevation-z2">
-        <mat-table #table [dataSource]="dataSource">
+        <mat-table #table [dataSource]="data">
           <ng-container matColumnDef="dateFormatted">
             <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
             <mat-cell *matCellDef="let forecast">
@@ -78,16 +78,11 @@ import { WeatherForecast } from '../../models/weather-forecast';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastTableComponent {
-  @HostBinding('attr.data-testid') get testId() {
-    return 'lib-forecast-table';
-  }
+  @HostBinding('attr.data-testid') testid = 'lib-forecast-table';
 
   @Input() loading: boolean;
-  @Input() set data(data: WeatherForecast[]) {
-    this.dataSource.data = data;
-  }
+  @Input() data: WeatherForecast[];
 
-  dataSource = new MatTableDataSource<WeatherForecast>([]);
   displayedColumns = [
     'dateFormatted',
     'temperatureC',
