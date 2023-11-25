@@ -15,14 +15,16 @@ import { pipe, switchMap, tap } from 'rxjs';
 import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from '../services/weather-forecast.service';
 
+export const weatherForecastsInitialState = {
+  error: null,
+  count: null,
+  loading: null,
+};
+
 export function withWeatherForecastFeature() {
   return signalStoreFeature(
     withEntities<WeatherForecast>(),
-    withState({
-      error: null,
-      count: null,
-      loading: null,
-    }),
+    withState(weatherForecastsInitialState),
     withMethods(
       (store, weatherForecastService = inject(WeatherForecastService)) => ({
         getForecasts: rxMethod<number>(
@@ -41,7 +43,10 @@ export function withWeatherForecastFeature() {
                         loading: false,
                       },
                     ),
-                  (error) => patchState(store, { error, loading: false }),
+                  (error) => {
+                    console.error(error);
+                    patchState(store, { error, loading: false });
+                  },
                 ),
               ),
             ),
