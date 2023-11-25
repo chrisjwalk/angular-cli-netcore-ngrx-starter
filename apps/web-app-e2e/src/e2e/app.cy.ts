@@ -8,6 +8,10 @@ describe('web-app', () => {
   });
 
   it('should load home.component.md', () => {
-    getPageMarkdown().should('have.attr', 'src', '/assets/home.component.md');
+    getPageMarkdown().should(
+      'have.attr',
+      'ng-reflect-src',
+      '/assets/home.component.md',
+    );
   });
 });

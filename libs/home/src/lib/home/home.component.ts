@@ -34,7 +34,7 @@ import { MarkdownComponent } from 'ngx-markdown';
       <lib-page-container>
         <mat-card>
           <mat-card-content>
-            <markdown [src]="vm.src" />
+            <markdown data-testid="page-markdown" [src]="vm.src" />
           </mat-card-content>
         </mat-card>
       </lib-page-container>
