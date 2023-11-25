@@ -13,8 +13,13 @@ import { RouterModule } from '@angular/router';
   standalone: true,
   imports: [MatIconModule, RouterModule, MatListModule],
   selector: 'lib-sidenav-list-item',
-  templateUrl: './sidenav-list-item.component.html',
-  styleUrls: ['./sidenav-list-item.component.scss'],
+  template: `
+    <a mat-list-item [routerLink]="routerLink" (click)="navigate.emit()">
+      <mat-icon matListItemIcon>{{ icon }}</mat-icon>
+      <span matListItemTitle><ng-content></ng-content></span>
+      <span matListItemLine class="secondary">{{ hint }}</span>
+    </a>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavListItemComponent {

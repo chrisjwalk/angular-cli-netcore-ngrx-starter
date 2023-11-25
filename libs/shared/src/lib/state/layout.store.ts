@@ -36,6 +36,7 @@ export function withLayoutFeature() {
     }),
   );
 }
+
 export const LayoutStore = signalStore(
   {
     providedIn: 'root',

@@ -13,8 +13,27 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   standalone: true,
   imports: [CommonModule, MatButtonModule, MatIconModule, MatTooltipModule],
   selector: 'lib-page-toolbar-button',
-  templateUrl: './page-toolbar-button.component.html',
-  styleUrls: ['./page-toolbar-button.component.scss'],
+  template: `
+    <button
+      mat-icon-button
+      [attr.aria-label]="tooltip"
+      [matTooltip]="tooltip"
+      [matTooltipDisabled]="tooltipDisabled"
+    >
+      <ng-content></ng-content>
+    </button>
+  `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        align-items: center;
+        .mdc-icon-button {
+          @apply flex;
+        }
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarButtonComponent implements OnInit {

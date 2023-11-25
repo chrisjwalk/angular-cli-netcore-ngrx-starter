@@ -50,12 +50,14 @@ import {
       </div>
     </mat-sidenav-container>
   `,
-  styles: `
-    .mat-drawer-container {
-      margin-top: var(--mat-toolbar-standard-height);
-      height: calc(100% - var(--mat-toolbar-standard-height));
-    }
-  `,
+  styles: [
+    `
+      .mat-drawer-container {
+        margin-top: var(--mat-toolbar-standard-height);
+        height: calc(100% - var(--mat-toolbar-standard-height));
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SwUpdateStore],
 })

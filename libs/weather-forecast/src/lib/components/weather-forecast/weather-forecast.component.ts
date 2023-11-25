@@ -18,7 +18,7 @@ import {
 } from '@myorg/shared';
 import { getState } from '@ngrx/signals';
 
-import { ForecastTableComponent } from '../../components/forecast-table/forecast-table.component';
+import { ForecastTableComponent } from '../forecast-table/forecast-table.component';
 import { WeatherForecastStore } from '../../state/weather-forecast.store';
 
 @Component({
@@ -34,7 +34,34 @@ import { WeatherForecastStore } from '../../state/weather-forecast.store';
     ForecastTableComponent,
   ],
   selector: 'lib-weather-forecast',
-  templateUrl: './weather-forecast.component.html',
+  template: `
+    <ng-container *ngIf="vm() as vm">
+      <lib-page-toolbar [title]="vm.title">
+        <mat-form-field appearance="outline">
+          <input
+            matInput
+            #count
+            type="number"
+            placeholder="Forecast Days"
+            (keyup.enter)="weatherForecastStore.getForecasts(+count.value)"
+            [value]="vm.count"
+          />
+        </mat-form-field>
+        <lib-page-toolbar-button
+          (click)="weatherForecastStore.getForecasts(+count.value)"
+          tooltip="Get Forecasts"
+        >
+          <mat-icon>refresh</mat-icon>
+        </lib-page-toolbar-button>
+      </lib-page-toolbar>
+      <lib-page-container>
+        <lib-forecast-table
+          [loading]="vm.loading"
+          [data]="vm.weatherForecasts"
+        />
+      </lib-page-container>
+    </ng-container>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {

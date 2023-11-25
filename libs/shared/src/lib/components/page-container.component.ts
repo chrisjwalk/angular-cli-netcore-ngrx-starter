@@ -5,8 +5,16 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   standalone: true,
   imports: [CommonModule],
   selector: 'lib-page-container',
-  templateUrl: './page-container.component.html',
-  styleUrls: ['./page-container.component.scss'],
+  template: ` <ng-content></ng-content> `,
+  styles: [
+    `
+      :host {
+        display: flex;
+        flex-direction: column;
+        padding: 16px;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageContainerComponent {}

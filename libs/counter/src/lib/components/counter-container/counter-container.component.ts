@@ -16,7 +16,7 @@ import {
 } from '@myorg/shared';
 import { getState } from '@ngrx/signals';
 
-import { CounterComponent } from '../../components/counter/counter.component';
+import { CounterComponent } from '../counter/counter.component';
 import { CounterStore } from '../../state';
 
 @Component({
@@ -30,7 +30,27 @@ import { CounterStore } from '../../state';
     CounterComponent,
   ],
   selector: 'lib-counter-container',
-  templateUrl: './counter-container.component.html',
+  template: `
+    <ng-container *ngIf="vm() as vm">
+      <lib-page-toolbar [title]="vm.title">
+        <lib-page-toolbar-button
+          (click)="counterStore.incrementCount()"
+          tooltip="Increment!"
+        >
+          <mat-icon>add</mat-icon>
+        </lib-page-toolbar-button>
+      </lib-page-toolbar>
+      <lib-page-container>
+        <lib-counter
+          [count]="vm.count"
+          (increment)="counterStore.incrementCount()"
+          (decrement)="counterStore.decrementCount()"
+          (setCount)="counterStore.setCount($event)"
+        >
+        </lib-counter>
+      </lib-page-container>
+    </ng-container>
+  `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
