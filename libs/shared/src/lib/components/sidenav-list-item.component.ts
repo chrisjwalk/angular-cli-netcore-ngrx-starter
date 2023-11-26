@@ -26,5 +26,6 @@ export class SidenavListItemComponent {
   @Input() icon = '';
   @Input() hint = '';
   @Input() routerLink: string | any[] = '/';
+
   @Output() navigate = new EventEmitter();
 }

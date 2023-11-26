@@ -21,18 +21,18 @@ import { RouterModule } from '@angular/router';
   ],
   selector: 'lib-main-toolbar',
   template: `
-    <mat-toolbar class="app-main-toolbar flex gap-2">
-      <span class="md:hidden flex items-center justify-center">
+    <mat-toolbar class="app-main-toolbar fixed top-0 w-full z-50 flex gap-2">
+      <span class="md:hidden flex gap-2 items-center justify-center">
         <button
           mat-icon-button
           aria-label="Toggle side menu"
-          (click)="emitToggleSidenav()"
+          (click)="toggleSidenav.emit()"
         >
           <mat-icon>menu</mat-icon>
         </button>
       </span>
       <a
-        class="logo flex justify-center items-center w-12"
+        class="no-underline flex justify-center items-center w-12"
         aria-label="Home Page"
         [routerLink]="['/']"
       >
@@ -85,7 +85,9 @@ import { RouterModule } from '@angular/router';
           </defs>
         </svg>
       </a>
-      <a class="logo-text" [routerLink]="['/']"> Demo App </a>
+      <a class="no-underline !text-neutral-300" [routerLink]="['/']">
+        Demo App
+      </a>
       <span class="flex-1"></span>
       <div class="hidden md:block">
         <button
@@ -110,25 +112,10 @@ import { RouterModule } from '@angular/router';
   styles: [
     `
       .app-main-toolbar {
-        @apply fixed top-0 w-full z-50;
         height: var(--mat-toolbar-standard-height);
-
-        .hidden.md:block {
-          @apply flex gap-2;
-        }
 
         .logo {
           height: var(--mat-toolbar-standard-height);
-        }
-
-        a.logo,
-        a.logo:visited,
-        a.logo:hover,
-        a.logo-text,
-        a.logo-text:visited,
-        a.logo-text:hover {
-          text-decoration: none;
-          color: hsla(0, 0%, 100%, 0.75);
         }
       }
     `,
@@ -136,9 +123,5 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbarComponent {
-  @Output() toggleSidenav = new EventEmitter<boolean>();
-
-  emitToggleSidenav() {
-    this.toggleSidenav.emit(true);
-  }
+  @Output() toggleSidenav = new EventEmitter<void>();
 }

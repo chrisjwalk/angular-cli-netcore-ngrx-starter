@@ -2,8 +2,8 @@ import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  HostBinding,
   Input,
-  OnInit,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -15,32 +15,18 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'lib-page-toolbar-button',
   template: `
     <button
+      class="flex"
       mat-icon-button
       [attr.aria-label]="tooltip"
       [matTooltip]="tooltip"
-      [matTooltipDisabled]="tooltipDisabled"
+      [matTooltipDisabled]="!tooltip"
     >
       <ng-content></ng-content>
     </button>
   `,
-  styles: [
-    `
-      :host {
-        display: flex;
-        align-items: center;
-        .mdc-icon-button {
-          @apply flex;
-        }
-      }
-    `,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageToolbarButtonComponent implements OnInit {
+export class PageToolbarButtonComponent {
   @Input() tooltip: string;
-  tooltipDisabled: boolean;
-
-  ngOnInit() {
-    this.tooltipDisabled = !this.tooltip;
-  }
+  @HostBinding('class') class = 'flex items-center';
 }

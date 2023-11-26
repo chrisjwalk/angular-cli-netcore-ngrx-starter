@@ -6,9 +6,11 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   imports: [CommonModule],
   selector: 'lib-page-toolbar',
   template: `
-    <div class="app-page-toolbar">
+    <div
+      class="bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]"
+    >
       @if (title) {
-        <h1 class="title">{{ title }}</h1>
+        <h1 class="text-lg font-normal inline">{{ title }}</h1>
       }
       <span class="flex-1"></span>
       <ng-content></ng-content>
@@ -16,16 +18,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   `,
   styles: [
     `
-      .app-page-toolbar {
-        @apply bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center;
-        height: 46px;
-
-        h1 {
-          &.title {
-            @apply text-lg font-normal inline;
-          }
-        }
-
+      :host {
         ::ng-deep {
           .mat-mdc-form-field-subscript-wrapper {
             @apply hidden;
@@ -33,8 +26,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
           .mat-mdc-text-field-wrapper.mdc-text-field--outlined
             .mat-mdc-form-field-infix {
-            @apply py-1;
-            min-height: 34px;
+            @apply py-1 min-h-[34px];
           }
         }
       }

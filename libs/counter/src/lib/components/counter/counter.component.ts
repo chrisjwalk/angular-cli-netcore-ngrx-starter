@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  HostBinding,
   Input,
   Output,
 } from '@angular/core';
@@ -28,30 +29,40 @@ import { BigButtonComponent } from '@myorg/shared';
   ],
   selector: 'lib-counter',
   template: `
-    <div class="count-row">
+    <div
+      class="count-row flex gap-2 items-center content-center justify-center w-full whitespace-nowrap"
+    >
       <button
+        class="!w-[92px] !h-[92px]"
         mat-icon-button
         (click)="decrement.emit()"
         matTooltip="Decrement"
         aria-label="Decrement"
       >
-        <mat-icon>keyboard_arrow_left</mat-icon>
+        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]"
+          >keyboard_arrow_left</mat-icon
+        >
       </button>
-      <mat-card>
+      <mat-card class="truncate min-[600px]:min-w-[300px] max-[599px]:flex-1">
         <mat-card-content>
-          <p class="count" data-testid="count">{{ count }}</p>
+          <p class="text-[120px] text-center" data-testid="count">
+            {{ count }}
+          </p>
         </mat-card-content>
       </mat-card>
       <button
+        class="!w-[92px] !h-[92px]"
         mat-icon-button
         (click)="increment.emit()"
         matTooltip="Increment"
         aria-label="Increment"
       >
-        <mat-icon>keyboard_arrow_right</mat-icon>
+        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]"
+          >keyboard_arrow_right</mat-icon
+        >
       </button>
     </div>
-    <mat-form-field appearance="outline">
+    <mat-form-field appearance="outline" class="mt-1 w-[320px]">
       <mat-label>Enter the value you'd like to set the count to here</mat-label>
       <input
         matInput
@@ -68,64 +79,9 @@ import { BigButtonComponent } from '@myorg/shared';
   `,
   styles: [
     `
-      :host {
-        display: flex;
-        flex-direction: column;
-        gap: 16px;
-        align-items: center;
-
-        .count-row,
-        .set-row {
-          display: flex;
-          flex-direction: row;
-          box-sizing: border-box;
-          align-items: center;
-          align-content: center;
-          justify-content: center;
-          white-space: nowrap;
-          width: 100%;
-        }
-
-        .count-row {
-          display: flex;
-          gap: 8px;
-          .mat-mdc-card {
-            @media (min-width: 600px) {
-              min-width: 300px;
-            }
-
-            @media (max-width: 599px) {
-              min-width: calc(100% - 220px);
-            }
-
-            text-overflow: ellipsis;
-            overflow: hidden;
-          }
-
-          p.count {
-            text-align: center;
-            font-size: 120px;
-            margin: 0;
-          }
-
-          .mat-mdc-icon-button {
-            height: 92px;
-            width: 92px;
-          }
-
-          .mat-mdc-icon {
-            font-size: 76px;
-            height: 76px;
-            width: 76px;
-            line-height: 76px;
-          }
-        }
-
+      :host ::ng-deep {
         .mat-mdc-form-field {
-          margin-top: 4px;
-          width: 320px;
-
-          ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+          .mat-mdc-form-field-subscript-wrapper {
             display: none;
           }
         }
@@ -136,7 +92,10 @@ import { BigButtonComponent } from '@myorg/shared';
 })
 export class CounterComponent {
   @Input() count: number;
+
   @Output() increment = new EventEmitter();
   @Output() decrement = new EventEmitter();
   @Output() setCount = new EventEmitter<number>();
+
+  @HostBinding('class') class = 'flex flex-col gap-4 items-center';
 }

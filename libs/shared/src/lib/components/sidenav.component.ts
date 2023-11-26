@@ -13,7 +13,7 @@ import { SidenavListItemComponent } from './sidenav-list-item.component';
   imports: [SidenavListItemComponent, MatListModule],
   selector: 'lib-sidenav',
   template: `
-    <div class="app-sidebar-content">
+    <div class="p-2">
       <mat-nav-list>
         <lib-sidenav-list-item
           (navigate)="closeSidenav.emit()"
@@ -34,13 +34,6 @@ import { SidenavListItemComponent } from './sidenav-list-item.component';
       </mat-nav-list>
     </div>
   `,
-  styles: [
-    `
-      .app-sidebar-content {
-        padding: 8px;
-      }
-    `,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavComponent {
