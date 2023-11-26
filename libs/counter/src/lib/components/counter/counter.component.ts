@@ -45,9 +45,9 @@ import { BigButtonComponent } from '@myorg/shared';
       </button>
       <mat-card class="truncate min-[600px]:min-w-[300px] max-[599px]:flex-1">
         <mat-card-content>
-          <p class="text-[120px] text-center" data-testid="count">
+          <div class="text-[120px] text-center" data-testid="count">
             {{ count }}
-          </p>
+          </div>
         </mat-card-content>
       </mat-card>
       <button

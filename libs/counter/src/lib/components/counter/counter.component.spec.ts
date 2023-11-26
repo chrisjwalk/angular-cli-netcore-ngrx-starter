@@ -9,7 +9,7 @@ describe('CounterComponent', () => {
       componentProperties: { count },
     });
 
-    expect(screen.getByTestId('count').innerHTML).toBe(`${count}`);
+    expect(screen.getByTestId('count').innerHTML?.trim()).toBe(`${count}`);
   });
 
   test('should emit increment event on click', async () => {
