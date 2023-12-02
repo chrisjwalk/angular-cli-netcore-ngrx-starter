@@ -4,7 +4,6 @@
     "angular.ng-template",
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
-    "hookyqr.beautify",
     "dbaeumer.vscode-eslint",
     "eamodio.gitlens"
   ]
