@@ -16,16 +16,14 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
   `,
   styles: [
     `
-      :host {
-        ::ng-deep {
-          .mat-mdc-form-field-subscript-wrapper {
-            @apply hidden;
-          }
+      :host ::ng-deep {
+        .mat-mdc-form-field-subscript-wrapper {
+          @apply hidden;
+        }
 
-          .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-            .mat-mdc-form-field-infix {
-            @apply py-1 min-h-[34px];
-          }
+        .mat-mdc-text-field-wrapper.mdc-text-field--outlined
+          .mat-mdc-form-field-infix {
+          @apply py-1 min-h-[34px];
         }
       }
     `,

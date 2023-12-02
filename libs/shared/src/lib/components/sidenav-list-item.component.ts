@@ -17,7 +17,7 @@ import { RouterModule } from '@angular/router';
     <a mat-list-item [routerLink]="routerLink" (click)="navigate.emit()">
       <mat-icon matListItemIcon>{{ icon }}</mat-icon>
       <span matListItemTitle> <ng-content /> </span>
-      <span matListItemLine class="secondary">{{ hint }}</span>
+      <span matListItemLine>{{ hint }}</span>
     </a>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
