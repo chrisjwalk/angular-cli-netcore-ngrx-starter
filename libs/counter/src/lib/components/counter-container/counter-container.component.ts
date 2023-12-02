@@ -46,8 +46,7 @@ import { CounterComponent } from '../counter/counter.component';
           (increment)="store.incrementCount()"
           (decrement)="store.decrementCount()"
           (setCount)="store.setCount($event)"
-        >
-        </lib-counter>
+        />
       </lib-page-container>
     }
   `,

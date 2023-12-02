@@ -33,9 +33,7 @@ import { getState } from '@ngrx/signals';
   selector: 'app-root',
   template: `
     @if (vm(); as vm) {
-      <lib-main-toolbar
-        (toggleSidenav)="store.toggleSidenav()"
-      ></lib-main-toolbar>
+      <lib-main-toolbar (toggleSidenav)="store.toggleSidenav()" />
       <mat-sidenav-container class="mat-app-background" fullscreen>
         <mat-sidenav
           mode="over"
@@ -46,10 +44,10 @@ import { getState } from '@ngrx/signals';
           <lib-sidenav
             (toggleSidenav)="store.toggleSidenav()"
             (closeSidenav)="store.closeSidenav()"
-          ></lib-sidenav>
+          />
         </mat-sidenav>
         <div class="app-content">
-          <router-outlet></router-outlet>
+          <router-outlet />
         </div>
       </mat-sidenav-container>
     }

@@ -13,7 +13,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
         <h1 class="text-lg font-normal inline">{{ title }}</h1>
       }
       <span class="flex-1"></span>
-      <ng-content></ng-content>
+      <ng-content />
     </div>
   `,
   styles: [

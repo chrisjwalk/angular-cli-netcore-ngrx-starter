@@ -16,7 +16,7 @@ import { RouterModule } from '@angular/router';
   template: `
     <a mat-list-item [routerLink]="routerLink" (click)="navigate.emit()">
       <mat-icon matListItemIcon>{{ icon }}</mat-icon>
-      <span matListItemTitle><ng-content></ng-content></span>
+      <span matListItemTitle> <ng-content /> </span>
       <span matListItemLine class="secondary">{{ hint }}</span>
     </a>
   `,

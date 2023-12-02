@@ -21,7 +21,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       [matTooltip]="tooltip"
       [matTooltipDisabled]="!tooltip"
     >
-      <ng-content></ng-content>
+      <ng-content />
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
