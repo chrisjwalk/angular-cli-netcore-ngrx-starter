@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -24,7 +23,6 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     PageContainerComponent,
     PageToolbarButtonComponent,
     MatFormFieldModule,

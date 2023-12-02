@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -20,7 +19,6 @@ import { MarkdownComponent } from 'ngx-markdown';
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     MarkdownComponent,
     MatCardModule,
     PageContainerComponent,

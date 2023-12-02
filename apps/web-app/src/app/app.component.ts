@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,7 +21,6 @@ import { getState } from '@ngrx/signals';
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     RouterModule,
     MatSidenavModule,
     SidenavComponent,
@@ -34,21 +32,18 @@ import { getState } from '@ngrx/signals';
   template: `
     @if (vm(); as vm) {
       <lib-main-toolbar (toggleSidenav)="store.toggleSidenav()" />
-      <mat-sidenav-container class="mat-app-background" fullscreen>
+      <mat-sidenav-container fullscreen>
         <mat-sidenav
           mode="over"
           [opened]="vm.showSidenav"
           (openedChange)="store.setShowSidenav($event)"
-          class="mat-app-background"
         >
           <lib-sidenav
             (toggleSidenav)="store.toggleSidenav()"
             (closeSidenav)="store.closeSidenav()"
           />
         </mat-sidenav>
-        <div class="app-content">
-          <router-outlet />
-        </div>
+        <router-outlet />
       </mat-sidenav-container>
     }
   `,

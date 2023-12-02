@@ -1,9 +1,7 @@
-import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 
 @Component({
   standalone: true,
-  imports: [CommonModule],
   selector: 'lib-page-toolbar',
   template: `
     <div

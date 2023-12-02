@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -22,7 +21,6 @@ import { CounterComponent } from '../counter/counter.component';
 @Component({
   standalone: true,
   imports: [
-    CommonModule,
     MatIconModule,
     PageContainerComponent,
     PageToolbarComponent,

@@ -1,4 +1,3 @@
-import { CommonModule } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -12,7 +11,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
 
 @Component({
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatProgressSpinnerModule],
+  imports: [MatTableModule, MatProgressSpinnerModule],
   selector: 'lib-forecast-table',
   template: `
     @if (loading) {
