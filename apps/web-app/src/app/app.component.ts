@@ -32,7 +32,7 @@ import { getState } from '@ngrx/signals';
   ],
   selector: 'app-root',
   template: `
-    <ng-container *ngIf="vm() as vm">
+    @if (vm(); as vm) {
       <lib-main-toolbar
         (toggleSidenav)="store.toggleSidenav()"
       ></lib-main-toolbar>
@@ -52,7 +52,7 @@ import { getState } from '@ngrx/signals';
           <router-outlet></router-outlet>
         </div>
       </mat-sidenav-container>
-    </ng-container>
+    }
   `,
   styles: [
     `

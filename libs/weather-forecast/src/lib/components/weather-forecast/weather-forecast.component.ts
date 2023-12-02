@@ -35,7 +35,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
   ],
   selector: 'lib-weather-forecast',
   template: `
-    <ng-container *ngIf="vm() as vm">
+    @if (vm(); as vm) {
       <lib-page-toolbar [title]="vm.title">
         <mat-form-field appearance="outline">
           <input
@@ -60,7 +60,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
           [data]="vm.weatherForecasts"
         />
       </lib-page-container>
-    </ng-container>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

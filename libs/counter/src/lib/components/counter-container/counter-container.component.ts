@@ -31,7 +31,7 @@ import { CounterComponent } from '../counter/counter.component';
   ],
   selector: 'lib-counter-container',
   template: `
-    <ng-container *ngIf="vm() as vm">
+    @if (vm(); as vm) {
       <lib-page-toolbar [title]="vm.title">
         <lib-page-toolbar-button
           (click)="store.incrementCount()"
@@ -49,7 +49,7 @@ import { CounterComponent } from '../counter/counter.component';
         >
         </lib-counter>
       </lib-page-container>
-    </ng-container>
+    }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

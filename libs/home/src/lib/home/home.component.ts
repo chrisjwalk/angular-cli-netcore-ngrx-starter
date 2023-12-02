@@ -29,7 +29,7 @@ import { MarkdownComponent } from 'ngx-markdown';
   ],
   selector: 'lib-home',
   template: `
-    <ng-container *ngIf="vm() as vm">
+    @if (vm(); as vm) {
       <lib-page-toolbar [title]="vm.title" />
       <lib-page-container>
         <mat-card>
@@ -38,7 +38,7 @@ import { MarkdownComponent } from 'ngx-markdown';
           </mat-card-content>
         </mat-card>
       </lib-page-container>
-    </ng-container>
+    }
   `,
   styles: [
     `
