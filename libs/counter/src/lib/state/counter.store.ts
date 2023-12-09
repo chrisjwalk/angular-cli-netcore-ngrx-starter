@@ -1,3 +1,5 @@
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { FormBuilder } from '@angular/forms';
 import {
   patchState,
   signalStore,
@@ -32,3 +34,21 @@ export function withCounterFeature() {
 }
 
 export const CounterStore = signalStore(withCounterFeature());
+
+export function getCounterFormGroup(
+  formBuilder: FormBuilder,
+  store: CounterStoreInstance,
+) {
+  const formGroup = formBuilder.group({
+    count: [store.count()],
+  });
+
+  formGroup.valueChanges
+    .pipe(takeUntilDestroyed())
+    .subscribe((value) => patchState(store, value));
+
+  return formGroup;
+}
+
+export type CounterStoreInstance = InstanceType<typeof CounterStore>;
+export type CounterFormGroup = ReturnType<typeof getCounterFormGroup>;

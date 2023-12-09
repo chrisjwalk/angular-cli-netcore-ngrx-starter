@@ -13,7 +13,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { BigButtonComponent } from '@myorg/shared';
-
 @Component({
   standalone: true,
   imports: [
@@ -37,9 +36,9 @@ import { BigButtonComponent } from '@myorg/shared';
         matTooltip="Decrement"
         aria-label="Decrement"
       >
-        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]"
-          >keyboard_arrow_left</mat-icon
-        >
+        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]">
+          keyboard_arrow_left
+        </mat-icon>
       </button>
       <mat-card class="truncate min-[600px]:min-w-[300px] max-[599px]:flex-1">
         <mat-card-content>
@@ -55,13 +54,15 @@ import { BigButtonComponent } from '@myorg/shared';
         matTooltip="Increment"
         aria-label="Increment"
       >
-        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]"
-          >keyboard_arrow_right</mat-icon
-        >
+        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]">
+          keyboard_arrow_right
+        </mat-icon>
       </button>
     </div>
     <mat-form-field appearance="outline" class="mt-1 w-[320px]">
-      <mat-label>Enter the value you'd like to set the count to here</mat-label>
+      <mat-label>
+        Enter the value you'd like to set the count to here
+      </mat-label>
       <input
         matInput
         #setvalue
