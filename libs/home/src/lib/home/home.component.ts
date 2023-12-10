@@ -6,7 +6,6 @@ import {
   computed,
   inject,
 } from '@angular/core';
-import { MatCardModule } from '@angular/material/card';
 import {
   LayoutStore,
   PageContainerComponent,
@@ -20,7 +19,6 @@ import { MarkdownComponent } from 'ngx-markdown';
   standalone: true,
   imports: [
     MarkdownComponent,
-    MatCardModule,
     PageContainerComponent,
     PageToolbarComponent,
     SidenavComponent,
@@ -30,11 +28,11 @@ import { MarkdownComponent } from 'ngx-markdown';
     @if (vm(); as vm) {
       <lib-page-toolbar [title]="vm.title" />
       <lib-page-container>
-        <mat-card>
-          <mat-card-content>
-            <markdown data-testid="page-markdown" [src]="vm.src" />
-          </mat-card-content>
-        </mat-card>
+        <div
+          class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow"
+        >
+          <markdown data-testid="page-markdown" [src]="vm.src" />
+        </div>
       </lib-page-container>
     }
   `,
