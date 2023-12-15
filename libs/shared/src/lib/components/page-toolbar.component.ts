@@ -1,18 +1,19 @@
-import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostBinding,
+  Input,
+} from '@angular/core';
 
 @Component({
   standalone: true,
   selector: 'lib-page-toolbar',
   template: `
-    <div
-      class="bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]"
-    >
-      @if (title) {
-        <h1 class="text-lg font-normal inline">{{ title }}</h1>
-      }
-      <span class="flex-1"></span>
-      <ng-content />
-    </div>
+    @if (title) {
+      <h1 class="text-lg font-normal inline">{{ title }}</h1>
+    }
+    <span class="flex-1"></span>
+    <ng-content />
   `,
   styles: [
     `
@@ -32,4 +33,6 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 })
 export class PageToolbarComponent {
   @Input() title: string;
+  @HostBinding('class') class =
+    'bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]';
 }

@@ -7,7 +7,6 @@ import {
   Output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -17,7 +16,6 @@ import { BigButtonComponent } from '@myorg/shared';
   standalone: true,
   imports: [
     MatButtonModule,
-    MatCardModule,
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
@@ -40,13 +38,13 @@ import { BigButtonComponent } from '@myorg/shared';
           keyboard_arrow_left
         </mat-icon>
       </button>
-      <mat-card class="truncate min-[600px]:min-w-[300px] max-[599px]:flex-1">
-        <mat-card-content>
-          <div class="text-[120px] text-center" data-testid="count">
-            {{ count }}
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div
+        class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
+      >
+        <div class="text-[120px] text-center" data-testid="count">
+          {{ count }}
+        </div>
+      </div>
       <button
         class="!w-[92px] !h-[92px]"
         mat-icon-button
