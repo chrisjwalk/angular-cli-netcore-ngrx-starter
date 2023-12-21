@@ -2,6 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
+  Input,
   Output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
@@ -106,6 +107,16 @@ import { RouterModule } from '@angular/router';
         >
           <mat-icon>hotel</mat-icon>
         </button>
+        @if (loggedIn) {
+          <button
+            mat-icon-button
+            (click)="logout.emit()"
+            matTooltip="Log out"
+            aria-label="Log out"
+          >
+            <mat-icon>logout</mat-icon>
+          </button>
+        }
       </div>
     </mat-toolbar>
   `,
@@ -124,4 +135,6 @@ import { RouterModule } from '@angular/router';
 })
 export class MainToolbarComponent {
   @Output() toggleSidenav = new EventEmitter<void>();
+  @Output() logout = new EventEmitter<void>();
+  @Input() loggedIn: boolean;
 }

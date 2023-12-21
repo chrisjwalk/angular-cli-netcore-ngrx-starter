@@ -19,7 +19,7 @@
       }
     },
     "serve": {
-      "executor": "./tools/builders/dotnet-builder:run",
+      "executor": "./tools/builders/dotnet-builder:watch",
       "options": {
         "project": "apps/api/Api"
       }

@@ -14,4 +14,20 @@
       @apply text-sky-300;
     }
   }
+
+  .loading {
+    animation: loading 1s linear infinite alternate;
+  }
+
+  @keyframes loading {
+    0% {
+      opacity: 0.6;
+    }
+    50% {
+      opacity: 1;
+    }
+    100% {
+      opacity: 0.6;
+    }
+  }
 }

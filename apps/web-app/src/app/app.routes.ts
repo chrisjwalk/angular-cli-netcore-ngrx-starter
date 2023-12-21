@@ -14,5 +14,9 @@ export const routes: Route[] = [
     loadChildren: () =>
       import('@myorg/weather-forecast').then((m) => m.weatherForecastRoutes),
   },
+  {
+    path: 'login',
+    loadChildren: () => import('@myorg/login').then((m) => m.loginRoutes),
+  },
   { path: '**', redirectTo: '' },
 ];

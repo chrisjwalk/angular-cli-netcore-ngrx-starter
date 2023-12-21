@@ -1,0 +1,32 @@
+@Api_HostAddress = https://localhost:60254/api
+@access_token = CfDJ8PULUqOvBGtLke-t-WHQZCRyCTyQDvz_33EaksarCb3TCbt7PcUmdRBLL6blzMAou_MewJf3hGKXqLVveQjC9jGDwHfRKKV-QhVlYmfsR1_itt2m-qczprgiRo8GOOf6s8_Cl-Xo5a5x-xSr9I5s8-64q3X7h7qdNPNzMQ35uDQ4t9NJ2lD5fhLZiEKBnUTcHo1-G0wX0T8ikm2DMsKtXE0sVgj5YYx63NsXJWRI5PlksuN7UzdC_6wI7g0RVkhrichzByUNHguJJmBRhS0VzStSfFbV3-YKtH2R7jKDjyJHWn6MOKx7jjRK3uHNm4EftdGAvZ8wKGEI_6JXxSGoX-kB9aKusVUXfQYxnxCMh8SPpi2TsJ0FQnDQ6eCTwXYFi_N_Q3pez04IojUiqlPWWME-1A3OifjiPlhrYxgdBGd2ky99QkyiOCUF5dSNe7860sFiB-7fOTPMUPd3eZr1dm0vUMLLVr4d6mH4EbZslZzw6h3-e7-whFYuKbclz4u9LmT8NyTP9FBQRxKAJjq7nmlTOnUqls5utoW1eSMVBFa615R2v4BKt4tddW-6WpBve5bz_lZTz0wet_PvboBkZlAS7h9Zi9LAx0b8q_XiOUWZswyGnRYvLAhekJMr8sQxxAHp8vcxZWg-fmDeD9c7zRnbN811wBp6_xXm0onQM-rWseQWdu4mUTNjhBxlCuSPzg
+@email = test@test.com
+@password = SuperSecret1!
+
+### Register
+POST {{Api_HostAddress}}/account/register
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+### Login and retrieve tokens
+POST {{Api_HostAddress}}/account/login
+Content-Type: application/json
+
+{
+  "email": "{{email}}",
+  "password": "{{password}}"
+}
+
+###
+
+GET {{Api_HostAddress}}/weatherforecastsplus
+Accept: application/json
+Authorization: Bearer {{access_token}}
+
+###

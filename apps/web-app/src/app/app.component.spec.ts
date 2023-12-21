@@ -1,3 +1,4 @@
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { RouterTestingModule } from '@angular/router/testing';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { render, screen } from '@testing-library/angular';
@@ -9,6 +10,7 @@ describe('AppComponent', () => {
     await render(AppComponent, {
       imports: [
         RouterTestingModule,
+        HttpClientTestingModule,
         ServiceWorkerModule.register('/ngsw-worker.js', {
           enabled: false,
         }),

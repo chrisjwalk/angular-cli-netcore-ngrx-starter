@@ -97,7 +97,7 @@ describe('WeatherForecastService', () => {
   });
 
   it('WeatherForecastService.getForecasts() should return data', () => {
-    service.getForecasts(1).subscribe((result) => {
+    service.getForecasts(1, false).subscribe((result) => {
       expect(result).toEqual([weatherForecasts[0]]);
     });
 
@@ -109,7 +109,7 @@ describe('WeatherForecastService', () => {
   });
 
   it('WeatherForecastService.refresh(count) should return data of length count', () => {
-    service.getForecasts(10).subscribe((data) => {
+    service.getForecasts(10, false).subscribe((data) => {
       expect(data.length).toBe(10);
     });
 

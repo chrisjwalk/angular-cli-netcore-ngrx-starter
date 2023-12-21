@@ -19,6 +19,11 @@
       "implementation": "./dist/run",
       "schema": "./src/run/schema.json",
       "description": "Runs dotnet project."
+    },
+    "watch": {
+      "implementation": "./dist/watch",
+      "schema": "./src/watch/schema.json",
+      "description": "Watches dotnet project."
     }
   }
 }

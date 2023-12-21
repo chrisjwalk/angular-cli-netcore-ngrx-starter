@@ -55,27 +55,6 @@ import { WeatherForecast } from '../../models/weather-forecast';
       </div>
     }
   `,
-  styles: [
-    `
-      :host {
-        .loading {
-          animation: loading 1s linear infinite alternate;
-        }
-
-        @keyframes loading {
-          0% {
-            opacity: 0.6;
-          }
-          50% {
-            opacity: 1;
-          }
-          100% {
-            opacity: 0.6;
-          }
-        }
-      }
-    `,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastTableComponent {

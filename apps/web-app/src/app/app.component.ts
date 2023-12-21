@@ -9,6 +9,7 @@ import {
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
+import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
   MainToolbarComponent,
@@ -31,7 +32,11 @@ import { getState } from '@ngrx/signals';
   selector: 'app-root',
   template: `
     @if (vm(); as vm) {
-      <lib-main-toolbar (toggleSidenav)="store.toggleSidenav()" />
+      <lib-main-toolbar
+        (toggleSidenav)="store.toggleSidenav()"
+        (logout)="authStore.logout()"
+        [loggedIn]="vm.loggedIn"
+      />
       <mat-sidenav-container fullscreen>
         <mat-sidenav
           mode="over"
@@ -62,8 +67,10 @@ export class AppComponent {
   private swUpdateStore = inject(SwUpdateStore);
 
   store = inject(LayoutStore);
+  authStore = inject(AuthStore);
   vm = computed(() => ({
     ...getState(this.store),
+    loggedIn: this.authStore.loggedIn(),
   }));
 
   updateReady = effect(() => {

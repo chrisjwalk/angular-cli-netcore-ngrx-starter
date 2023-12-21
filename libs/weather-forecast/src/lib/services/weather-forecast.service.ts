@@ -9,9 +9,12 @@ import { WeatherForecast } from '../models/weather-forecast';
 export class WeatherForecastService {
   private http = inject(HttpClient);
 
-  getForecasts(count: number) {
-    return this.http.get<WeatherForecast[]>('/api/weatherforecasts', {
-      params: { count },
-    });
+  getForecasts(count: number, plus: boolean) {
+    return this.http.get<WeatherForecast[]>(
+      plus ? '/api/weatherforecastsplus' : '/api/weatherforecasts',
+      {
+        params: { count },
+      },
+    );
   }
 }

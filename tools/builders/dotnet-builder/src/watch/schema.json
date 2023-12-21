@@ -1,0 +1,21 @@
+{
+  "$schema": "http://json-schema.org/schema",
+  "type": "object",
+  "properties": {
+    "project": {
+      "type": "string"
+    },
+    "launchProfile": {
+      "type": "string"
+    },
+    "verbosityLevel": {
+      "type": "string"
+    },
+    "noBuild": {
+      "type": "boolean"
+    },
+    "noRestore": {
+      "type": "boolean"
+    }
+  }
+}

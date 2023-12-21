@@ -1,7 +1,8 @@
-using System;
+  using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -35,7 +36,14 @@ namespace Api.Controllers
             });
         }
 
-        public class WeatherForecast
+    [HttpGet("weatherforecastsplus")]
+    [Authorize]
+    public IEnumerable<WeatherForecast> WeatherForecastsPlus(int count = 10)
+    {
+      return WeatherForecasts(count);
+    }
+
+    public class WeatherForecast
         {
             public string Id {
                 get {

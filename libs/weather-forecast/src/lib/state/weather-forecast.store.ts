@@ -37,7 +37,7 @@ export function withWeatherForecastFeature() {
           pipe(
             tap((count) => patchState(store, { count, loading: true })),
             switchMap((count) =>
-              weatherForecastService.getForecasts(count).pipe(
+              weatherForecastService.getForecasts(count, false).pipe(
                 tapResponse(
                   (weatherForecasts) =>
                     patchState(
