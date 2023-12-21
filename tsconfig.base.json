@@ -16,12 +16,12 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "paths": {
+      "@myorg/auth": ["libs/auth/src/index.ts"],
       "@myorg/counter": ["libs/counter/src/index.ts"],
       "@myorg/home": ["libs/home/src/index.ts"],
       "@myorg/login": ["libs/login/src/index.ts"],
       "@myorg/shared": ["libs/shared/src/index.ts"],
-      "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"],
-      "@myorg/auth": ["libs/auth/src/index.ts"]
+      "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
