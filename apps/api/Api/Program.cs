@@ -43,9 +43,7 @@ if (app.Environment.IsDevelopment())
 }
 else
 {
-    app.UseDeveloperExceptionPage();
-
-    // app.UseExceptionHandler("/Error");
+    app.UseExceptionHandler("/Error");
     app.UseHsts();
 }
 
