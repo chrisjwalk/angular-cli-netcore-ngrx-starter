@@ -88,6 +88,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
 export class LoginComponent implements OnInit {
   private formBuilder = inject(FormBuilder);
   private layoutStore = inject(LayoutStore);
+
   authStore = inject(AuthStore);
   store = inject(LoginStore);
 

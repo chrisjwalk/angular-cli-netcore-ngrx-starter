@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   ActivatedRouteSnapshot,
@@ -14,7 +15,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, switchMap, tap } from 'rxjs';
+import { filter, pipe, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
@@ -93,9 +94,7 @@ export const AuthStore = signalStore(
                   snackBar.open('Login Successful', 'Close', {
                     duration: 5000,
                   });
-                  patchState(store, {
-                    loading: false,
-                  });
+                  patchState(store, { loading: false });
                   if (store.redirect()) {
                     router.navigate([store.redirect().state.url]);
                     patchState(store, { redirect: null });
@@ -111,7 +110,7 @@ export const AuthStore = signalStore(
                   snackBar.open('Login failed', 'Close', {
                     duration: 5000,
                   });
-                  patchState(store, { error, loading: false });
+                  patchState(store, { error, loggedIn: false, loading: false });
                 },
               ),
             ),
@@ -137,7 +136,7 @@ export const AuthStore = signalStore(
                 },
                 (error) => {
                   console.error(error);
-                  patchState(store, { error, loading: false });
+                  patchState(store, { error, loggedIn: false, loading: false });
                 },
               ),
             ),
@@ -187,11 +186,13 @@ export function requiresLoginCanActivateFn(
   const authStore = inject(AuthStore);
   const router = inject(Router);
 
-  if (!authStore.loggedIn()) {
-    patchState(authStore, { redirect: { route, state } });
-    router.navigate(loginRouterLink);
-    return false;
-  }
-
-  return true;
+  return toObservable(authStore.loggedIn).pipe(
+    filter((loggedIn) => loggedIn !== null || authStore.missingRefreshToken()),
+    tap(() => {
+      if (!authStore.loggedIn()) {
+        patchState(authStore, { redirect: { route, state } });
+        router.navigate(loginRouterLink);
+      }
+    }),
+  );
 }
