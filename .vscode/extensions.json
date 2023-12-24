@@ -5,6 +5,9 @@
     "esbenp.prettier-vscode",
     "firsttris.vscode-jest-runner",
     "dbaeumer.vscode-eslint",
-    "eamodio.gitlens"
+    "eamodio.gitlens",
+    "bradlc.vscode-tailwindcss",
+    "csharpier.csharpier-vscode",
+    "ms-dotnettools.csharp"
   ]
 }
