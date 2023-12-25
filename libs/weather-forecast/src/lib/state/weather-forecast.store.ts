@@ -1,4 +1,5 @@
 import { inject } from '@angular/core';
+import { AuthStore } from '@myorg/auth';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
@@ -33,11 +34,11 @@ export function withWeatherForecastFeature() {
     withState(weatherForecastsInitialState),
     withMethods(
       (store, weatherForecastService = inject(WeatherForecastService)) => ({
-        getForecasts: rxMethod<number>(
+        getForecasts: rxMethod<{ count: number; plus: boolean }>(
           pipe(
-            tap((count) => patchState(store, { count, loading: true })),
-            switchMap((count) =>
-              weatherForecastService.getForecasts(count, false).pipe(
+            tap(({ count }) => patchState(store, { count, loading: true })),
+            switchMap(({ count, plus }) =>
+              weatherForecastService.getForecasts(count, plus).pipe(
                 tapResponse(
                   (weatherForecasts) =>
                     patchState(
@@ -61,8 +62,8 @@ export function withWeatherForecastFeature() {
       }),
     ),
     withHooks({
-      onInit({ getForecasts }) {
-        getForecasts(10);
+      onInit({ getForecasts }, authStore = inject(AuthStore)) {
+        getForecasts({ count: 10, plus: authStore.pageRequiresLogin() });
       },
     }),
   );

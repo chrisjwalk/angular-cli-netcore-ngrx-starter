@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterModule } from '@angular/router';
+import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
@@ -34,7 +34,7 @@ import { getState } from '@ngrx/signals';
     @if (vm(); as vm) {
       <lib-main-toolbar
         (toggleSidenav)="store.toggleSidenav()"
-        (logout)="authStore.logout()"
+        (logout)="authStore.logout(vm.pageRequiresLogin)"
         [loggedIn]="vm.loggedIn"
       />
       <mat-sidenav-container fullscreen>
@@ -65,12 +65,14 @@ import { getState } from '@ngrx/signals';
 })
 export class AppComponent {
   private swUpdateStore = inject(SwUpdateStore);
+  private route = inject(ActivatedRoute);
 
   store = inject(LayoutStore);
   authStore = inject(AuthStore);
   vm = computed(() => ({
     ...getState(this.store),
     loggedIn: this.authStore.loggedIn(),
+    pageRequiresLogin: this.authStore.pageRequiresLogin(),
   }));
 
   updateReady = effect(() => {

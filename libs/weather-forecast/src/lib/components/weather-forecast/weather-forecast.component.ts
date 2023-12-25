@@ -9,6 +9,7 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
+import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
   PageContainerComponent,
@@ -41,12 +42,14 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
             #count
             type="number"
             placeholder="Forecast Days"
-            (keyup.enter)="store.getForecasts(+count.value)"
+            (keyup.enter)="
+              store.getForecasts({ count: +count.value, plus: vm.plus })
+            "
             [value]="vm.count"
           />
         </mat-form-field>
         <lib-page-toolbar-button
-          (click)="store.getForecasts(+count.value)"
+          (click)="store.getForecasts({ count: +count.value, plus: vm.plus })"
           tooltip="Get Forecasts"
         >
           <mat-icon>refresh</mat-icon>
@@ -64,11 +67,13 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
 })
 export class WeatherForecastComponent implements OnInit {
   private layoutStore = inject(LayoutStore);
+  private authStore = inject(AuthStore);
 
   store = inject(WeatherForecastStore);
   vm = computed(() => ({
     ...getState(this.layoutStore),
     ...getState(this.store),
+    plus: this.authStore.pageRequiresLogin(),
     weatherForecasts: this.store.entities(),
   }));
 

@@ -57,6 +57,7 @@ export type AuthState = {
   redirect: RedirectRouterState;
   loggedIn: boolean;
   response: AuthResponseState;
+  pageRequiresLogin: boolean;
 };
 
 export type RedirectRouterState = {
@@ -71,6 +72,7 @@ export const authInitialState: AuthState = {
   redirect: null,
   loggedIn: null,
   response: authResponseInitialState,
+  pageRequiresLogin: null,
 };
 
 export const AuthStore = signalStore(
@@ -174,12 +176,17 @@ export const AuthStore = signalStore(
           ),
         ),
       ),
-      logout: () => {
+      logout: (redirectToLogin: boolean) => {
         removeRefreshToken();
         patchState(store, authInitialState);
-        snackBar.open('Logout Successful', 'Close', {
-          duration: 5000,
-        });
+
+        if (redirectToLogin) {
+          router.navigate(loginRouterLink);
+        } else {
+          snackBar.open('Logout Successful', 'Close', {
+            duration: 5000,
+          });
+        }
       },
     }),
   ),
@@ -216,6 +223,7 @@ export function requiresLoginCanActivateFn(
 ) {
   const authStore = inject(AuthStore);
   const router = inject(Router);
+  patchState(authStore, { pageRequiresLogin: true });
 
   return toObservable(authStore.loggedIn).pipe(
     filter((loggedIn) => loggedIn !== null || authStore.missingRefreshToken()),
@@ -226,4 +234,11 @@ export function requiresLoginCanActivateFn(
       }
     }),
   );
+}
+
+export function requiresLoginCanDeactivateFn() {
+  const authStore = inject(AuthStore);
+  patchState(authStore, { pageRequiresLogin: false });
+
+  return true;
 }
