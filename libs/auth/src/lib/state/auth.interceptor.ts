@@ -13,49 +13,49 @@ export function authInterceptor(
   const loggedIn$ = toObservable(store.loggedIn);
 
   if (store.loggedIn()) {
-    req = req.clone({
-      setHeaders: {
-        Authorization: `Bearer ${store.accessToken()}`,
-      },
-    });
+    req = setAuthorizationHeader(req, store.accessToken());
   }
 
   return next(req).pipe(
     catchError((error) => {
-      if (error.status === 401) {
+      if (error.status === 401 || store.expired()) {
         const refreshToken = getRefreshToken();
 
-        if (refreshToken) {
-          store.refresh({ refreshToken });
-
-          return loggedIn$.pipe(
-            filter(
-              (loggedIn) => loggedIn !== null && store.loggedIn() !== null,
-            ),
-            switchMap((loggedIn) => {
-              if (!loggedIn) {
-                throw error;
-              }
-              const newAccessToken = store.accessToken();
-              req = req.clone({
-                setHeaders: {
-                  Authorization: `Bearer ${newAccessToken}`,
-                },
-              });
-              return next(req);
-            }),
-            catchError((error) => {
-              store.logout(true);
-              throw error;
-            }),
-          );
-        } else {
+        if (!refreshToken) {
           store.logout(true);
           throw error;
         }
-      } else {
-        throw error;
+
+        store.refresh({ refreshToken });
+
+        return loggedIn$.pipe(
+          filter(() => store.loggedIn() !== null),
+          switchMap(() => {
+            if (!store.loggedIn()) {
+              throw error;
+            }
+
+            return next(setAuthorizationHeader(req, store.accessToken()));
+          }),
+          catchError((error) => {
+            store.logout(true);
+            throw error;
+          }),
+        );
       }
+
+      throw error;
     }),
   );
+}
+
+function setAuthorizationHeader(
+  req: HttpRequest<unknown>,
+  accessToken: string,
+) {
+  return req.clone({
+    setHeaders: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 }
