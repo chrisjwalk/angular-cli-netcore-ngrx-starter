@@ -75,6 +75,8 @@ export const authInitialState: AuthState = {
   pageRequiresLogin: null,
 };
 
+export type AuthStoreInstance = InstanceType<typeof AuthStore>;
+
 export const refreshTokenKey = 'refreshToken';
 export const loginRouterLink = ['/login'];
 export const homeRouterLink = ['/'];
