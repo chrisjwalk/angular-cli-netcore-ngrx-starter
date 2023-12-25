@@ -1,4 +1,4 @@
-import { inject } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
@@ -10,6 +10,7 @@ import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
   signalStore,
+  withComputed,
   withHooks,
   withMethods,
   withState,
@@ -30,11 +31,15 @@ export type Login = {
   twoFactorRecoveryCode: string;
 };
 
-export type AuthResponseState = {
+export type AuthResponse = {
   tokenType: string;
   accessToken: string;
   expiresIn: number;
   refreshToken: string;
+};
+
+export type AuthResponseState = AuthResponse & {
+  accessTokenIssued: Date;
 };
 
 export const authResponseInitialState: AuthResponseState = {
@@ -42,6 +47,7 @@ export const authResponseInitialState: AuthResponseState = {
   accessToken: null,
   expiresIn: null,
   refreshToken: null,
+  accessTokenIssued: null,
 };
 
 export type AuthState = {
@@ -50,6 +56,7 @@ export type AuthState = {
   missingRefreshToken: boolean;
   redirect: RedirectRouterState;
   loggedIn: boolean;
+  response: AuthResponseState;
 };
 
 export type RedirectRouterState = {
@@ -63,29 +70,46 @@ export const authInitialState: AuthState = {
   missingRefreshToken: null,
   redirect: null,
   loggedIn: null,
+  response: authResponseInitialState,
 };
-
-export const AuthResponseStore = signalStore(
-  { providedIn: 'root' },
-  withState(authResponseInitialState),
-);
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
   withState(authInitialState),
+  withComputed((state) => ({
+    expiresAt: computed(() =>
+      state.response()
+        ? new Date(
+            state.response().accessTokenIssued.getTime() +
+              state.response().expiresIn * 1000,
+          )
+        : null,
+    ),
+    accessToken: computed(() => state.response().accessToken),
+    refreshToken: computed(() => state.response().refreshToken),
+  })),
+  withComputed((state) => ({
+    expired: computed(() =>
+      state.expiresAt() ? state.expiresAt().getTime() < Date.now() : null,
+    ),
+  })),
   withMethods(
     (
       store,
       loginService = inject(AuthService),
       snackBar = inject(MatSnackBar),
       router = inject(Router),
-      authResponseStore = inject(AuthResponseStore),
     ) => ({
       login: rxMethod<Login>(
         pipe(
           tap(() => {
             removeRefreshToken();
-            patchState(store, { loggedIn: null, error: null, loading: true });
+            patchState(store, {
+              loggedIn: null,
+              error: null,
+              loading: true,
+              response: authResponseInitialState,
+            });
           }),
           switchMap((request) =>
             loginService.login(request).pipe(
@@ -94,7 +118,6 @@ export const AuthStore = signalStore(
                   snackBar.open('Login Successful', 'Close', {
                     duration: 5000,
                   });
-                  patchState(store, { loading: false });
                   if (store.redirect()) {
                     router.navigate([store.redirect().state.url]);
                     patchState(store, { redirect: null });
@@ -102,8 +125,11 @@ export const AuthStore = signalStore(
                     router.navigate(['/']);
                   }
                   storeRefreshToken(response);
-                  patchState(authResponseStore, response);
-                  patchState(store, { loggedIn: true });
+                  patchState(store, {
+                    loading: false,
+                    loggedIn: true,
+                    response: { ...response, accessTokenIssued: new Date() },
+                  });
                 },
                 (error) => {
                   console.error(error);
@@ -121,17 +147,22 @@ export const AuthStore = signalStore(
         pipe(
           tap(() => {
             removeRefreshToken();
-            patchState(store, { loggedIn: null, error: null, loading: true });
+            patchState(store, {
+              loggedIn: null,
+              error: null,
+              loading: true,
+              response: authResponseInitialState,
+            });
           }),
           switchMap((refresh) =>
             loginService.refresh(refresh).pipe(
               tapResponse(
                 (response) => {
                   storeRefreshToken(response);
-                  patchState(authResponseStore, response);
                   patchState(store, {
                     loading: false,
                     loggedIn: true,
+                    response: { ...response, accessTokenIssued: new Date() },
                   });
                 },
                 (error) => {
@@ -167,7 +198,7 @@ export const AuthStore = signalStore(
 export const refreshTokenKey = 'refreshToken';
 export const loginRouterLink = ['/login'];
 
-export function storeRefreshToken(response: AuthResponseState) {
+export function storeRefreshToken(response: AuthResponse) {
   localStorage.setItem(refreshTokenKey, response.refreshToken);
 }
 
