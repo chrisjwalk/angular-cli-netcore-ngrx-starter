@@ -1,11 +1,11 @@
-import { HttpClientModule } from '@angular/common/http';
 import {
-  HttpClientTestingModule,
   HttpTestingController,
+  provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { provideHttpClient } from '@angular/common/http';
 import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from './weather-forecast.service';
 
@@ -88,8 +88,12 @@ describe('WeatherForecastService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [HttpClientModule, MatSnackBarModule, HttpClientTestingModule],
-      providers: [{ provide: 'BASE_URL', useValue: '' }],
+      imports: [MatSnackBarModule],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: 'BASE_URL', useValue: '' },
+      ],
     });
 
     service = TestBed.inject(WeatherForecastService);

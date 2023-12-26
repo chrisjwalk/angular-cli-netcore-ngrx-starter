@@ -1,7 +1,7 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { Observable, catchError, filter, switchMap } from 'rxjs';
+import { Observable, catchError, filter, startWith, switchMap } from 'rxjs';
 
 import { AuthStore, getRefreshToken } from './auth.store';
 
@@ -29,6 +29,7 @@ export function authInterceptor(
         store.refresh({ refreshToken });
 
         return loggedIn$.pipe(
+          startWith(store.loggedIn()),
           filter(() => store.loggedIn() !== null),
           switchMap(() => {
             if (!store.loggedIn()) {

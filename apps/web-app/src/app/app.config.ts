@@ -6,8 +6,8 @@ import {
   withEnabledBlockingInitialNavigation,
 } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
-
 import { authInterceptor } from '@myorg/auth';
+
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 
