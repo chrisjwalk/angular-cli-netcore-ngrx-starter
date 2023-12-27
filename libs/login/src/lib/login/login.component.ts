@@ -94,8 +94,8 @@ export class LoginComponent implements OnInit {
 
   vm = computed(() => ({
     ...getState(this.layoutStore),
-    ...getState(this.authStore),
     ...getState(this.store),
+    loading: this.authStore.loading(),
   }));
   formGroup = getLoginFormGroup(this.formBuilder, this.store);
 

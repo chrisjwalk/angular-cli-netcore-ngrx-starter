@@ -59,7 +59,6 @@ export type LoginStatus =
   | 'logged-out';
 
 export type AuthState = {
-  loading: boolean;
   error: any;
   redirect: RedirectRouterState;
   response: AuthResponseState;
@@ -73,7 +72,6 @@ export type RedirectRouterState = {
 };
 
 export const authInitialState: AuthState = {
-  loading: null,
   error: null,
   redirect: null,
   response: authResponseInitialState,
@@ -103,9 +101,11 @@ export const AuthStore = signalStore(
     refreshToken: computed(() => state.response().refreshToken),
     loginSuccess: computed(() => state.loginStatus() === 'success'),
     loginError: computed(() => state.loginStatus() === 'error'),
+    loading: computed(() => state.loginStatus() === 'loading'),
     noRefreshTokenAvailable: computed(
       () => state.loginStatus() === 'no-refresh-token',
     ),
+    loggedOut: computed(() => state.loginStatus() === 'logged-out'),
   })),
   withComputed((state) => ({
     expired: computed(() =>
@@ -124,14 +124,12 @@ export const AuthStore = signalStore(
       removeRefreshToken();
       patchState(store, {
         error: null,
-        loading: true,
         response: authResponseInitialState,
         loginStatus: 'loading',
       });
     },
     loginSuccessful(response: AuthResponse) {
       patchState(store, {
-        loading: false,
         loginStatus: 'success',
         response: { ...response, accessTokenIssued: new Date() },
       });
@@ -142,7 +140,6 @@ export const AuthStore = signalStore(
       patchState(store, {
         error,
         loginStatus: 'error',
-        loading: false,
       });
     },
     loginReset() {
@@ -160,7 +157,7 @@ export const AuthStore = signalStore(
     loginRequired(pageRequiresLogin: boolean) {
       patchState(store, { pageRequiresLogin });
     },
-    getLoginStatusObservable() {
+    loginStatusToObservable() {
       return toObservable(store.loginStatus).pipe(startWith(null));
     },
   })),
@@ -251,7 +248,7 @@ export function requiresLoginCanActivateFn(
 ) {
   const store = inject(AuthStore);
   const router = inject(Router);
-  const loginStatus$ = store.getLoginStatusObservable();
+  const loginStatus$ = store.loginStatusToObservable();
 
   store.loginRequired(true);
 

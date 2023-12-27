@@ -9,7 +9,7 @@ export function authInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   const store = inject(AuthStore);
-  const loginStatus$ = store.getLoginStatusObservable();
+  const loginStatus$ = store.loginStatusToObservable();
 
   if (store.loggedIn()) {
     req = setAuthorizationHeader(req, store.accessToken());

@@ -32,6 +32,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
     MatIconModule,
     ForecastTableComponent,
   ],
+  providers: [WeatherForecastStore],
   selector: 'lib-weather-forecast',
   template: `
     @if (vm(); as vm) {

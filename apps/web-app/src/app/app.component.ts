@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { ActivatedRoute, RouterModule } from '@angular/router';
+import { RouterModule } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
@@ -65,7 +65,6 @@ import { getState } from '@ngrx/signals';
 })
 export class AppComponent {
   private swUpdateStore = inject(SwUpdateStore);
-  private route = inject(ActivatedRoute);
 
   store = inject(LayoutStore);
   authStore = inject(AuthStore);

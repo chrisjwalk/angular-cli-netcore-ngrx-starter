@@ -26,7 +26,7 @@ describe('AuthStore', () => {
       expect(store).toBeDefined();
     }));
 
-  it('should have the no refresh token state when no refresh token is  ', () =>
+  it('should have the no refresh token state when no refresh token is unavailble', () =>
     TestBed.runInInjectionContext(() => {
       expect(getState(store)).toEqual({
         ...authInitialState,
@@ -59,12 +59,14 @@ describe('AuthStore', () => {
 
       expect(store.loading()).toBe(false);
       expect(store.loggedIn()).toBe(false);
+      expect(store.loginError()).toBe(true);
     }));
 
   it('should set the logged in state to logged out when logout is called', () =>
     TestBed.runInInjectionContext(() => {
       store.logout(false);
       expect(store.loginStatus()).toBe('logged-out');
+      expect(store.loggedOut()).toBe(true);
       expect(store.loggedIn()).toBe(false);
     }));
 });

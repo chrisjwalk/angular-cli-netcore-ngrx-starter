@@ -4,12 +4,15 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { of, throwError } from 'rxjs';
 
-import { WeatherForecastService } from '../services/weather-forecast.service';
+import {
+  WeatherForecastService,
+  WeatherForecastServiceType,
+} from '../services/weather-forecast.service';
 import { weatherForecasts } from '../services/weather-forecast.service.spec';
 import { WeatherForecastStore } from './weather-forecast.store';
 
 describe('WeatherForecastStore', () => {
-  let service: WeatherForecastService;
+  let service: WeatherForecastServiceType;
   let store: InstanceType<typeof WeatherForecastStore>;
 
   beforeEach(() => {
