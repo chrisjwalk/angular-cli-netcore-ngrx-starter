@@ -1,7 +1,6 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { toObservable } from '@angular/core/rxjs-interop';
-import { Observable, catchError, filter, startWith, switchMap } from 'rxjs';
+import { Observable, catchError, filter, switchMap } from 'rxjs';
 
 import { AuthStore, getRefreshToken } from './auth.store';
 
@@ -10,7 +9,7 @@ export function authInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   const store = inject(AuthStore);
-  const loggedIn$ = toObservable(store.loggedIn);
+  const loginStatus$ = store.getLoginStatusObservable();
 
   if (store.loggedIn()) {
     req = setAuthorizationHeader(req, store.accessToken());
@@ -28,9 +27,8 @@ export function authInterceptor(
 
         store.refresh({ refreshToken });
 
-        return loggedIn$.pipe(
-          startWith(store.loggedIn()),
-          filter(() => store.loggedIn() !== null),
+        return loginStatus$.pipe(
+          filter(() => store.loginAttempted()),
           switchMap(() => {
             if (!store.loggedIn()) {
               throw error;

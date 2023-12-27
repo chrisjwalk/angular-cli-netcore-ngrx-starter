@@ -16,7 +16,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { filter, pipe, switchMap, tap } from 'rxjs';
+import { filter, pipe, startWith, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
@@ -50,14 +50,21 @@ export const authResponseInitialState: AuthResponseState = {
   accessTokenIssued: null,
 };
 
+export type LoginStatus =
+  | 'none'
+  | 'no-refresh-token'
+  | 'loading'
+  | 'success'
+  | 'error'
+  | 'logged-out';
+
 export type AuthState = {
   loading: boolean;
   error: any;
-  missingRefreshToken: boolean;
   redirect: RedirectRouterState;
-  loggedIn: boolean;
   response: AuthResponseState;
   pageRequiresLogin: boolean;
+  loginStatus: LoginStatus;
 };
 
 export type RedirectRouterState = {
@@ -68,11 +75,10 @@ export type RedirectRouterState = {
 export const authInitialState: AuthState = {
   loading: null,
   error: null,
-  missingRefreshToken: null,
   redirect: null,
-  loggedIn: null,
   response: authResponseInitialState,
   pageRequiresLogin: null,
+  loginStatus: 'none',
 };
 
 export type AuthStoreInstance = InstanceType<typeof AuthStore>;
@@ -95,33 +101,49 @@ export const AuthStore = signalStore(
     ),
     accessToken: computed(() => state.response().accessToken),
     refreshToken: computed(() => state.response().refreshToken),
+    loginSuccess: computed(() => state.loginStatus() === 'success'),
+    loginError: computed(() => state.loginStatus() === 'error'),
+    noRefreshTokenAvailable: computed(
+      () => state.loginStatus() === 'no-refresh-token',
+    ),
   })),
   withComputed((state) => ({
     expired: computed(() =>
       state.expiresAt() ? state.expiresAt().getTime() < Date.now() : null,
     ),
+    loginAttempted: computed(
+      () =>
+        state.loginError() ||
+        state.loginSuccess() ||
+        state.noRefreshTokenAvailable(),
+    ),
+    loggedIn: computed(() => state.loginSuccess() && !!state.accessToken()),
   })),
   withMethods((store, router = inject(Router)) => ({
     loginStart() {
       removeRefreshToken();
       patchState(store, {
-        loggedIn: null,
         error: null,
         loading: true,
         response: authResponseInitialState,
+        loginStatus: 'loading',
       });
     },
-    loginSuccess(response: AuthResponse) {
+    loginSuccessful(response: AuthResponse) {
       patchState(store, {
         loading: false,
-        loggedIn: true,
+        loginStatus: 'success',
         response: { ...response, accessTokenIssued: new Date() },
       });
       storeRefreshToken(response);
     },
-    loginError(error: any) {
+    loginFailure(error: any) {
       console.error(error);
-      patchState(store, { error, loggedIn: false, loading: false });
+      patchState(store, {
+        error,
+        loginStatus: 'error',
+        loading: false,
+      });
     },
     loginReset() {
       removeRefreshToken();
@@ -134,6 +156,12 @@ export const AuthStore = signalStore(
       } else {
         router.navigate(homeRouterLink);
       }
+    },
+    loginRequired(pageRequiresLogin: boolean) {
+      patchState(store, { pageRequiresLogin });
+    },
+    getLoginStatusObservable() {
+      return toObservable(store.loginStatus).pipe(startWith(null));
     },
   })),
   withMethods(
@@ -154,13 +182,13 @@ export const AuthStore = signalStore(
                     duration: 5000,
                   });
                   store.redirectAfterLogin();
-                  store.loginSuccess(response);
+                  store.loginSuccessful(response);
                 },
                 (error) => {
                   snackBar.open('Login failed', 'Close', {
                     duration: 5000,
                   });
-                  store.loginError(error);
+                  store.loginFailure(error);
                 },
               ),
             ),
@@ -173,8 +201,8 @@ export const AuthStore = signalStore(
           switchMap((refresh) =>
             authService.refresh(refresh).pipe(
               tapResponse(
-                (response) => store.loginSuccess(response),
-                (error) => store.loginError(error),
+                (response) => store.loginSuccessful(response),
+                (error) => store.loginFailure(error),
               ),
             ),
           ),
@@ -182,6 +210,7 @@ export const AuthStore = signalStore(
       ),
       logout: (redirectToLogin: boolean) => {
         store.loginReset();
+        patchState(store, { loginStatus: 'logged-out' });
         if (redirectToLogin) {
           router.navigate(loginRouterLink);
         } else {
@@ -198,7 +227,7 @@ export const AuthStore = signalStore(
       if (refreshToken) {
         store.refresh({ refreshToken });
       } else {
-        patchState(store, { missingRefreshToken: true });
+        patchState(store, { loginStatus: 'no-refresh-token' });
       }
     },
   }),
@@ -220,16 +249,17 @@ export function requiresLoginCanActivateFn(
   route: ActivatedRouteSnapshot,
   state: RouterStateSnapshot,
 ) {
-  const authStore = inject(AuthStore);
+  const store = inject(AuthStore);
   const router = inject(Router);
+  const loginStatus$ = store.getLoginStatusObservable();
 
-  patchState(authStore, { pageRequiresLogin: true });
+  store.loginRequired(true);
 
-  return toObservable(authStore.loggedIn).pipe(
-    filter((loggedIn) => loggedIn !== null || authStore.missingRefreshToken()),
+  return loginStatus$.pipe(
+    filter(() => store.loginAttempted()),
     tap(() => {
-      if (!authStore.loggedIn()) {
-        patchState(authStore, { redirect: { route, state } });
+      if (!store.loggedIn()) {
+        patchState(store, { redirect: { route, state } });
         router.navigate(loginRouterLink);
       }
     }),
@@ -237,9 +267,7 @@ export function requiresLoginCanActivateFn(
 }
 
 export function requiresLoginCanDeactivateFn() {
-  const authStore = inject(AuthStore);
-
-  patchState(authStore, { pageRequiresLogin: false });
+  inject(AuthStore).loginRequired(false);
 
   return true;
 }

@@ -26,11 +26,11 @@ describe('AuthStore', () => {
       expect(store).toBeDefined();
     }));
 
-  it('should have the initial state', () =>
+  it('should have the no refresh token state when no refresh token is  ', () =>
     TestBed.runInInjectionContext(() => {
       expect(getState(store)).toEqual({
         ...authInitialState,
-        missingRefreshToken: true,
+        loginStatus: 'no-refresh-token',
       });
     }));
 
@@ -43,7 +43,10 @@ describe('AuthStore', () => {
 
   it('should set the loading state to false and the logged in state to true when login succeeds', () =>
     TestBed.runInInjectionContext(() => {
-      store.loginSuccess({ ...authResponseInitialState });
+      store.loginSuccessful({
+        ...authResponseInitialState,
+        accessToken: 'token',
+      });
 
       expect(store.loading()).toBe(false);
       expect(store.loggedIn()).toBe(true);
@@ -52,16 +55,16 @@ describe('AuthStore', () => {
   it('should set the loading state to false and the logged in state to false when login fails', () =>
     TestBed.runInInjectionContext(() => {
       const error = new Error('Login failed');
-      store.loginError(error);
+      store.loginFailure(error);
 
       expect(store.loading()).toBe(false);
       expect(store.loggedIn()).toBe(false);
     }));
 
-  it('should set the logged in state to null when logout is called', () =>
+  it('should set the logged in state to logged out when logout is called', () =>
     TestBed.runInInjectionContext(() => {
       store.logout(false);
-
-      expect(store.loggedIn()).toBe(null);
+      expect(store.loginStatus()).toBe('logged-out');
+      expect(store.loggedIn()).toBe(false);
     }));
 });

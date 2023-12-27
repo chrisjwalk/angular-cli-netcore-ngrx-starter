@@ -35,7 +35,7 @@ describe('authInterceptor', () => {
           accessToken: 'abc123',
           refreshToken: 'xyz789',
         },
-        loggedIn: true,
+        loginStatus: 'success',
       });
 
       const next = jest.fn().mockReturnValue(of(null));
@@ -57,7 +57,6 @@ describe('authInterceptor', () => {
 
       patchState(store, {
         response: authResponseInitialState,
-        loggedIn: false,
       });
 
       const next = jest.fn().mockReturnValue(of(null));
@@ -79,7 +78,7 @@ describe('authInterceptor', () => {
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
-        loggedIn: true,
+        loginStatus: 'success',
       });
 
       let nextCount = 0;
@@ -139,7 +138,6 @@ describe('authInterceptor', () => {
 
       patchState(store, {
         response: authResponseInitialState,
-        loggedIn: false,
       });
 
       const next = jest.fn().mockReturnValue(
@@ -174,7 +172,7 @@ describe('authInterceptor', () => {
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
-        loggedIn: true,
+        loginStatus: 'success',
       });
       const unauthorizedResponnse = new HttpErrorResponse({
         status: 401,
