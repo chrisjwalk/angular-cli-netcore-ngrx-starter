@@ -9,7 +9,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { WeatherForecast } from '../models/weather-forecast';
 import {
   WeatherForecastService,
-  WeatherForecastServiceType,
+  WeatherForecastServiceFactory,
 } from './weather-forecast.service';
 
 export const weatherForecasts: WeatherForecast[] = [
@@ -86,7 +86,7 @@ export const weatherForecasts: WeatherForecast[] = [
 ];
 
 describe('WeatherForecastService', () => {
-  let service: WeatherForecastServiceType;
+  let service: WeatherForecastServiceFactory;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {

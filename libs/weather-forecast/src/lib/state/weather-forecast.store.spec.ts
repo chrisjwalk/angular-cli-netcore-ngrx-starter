@@ -6,13 +6,13 @@ import { of, throwError } from 'rxjs';
 
 import {
   WeatherForecastService,
-  WeatherForecastServiceType,
+  WeatherForecastServiceFactory,
 } from '../services/weather-forecast.service';
 import { weatherForecasts } from '../services/weather-forecast.service.spec';
 import { WeatherForecastStore } from './weather-forecast.store';
 
 describe('WeatherForecastStore', () => {
-  let service: WeatherForecastServiceType;
+  let service: WeatherForecastServiceFactory;
   let store: InstanceType<typeof WeatherForecastStore>;
 
   beforeEach(() => {
