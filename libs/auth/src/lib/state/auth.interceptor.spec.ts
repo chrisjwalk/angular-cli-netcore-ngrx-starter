@@ -160,6 +160,45 @@ describe('authInterceptor', () => {
         .subscribe();
     }));
 
+  it('should throw an error the refresh token is not available', () =>
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/api/v1/users');
+
+      patchState(store, {
+        response: {
+          ...authResponseInitialState,
+          accessToken: 'abc123',
+          refreshToken: 'xyz789',
+          accessTokenIssued: new Date(),
+          expiresIn: 0,
+        },
+        loginStatus: 'success',
+      });
+      const unauthorizedResponnse = new HttpErrorResponse({
+        status: 401,
+        statusText: 'Unauthorized',
+      });
+
+      const next = jest
+        .fn()
+        .mockReturnValue(throwError(() => unauthorizedResponnse));
+
+      const logout = jest.spyOn(store, 'logout');
+
+      jest.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
+
+      authInterceptor(req, next)
+        .pipe(
+          catchError((error) => {
+            expect(error).toEqual(unauthorizedResponnse);
+            throw error;
+          }),
+        )
+        .subscribe();
+
+      expect(logout).toHaveBeenCalled();
+    }));
+
   it('should throw an error the refresh token is expired', () =>
     TestBed.runInInjectionContext(() => {
       let req = new HttpRequest('GET', '/api/v1/users');
@@ -214,5 +253,71 @@ describe('authInterceptor', () => {
       expect(refresh).toHaveBeenCalledWith({ refreshToken: 'xyz789' });
 
       expect(logout).toHaveBeenCalled();
+    }));
+
+  it('should throw an error when a non 401 error is returned and the user is logged in', () =>
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/api/v1/users');
+
+      patchState(store, {
+        response: {
+          ...authResponseInitialState,
+          accessToken: 'abc123',
+          refreshToken: 'xyz789',
+          accessTokenIssued: new Date(),
+          expiresIn: 3600,
+        },
+        loginStatus: 'success',
+      });
+      const badRequestResponnse = new HttpErrorResponse({
+        status: 400,
+        statusText: 'Bad Request',
+      });
+
+      const next = jest
+        .fn()
+        .mockReturnValue(throwError(() => badRequestResponnse));
+
+      authInterceptor(req, next)
+        .pipe(
+          catchError((error) => {
+            expect(error).toEqual(badRequestResponnse);
+            throw error;
+          }),
+        )
+        .subscribe();
+    }));
+
+  it('should throw an error when a non 401 error is returned and the user expired', () =>
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/api/v1/users');
+
+      patchState(store, {
+        response: {
+          ...authResponseInitialState,
+          accessToken: 'abc123',
+          refreshToken: 'xyz789',
+          accessTokenIssued: new Date(),
+          expiresIn: 0,
+        },
+        loginStatus: 'success',
+      });
+      const badRequestResponnse = new HttpErrorResponse({
+        status: 400,
+        statusText: 'Bad Request',
+      });
+
+      const next = jest
+        .fn()
+        .mockReturnValue(throwError(() => badRequestResponnse));
+
+      authInterceptor(req, next)
+        .pipe(
+          catchError((error) => {
+            expect(error).toEqual(badRequestResponnse);
+            throw error;
+          }),
+        )
+        .subscribe();
     }));
 });

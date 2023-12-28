@@ -3,7 +3,10 @@ import {
   CounterStore,
   CounterStoreInstance,
   conuterInitialState,
+  getCounterFormGroup,
 } from './counter.store';
+import { inject } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 
 describe('CounterStore', () => {
   let store: CounterStoreInstance;
@@ -33,4 +36,18 @@ describe('CounterStore', () => {
     count--;
     expect(store.count()).toBe(count);
   });
+
+  it('should get the counter form group', () =>
+    TestBed.runInInjectionContext(() => {
+      const formGroup = getCounterFormGroup(inject(FormBuilder), store);
+      expect(formGroup).toBeDefined();
+      expect(formGroup.controls.count).toBeDefined();
+      expect(formGroup.controls.count.value).toBe(conuterInitialState.count);
+
+      formGroup.controls.count.setValue(100);
+      expect(store.count()).toBe(100);
+
+      formGroup.patchValue({ count: 200 });
+      expect(store.count()).toBe(200);
+    }));
 });

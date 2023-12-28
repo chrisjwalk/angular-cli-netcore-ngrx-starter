@@ -1,17 +1,29 @@
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
-import { getState } from '@ngrx/signals';
+import {
+  ActivatedRouteSnapshot,
+  Router,
+  RouterStateSnapshot,
+} from '@angular/router';
+import { getState, patchState } from '@ngrx/signals';
+import { of, throwError } from 'rxjs';
 
+import { AuthService, AuthServiceFactory } from '../services/auth.service';
 import {
   AuthStore,
   AuthStoreInstance,
   authInitialState,
   authResponseInitialState,
+  loginRouterLink,
+  requiresLoginCanActivateFn,
+  requiresLoginCanDeactivateFn,
 } from './auth.store';
 
 describe('AuthStore', () => {
   let store: AuthStoreInstance;
+  let authService: AuthServiceFactory;
+  let router: Router;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -19,6 +31,8 @@ describe('AuthStore', () => {
     });
 
     store = TestBed.inject(AuthStore);
+    authService = TestBed.inject(AuthService);
+    router = TestBed.inject(Router);
   });
 
   it('should be created', () =>
@@ -68,5 +82,71 @@ describe('AuthStore', () => {
       expect(store.loginStatus()).toBe('logged-out');
       expect(store.loggedOut()).toBe(true);
       expect(store.loggedIn()).toBe(false);
+    }));
+
+  it('should set the status to logged in when login is succesful', () =>
+    TestBed.runInInjectionContext(() => {
+      jest.spyOn(authService, 'login').mockReturnValue(
+        of({
+          ...authResponseInitialState,
+          expiresIn: 3600,
+          accessToken: 'access-token',
+          refreshToken: 'refresh-token',
+        }),
+      );
+      store.login({
+        email: 'username',
+        password: 'password',
+      });
+      expect(store.loginStatus()).toBe('success');
+      expect(store.loggedOut()).toBe(false);
+      expect(store.loggedIn()).toBe(true);
+      expect(store.accessToken()).toBe('access-token');
+      expect(store.refreshToken()).toBe('refresh-token');
+      expect(store.expiresAt()).toEqual(
+        new Date(store.response().accessTokenIssued.getTime() + 3600 * 1000),
+      );
+    }));
+
+  it('should set the status to error in when login is not succesful', () =>
+    TestBed.runInInjectionContext(() => {
+      jest
+        .spyOn(authService, 'login')
+        .mockReturnValue(throwError(() => new Error()));
+      store.login({
+        email: 'username',
+        password: 'password',
+      });
+      expect(store.loginStatus()).toBe('error');
+      expect(store.loggedOut()).toBe(false);
+      expect(store.loggedIn()).toBe(false);
+      expect(store.loginError()).toBe(true);
+    }));
+
+  it('should redirect to the page stored in state when login is successful', () =>
+    TestBed.runInInjectionContext(() => {
+      const route = new ActivatedRouteSnapshot();
+      const state = { url: '/test' } as RouterStateSnapshot;
+      const navigate = jest.spyOn(router, 'navigate');
+
+      patchState(store, { redirect: { route, state } });
+      store.redirectAfterLogin();
+      expect(navigate).toHaveBeenCalledWith(['/test']);
+      expect(store.redirect()).toBe(null);
+    }));
+
+  it('should require login to access route', () =>
+    TestBed.runInInjectionContext(() => {
+      const route = new ActivatedRouteSnapshot();
+      const state = { url: '/test' } as RouterStateSnapshot;
+      const navigate = jest.spyOn(router, 'navigate');
+
+      requiresLoginCanActivateFn(route, state).subscribe((canActivate) => {
+        expect(canActivate).toEqual(false);
+        expect(navigate).toHaveBeenCalledWith(loginRouterLink);
+        expect(store.pageRequiresLogin()).toEqual(true);
+        requiresLoginCanDeactivateFn();
+        expect(store.pageRequiresLogin()).toEqual(false);
+      });
     }));
 });

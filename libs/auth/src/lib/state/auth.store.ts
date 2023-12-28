@@ -16,7 +16,7 @@ import {
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { filter, pipe, startWith, switchMap, tap } from 'rxjs';
+import { filter, map, pipe, startWith, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
@@ -27,8 +27,8 @@ export type Refresh = {
 export type Login = {
   email: string;
   password: string;
-  twoFactorCode: string;
-  twoFactorRecoveryCode: string;
+  twoFactorCode?: string;
+  twoFactorRecoveryCode?: string;
 };
 
 export type AuthResponse = {
@@ -254,8 +254,9 @@ export function requiresLoginCanActivateFn(
 
   return loginStatus$.pipe(
     filter(() => store.loginAttempted()),
-    tap(() => {
-      if (!store.loggedIn()) {
+    map(() => store.loggedIn()),
+    tap((loggedIn) => {
+      if (!loggedIn) {
         patchState(store, { redirect: { route, state } });
         router.navigate(loginRouterLink);
       }
