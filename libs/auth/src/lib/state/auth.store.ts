@@ -90,7 +90,7 @@ export const AuthStore = signalStore(
   withState(authInitialState),
   withComputed((state) => ({
     expiresAt: computed(() =>
-      state.response()
+      state.response()?.accessTokenIssued
         ? new Date(
             state.response().accessTokenIssued.getTime() +
               state.response().expiresIn * 1000,
@@ -109,7 +109,7 @@ export const AuthStore = signalStore(
   })),
   withComputed((state) => ({
     expired: computed(() =>
-      state.expiresAt() ? state.expiresAt().getTime() < Date.now() : null,
+      state.expiresAt() ? state.expiresAt().getTime() <= Date.now() : null,
     ),
     loginAttempted: computed(
       () =>

@@ -3,7 +3,7 @@ import { InjectionToken, inject } from '@angular/core';
 
 import { WeatherForecast } from '../models/weather-forecast';
 
-export const weatherForecastService = (http = inject(HttpClient)) => ({
+export const weatherForecastServiceFactory = (http = inject(HttpClient)) => ({
   getForecasts(count: number, plus: boolean) {
     return http.get<WeatherForecast[]>(
       plus ? '/api/weatherforecastsplus' : '/api/weatherforecasts',
@@ -18,10 +18,10 @@ export const WeatherForecastService = new InjectionToken(
   'WeatherForecastService',
   {
     providedIn: 'root',
-    factory: weatherForecastService,
+    factory: weatherForecastServiceFactory,
   },
 );
 
-export type WeatherForecastServiceFactory = ReturnType<
-  typeof weatherForecastService
+export type WeatherForecastServiceApi = ReturnType<
+  typeof weatherForecastServiceFactory
 >;

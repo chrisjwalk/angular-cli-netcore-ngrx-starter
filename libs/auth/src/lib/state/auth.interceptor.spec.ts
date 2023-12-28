@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { patchState } from '@ngrx/signals';
 
 import { catchError, of, throwError } from 'rxjs';
-import { AuthService, AuthServiceFactory } from '../services/auth.service';
+import { AuthService, AuthServiceApi } from '../services/auth.service';
 import { authInterceptor } from './auth.interceptor';
 import * as authStore from './auth.store';
 import {
@@ -15,7 +15,7 @@ import {
 
 describe('authInterceptor', () => {
   let store: AuthStoreInstance;
-  let authService: AuthServiceFactory;
+  let authService: AuthServiceApi;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -89,8 +89,8 @@ describe('authInterceptor', () => {
           return throwError(
             () =>
               new HttpErrorResponse({
-                status: 401,
-                statusText: 'Unauthorized',
+                status: 400,
+                statusText: 'Bad request',
               }),
           );
         }

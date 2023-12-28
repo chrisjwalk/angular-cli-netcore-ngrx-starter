@@ -3,7 +3,7 @@ import { InjectionToken, inject } from '@angular/core';
 
 import { AuthResponse, Login, Refresh } from '../state/auth.store';
 
-const authService = (httpBackend = inject(HttpBackend)) => {
+const authServiceFactory = (httpBackend = inject(HttpBackend)) => {
   const http = new HttpClient(httpBackend);
   return {
     login(login: Login) {
@@ -17,7 +17,7 @@ const authService = (httpBackend = inject(HttpBackend)) => {
 
 export const AuthService = new InjectionToken('AuthService', {
   providedIn: 'root',
-  factory: authService,
+  factory: authServiceFactory,
 });
 
-export type AuthServiceFactory = ReturnType<typeof authService>;
+export type AuthServiceApi = ReturnType<typeof authServiceFactory>;

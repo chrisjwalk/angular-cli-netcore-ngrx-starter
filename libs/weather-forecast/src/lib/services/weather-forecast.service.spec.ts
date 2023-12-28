@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import {
   HttpTestingController,
   provideHttpClientTesting,
@@ -5,11 +6,10 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
-import { provideHttpClient } from '@angular/common/http';
 import { WeatherForecast } from '../models/weather-forecast';
 import {
   WeatherForecastService,
-  WeatherForecastServiceFactory,
+  WeatherForecastServiceApi,
 } from './weather-forecast.service';
 
 export const weatherForecasts: WeatherForecast[] = [
@@ -86,7 +86,7 @@ export const weatherForecasts: WeatherForecast[] = [
 ];
 
 describe('WeatherForecastService', () => {
-  let service: WeatherForecastServiceFactory;
+  let weatherForecastService: WeatherForecastServiceApi;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
@@ -99,12 +99,12 @@ describe('WeatherForecastService', () => {
       ],
     });
 
-    service = TestBed.inject(WeatherForecastService);
+    weatherForecastService = TestBed.inject(WeatherForecastService);
     httpTestingController = TestBed.inject(HttpTestingController);
   });
 
   it('WeatherForecastService.getForecasts() should return data', () => {
-    service.getForecasts(1, false).subscribe((result) => {
+    weatherForecastService.getForecasts(1, false).subscribe((result) => {
       expect(result).toEqual([weatherForecasts[0]]);
     });
 
@@ -116,7 +116,7 @@ describe('WeatherForecastService', () => {
   });
 
   it('WeatherForecastService.getForecasts(1, true) should call protected enpoint', () => {
-    service.getForecasts(1, true).subscribe((result) => {
+    weatherForecastService.getForecasts(1, true).subscribe((result) => {
       expect(result).toEqual([weatherForecasts[0]]);
     });
 
@@ -128,7 +128,7 @@ describe('WeatherForecastService', () => {
   });
 
   it('WeatherForecastService.refresh(count) should return data of length count', () => {
-    service.getForecasts(10, false).subscribe((data) => {
+    weatherForecastService.getForecasts(10, false).subscribe((data) => {
       expect(data.length).toBe(10);
     });
 

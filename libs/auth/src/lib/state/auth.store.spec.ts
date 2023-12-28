@@ -9,7 +9,7 @@ import {
 import { getState, patchState } from '@ngrx/signals';
 import { of, throwError } from 'rxjs';
 
-import { AuthService, AuthServiceFactory } from '../services/auth.service';
+import { AuthService, AuthServiceApi } from '../services/auth.service';
 import {
   AuthStore,
   AuthStoreInstance,
@@ -22,7 +22,7 @@ import {
 
 describe('AuthStore', () => {
   let store: AuthStoreInstance;
-  let authService: AuthServiceFactory;
+  let authService: AuthServiceApi;
   let router: Router;
 
   beforeEach(() => {
@@ -106,6 +106,12 @@ describe('AuthStore', () => {
       expect(store.expiresAt()).toEqual(
         new Date(store.response().accessTokenIssued.getTime() + 3600 * 1000),
       );
+      expect(store.expired()).toEqual(false);
+      expect(store.loginSuccess()).toBe(true);
+      expect(store.loginError()).toBe(false);
+      expect(store.loading()).toBe(false);
+      expect(store.noRefreshTokenAvailable()).toBe(false);
+      expect(store.loginAttempted()).toBe(true);
     }));
 
   it('should set the status to error in when login is not succesful', () =>
@@ -121,6 +127,29 @@ describe('AuthStore', () => {
       expect(store.loggedOut()).toBe(false);
       expect(store.loggedIn()).toBe(false);
       expect(store.loginError()).toBe(true);
+      expect(store.expiresAt()).toEqual(null);
+      expect(store.expired()).toEqual(null);
+    }));
+
+  it('should set the status to expired in when login is succesful and but the expiresIn duration has passed', () =>
+    TestBed.runInInjectionContext(() => {
+      jest.spyOn(authService, 'login').mockReturnValue(
+        of({
+          ...authResponseInitialState,
+          expiresIn: 0,
+          accessToken: 'access-token',
+          refreshToken: 'refresh-token',
+        }),
+      );
+      store.login({
+        email: 'username',
+        password: 'password',
+      });
+
+      expect(store.expiresAt()).toEqual(
+        new Date(store.response().accessTokenIssued.getTime() + 0 * 1000),
+      );
+      expect(store.expired()).toBe(true);
     }));
 
   it('should redirect to the page stored in state when login is successful', () =>
