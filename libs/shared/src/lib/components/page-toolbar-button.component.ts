@@ -26,6 +26,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarButtonComponent {
-  @Input() tooltip: string;
   @HostBinding('class') class = 'flex items-center';
+
+  @Input() tooltip: string;
 }

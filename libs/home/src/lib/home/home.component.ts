@@ -94,6 +94,8 @@ import { MarkdownComponent } from 'ngx-markdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
+  @HostBinding('attr.data-testid') testid = 'lib-home';
+
   private readonly layoutStore = inject(LayoutStore);
   private readonly state = signalState({ src: '/assets/home.component.md' });
 
@@ -101,8 +103,6 @@ export class HomeComponent implements OnInit {
     ...getState(this.layoutStore),
     ...getState(this.state),
   }));
-
-  @HostBinding('attr.data-testid') testid = 'lib-home';
 
   ngOnInit() {
     this.layoutStore.setTitle('Home');

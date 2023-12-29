@@ -1,12 +1,7 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Login } from '@myorg/auth';
-import {
-  patchState,
-  signalStore,
-  signalStoreFeature,
-  withState,
-} from '@ngrx/signals';
+import { patchState, signalStore, withState } from '@ngrx/signals';
 
 export type LoginState = {
   request: Login;
@@ -25,13 +20,9 @@ export const loginInitialState: LoginState = {
   valid: null,
 };
 
-export function withLoginFeature() {
-  return signalStoreFeature(withState(loginInitialState));
-}
-
 export const LoginStore = signalStore(
   { providedIn: 'root' },
-  withLoginFeature(),
+  withState(loginInitialState),
 );
 
 export function getLoginFormGroup(

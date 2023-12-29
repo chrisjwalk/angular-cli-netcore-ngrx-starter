@@ -10,41 +10,38 @@ export const swUpdateInitialState: SwUpdateState = { updateReady: false };
 
 export const SwUpdateStore = signalStore(
   withState(swUpdateInitialState),
-  withMethods((store) => {
-    const swUpdate = inject(SwUpdate);
-    const snackBar = inject(MatSnackBar);
-
-    const versionUpdates = rxMethod<void>(() =>
-      swUpdate.isEnabled
-        ? swUpdate.versionUpdates.pipe(
-            map(
-              (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
-            ),
-            map((updateReady) => {
-              patchState(store, { updateReady });
-            }),
-          )
-        : EMPTY,
-    );
-
-    const openReloadAppSnackbar = rxMethod<void>(
-      pipe(
-        switchMap(() =>
-          snackBar
-            .open(`App update avalable! Reload?`, 'OK', {
-              duration: 15000,
-            })
-            .onAction()
-            .pipe(
-              tap(() =>
-                swUpdate
-                  .activateUpdate()
-                  .then(() => document.location.reload()),
+  withMethods(
+    (store, swUpdate = inject(SwUpdate), snackBar = inject(MatSnackBar)) => ({
+      versionUpdates: rxMethod<void>(() =>
+        swUpdate.isEnabled
+          ? swUpdate.versionUpdates.pipe(
+              map(
+                (evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY',
               ),
-            ),
+              map((updateReady) => {
+                patchState(store, { updateReady });
+              }),
+            )
+          : EMPTY,
+      ),
+      openReloadAppSnackbar: rxMethod<void>(
+        pipe(
+          switchMap(() =>
+            snackBar
+              .open(`App update avalable! Reload?`, 'OK', {
+                duration: 15000,
+              })
+              .onAction()
+              .pipe(
+                tap(() =>
+                  swUpdate
+                    .activateUpdate()
+                    .then(() => document.location.reload()),
+                ),
+              ),
+          ),
         ),
       ),
-    );
-    return { versionUpdates, openReloadAppSnackbar };
-  }),
+    }),
+  ),
 );

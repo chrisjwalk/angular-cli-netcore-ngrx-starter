@@ -51,6 +51,8 @@ import { CounterComponent } from '../counter/counter.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
+  @HostBinding('attr.data-testid') testid = 'lib-counter-container';
+
   private readonly layoutStore = inject(LayoutStore);
 
   readonly store = inject(CounterStore);
@@ -58,8 +60,6 @@ export class CounterContainerComponent implements OnInit {
     ...getState(this.layoutStore),
     ...getState(this.store),
   }));
-
-  @HostBinding('attr.data-testid') testid = 'lib-counter-container';
 
   ngOnInit() {
     this.layoutStore.setTitle('Lazy Loaded Feature');

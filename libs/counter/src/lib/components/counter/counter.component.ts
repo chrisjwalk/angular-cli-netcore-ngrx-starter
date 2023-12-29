@@ -89,11 +89,11 @@ import { BigButtonComponent } from '@myorg/shared';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterComponent {
+  @HostBinding('class') class = 'flex flex-col gap-4 items-center';
+
   @Input() count: number;
 
   @Output() increment = new EventEmitter();
   @Output() decrement = new EventEmitter();
   @Output() setCount = new EventEmitter<number>();
-
-  @HostBinding('class') class = 'flex flex-col gap-4 items-center';
 }

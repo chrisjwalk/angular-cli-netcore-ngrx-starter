@@ -64,6 +64,8 @@ import { getState } from '@ngrx/signals';
   providers: [SwUpdateStore],
 })
 export class AppComponent {
+  @HostBinding('attr.data-testid') testid = 'app-root';
+
   private readonly swUpdateStore = inject(SwUpdateStore);
 
   readonly store = inject(LayoutStore);
@@ -79,6 +81,4 @@ export class AppComponent {
       this.swUpdateStore.openReloadAppSnackbar();
     }
   });
-
-  @HostBinding('attr.data-testid') testid = 'app-root';
 }

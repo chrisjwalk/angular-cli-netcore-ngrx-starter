@@ -86,6 +86,8 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
+  @HostBinding('attr.data-testid') testid = 'lib-login';
+
   private readonly formBuilder = inject(FormBuilder);
   private readonly layoutStore = inject(LayoutStore);
 
@@ -98,8 +100,6 @@ export class LoginComponent implements OnInit {
     loading: this.authStore.loading(),
   }));
   readonly formGroup = getLoginFormGroup(this.formBuilder, this.store);
-
-  @HostBinding('attr.data-testid') testid = 'lib-login';
 
   ngOnInit() {
     this.layoutStore.setTitle('Login');

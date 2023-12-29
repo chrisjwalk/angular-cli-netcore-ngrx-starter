@@ -134,7 +134,8 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbarComponent {
+  @Input() loggedIn: boolean;
+
   @Output() toggleSidenav = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();
-  @Input() loggedIn: boolean;
 }

@@ -67,6 +67,8 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {
+  @HostBinding('attr.data-testid') testid = 'lib-weather-forecast';
+
   private readonly layoutStore = inject(LayoutStore);
   private readonly authStore = inject(AuthStore);
 
@@ -77,8 +79,6 @@ export class WeatherForecastComponent implements OnInit {
     plus: this.authStore.pageRequiresLogin(),
     weatherForecasts: this.store.entities(),
   }));
-
-  @HostBinding('attr.data-testid') testid = 'lib-weather-forecast';
 
   ngOnInit() {
     this.layoutStore.setTitle('Weather Forecasts');
