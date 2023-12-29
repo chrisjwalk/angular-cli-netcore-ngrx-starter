@@ -20,4 +20,8 @@ describe('weather-forecast', () => {
     cy.wait('@getWeatherforecasts');
     cy.get('[data-testid="table-row"]').should('have.length', 10);
   });
+
+  it('should have correct title', () => {
+    cy.title().should('eq', 'Weather Forecasts | Demo App');
+  });
 });
