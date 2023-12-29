@@ -67,11 +67,11 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {
-  private layoutStore = inject(LayoutStore);
-  private authStore = inject(AuthStore);
+  private readonly layoutStore = inject(LayoutStore);
+  private readonly authStore = inject(AuthStore);
 
-  store = inject(WeatherForecastStore);
-  vm = computed(() => ({
+  readonly store = inject(WeatherForecastStore);
+  readonly vm = computed(() => ({
     ...getState(this.layoutStore),
     ...getState(this.store),
     plus: this.authStore.pageRequiresLogin(),

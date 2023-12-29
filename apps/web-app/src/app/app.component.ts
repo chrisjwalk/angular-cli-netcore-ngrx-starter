@@ -64,17 +64,17 @@ import { getState } from '@ngrx/signals';
   providers: [SwUpdateStore],
 })
 export class AppComponent {
-  private swUpdateStore = inject(SwUpdateStore);
+  private readonly swUpdateStore = inject(SwUpdateStore);
 
-  store = inject(LayoutStore);
-  authStore = inject(AuthStore);
-  vm = computed(() => ({
+  readonly store = inject(LayoutStore);
+  readonly authStore = inject(AuthStore);
+  readonly vm = computed(() => ({
     ...getState(this.store),
     loggedIn: this.authStore.loggedIn(),
     pageRequiresLogin: this.authStore.pageRequiresLogin(),
   }));
 
-  updateReady = effect(() => {
+  readonly updateReady = effect(() => {
     if (this.swUpdateStore.updateReady()) {
       this.swUpdateStore.openReloadAppSnackbar();
     }

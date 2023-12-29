@@ -86,18 +86,18 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private layoutStore = inject(LayoutStore);
+  private readonly formBuilder = inject(FormBuilder);
+  private readonly layoutStore = inject(LayoutStore);
 
-  authStore = inject(AuthStore);
-  store = inject(LoginStore);
+  readonly authStore = inject(AuthStore);
+  readonly store = inject(LoginStore);
 
-  vm = computed(() => ({
+  readonly vm = computed(() => ({
     ...getState(this.layoutStore),
     ...getState(this.store),
     loading: this.authStore.loading(),
   }));
-  formGroup = getLoginFormGroup(this.formBuilder, this.store);
+  readonly formGroup = getLoginFormGroup(this.formBuilder, this.store);
 
   @HostBinding('attr.data-testid') testid = 'lib-login';
 

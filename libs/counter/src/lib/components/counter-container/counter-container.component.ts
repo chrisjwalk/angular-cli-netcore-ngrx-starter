@@ -51,10 +51,10 @@ import { CounterComponent } from '../counter/counter.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
-  private layoutStore = inject(LayoutStore);
+  private readonly layoutStore = inject(LayoutStore);
 
-  store = inject(CounterStore);
-  vm = computed(() => ({
+  readonly store = inject(CounterStore);
+  readonly vm = computed(() => ({
     ...getState(this.layoutStore),
     ...getState(this.store),
   }));

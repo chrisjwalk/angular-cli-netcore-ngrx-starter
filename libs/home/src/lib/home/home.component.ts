@@ -94,10 +94,10 @@ import { MarkdownComponent } from 'ngx-markdown';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
-  private layoutStore = inject(LayoutStore);
-  private state = signalState({ src: '/assets/home.component.md' });
+  private readonly layoutStore = inject(LayoutStore);
+  private readonly state = signalState({ src: '/assets/home.component.md' });
 
-  vm = computed(() => ({
+  readonly vm = computed(() => ({
     ...getState(this.layoutStore),
     ...getState(this.state),
   }));
