@@ -1,0 +1,67 @@
+{
+  "name": "update-packages",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "tools/update-packages/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/tools/update-packages",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "tools/update-packages/src/main.ts",
+        "tsConfig": "tools/update-packages/tsconfig.app.json",
+        "assets": ["tools/update-packages/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "update-packages:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "update-packages:build:development"
+        },
+        "production": {
+          "buildTarget": "update-packages:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"]
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "tools/update-packages/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
