@@ -3,8 +3,8 @@ import {
   Component,
   EventEmitter,
   HostBinding,
-  Input,
   Output,
+  input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -43,7 +43,7 @@ import { BigButtonComponent } from '@myorg/shared';
         class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
       >
         <div class="text-[120px] text-center" data-testid="count">
-          {{ count }}
+          {{ count() }}
         </div>
       </div>
       <button
@@ -68,7 +68,7 @@ import { BigButtonComponent } from '@myorg/shared';
         type="number"
         placeholder="Set Count"
         (keyup.enter)="setCount.emit(+setvalue.value)"
-        [value]="count"
+        [value]="count()"
       />
     </mat-form-field>
     <lib-big-button (click)="setCount.emit(+setvalue.value)">
@@ -91,7 +91,7 @@ import { BigButtonComponent } from '@myorg/shared';
 export class CounterComponent {
   @HostBinding('class') class = 'flex flex-col gap-4 items-center';
 
-  @Input() count: number;
+  count = input<number>(null);
 
   @Output() increment = new EventEmitter();
   @Output() decrement = new EventEmitter();

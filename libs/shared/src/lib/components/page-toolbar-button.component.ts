@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  Input,
+  input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -16,9 +16,9 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     <button
       class="flex"
       mat-icon-button
-      [attr.aria-label]="tooltip"
-      [matTooltip]="tooltip"
-      [matTooltipDisabled]="!tooltip"
+      [attr.aria-label]="tooltip()"
+      [matTooltip]="tooltip()"
+      [matTooltipDisabled]="!tooltip()"
     >
       <ng-content />
     </button>
@@ -28,5 +28,5 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class PageToolbarButtonComponent {
   @HostBinding('class') class = 'flex items-center';
 
-  @Input() tooltip: string;
+  tooltip = input<string>(null);
 }

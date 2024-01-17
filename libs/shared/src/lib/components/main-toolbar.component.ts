@@ -2,8 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   EventEmitter,
-  Input,
   Output,
+  input,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -107,7 +107,7 @@ import { RouterModule } from '@angular/router';
         >
           <mat-icon>hotel</mat-icon>
         </button>
-        @if (loggedIn) {
+        @if (loggedIn()) {
           <button
             mat-icon-button
             (click)="logout.emit()"
@@ -134,7 +134,7 @@ import { RouterModule } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbarComponent {
-  @Input() loggedIn: boolean;
+  loggedIn = input<boolean>(null);
 
   @Output() toggleSidenav = new EventEmitter<void>();
   @Output() logout = new EventEmitter<void>();

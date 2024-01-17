@@ -2,7 +2,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  Input,
+  input,
 } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
@@ -14,14 +14,14 @@ import { WeatherForecast } from '../../models/weather-forecast';
   imports: [MatTableModule, MatProgressSpinnerModule],
   selector: 'lib-forecast-table',
   template: `
-    @if (loading) {
+    @if (loading()) {
       <div class="flex flex-col gap-4">
         <div class="loading h-12 bg-neutral-300 dark:bg-neutral-700"></div>
         <div class="loading h-96 bg-neutral-300 dark:bg-neutral-700"></div>
       </div>
     } @else {
       <div class="mat-elevation-z2">
-        <mat-table #table [dataSource]="data">
+        <mat-table #table [dataSource]="data()">
           <ng-container matColumnDef="dateFormatted">
             <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
             <mat-cell *matCellDef="let forecast">
@@ -60,8 +60,8 @@ import { WeatherForecast } from '../../models/weather-forecast';
 export class ForecastTableComponent {
   @HostBinding('attr.data-testid') testid = 'lib-forecast-table';
 
-  @Input() loading: boolean;
-  @Input() data: WeatherForecast[];
+  loading = input<boolean>(null);
+  data = input<WeatherForecast[]>(null);
 
   displayedColumns = [
     'dateFormatted',
