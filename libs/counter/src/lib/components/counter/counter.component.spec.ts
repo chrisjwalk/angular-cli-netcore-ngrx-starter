@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/angular';
+import { fireEvent, render, screen } from '@testing-library/angular';
 
 import { CounterComponent } from './counter.component';
 
@@ -9,24 +9,24 @@ describe('CounterComponent', () => {
     expect(screen.getByTestId('lib-counter')).toBeTruthy();
   });
 
-  // test('should render counter', async () => {
-  //   const count = 5;
-  //   await render(CounterComponent, {
-  //     componentProperties: { count },
-  //   });
+  xtest('should render counter', async () => {
+    const count = 5;
+    await render(CounterComponent, {
+      componentInputs: { count },
+    });
 
-  //   expect(screen.getByTestId('count').innerHTML?.trim()).toBe(`${count}`);
-  // });
+    expect(screen.getByTestId('count').innerHTML?.trim()).toBe(`${count}`);
+  });
 
-  // test('should emit increment event on click', async () => {
-  //   const count = 5;
-  //   const increment = jest.fn();
+  xtest('should emit increment event on click', async () => {
+    const count = 5;
+    const increment = jest.fn();
 
-  //   await render(CounterComponent, {
-  //     componentProperties: { count, increment: { emit: increment } as any },
-  //   });
+    await render(CounterComponent, {
+      componentInputs: { count, increment: { emit: increment } as any },
+    });
 
-  //   fireEvent.click(screen.getByText('keyboard_arrow_right'));
-  //   expect(increment).toHaveBeenCalledTimes(1);
-  // });
+    fireEvent.click(screen.getByText('keyboard_arrow_right'));
+    expect(increment).toHaveBeenCalledTimes(1);
+  });
 });
