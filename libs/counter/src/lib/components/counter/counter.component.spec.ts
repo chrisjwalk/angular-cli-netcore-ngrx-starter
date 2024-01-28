@@ -9,6 +9,7 @@ describe('CounterComponent', () => {
     expect(screen.getByTestId('lib-counter')).toBeTruthy();
   });
 
+  // Test with signal inputs disabled until issue resolved https://github.com/thymikee/jest-preset-angular/issues/2246
   xtest('should render counter', async () => {
     const count = 5;
     await render(CounterComponent, {

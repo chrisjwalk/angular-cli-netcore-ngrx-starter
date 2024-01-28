@@ -9,6 +9,8 @@ describe('ForecastTableComponent', () => {
 
     expect(screen.getByTestId('lib-forecast-table')).toBeTruthy();
   });
+
+  // Test with signal inputs disabled until issue resolved https://github.com/thymikee/jest-preset-angular/issues/2246
   xtest('should have the correct number of rows', async () => {
     await render(ForecastTableComponent, {
       componentInputs: { data: weatherForecasts },
