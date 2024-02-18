@@ -3,8 +3,8 @@ import {
   Component,
   HostBinding,
   OnInit,
-  computed,
   inject,
+  input,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import {
@@ -13,7 +13,6 @@ import {
   PageToolbarButtonComponent,
   PageToolbarComponent,
 } from '@myorg/shared';
-import { getState } from '@ngrx/signals';
 
 import { CounterStore } from '../../state';
 import { CounterComponent } from '../counter/counter.component';
@@ -29,39 +28,38 @@ import { CounterComponent } from '../counter/counter.component';
   ],
   selector: 'lib-counter-container',
   template: `
-    @if (vm(); as vm) {
-      <lib-page-toolbar [title]="vm.title">
-        <lib-page-toolbar-button
-          (click)="store.incrementCount()"
-          tooltip="Increment!"
-        >
-          <mat-icon>add</mat-icon>
-        </lib-page-toolbar-button>
-      </lib-page-toolbar>
-      <lib-page-container>
-        <lib-counter
-          [count]="vm.count"
-          (increment)="store.incrementCount()"
-          (decrement)="store.decrementCount()"
-          (setCount)="store.setCount($event)"
-        />
-      </lib-page-container>
-    }
+    <lib-page-toolbar [title]="layoutStore.title()">
+      <lib-page-toolbar-button
+        (click)="store.incrementCount()"
+        tooltip="Increment!"
+      >
+        <mat-icon>add</mat-icon>
+      </lib-page-toolbar-button>
+    </lib-page-toolbar>
+    <lib-page-container>
+      <lib-counter
+        #counter
+        [count]="store.count()"
+        (increment)="store.incrementCount()"
+        (decrement)="store.decrementCount()"
+        (setCount)="store.setCount($event)"
+      />
+    </lib-page-container>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
   @HostBinding('attr.data-testid') testid = 'lib-counter-container';
 
-  private readonly layoutStore = inject(LayoutStore);
-
+  readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
-  readonly vm = computed(() => ({
-    ...getState(this.layoutStore),
-    ...getState(this.store),
-  }));
+
+  count = input<number>(null);
 
   ngOnInit() {
     this.layoutStore.setTitle('Lazy Loaded Feature');
+    if (this.count()) {
+      this.store.setCount(+this.count());
+    }
   }
 }

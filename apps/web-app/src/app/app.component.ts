@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  computed,
   effect,
   inject,
 } from '@angular/core';
@@ -17,7 +16,6 @@ import {
   SidenavListItemComponent,
   SwUpdateStore,
 } from '@myorg/shared';
-import { getState } from '@ngrx/signals';
 
 @Component({
   standalone: true,
@@ -31,26 +29,24 @@ import { getState } from '@ngrx/signals';
   ],
   selector: 'app-root',
   template: `
-    @if (vm(); as vm) {
-      <lib-main-toolbar
-        (toggleSidenav)="store.toggleSidenav()"
-        (logout)="authStore.logout(vm.pageRequiresLogin)"
-        [loggedIn]="vm.loggedIn"
-      />
-      <mat-sidenav-container fullscreen>
-        <mat-sidenav
-          mode="over"
-          [opened]="vm.showSidenav"
-          (openedChange)="store.setShowSidenav($event)"
-        >
-          <lib-sidenav
-            (toggleSidenav)="store.toggleSidenav()"
-            (closeSidenav)="store.closeSidenav()"
-          />
-        </mat-sidenav>
-        <router-outlet />
-      </mat-sidenav-container>
-    }
+    <lib-main-toolbar
+      (toggleSidenav)="store.toggleSidenav()"
+      (logout)="authStore.logout(authStore.pageRequiresLogin())"
+      [loggedIn]="authStore.loggedIn()"
+    />
+    <mat-sidenav-container fullscreen>
+      <mat-sidenav
+        mode="over"
+        [opened]="store.showSidenav()"
+        (openedChange)="store.setShowSidenav($event)"
+      >
+        <lib-sidenav
+          (toggleSidenav)="store.toggleSidenav()"
+          (closeSidenav)="store.closeSidenav()"
+        />
+      </mat-sidenav>
+      <router-outlet />
+    </mat-sidenav-container>
   `,
   styles: [
     `
@@ -70,11 +66,6 @@ export class AppComponent {
 
   readonly store = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
-  readonly vm = computed(() => ({
-    ...getState(this.store),
-    loggedIn: this.authStore.loggedIn(),
-    pageRequiresLogin: this.authStore.pageRequiresLogin(),
-  }));
 
   readonly updateReady = effect(() => {
     if (this.swUpdateStore.updateReady()) {

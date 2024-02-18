@@ -3,7 +3,6 @@ import {
   Component,
   HostBinding,
   OnInit,
-  computed,
   inject,
 } from '@angular/core';
 import {
@@ -12,7 +11,7 @@ import {
   PageToolbarComponent,
   SidenavComponent,
 } from '@myorg/shared';
-import { getState, signalState } from '@ngrx/signals';
+import { signalState } from '@ngrx/signals';
 import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
@@ -25,16 +24,14 @@ import { MarkdownComponent } from 'ngx-markdown';
   ],
   selector: 'lib-home',
   template: `
-    @if (vm(); as vm) {
-      <lib-page-toolbar [title]="vm.title" />
-      <lib-page-container>
-        <div
-          class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow"
-        >
-          <markdown data-testid="page-markdown" [src]="vm.src" />
-        </div>
-      </lib-page-container>
-    }
+    <lib-page-toolbar [title]="layoutStore.title()" />
+    <lib-page-container>
+      <div
+        class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow"
+      >
+        <markdown data-testid="page-markdown" [src]="state.src()" />
+      </div>
+    </lib-page-container>
   `,
   styles: [
     `
@@ -96,13 +93,8 @@ import { MarkdownComponent } from 'ngx-markdown';
 export class HomeComponent implements OnInit {
   @HostBinding('attr.data-testid') testid = 'lib-home';
 
-  private readonly layoutStore = inject(LayoutStore);
-  private readonly state = signalState({ src: '/assets/home.component.md' });
-
-  readonly vm = computed(() => ({
-    ...getState(this.layoutStore),
-    ...getState(this.state),
-  }));
+  readonly layoutStore = inject(LayoutStore);
+  readonly state = signalState({ src: '/assets/home.component.md' });
 
   ngOnInit() {
     this.layoutStore.setTitle('Home');
