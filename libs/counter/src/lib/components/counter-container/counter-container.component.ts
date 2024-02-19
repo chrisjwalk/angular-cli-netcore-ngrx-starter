@@ -58,8 +58,6 @@ export class CounterContainerComponent implements OnInit {
 
   ngOnInit() {
     this.layoutStore.setTitle('Lazy Loaded Feature');
-    if (this.count()) {
-      this.store.setCount(+this.count());
-    }
+    this.store.inputCount(this.count);
   }
 }

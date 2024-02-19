@@ -1,6 +1,8 @@
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder } from '@angular/forms';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { pipe, tap } from 'rxjs';
 
 export type CounterState = {
   count: number;
@@ -22,6 +24,17 @@ export const CounterStore = signalStore(
         ...state,
         count: state.count - 1,
       })),
+  })),
+  withMethods((store) => ({
+    inputCount: rxMethod<number>(
+      pipe(
+        tap((count) => {
+          if (!isNaN(+count)) {
+            store.setCount(+count);
+          }
+        }),
+      ),
+    ),
   })),
 );
 

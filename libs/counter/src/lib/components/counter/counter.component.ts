@@ -90,7 +90,6 @@ import { BigButtonComponent } from '@myorg/shared';
 })
 export class CounterComponent {
   @HostBinding('attr.data-testid') testid = 'lib-counter';
-
   @HostBinding('class') class = 'flex flex-col gap-4 items-center';
 
   count = input<number>(null);
