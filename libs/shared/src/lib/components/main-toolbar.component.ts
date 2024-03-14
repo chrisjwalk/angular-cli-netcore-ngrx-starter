@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Output,
   input,
+  output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -136,6 +135,6 @@ import { RouterModule } from '@angular/router';
 export class MainToolbarComponent {
   loggedIn = input<boolean>(null);
 
-  @Output() toggleSidenav = new EventEmitter<void>();
-  @Output() logout = new EventEmitter<void>();
+  toggleSidenav = output<void>();
+  logout = output<void>();
 }

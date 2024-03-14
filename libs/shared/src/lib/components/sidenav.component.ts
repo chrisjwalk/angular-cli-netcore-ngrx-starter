@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  EventEmitter,
-  Output,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 
 import { SidenavListItemComponent } from './sidenav-list-item.component';
@@ -37,6 +32,6 @@ import { SidenavListItemComponent } from './sidenav-list-item.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavComponent {
-  @Output() toggleSidenav = new EventEmitter();
-  @Output() closeSidenav = new EventEmitter();
+  toggleSidenav = output();
+  closeSidenav = output();
 }

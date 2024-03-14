@@ -1,9 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
-  Output,
   input,
+  output,
 } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatListModule } from '@angular/material/list';
@@ -26,6 +25,5 @@ export class SidenavListItemComponent {
   icon = input<string>('');
   hint = input<string>('');
   routerLink = input<string | any[]>('/');
-
-  @Output() navigate = new EventEmitter();
+  navigate = output();
 }

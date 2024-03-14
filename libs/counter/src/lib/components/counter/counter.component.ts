@@ -1,10 +1,9 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  EventEmitter,
   HostBinding,
-  Output,
   input,
+  output,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -93,8 +92,7 @@ export class CounterComponent {
   @HostBinding('class') class = 'flex flex-col gap-4 items-center';
 
   count = input<number>(null);
-
-  @Output() increment = new EventEmitter();
-  @Output() decrement = new EventEmitter();
-  @Output() setCount = new EventEmitter<number>();
+  increment = output();
+  decrement = output();
+  setCount = output<number>();
 }
