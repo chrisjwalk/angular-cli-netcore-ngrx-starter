@@ -1,7 +1,8 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, Validators } from '@angular/forms';
 import { Login } from '@myorg/auth';
-import { patchState, signalStore, withState } from '@ngrx/signals';
+import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { map, pipe, startWith } from 'rxjs';
 
 export type LoginState = {
   request: Login;
@@ -23,6 +24,11 @@ export const loginInitialState: LoginState = {
 export const LoginStore = signalStore(
   { providedIn: 'root' },
   withState(loginInitialState),
+  withMethods((store) => ({
+    syncFormGroup: rxMethod<LoginState>(
+      pipe(map((state) => patchState(store, state))),
+    ),
+  })),
 );
 
 export function getLoginFormGroup(
@@ -33,19 +39,18 @@ export function getLoginFormGroup(
     store.request();
 
   const formGroup = formBuilder.group({
-    email: [email, [Validators.required]],
+    email: [email, [Validators.required, Validators.email]],
     password: [password, [Validators.required]],
     twoFactorCode: [twoFactorCode],
     twoFactorRecoveryCode: [twoFactorRecoveryCode],
   });
 
-  patchState(store, { ...formGroup.value, valid: formGroup.valid });
-
-  formGroup.valueChanges
-    .pipe(takeUntilDestroyed())
-    .subscribe((value) =>
-      patchState(store, { request: value as Login, valid: formGroup.valid }),
-    );
+  store.syncFormGroup(
+    formGroup.valueChanges.pipe(
+      startWith(formGroup.value),
+      map((value) => ({ request: value as Login, valid: formGroup.valid })),
+    ),
+  );
 
   return formGroup;
 }
