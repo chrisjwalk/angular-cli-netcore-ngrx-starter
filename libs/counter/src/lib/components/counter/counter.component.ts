@@ -92,6 +92,7 @@ export class CounterComponent {
   @HostBinding('class') class = 'flex flex-col gap-4 items-center';
 
   count = input<number>(null);
+
   increment = output();
   decrement = output();
   setCount = output<number>();

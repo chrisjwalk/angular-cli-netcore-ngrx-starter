@@ -25,5 +25,6 @@ export class SidenavListItemComponent {
   icon = input<string>('');
   hint = input<string>('');
   routerLink = input<string | any[]>('/');
+
   navigate = output();
 }
