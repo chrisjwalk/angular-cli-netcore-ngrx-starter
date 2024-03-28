@@ -46,7 +46,7 @@ export const WeatherForecastStore = signalStore(
                     }),
                     {
                       loading: false,
-                    },
+                    } as any,
                   ),
                 (error) => {
                   console.error(error);
