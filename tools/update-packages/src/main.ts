@@ -71,7 +71,7 @@ async function mergeMigrations(verbose: boolean) {
   await fs.promises.writeFile(dest, JSON.stringify(merged, null, 2));
 }
 
-async function main(omit: string[], { verbose }: { verbose: boolean }) {
+async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   console.log(`Updating packages...`);
   if (omit?.length) {
     console.log(`Omitting: ${omit}`);
@@ -113,8 +113,8 @@ async function main(omit: string[], { verbose }: { verbose: boolean }) {
 }
 
 program
-  .argument('<omit...>')
+  .option('-o, --omit [omit...]', 'Omit packages', [])
   .option('-v, --verbose [verbose]', 'Verbose', false)
-  .action((omit, options) => main(omit, options));
+  .action((options) => main(options));
 
 program.parse();
