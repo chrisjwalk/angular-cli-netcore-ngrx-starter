@@ -62,14 +62,7 @@ import {
 export class AppComponent {
   @HostBinding('attr.data-testid') testid = 'app-root';
 
-  private readonly swUpdateStore = inject(SwUpdateStore);
-
+  readonly swUpdateStore = inject(SwUpdateStore);
   readonly store = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
-
-  readonly updateReady = effect(() => {
-    if (this.swUpdateStore.updateReady()) {
-      this.swUpdateStore.openReloadAppSnackbar();
-    }
-  });
 }
