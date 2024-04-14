@@ -47,9 +47,6 @@ export const SwUpdateStore = signalStore(
   withMethods((store) => ({
     versionUpdates: rxMethod<VersionEvent>(
       pipe(
-        tap((versionEvent) =>
-          console.log('SwUpdate versionUpdates event ', versionEvent),
-        ),
         map((versionEvent) => patchState(store, { versionEvent })),
         tap(() => {
           if (store.updateReady()) {
