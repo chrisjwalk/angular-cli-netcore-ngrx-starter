@@ -1,8 +1,6 @@
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { FormBuilder } from '@angular/forms';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { pipe, tap } from 'rxjs';
+import { filter, map, pipe, tap } from 'rxjs';
 
 export type CounterState = {
   count: number;
@@ -26,32 +24,14 @@ export const CounterStore = signalStore(
       })),
   })),
   withMethods((store) => ({
-    inputCount: rxMethod<number>(
+    inputCount: rxMethod<number | string>(
       pipe(
-        tap((count) => {
-          if (!isNaN(+count)) {
-            store.setCount(+count);
-          }
-        }),
+        map((count) => +count),
+        filter((count) => !isNaN(count)),
+        tap((count) => store.setCount(+count)),
       ),
     ),
   })),
 );
 
-export function getCounterFormGroup(
-  formBuilder: FormBuilder,
-  store: CounterStoreInstance,
-) {
-  const formGroup = formBuilder.group({
-    count: [store.count()],
-  });
-
-  formGroup.valueChanges
-    .pipe(takeUntilDestroyed())
-    .subscribe((value) => patchState(store, value));
-
-  return formGroup;
-}
-
 export type CounterStoreInstance = InstanceType<typeof CounterStore>;
-export type CounterFormGroup = ReturnType<typeof getCounterFormGroup>;

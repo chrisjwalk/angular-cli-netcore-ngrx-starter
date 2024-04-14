@@ -54,7 +54,7 @@ export class CounterContainerComponent implements OnInit {
   readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
 
-  count = input<number>(null);
+  count = input<number | string>(null);
 
   ngOnInit() {
     this.layoutStore.setTitle('Lazy Loaded Feature');
