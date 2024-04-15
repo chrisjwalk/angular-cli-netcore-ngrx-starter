@@ -2,7 +2,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
-  effect,
   inject,
 } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
