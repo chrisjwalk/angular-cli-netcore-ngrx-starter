@@ -35,7 +35,7 @@ async function npmOutdated() {
 }
 
 async function nxMigrateLatest(pkg: string, verbose: boolean) {
-  const cmd = `nx migrate ${pkg}@latest`;
+  const cmd = `nx migrate ${pkg}${pkg ? '@' : ''}latest`;
   console.log(cmd);
   const stdout = await execAsync(cmd);
   if (verbose) {
@@ -81,7 +81,11 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   }
   const data = await npmOutdated();
   const parsed = JSON.parse(data.toString()) as NpmOudated;
-  const packages = Object.keys(parsed).filter((p) => !omit.includes(p));
+  let packages = Object.keys(parsed).filter((p) => !omit.includes(p));
+  if (packages.some((p) => p.startsWith('@nx/'))) {
+    packages = packages.filter((p) => !p.startsWith('@nx/'));
+    packages.unshift('');
+  }
   if (packages.length === 0) {
     console.log('No packages to update');
     return;
