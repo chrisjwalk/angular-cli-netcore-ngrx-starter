@@ -90,15 +90,15 @@ export const AuthStore = signalStore(
   withState(authInitialState),
   withComputed((state) => ({
     expiresAt: computed(() =>
-      state.response()?.accessTokenIssued
+      state.response?.accessTokenIssued()
         ? new Date(
-            state.response().accessTokenIssued.getTime() +
-              state.response().expiresIn * 1000,
+            state.response.accessTokenIssued().getTime() +
+              state.response.expiresIn() * 1000,
           )
         : null,
     ),
-    accessToken: computed(() => state.response().accessToken),
-    refreshToken: computed(() => state.response().refreshToken),
+    accessToken: computed(() => state.response.accessToken()),
+    refreshToken: computed(() => state.response.refreshToken()),
     loginSuccess: computed(() => state.loginStatus() === 'success'),
     loginError: computed(() => state.loginStatus() === 'error'),
     loading: computed(() => state.loginStatus() === 'loading'),
