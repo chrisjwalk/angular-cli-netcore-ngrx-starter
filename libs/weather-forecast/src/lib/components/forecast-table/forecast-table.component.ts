@@ -1,17 +1,29 @@
 import {
+  BreakpointObserver,
+  BreakpointState,
+  Breakpoints,
+  LayoutModule,
+} from '@angular/cdk/layout';
+import {
   ChangeDetectionStrategy,
   Component,
   HostBinding,
+  OnInit,
+  computed,
+  inject,
   input,
 } from '@angular/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
+import { patchState, signalState } from '@ngrx/signals';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { map, pipe } from 'rxjs';
 
 import { WeatherForecast } from '../../models/weather-forecast';
 
 @Component({
   standalone: true,
-  imports: [MatTableModule, MatProgressSpinnerModule],
+  imports: [MatTableModule, MatProgressSpinnerModule, LayoutModule],
   selector: 'lib-forecast-table',
   template: `
     @if (loading()) {
@@ -46,27 +58,88 @@ import { WeatherForecast } from '../../models/weather-forecast';
               {{ forecast.summary }}
             </mat-cell>
           </ng-container>
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-header-row
+            *matHeaderRowDef="displayedColumns()"
+          ></mat-header-row>
           <mat-row
-            *matRowDef="let row; columns: displayedColumns"
+            *matRowDef="let row; columns: displayedColumns()"
             data-testid="table-row"
           ></mat-row>
         </mat-table>
       </div>
+      <!-- @if (!state.handsetPortrait()) {
+        <div class="flex justify-end">
+          <button
+            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
+            (click)="toggleSummary()"
+          >
+            Toggle Summary
+          </button>
+        </div>
+      } -->
     }
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ForecastTableComponent {
+export class ForecastTableComponent implements OnInit {
+  breakpointObserver = inject(BreakpointObserver);
   @HostBinding('attr.data-testid') testid = 'lib-forecast-table';
 
   loading = input<boolean>(null);
   data = input<WeatherForecast[]>(null);
 
-  displayedColumns = [
-    'dateFormatted',
-    'temperatureC',
-    'temperatureF',
-    'summary',
-  ];
+  ngOnInit() {
+    this.rxBreakpointObserver(
+      this.breakpointObserver.observe(Breakpoints.HandsetPortrait),
+    );
+  }
+
+  rxBreakpointObserver = rxMethod<BreakpointState>(
+    pipe(
+      map((result) =>
+        patchState(this.state, { handsetPortrait: result.matches }),
+      ),
+    ),
+  );
+
+  state = signalState({
+    columns: [
+      { name: 'dateFormatted', visible: true, displayHandsetPortrait: true },
+      {
+        name: 'temperatureC',
+        visible: true,
+        displayHandsetPortrait: false,
+      },
+      {
+        name: 'temperatureF',
+        visible: true,
+        displayHandsetPortrait: true,
+      },
+      { name: 'summary', visible: true, displayHandsetPortrait: false },
+    ],
+    handsetPortrait: false,
+  });
+
+  displayedColumns = computed(() =>
+    this.state
+      .columns()
+      .filter(
+        (c) =>
+          c.visible &&
+          (this.state.handsetPortrait() ? c.displayHandsetPortrait : true),
+      )
+      .map((c) => c.name),
+  );
+
+  toggleColumnVisible(name: string) {
+    patchState(this.state, {
+      columns: this.state
+        .columns()
+        .map((c) => (c.name === name ? { ...c, visible: !c.visible } : c)),
+    });
+  }
+
+  toggleSummary() {
+    this.toggleColumnVisible('summary');
+  }
 }

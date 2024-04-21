@@ -4,7 +4,7 @@ import { TestBed } from '@angular/core/testing';
 import { patchState } from '@ngrx/signals';
 
 import { catchError, of, throwError } from 'rxjs';
-import { AuthService, AuthServiceApi } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
 import { authInterceptor } from './auth.interceptor';
 import * as authStore from './auth.store';
 import {
@@ -15,7 +15,7 @@ import {
 
 describe('authInterceptor', () => {
   let store: AuthStoreInstance;
-  let authService: AuthServiceApi;
+  let authService: AuthService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

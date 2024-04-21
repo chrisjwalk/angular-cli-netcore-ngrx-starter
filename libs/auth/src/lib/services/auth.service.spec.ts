@@ -7,10 +7,10 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { authResponseInitialState } from '../state/auth.store';
-import { AuthService, AuthServiceApi } from './auth.service';
+import { AuthService } from './auth.service';
 
 describe('AuthService', () => {
-  let authService: AuthServiceApi;
+  let authService: AuthService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {

@@ -7,10 +7,7 @@ import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { WeatherForecast } from '../models/weather-forecast';
-import {
-  WeatherForecastService,
-  WeatherForecastServiceApi,
-} from './weather-forecast.service';
+import { WeatherForecastService } from './weather-forecast.service';
 
 export const weatherForecasts: WeatherForecast[] = [
   {
@@ -86,7 +83,7 @@ export const weatherForecasts: WeatherForecast[] = [
 ];
 
 describe('WeatherForecastService', () => {
-  let weatherForecastService: WeatherForecastServiceApi;
+  let weatherForecastService: WeatherForecastService;
   let httpTestingController: HttpTestingController;
 
   beforeEach(() => {

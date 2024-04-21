@@ -22,6 +22,6 @@ export const WeatherForecastService = new InjectionToken(
   },
 );
 
-export type WeatherForecastServiceApi = ReturnType<
+export type WeatherForecastService = ReturnType<
   typeof weatherForecastServiceFactory
 >;

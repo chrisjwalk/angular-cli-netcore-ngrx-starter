@@ -9,7 +9,7 @@ import {
 import { getState, patchState } from '@ngrx/signals';
 import { of, throwError } from 'rxjs';
 
-import { AuthService, AuthServiceApi } from '../services/auth.service';
+import { AuthService } from '../services/auth.service';
 import {
   AuthStore,
   AuthStoreInstance,
@@ -22,7 +22,7 @@ import {
 
 describe('AuthStore', () => {
   let store: AuthStoreInstance;
-  let authService: AuthServiceApi;
+  let authService: AuthService;
   let router: Router;
 
   beforeEach(() => {

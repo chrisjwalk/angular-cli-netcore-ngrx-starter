@@ -20,4 +20,4 @@ export const AuthService = new InjectionToken('AuthService', {
   factory: authServiceFactory,
 });
 
-export type AuthServiceApi = ReturnType<typeof authServiceFactory>;
+export type AuthService = ReturnType<typeof authServiceFactory>;
