@@ -39,6 +39,14 @@ export const swUpdateInitialState: SwUpdateState = {
   },
 };
 
+/**
+ * Service Worker Update Store
+ *
+ * Subscribes to SwUpdate.versionUpdates and prompts for reload when
+ * a new version is available. Subscription is started in onInit hook.
+ * This just needs to be provided/injected into the main app component
+ * to function.
+ */
 export const SwUpdateStore = signalStore(
   withState(swUpdateInitialState),
   withComputed((store) => ({
