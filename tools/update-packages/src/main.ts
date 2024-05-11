@@ -35,7 +35,7 @@ async function npmOutdated() {
 }
 
 async function nxMigrateLatest(pkg: string, verbose: boolean) {
-  const cmd = `nx migrate ${pkg}${pkg ? '@' : ''}latest`;
+  const cmd = `npx nx migrate ${pkg}${pkg ? '@' : ''}latest`;
   console.log(cmd);
   const stdout = await execAsync(cmd);
   if (verbose) {
@@ -82,6 +82,24 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   const data = await npmOutdated();
   const parsed = JSON.parse(data.toString()) as NpmOudated;
   let packages = Object.keys(parsed).filter((p) => !omit.includes(p));
+  const hasAngularCore = packages.some((p) => p.startsWith('@angular/core'));
+  const hasAngularCLI = packages.some((p) => p.startsWith('@angular/cli'));
+
+  const hasAngularMaterial = packages.some((p) =>
+    p.startsWith('@angular/material'),
+  );
+  if (hasAngularCore || hasAngularMaterial || hasAngularCLI) {
+    packages = packages.filter((p) => !p.startsWith('@angular/'));
+    if (hasAngularMaterial) {
+      packages.unshift('@angular/material');
+    }
+    if (hasAngularCLI) {
+      packages.unshift('@angular/cli');
+    }
+    if (hasAngularCore) {
+      packages.unshift('@angular/core');
+    }
+  }
   if (packages.some((p) => p.startsWith('@nx/'))) {
     packages = packages.filter((p) => !p.startsWith('@nx/'));
     packages.unshift('');
