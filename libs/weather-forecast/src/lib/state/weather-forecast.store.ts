@@ -1,5 +1,6 @@
 import { inject } from '@angular/core';
 import { AuthStore } from '@myorg/auth';
+import { withLoadingFeature } from '@myorg/shared';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
@@ -16,19 +17,16 @@ import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from '../services/weather-forecast.service';
 
 export type WeatherForecastState = {
-  error: unknown;
   count: number;
-  loading: boolean;
 };
 
 export const weatherForecastsInitialState: WeatherForecastState = {
-  error: null,
   count: null,
-  loading: null,
 };
 
 export const WeatherForecastStore = signalStore(
   withEntities<WeatherForecast>(),
+  withLoadingFeature(),
   withState(weatherForecastsInitialState),
   withMethods(
     (store, weatherForecastService = inject(WeatherForecastService)) => ({

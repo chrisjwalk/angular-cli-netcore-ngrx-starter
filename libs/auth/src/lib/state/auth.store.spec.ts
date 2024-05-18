@@ -6,6 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
+import { loadingInitialState } from '@myorg/shared';
 import { getState, patchState } from '@ngrx/signals';
 import { of, throwError } from 'rxjs';
 
@@ -44,6 +45,7 @@ describe('AuthStore', () => {
     TestBed.runInInjectionContext(() => {
       expect(getState(store)).toEqual({
         ...authInitialState,
+        ...loadingInitialState,
         loginStatus: 'no-refresh-token',
       });
     }));

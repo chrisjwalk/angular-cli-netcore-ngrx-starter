@@ -6,6 +6,7 @@ import {
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
+import { withLoadingFeature } from '@myorg/shared';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
@@ -59,7 +60,6 @@ export type LoginStatus =
   | 'logged-out';
 
 export type AuthState = {
-  error: any;
   redirect: RedirectRouterState;
   response: AuthResponseState;
   pageRequiresLogin: boolean;
@@ -72,7 +72,6 @@ export type RedirectRouterState = {
 };
 
 export const authInitialState: AuthState = {
-  error: null,
   redirect: null,
   response: authResponseInitialState,
   pageRequiresLogin: null,
@@ -88,6 +87,7 @@ export const homeRouterLink = ['/'];
 export const AuthStore = signalStore(
   { providedIn: 'root' },
   withState(authInitialState),
+  withLoadingFeature(),
   withComputed((state) => ({
     expiresAt: computed(() =>
       state.response?.accessTokenIssued()

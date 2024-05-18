@@ -5,10 +5,3 @@ export type WeatherForecast = {
   temperatureF: number;
   summary: string;
 };
-
-export type WeatherForecastState = {
-  weatherForecasts: WeatherForecast[];
-  error: unknown;
-  count: number;
-  loading: boolean;
-};
