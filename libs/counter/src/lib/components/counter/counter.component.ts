@@ -10,7 +10,6 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { BigButtonComponent } from '@myorg/shared';
 
 @Component({
   standalone: true,
@@ -19,7 +18,6 @@ import { BigButtonComponent } from '@myorg/shared';
     MatIconModule,
     MatFormFieldModule,
     MatInputModule,
-    BigButtonComponent,
     MatTooltipModule,
   ],
   selector: 'lib-counter',
@@ -70,9 +68,13 @@ import { BigButtonComponent } from '@myorg/shared';
         [value]="count()"
       />
     </mat-form-field>
-    <lib-big-button (click)="setCount.emit(+setvalue.value)">
+    <button
+      mat-button
+      class="!text-base/10 dark:!bg-neutral-900"
+      (click)="setCount.emit(+setvalue.value)"
+    >
       Submit
-    </lib-big-button>
+    </button>
   `,
   styles: [
     `

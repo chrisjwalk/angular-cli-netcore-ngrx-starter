@@ -3,46 +3,54 @@
 @include mat.core();
 
 // Define a dark theme
-$dark-theme: mat.define-dark-theme(
+$dark-theme: mat.define-theme(
   (
     color: (
-      primary: mat.define-palette(mat.$blue-grey-palette),
-      accent: mat.define-palette(mat.$orange-palette),
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      tertiary: mat.$orange-palette,
     ),
-    // Only include `typography` and `density` in the default dark theme.
-    typography: mat.define-typography-config(),
-    density: 0,
+    typography: (
+      plain-family: 'Roboto',
+    ),
+    density: (
+      scale: -1,
+    ),
   )
 );
 
 // Define a light theme
-$light-theme: mat.define-light-theme(
+$light-theme: mat.define-theme(
   (
     color: (
-      primary: mat.define-palette(mat.$indigo-palette),
-      accent: mat.define-palette(mat.$pink-palette),
+      theme-type: light,
+      primary: mat.$azure-palette,
+      tertiary: mat.$violet-palette,
     ),
   )
 );
 
-// Apply the dark theme by default
-@include mat.all-component-themes($dark-theme);
-
-// Apply the light theme only when the user prefers light themes.
-@media (prefers-color-scheme: light) {
-  // Use the `-color` mixins to only apply color styles without reapplying the same
-  // typography and density styles.
-  @include mat.all-component-colors($light-theme);
+html {
+  // Apply the dark theme by default
+  @include mat.all-component-themes($dark-theme);
+  // Apply the light theme only when the user prefers light themes.
+  @media (prefers-color-scheme: light) {
+    // Use the `-color` mixins to only apply color styles without reapplying the same
+    // typography and density styles.
+    @include mat.all-component-colors($light-theme);
+  }
 }
 
 :root {
+  --mat-toolbar-container-background-color: #{mat.get-theme-color(
+      $light-theme,
+      primary-container
+    )};
   --mat-sidenav-content-background-color: rgb(250, 250, 250);
-  --mat-toolbar-container-text-color: rgba(255, 255, 255, 0.75);
-  --mat-toolbar-container-background-color: rgb(35, 35, 35);
-
   @media (prefers-color-scheme: dark) {
     --mat-sidenav-content-background-color: rgb(33, 33, 33);
     --mat-toolbar-container-background-color: rgb(40, 40, 40);
+    --mat-toolbar-container-text-color: rgba(255, 255, 255, 0.75);
   }
 
   --mat-toolbar-standard-height: 56px;

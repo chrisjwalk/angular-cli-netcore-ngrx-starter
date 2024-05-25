@@ -85,7 +85,7 @@ import { RouterModule } from '@angular/router';
           </defs>
         </svg>
       </a>
-      <a class="no-underline !text-neutral-300" [routerLink]="['/']">
+      <a class="no-underline dark:!text-neutral-300" [routerLink]="['/']">
         Demo App
       </a>
       <span class="flex-1"></span>
