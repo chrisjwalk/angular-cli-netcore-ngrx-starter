@@ -89,7 +89,7 @@ import { RouterModule } from '@angular/router';
         Demo App
       </a>
       <span class="flex-1"></span>
-      <div class="hidden md:block">
+      <div class="hidden md:flex gap-2">
         <button
           mat-icon-button
           [routerLink]="['/weather-forecast']"

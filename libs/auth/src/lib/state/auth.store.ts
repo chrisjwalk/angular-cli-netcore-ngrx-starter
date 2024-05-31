@@ -3,6 +3,7 @@ import { toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import {
   ActivatedRouteSnapshot,
+  RedirectCommand,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -255,10 +256,13 @@ export function requiresLoginCanActivateFn(
   return loginStatus$.pipe(
     filter(() => store.loginAttempted()),
     map(() => store.loggedIn()),
-    tap((loggedIn) => {
+    map((loggedIn) => {
       if (!loggedIn) {
         patchState(store, { redirect: { route, state } });
-        router.navigate(loginRouterLink);
+
+        return new RedirectCommand(router.parseUrl(loginRouterLink.join('/')));
+      } else {
+        return loggedIn;
       }
     }),
   );
