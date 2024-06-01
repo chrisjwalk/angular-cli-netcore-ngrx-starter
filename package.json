@@ -80,7 +80,7 @@
     "@angular-eslint/eslint-plugin": "18.0.1",
     "@angular-eslint/eslint-plugin-template": "18.0.1",
     "@angular-eslint/template-parser": "18.0.1",
-    "@angular/cli": "~18.0.0",
+    "@angular/cli": "18.0.2",
     "@angular/compiler-cli": "18.0.1",
     "@angular/language-service": "18.0.1",
     "@nx/cypress": "19.1.1",
@@ -99,7 +99,7 @@
     "@testing-library/jest-dom": "6.4.5",
     "@trivago/prettier-plugin-sort-imports": "4.3.0",
     "@types/jest": "29.5.12",
-    "@types/node": "20.12.13",
+    "@types/node": "20.13.0",
     "@typescript-eslint/eslint-plugin": "7.11.0",
     "@typescript-eslint/parser": "7.11.0",
     "@typescript-eslint/types": "7.11.0",
@@ -131,5 +131,11 @@
   "lint-staged": {
     "*.{ts,js}": "eslint --cache --cache-location=.husky/_ --fix",
     "*.{ts,js,css,scss,md,mdx}": "prettier --write"
+  },
+  "overrides": {
+    "@ngrx/signals": {
+      ".": "17.2.0",
+      "@angular/core": "18.0.1"
+    }
   }
 }
