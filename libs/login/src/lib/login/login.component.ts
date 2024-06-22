@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   OnInit,
   inject,
 } from '@angular/core';
@@ -81,11 +80,12 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
       </div>
     </lib-page-container>
   `,
+  host: {
+    'data-testid': 'lib-login',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnInit {
-  @HostBinding('attr.data-testid') testid = 'lib-login';
-
   private readonly formBuilder = inject(FormBuilder);
 
   readonly layoutStore = inject(LayoutStore);

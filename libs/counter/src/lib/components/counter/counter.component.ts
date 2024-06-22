@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   input,
   output,
 } from '@angular/core';
@@ -87,12 +86,13 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       }
     `,
   ],
+  host: {
+    class: 'flex flex-col gap-4 items-center',
+    'data-testid': 'lib-counter',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterComponent {
-  @HostBinding('attr.data-testid') testid = 'lib-counter';
-  @HostBinding('class') class = 'flex flex-col gap-4 items-center';
-
   count = input<number>(null);
 
   increment = output();

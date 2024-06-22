@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   OnInit,
   inject,
 } from '@angular/core';
@@ -43,7 +42,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
           (keyup.enter)="
             store.getForecasts({
               count: +count.value,
-              plus: authStore.pageRequiresLogin()
+              plus: authStore.pageRequiresLogin(),
             })
           "
           [value]="store.count()"
@@ -53,7 +52,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
         (click)="
           store.getForecasts({
             count: +count.value,
-            plus: authStore.pageRequiresLogin()
+            plus: authStore.pageRequiresLogin(),
           })
         "
         tooltip="Get Forecasts"
@@ -68,11 +67,12 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
       />
     </lib-page-container>
   `,
+  host: {
+    'data-testid': 'lib-weather-forecast',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WeatherForecastComponent implements OnInit {
-  @HostBinding('attr.data-testid') testid = 'lib-weather-forecast';
-
   readonly layoutStore = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
   readonly store = inject(WeatherForecastStore);

@@ -7,7 +7,6 @@ import {
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   OnInit,
   computed,
   inject,
@@ -79,11 +78,13 @@ import { WeatherForecast } from '../../models/weather-forecast';
       } -->
     }
   `,
+  host: {
+    'data-testid': 'lib-forecast-table',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ForecastTableComponent implements OnInit {
   breakpointObserver = inject(BreakpointObserver);
-  @HostBinding('attr.data-testid') testid = 'lib-forecast-table';
 
   loading = input<boolean>(null);
   data = input<WeatherForecast[]>(null);

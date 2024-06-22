@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
   standalone: true,
@@ -29,11 +24,12 @@ import {
       }
     `,
   ],
+  host: {
+    class:
+      'bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarComponent {
-  @HostBinding('class') class =
-    'bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]';
-
   title = input<string>(null);
 }

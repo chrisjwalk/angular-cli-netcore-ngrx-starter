@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   OnInit,
   inject,
 } from '@angular/core';
@@ -88,11 +87,12 @@ import { MarkdownComponent } from 'ngx-markdown';
       }
     `,
   ],
+  host: {
+    'data-testid': 'lib-home',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit {
-  @HostBinding('attr.data-testid') testid = 'lib-home';
-
   readonly layoutStore = inject(LayoutStore);
   readonly state = signalState({ src: '/assets/home.component.md' });
 

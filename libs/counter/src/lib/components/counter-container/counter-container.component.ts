@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  HostBinding,
   OnInit,
   inject,
   input,
@@ -46,11 +45,12 @@ import { CounterComponent } from '../counter/counter.component';
       />
     </lib-page-container>
   `,
+  host: {
+    'data-testid': 'lib-counter-container',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainerComponent implements OnInit {
-  @HostBinding('attr.data-testid') testid = 'lib-counter-container';
-
   readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
 

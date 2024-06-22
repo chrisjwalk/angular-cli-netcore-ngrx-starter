@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -23,10 +18,11 @@ import { MatTooltipModule } from '@angular/material/tooltip';
       <ng-content />
     </button>
   `,
+  host: {
+    class: 'flex items-center',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PageToolbarButtonComponent {
-  @HostBinding('class') class = 'flex items-center';
-
   tooltip = input<string>(null);
 }

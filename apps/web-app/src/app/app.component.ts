@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  HostBinding,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { RouterModule } from '@angular/router';
@@ -55,12 +50,13 @@ import {
       }
     `,
   ],
+  host: {
+    'data-testid': 'app-root',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SwUpdateStore],
 })
 export class AppComponent {
-  @HostBinding('attr.data-testid') testid = 'app-root';
-
   readonly swUpdateStore = inject(SwUpdateStore);
   readonly store = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
