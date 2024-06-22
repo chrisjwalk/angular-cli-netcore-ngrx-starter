@@ -11,7 +11,8 @@ module.exports = [
   ...baseConfig,
   ...compat.config().map((config) => ({
     ...config,
-    files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+    files: ['src/**/*.ts', 'src/**/*.tsx', 'src/**/*.js', 'src/**/*.jsx'],
+    ignores: ['dist/**'],
     rules: {
       ...config.rules,
     },
