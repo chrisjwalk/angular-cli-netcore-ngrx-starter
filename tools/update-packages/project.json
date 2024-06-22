@@ -3,6 +3,7 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "tools/update-packages/src",
   "projectType": "application",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nx/esbuild:esbuild",
@@ -63,6 +64,5 @@
         "passWithNoTests": true
       }
     }
-  },
-  "tags": []
+  }
 }
