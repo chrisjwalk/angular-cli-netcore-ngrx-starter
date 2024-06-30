@@ -45,6 +45,7 @@
     "dotnet:coverage": "dotnet tool install --global dotnet-coverage",
     "dotnet:clean": "dotnet clean apps/api",
     "dotnet:build": "dotnet build apps/api",
+    "dotnet:update": "dotnet outdated -u apps/api",
     "preinstall": "npm run dotnet:restore",
     "postinstall": "npm run build:dotnet-builder",
     "prepare": "husky",
