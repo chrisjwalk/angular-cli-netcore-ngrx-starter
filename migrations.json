@@ -1,12 +1,11 @@
 {
   "migrations": [
     {
-      "version": "19.2.4-beta.0",
-      "description": "Set project name in nx.json explicitly",
-      "implementation": "./src/migrations/update-19-2-4/set-project-name",
-      "x-repair-skip": true,
-      "package": "nx",
-      "name": "19-2-4-set-project-name"
+      "description": "Add @testing-library/dom as a dev dependency",
+      "version": "17.0.0-beta.3",
+      "factory": "./dtl-as-dev-dependency/index",
+      "package": "@testing-library/angular",
+      "name": "atl-add-dtl-as-dev-dependency"
     }
   ]
 }
