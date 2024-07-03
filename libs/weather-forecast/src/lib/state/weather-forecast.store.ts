@@ -40,7 +40,8 @@ export const WeatherForecastStore = signalStore(
                   patchState(
                     store,
                     setAllEntities(weatherForecasts, {
-                      idKey: 'dateFormatted',
+                      selectId: (weatherForecast) =>
+                        weatherForecast.dateFormatted,
                     }),
                     {
                       loading: false,
