@@ -27,6 +27,7 @@ import { CounterComponent } from '../counter/counter.component';
   ],
   selector: 'lib-counter-container',
   template: `
+    @let count = store.count();
     <lib-page-toolbar [title]="layoutStore.title()">
       <lib-page-toolbar-button
         (click)="store.incrementCount()"
@@ -38,7 +39,7 @@ import { CounterComponent } from '../counter/counter.component';
     <lib-page-container>
       <lib-counter
         #counter
-        [count]="store.count()"
+        [count]="count"
         (increment)="store.incrementCount()"
         (decrement)="store.decrementCount()"
         (setCount)="store.setCount($event)"

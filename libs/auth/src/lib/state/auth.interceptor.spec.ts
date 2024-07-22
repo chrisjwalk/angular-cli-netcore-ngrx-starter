@@ -1,7 +1,6 @@
 import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { patchState } from '@ngrx/signals';
 
 import { catchError, of, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
@@ -29,14 +28,14 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: {
+      store.setResponse(
+        {
           ...authResponseInitialState,
           accessToken: 'abc123',
           refreshToken: 'xyz789',
         },
-        loginStatus: 'success',
-      });
+        'success',
+      );
 
       const next = jest.fn().mockReturnValue(of(null));
 
@@ -55,9 +54,7 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: authResponseInitialState,
-      });
+      store.setResponse(authResponseInitialState);
 
       const next = jest.fn().mockReturnValue(of(null));
 
@@ -70,16 +67,16 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       let req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: {
+      store.setResponse(
+        {
           ...authResponseInitialState,
           accessToken: 'abc123',
           refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
-        loginStatus: 'success',
-      });
+        'success',
+      );
 
       let nextCount = 0;
 
@@ -136,9 +133,7 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: authResponseInitialState,
-      });
+      store.setResponse(authResponseInitialState);
 
       const next = jest.fn().mockReturnValue(
         throwError(
@@ -164,16 +159,16 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: {
+      store.setResponse(
+        {
           ...authResponseInitialState,
           accessToken: 'abc123',
           refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
-        loginStatus: 'success',
-      });
+        'success',
+      );
       const unauthorizedResponnse = new HttpErrorResponse({
         status: 401,
         statusText: 'Unauthorized',
@@ -203,16 +198,16 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       let req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: {
+      store.setResponse(
+        {
           ...authResponseInitialState,
           accessToken: 'abc123',
           refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
-        loginStatus: 'success',
-      });
+        'success',
+      );
       const unauthorizedResponnse = new HttpErrorResponse({
         status: 401,
         statusText: 'Unauthorized',
@@ -259,16 +254,16 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: {
+      store.setResponse(
+        {
           ...authResponseInitialState,
           accessToken: 'abc123',
           refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 3600,
         },
-        loginStatus: 'success',
-      });
+        'success',
+      );
       const badRequestResponnse = new HttpErrorResponse({
         status: 400,
         statusText: 'Bad Request',
@@ -292,16 +287,16 @@ describe('authInterceptor', () => {
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
-      patchState(store, {
-        response: {
+      store.setResponse(
+        {
           ...authResponseInitialState,
           accessToken: 'abc123',
           refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
-        loginStatus: 'success',
-      });
+        'success',
+      );
       const badRequestResponnse = new HttpErrorResponse({
         status: 400,
         statusText: 'Bad Request',

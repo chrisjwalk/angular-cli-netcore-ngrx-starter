@@ -160,7 +160,7 @@ describe('AuthStore', () => {
       const state = { url: '/test' } as RouterStateSnapshot;
       const navigate = jest.spyOn(router, 'navigate');
 
-      patchState(store, { redirect: { route, state } });
+      store.setRedirect(route, state);
       store.redirectAfterLogin();
       expect(navigate).toHaveBeenCalledWith(['/test']);
       expect(store.redirect()).toBe(null);

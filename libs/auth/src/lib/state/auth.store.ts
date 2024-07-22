@@ -161,6 +161,15 @@ export const AuthStore = signalStore(
     loginStatusToObservable() {
       return toObservable(store.loginStatus).pipe(startWith(null));
     },
+    setRedirect(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+      patchState(store, { redirect: { route, state } });
+    },
+    setResponse(response: AuthResponseState, loginStatus?: LoginStatus) {
+      patchState(store, { response });
+      if (loginStatus) {
+        patchState(store, { loginStatus });
+      }
+    },
   })),
   withMethods(
     (
@@ -258,8 +267,7 @@ export function requiresLoginCanActivateFn(
     map(() => store.loggedIn()),
     map((loggedIn) => {
       if (!loggedIn) {
-        patchState(store, { redirect: { route, state } });
-
+        store.setRedirect(route, state);
         return new RedirectCommand(router.parseUrl(loginRouterLink.join('/')));
       } else {
         return loggedIn;
