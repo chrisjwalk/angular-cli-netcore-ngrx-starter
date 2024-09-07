@@ -1,12 +1,8 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  CounterStore,
-  CounterStoreInstance,
-  conuterInitialState,
-} from './counter.store';
+import { CounterStore, conuterInitialState } from './counter.store';
 
 describe('CounterStore', () => {
-  let store: CounterStoreInstance;
+  let store: CounterStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

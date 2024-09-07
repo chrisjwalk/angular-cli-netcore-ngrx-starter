@@ -2,17 +2,16 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 
+import { inject } from '@angular/core';
+import { FormBuilder } from '@angular/forms';
 import {
   LoginStore,
-  LoginStoreInstance,
   defaultLoginRequest,
   getLoginFormGroup,
 } from './login.store';
-import { inject } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
 
 describe('LoginStore', () => {
-  let store: LoginStoreInstance;
+  let store: LoginStore;
 
   beforeEach(() => {
     TestBed.configureTestingModule({

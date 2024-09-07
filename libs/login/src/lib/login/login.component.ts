@@ -41,7 +41,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
             store.valid() ? authStore.login(store.request()) : null
           "
         >
-          @if (!authStore.loading()) {
+          @if (!authStore.loginLoading()) {
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input matInput formControlName="email" />
@@ -61,11 +61,11 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
             <button
               mat-raised-button
               color="primary"
-              [disabled]="!store.valid() || authStore.loading()"
+              [disabled]="!store.valid() || authStore.loginLoading()"
               (click)="authStore.login(store.request())"
             >
               <span class="flex gap-2 items-center">
-                @if (authStore.loading()) {
+                @if (authStore.loginLoading()) {
                   <mat-spinner
                     [diameter]="20"
                     [strokeWidth]="2"

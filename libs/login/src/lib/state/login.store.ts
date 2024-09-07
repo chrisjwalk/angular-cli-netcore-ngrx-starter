@@ -31,10 +31,7 @@ export const LoginStore = signalStore(
   })),
 );
 
-export function getLoginFormGroup(
-  formBuilder: FormBuilder,
-  store: LoginStoreInstance,
-) {
+export function getLoginFormGroup(formBuilder: FormBuilder, store: LoginStore) {
   const { email, password, twoFactorCode, twoFactorRecoveryCode } =
     store.request();
 
@@ -55,5 +52,5 @@ export function getLoginFormGroup(
   return formGroup;
 }
 
-export type LoginStoreInstance = InstanceType<typeof LoginStore>;
+export type LoginStore = InstanceType<typeof LoginStore>;
 export type LoginFormGroup = ReturnType<typeof getLoginFormGroup>;

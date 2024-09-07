@@ -79,7 +79,7 @@ export const authInitialState: AuthState = {
   loginStatus: 'none',
 };
 
-export type AuthStoreInstance = InstanceType<typeof AuthStore>;
+export type AuthStore = InstanceType<typeof AuthStore>;
 
 export const refreshTokenKey = 'refreshToken';
 export const loginRouterLink = ['/login'];
@@ -102,7 +102,7 @@ export const AuthStore = signalStore(
     refreshToken: computed(() => state.response.refreshToken()),
     loginSuccess: computed(() => state.loginStatus() === 'success'),
     loginError: computed(() => state.loginStatus() === 'error'),
-    loading: computed(() => state.loginStatus() === 'loading'),
+    loginLoading: computed(() => state.loginStatus() === 'loading'),
     noRefreshTokenAvailable: computed(
       () => state.loginStatus() === 'no-refresh-token',
     ),

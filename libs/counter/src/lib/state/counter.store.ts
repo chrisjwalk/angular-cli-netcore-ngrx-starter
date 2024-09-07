@@ -1,3 +1,4 @@
+import { computed, Injectable } from '@angular/core';
 import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { filter, map, pipe, tap } from 'rxjs';
@@ -34,4 +35,4 @@ export const CounterStore = signalStore(
   })),
 );
 
-export type CounterStoreInstance = InstanceType<typeof CounterStore>;
+export type CounterStore = InstanceType<typeof CounterStore>;

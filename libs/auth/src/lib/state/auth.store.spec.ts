@@ -7,13 +7,12 @@ import {
   RouterStateSnapshot,
 } from '@angular/router';
 import { loadingInitialState } from '@myorg/shared';
-import { getState, patchState } from '@ngrx/signals';
+import { getState } from '@ngrx/signals';
 import { of, throwError } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import {
   AuthStore,
-  AuthStoreInstance,
   authInitialState,
   authResponseInitialState,
   loginRouterLink,
@@ -22,7 +21,7 @@ import {
 } from './auth.store';
 
 describe('AuthStore', () => {
-  let store: AuthStoreInstance;
+  let store: AuthStore;
   let authService: AuthService;
   let router: Router;
 
@@ -54,7 +53,7 @@ describe('AuthStore', () => {
     TestBed.runInInjectionContext(() => {
       store.loginStart();
 
-      expect(store.loading()).toBe(true);
+      expect(store.loginLoading()).toBe(true);
     }));
 
   it('should set the loading state to false and the logged in state to true when login succeeds', () =>
@@ -64,7 +63,7 @@ describe('AuthStore', () => {
         accessToken: 'token',
       });
 
-      expect(store.loading()).toBe(false);
+      expect(store.loginLoading()).toBe(false);
       expect(store.loggedIn()).toBe(true);
     }));
 
@@ -73,7 +72,7 @@ describe('AuthStore', () => {
       const error = new Error('Login failed');
       store.loginFailure(error);
 
-      expect(store.loading()).toBe(false);
+      expect(store.loginLoading()).toBe(false);
       expect(store.loggedIn()).toBe(false);
       expect(store.loginError()).toBe(true);
     }));
@@ -111,7 +110,7 @@ describe('AuthStore', () => {
       expect(store.expired()).toEqual(false);
       expect(store.loginSuccess()).toBe(true);
       expect(store.loginError()).toBe(false);
-      expect(store.loading()).toBe(false);
+      expect(store.loginLoading()).toBe(false);
       expect(store.noRefreshTokenAvailable()).toBe(false);
       expect(store.loginAttempted()).toBe(true);
     }));

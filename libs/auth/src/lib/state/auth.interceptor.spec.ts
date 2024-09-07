@@ -6,14 +6,10 @@ import { catchError, of, throwError } from 'rxjs';
 import { AuthService } from '../services/auth.service';
 import { authInterceptor } from './auth.interceptor';
 import * as authStore from './auth.store';
-import {
-  AuthStore,
-  AuthStoreInstance,
-  authResponseInitialState,
-} from './auth.store';
+import { AuthStore, authResponseInitialState } from './auth.store';
 
 describe('authInterceptor', () => {
-  let store: AuthStoreInstance;
+  let store: AuthStore;
   let authService: AuthService;
 
   beforeEach(() => {
