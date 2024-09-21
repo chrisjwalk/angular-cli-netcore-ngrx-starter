@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'counter',
   preset: '../../jest.preset.js',

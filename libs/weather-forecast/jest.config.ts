@@ -1,4 +1,3 @@
-/* eslint-disable */
 export default {
   displayName: 'weather-forecast',
   preset: '../../jest.preset.js',

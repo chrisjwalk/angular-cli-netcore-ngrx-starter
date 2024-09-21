@@ -57,7 +57,7 @@ async function mergeMigrations(verbose: boolean) {
     destParsed = JSON.parse(destData.toString()) as MigrationsJson;
   } catch (e) {
     if (verbose) {
-      console.log(`${dest} does not exist`);
+      console.log(`${dest} does not exist`, e);
     }
   }
 
