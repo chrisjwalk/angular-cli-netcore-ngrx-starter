@@ -26,12 +26,8 @@ module.exports = [
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     // Override or add rules here
     rules: {
-      '@typescript-eslint/explicit-member-accessibility': 'off',
-      '@typescript-eslint/explicit-module-boundary-types': 'off',
-      '@typescript-eslint/explicit-function-return-type': 'off',
-      '@typescript-eslint/no-parameter-properties': 'off',
       '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-inferrable-types': 'off',
+      '@/semi': ['error', 'always'],
       '@/no-extra-semi': 'error',
       '@/quotes': ['error', 'single', { allowTemplateLiterals: true }],
     },
