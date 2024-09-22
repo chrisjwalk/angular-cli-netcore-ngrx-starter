@@ -47,7 +47,7 @@ steps:
       searchFolder: 'junit'
       failTaskOnFailedTests: true
 
-  - task: PublishCodeCoverageResults@1
+  - task: PublishCodeCoverageResults@2
     displayName: 'Publish Code Coverage'
     inputs:
       codeCoverageTool: Cobertura
