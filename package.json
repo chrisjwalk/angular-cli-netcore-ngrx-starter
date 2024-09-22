@@ -49,7 +49,7 @@
     "preinstall": "npm run dotnet:restore",
     "postinstall": "npm run build:dotnet-builder",
     "prepare": "husky",
-    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild marked typescript zone.js"
+    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild marked typescript"
   },
   "private": true,
   "dependencies": {
@@ -129,8 +129,7 @@
     "ts-jest": "29.2.5",
     "ts-node": "10.9.2",
     "typescript": "5.5.4",
-    "typescript-eslint": "8.6.0",
-    "zone.js": "0.14.10"
+    "typescript-eslint": "8.6.0"
   },
   "lint-staged": {
     "*.{ts,js}": "eslint --cache --cache-location=.husky/_ --fix",
