@@ -4,6 +4,7 @@ import { SwUpdate, VersionEvent } from '@angular/service-worker';
 import {
   patchState,
   signalStore,
+  signalStoreFeature,
   withComputed,
   withHooks,
   withMethods,
@@ -39,6 +40,43 @@ export const swUpdateInitialState: SwUpdateState = {
   },
 };
 
+export function withSwUpdateFeature() {
+  return signalStoreFeature(
+    withState(swUpdateInitialState),
+    withComputed((store) => ({
+      updateReady: computed(
+        () => store.versionEvent?.type() === 'VERSION_READY',
+      ),
+    })),
+    withMethods((store, swUpdate = inject(SwUpdate)) => ({
+      reloadAppOnAction: rxMethod<void>(
+        pipe(
+          tap(async () => {
+            await swUpdate.activateUpdate();
+            document.location.reload();
+          }),
+        ),
+      ),
+    })),
+    withMethods((store, snackBar = inject(MatSnackBar)) => ({
+      versionUpdates: rxMethod<VersionEvent>(
+        pipe(
+          map((versionEvent) => patchState(store, { versionEvent })),
+          map(() => store.updateReady()),
+          filter((updateReady) => updateReady),
+          tap(() =>
+            store.reloadAppOnAction(
+              snackBar
+                .open(store.message(), store.action(), store.snackbarConfig())
+                .onAction(),
+            ),
+          ),
+        ),
+      ),
+    })),
+  );
+}
+
 /**
  * Service Worker Update Store
  *
@@ -48,36 +86,7 @@ export const swUpdateInitialState: SwUpdateState = {
  * to function.
  */
 export const SwUpdateStore = signalStore(
-  withState(swUpdateInitialState),
-  withComputed((store) => ({
-    updateReady: computed(() => store.versionEvent?.type() === 'VERSION_READY'),
-  })),
-  withMethods((store, swUpdate = inject(SwUpdate)) => ({
-    reloadAppOnAction: rxMethod<void>(
-      pipe(
-        tap(async () => {
-          await swUpdate.activateUpdate();
-          document.location.reload();
-        }),
-      ),
-    ),
-  })),
-  withMethods((store, snackBar = inject(MatSnackBar)) => ({
-    versionUpdates: rxMethod<VersionEvent>(
-      pipe(
-        map((versionEvent) => patchState(store, { versionEvent })),
-        map(() => store.updateReady()),
-        filter((updateReady) => updateReady),
-        tap(() =>
-          store.reloadAppOnAction(
-            snackBar
-              .open(store.message(), store.action(), store.snackbarConfig())
-              .onAction(),
-          ),
-        ),
-      ),
-    ),
-  })),
+  withSwUpdateFeature(),
   withHooks((store, swUpdate = inject(SwUpdate)) => ({
     onInit() {
       if (swUpdate.isEnabled) {

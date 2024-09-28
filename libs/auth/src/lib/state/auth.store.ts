@@ -12,6 +12,7 @@ import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
   signalStore,
+  signalStoreFeature,
   withComputed,
   withHooks,
   withMethods,
@@ -85,149 +86,155 @@ export const refreshTokenKey = 'refreshToken';
 export const loginRouterLink = ['/login'];
 export const homeRouterLink = ['/'];
 
-export const AuthStore = signalStore(
-  { providedIn: 'root' },
-  withState(authInitialState),
-  withLoadingFeature(),
-  withComputed((state) => ({
-    expiresAt: computed(() =>
-      state.response?.accessTokenIssued()
-        ? new Date(
-            state.response.accessTokenIssued().getTime() +
-              state.response.expiresIn() * 1000,
-          )
-        : null,
-    ),
-    accessToken: computed(() => state.response.accessToken()),
-    refreshToken: computed(() => state.response.refreshToken()),
-    loginSuccess: computed(() => state.loginStatus() === 'success'),
-    loginError: computed(() => state.loginStatus() === 'error'),
-    loginLoading: computed(() => state.loginStatus() === 'loading'),
-    noRefreshTokenAvailable: computed(
-      () => state.loginStatus() === 'no-refresh-token',
-    ),
-    loggedOut: computed(() => state.loginStatus() === 'logged-out'),
-  })),
-  withComputed((state) => ({
-    expired: computed(() =>
-      state.expiresAt() ? state.expiresAt().getTime() <= Date.now() : null,
-    ),
-    loginAttempted: computed(
-      () =>
-        state.loginError() ||
-        state.loginSuccess() ||
-        state.noRefreshTokenAvailable(),
-    ),
-    loggedIn: computed(() => state.loginSuccess() && !!state.accessToken()),
-  })),
-  withMethods((store, router = inject(Router)) => ({
-    loginStart() {
-      removeRefreshToken();
-      patchState(store, {
-        error: null,
-        response: authResponseInitialState,
-        loginStatus: 'loading',
-      });
-    },
-    loginSuccessful(response: AuthResponse) {
-      patchState(store, {
-        loginStatus: 'success',
-        response: { ...response, accessTokenIssued: new Date() },
-      });
-      storeRefreshToken(response);
-    },
-    loginFailure(error: any) {
-      console.error(error);
-      patchState(store, {
-        error,
-        loginStatus: 'error',
-      });
-    },
-    loginReset() {
-      removeRefreshToken();
-      patchState(store, authInitialState);
-    },
-    redirectAfterLogin() {
-      if (store.redirect()) {
-        router.navigate([store.redirect().state.url]);
-        patchState(store, { redirect: null });
-      } else {
-        router.navigate(homeRouterLink);
-      }
-    },
-    loginRequired(pageRequiresLogin: boolean) {
-      patchState(store, { pageRequiresLogin });
-    },
-    loginStatusToObservable() {
-      return toObservable(store.loginStatus).pipe(startWith(null));
-    },
-    setRedirect(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-      patchState(store, { redirect: { route, state } });
-    },
-    setResponse(response: AuthResponseState, loginStatus?: LoginStatus) {
-      patchState(store, { response });
-      if (loginStatus) {
-        patchState(store, { loginStatus });
-      }
-    },
-  })),
-  withMethods(
-    (
-      store,
-      authService = inject(AuthService),
-      snackBar = inject(MatSnackBar),
-      router = inject(Router),
-    ) => ({
-      login: rxMethod<Login>(
-        pipe(
-          tap(() => store.loginStart()),
-          switchMap((request) =>
-            authService.login(request).pipe(
-              tapResponse(
-                (response) => {
-                  snackBar.open('Login Successful', 'Close', {
-                    duration: 5000,
-                  });
-                  store.redirectAfterLogin();
-                  store.loginSuccessful(response);
-                },
-                (error) => {
-                  snackBar.open('Login failed', 'Close', {
-                    duration: 5000,
-                  });
-                  store.loginFailure(error);
-                },
-              ),
-            ),
-          ),
-        ),
+export function withAuthFeature() {
+  return signalStoreFeature(
+    withState(authInitialState),
+    withLoadingFeature(),
+    withComputed((state) => ({
+      expiresAt: computed(() =>
+        state.response?.accessTokenIssued()
+          ? new Date(
+              state.response.accessTokenIssued().getTime() +
+                state.response.expiresIn() * 1000,
+            )
+          : null,
       ),
-      refresh: rxMethod<Refresh>(
-        pipe(
-          tap(() => store.loginStart()),
-          switchMap((refresh) =>
-            authService.refresh(refresh).pipe(
-              tapResponse(
-                (response) => store.loginSuccessful(response),
-                (error) => store.loginFailure(error),
-              ),
-            ),
-          ),
-        ),
+      accessToken: computed(() => state.response.accessToken()),
+      refreshToken: computed(() => state.response.refreshToken()),
+      loginSuccess: computed(() => state.loginStatus() === 'success'),
+      loginError: computed(() => state.loginStatus() === 'error'),
+      loginLoading: computed(() => state.loginStatus() === 'loading'),
+      noRefreshTokenAvailable: computed(
+        () => state.loginStatus() === 'no-refresh-token',
       ),
-      logout: (redirectToLogin: boolean) => {
-        store.loginReset();
-        patchState(store, { loginStatus: 'logged-out' });
-        if (redirectToLogin) {
-          router.navigate(loginRouterLink);
+      loggedOut: computed(() => state.loginStatus() === 'logged-out'),
+    })),
+    withComputed((state) => ({
+      expired: computed(() =>
+        state.expiresAt() ? state.expiresAt().getTime() <= Date.now() : null,
+      ),
+      loginAttempted: computed(
+        () =>
+          state.loginError() ||
+          state.loginSuccess() ||
+          state.noRefreshTokenAvailable(),
+      ),
+      loggedIn: computed(() => state.loginSuccess() && !!state.accessToken()),
+    })),
+    withMethods((store, router = inject(Router)) => ({
+      loginStart() {
+        removeRefreshToken();
+        patchState(store, {
+          error: null,
+          response: authResponseInitialState,
+          loginStatus: 'loading',
+        });
+      },
+      loginSuccessful(response: AuthResponse) {
+        patchState(store, {
+          loginStatus: 'success',
+          response: { ...response, accessTokenIssued: new Date() },
+        });
+        storeRefreshToken(response);
+      },
+      loginFailure(error: any) {
+        console.error(error);
+        patchState(store, {
+          error,
+          loginStatus: 'error',
+        });
+      },
+      loginReset() {
+        removeRefreshToken();
+        patchState(store, authInitialState);
+      },
+      redirectAfterLogin() {
+        if (store.redirect()) {
+          router.navigate([store.redirect().state.url]);
+          patchState(store, { redirect: null });
         } else {
-          snackBar.open('Logout Successful', 'Close', {
-            duration: 5000,
-          });
+          router.navigate(homeRouterLink);
         }
       },
-    }),
-  ),
+      loginRequired(pageRequiresLogin: boolean) {
+        patchState(store, { pageRequiresLogin });
+      },
+      loginStatusToObservable() {
+        return toObservable(store.loginStatus).pipe(startWith(null));
+      },
+      setRedirect(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+        patchState(store, { redirect: { route, state } });
+      },
+      setResponse(response: AuthResponseState, loginStatus?: LoginStatus) {
+        patchState(store, { response });
+        if (loginStatus) {
+          patchState(store, { loginStatus });
+        }
+      },
+    })),
+    withMethods(
+      (
+        store,
+        authService = inject(AuthService),
+        snackBar = inject(MatSnackBar),
+        router = inject(Router),
+      ) => ({
+        login: rxMethod<Login>(
+          pipe(
+            tap(() => store.loginStart()),
+            switchMap((request) =>
+              authService.login(request).pipe(
+                tapResponse(
+                  (response) => {
+                    snackBar.open('Login Successful', 'Close', {
+                      duration: 5000,
+                    });
+                    store.redirectAfterLogin();
+                    store.loginSuccessful(response);
+                  },
+                  (error) => {
+                    snackBar.open('Login failed', 'Close', {
+                      duration: 5000,
+                    });
+                    store.loginFailure(error);
+                  },
+                ),
+              ),
+            ),
+          ),
+        ),
+        refresh: rxMethod<Refresh>(
+          pipe(
+            tap(() => store.loginStart()),
+            switchMap((refresh) =>
+              authService.refresh(refresh).pipe(
+                tapResponse(
+                  (response) => store.loginSuccessful(response),
+                  (error) => store.loginFailure(error),
+                ),
+              ),
+            ),
+          ),
+        ),
+        logout: (redirectToLogin: boolean) => {
+          store.loginReset();
+          patchState(store, { loginStatus: 'logged-out' });
+          if (redirectToLogin) {
+            router.navigate(loginRouterLink);
+          } else {
+            snackBar.open('Logout Successful', 'Close', {
+              duration: 5000,
+            });
+          }
+        },
+      }),
+    ),
+  );
+}
+
+export const AuthStore = signalStore(
+  { providedIn: 'root' },
+  withAuthFeature(),
   withHooks({
     onInit(store) {
       const refreshToken = getRefreshToken();

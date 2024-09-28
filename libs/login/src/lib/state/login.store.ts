@@ -1,6 +1,12 @@
 import { FormBuilder, Validators } from '@angular/forms';
 import { Login } from '@myorg/auth';
-import { patchState, signalStore, withMethods, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  signalStoreFeature,
+  withMethods,
+  withState,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { map, pipe, startWith } from 'rxjs';
 
@@ -21,14 +27,20 @@ export const loginInitialState: LoginState = {
   valid: null,
 };
 
+export function withLoginFeature() {
+  return signalStoreFeature(
+    withState(loginInitialState),
+    withMethods((store) => ({
+      syncFormGroup: rxMethod<LoginState>(
+        pipe(map((state) => patchState(store, state))),
+      ),
+    })),
+  );
+}
+
 export const LoginStore = signalStore(
   { providedIn: 'root' },
-  withState(loginInitialState),
-  withMethods((store) => ({
-    syncFormGroup: rxMethod<LoginState>(
-      pipe(map((state) => patchState(store, state))),
-    ),
-  })),
+  withLoginFeature(),
 );
 
 export function getLoginFormGroup(formBuilder: FormBuilder, store: LoginStore) {
