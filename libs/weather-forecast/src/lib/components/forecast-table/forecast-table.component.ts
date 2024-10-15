@@ -1,13 +1,7 @@
-import {
-  BreakpointObserver,
-  BreakpointState,
-  Breakpoints,
-  LayoutModule,
-} from '@angular/cdk/layout';
+import { LayoutModule } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   computed,
   inject,
   input,
@@ -15,9 +9,8 @@ import {
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { patchState, signalState } from '@ngrx/signals';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { map, pipe } from 'rxjs';
 
+import { BreakpointStore } from '@myorg/shared';
 import { WeatherForecast } from '../../models/weather-forecast';
 
 @Component({
@@ -66,42 +59,19 @@ import { WeatherForecast } from '../../models/weather-forecast';
           ></mat-row>
         </mat-table>
       </div>
-      <!-- @if (!state.handsetPortrait()) {
-        <div class="flex justify-end">
-          <button
-            class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground shadow hover:bg-primary/90 h-9 px-4 py-2"
-            (click)="toggleSummary()"
-          >
-            Toggle Summary
-          </button>
-        </div>
-      } -->
     }
   `,
   host: {
     'data-testid': 'lib-forecast-table',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [BreakpointStore],
 })
-export class ForecastTableComponent implements OnInit {
-  breakpointObserver = inject(BreakpointObserver);
+export class ForecastTableComponent {
+  breakpointStore = inject(BreakpointStore);
 
   loading = input<boolean>(null);
   data = input<WeatherForecast[]>(null);
-
-  ngOnInit() {
-    this.rxBreakpointObserver(
-      this.breakpointObserver.observe(Breakpoints.HandsetPortrait),
-    );
-  }
-
-  rxBreakpointObserver = rxMethod<BreakpointState>(
-    pipe(
-      map((result) =>
-        patchState(this.state, { handsetPortrait: result.matches }),
-      ),
-    ),
-  );
 
   state = signalState({
     columns: [
@@ -118,7 +88,6 @@ export class ForecastTableComponent implements OnInit {
       },
       { name: 'summary', visible: true, displayHandsetPortrait: false },
     ],
-    handsetPortrait: false,
   });
 
   displayedColumns = computed(() =>
@@ -127,7 +96,9 @@ export class ForecastTableComponent implements OnInit {
       .filter(
         (c) =>
           c.visible &&
-          (this.state.handsetPortrait() ? c.displayHandsetPortrait : true),
+          (this.breakpointStore.handsetPortrait()
+            ? c.displayHandsetPortrait
+            : true),
       )
       .map((c) => c.name),
   );
