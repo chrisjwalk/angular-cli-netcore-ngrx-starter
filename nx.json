@@ -82,5 +82,6 @@
     }
   },
   "defaultProject": "web-app",
-  "defaultBase": "origin/main"
+  "defaultBase": "origin/main",
+  "useLegacyCache": true
 }
