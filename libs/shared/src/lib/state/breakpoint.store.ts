@@ -49,6 +49,7 @@ export const BreakpointStore = signalStore(
       webLandscape: BreakpointState;
     }>(
       pipe(
+        debounceTime(0),
         map(
           ({
             xsmall,
@@ -89,40 +90,30 @@ export const BreakpointStore = signalStore(
   withHooks((store, breakpointObserver = inject(BreakpointObserver)) => ({
     onInit() {
       store.rxBreakpointObserver(
-        combineLatest([
-          breakpointObserver.observe(Breakpoints.XSmall),
-          breakpointObserver.observe(Breakpoints.Small),
-          breakpointObserver.observe(Breakpoints.Medium),
-          breakpointObserver.observe(Breakpoints.Large),
-          breakpointObserver.observe(Breakpoints.XLarge),
-          breakpointObserver.observe(Breakpoints.Handset),
-          breakpointObserver.observe(Breakpoints.Tablet),
-          breakpointObserver.observe(Breakpoints.Web),
-          breakpointObserver.observe(Breakpoints.HandsetPortrait),
-          breakpointObserver.observe(Breakpoints.TabletPortrait),
-          breakpointObserver.observe(Breakpoints.WebPortrait),
-          breakpointObserver.observe(Breakpoints.HandsetLandscape),
-          breakpointObserver.observe(Breakpoints.TabletLandscape),
-          breakpointObserver.observe(Breakpoints.WebLandscape),
-        ]).pipe(
-          debounceTime(0),
-          map((result) => ({
-            xsmall: result[0],
-            small: result[1],
-            medium: result[2],
-            large: result[3],
-            xlarge: result[4],
-            handset: result[5],
-            tablet: result[6],
-            web: result[7],
-            handsetPortrait: result[8],
-            tabletPortrait: result[9],
-            webPortrait: result[10],
-            handsetLandscape: result[11],
-            tabletLandscape: result[12],
-            webLandscape: result[13],
-          })),
-        ),
+        combineLatest({
+          xsmall: breakpointObserver.observe(Breakpoints.XSmall),
+          small: breakpointObserver.observe(Breakpoints.Small),
+          medium: breakpointObserver.observe(Breakpoints.Medium),
+          large: breakpointObserver.observe(Breakpoints.Large),
+          xlarge: breakpointObserver.observe(Breakpoints.XLarge),
+          handset: breakpointObserver.observe(Breakpoints.Handset),
+          tablet: breakpointObserver.observe(Breakpoints.Tablet),
+          web: breakpointObserver.observe(Breakpoints.Web),
+          handsetPortrait: breakpointObserver.observe(
+            Breakpoints.HandsetPortrait,
+          ),
+          tabletPortrait: breakpointObserver.observe(
+            Breakpoints.TabletPortrait,
+          ),
+          webPortrait: breakpointObserver.observe(Breakpoints.WebPortrait),
+          handsetLandscape: breakpointObserver.observe(
+            Breakpoints.HandsetLandscape,
+          ),
+          tabletLandscape: breakpointObserver.observe(
+            Breakpoints.TabletLandscape,
+          ),
+          webLandscape: breakpointObserver.observe(Breakpoints.WebLandscape),
+        }),
       );
     },
   })),
