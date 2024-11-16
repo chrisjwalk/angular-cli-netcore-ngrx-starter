@@ -8,19 +8,13 @@ import {
   LayoutStore,
   PageContainerComponent,
   PageToolbarComponent,
-  SidenavComponent,
 } from '@myorg/shared';
 import { signalState } from '@ngrx/signals';
 import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
   standalone: true,
-  imports: [
-    MarkdownComponent,
-    PageContainerComponent,
-    PageToolbarComponent,
-    SidenavComponent,
-  ],
+  imports: [MarkdownComponent, PageContainerComponent, PageToolbarComponent],
   selector: 'lib-home',
   template: `
     <lib-page-toolbar [title]="layoutStore.title()" />

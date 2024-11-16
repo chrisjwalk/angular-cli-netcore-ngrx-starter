@@ -7,7 +7,6 @@ import {
   LayoutStore,
   MainToolbarComponent,
   SidenavComponent,
-  SidenavListItemComponent,
   SwUpdateStore,
 } from '@myorg/shared';
 
@@ -18,7 +17,6 @@ import {
     MatSidenavModule,
     SidenavComponent,
     MainToolbarComponent,
-    SidenavListItemComponent,
     MatSnackBarModule,
   ],
   selector: 'app-root',
