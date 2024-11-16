@@ -1,20 +1,18 @@
 {
   "migrations": [
     {
-      "version": "20.0.1",
-      "description": "Set `useLegacyCache` to true for migrating workspaces",
-      "implementation": "./src/migrations/update-20-0-1/use-legacy-cache",
-      "x-repair-skip": true,
-      "package": "nx",
-      "name": "use-legacy-cache"
+      "version": "19.0.0-0",
+      "description": "Updates Angular Material to v19",
+      "factory": "./ng-update/index_bundled#updateToV19",
+      "package": "@angular/material",
+      "name": "migration-v19"
     },
     {
-      "version": "20.0.1",
-      "description": "Set `useLegacyCache` to true for migrating workspaces",
-      "implementation": "./src/migrations/update-20-0-1/use-legacy-cache",
-      "x-repair-skip": true,
-      "package": "nx",
-      "name": "use-legacy-cache"
+      "version": "19.0.0-0",
+      "description": "Updates the Angular CDK to v19",
+      "factory": "./ng-update/index#updateToV19",
+      "package": "@angular/cdk",
+      "name": "migration-v19"
     }
   ]
 }
