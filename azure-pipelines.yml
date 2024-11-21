@@ -25,7 +25,7 @@ steps:
     displayName: 'Install dotnet-coverage'
 
   - script: |
-      npm ci
+      npm ci --legacy-peer-deps
     displayName: 'npm ci'
 
   - script: |
