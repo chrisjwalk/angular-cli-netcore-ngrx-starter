@@ -48,13 +48,13 @@ html {
       primary-container
     )};
   --mat-sidenav-content-background-color: rgb(250, 250, 250);
+  --mat-toolbar-standard-height: 56px;
+
   @media (prefers-color-scheme: dark) {
     --mat-sidenav-content-background-color: rgb(33, 33, 33);
     --mat-toolbar-container-background-color: rgb(40, 40, 40);
     --mat-toolbar-container-text-color: rgba(255, 255, 255, 0.75);
   }
-
-  --mat-toolbar-standard-height: 56px;
 
   .mat-mdc-form-field {
     .mdc-notched-outline__notch {
