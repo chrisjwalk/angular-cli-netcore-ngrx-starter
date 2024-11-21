@@ -17,7 +17,6 @@ import { CounterStore } from '../../state';
 import { CounterComponent } from '../counter/counter.component';
 
 @Component({
-  standalone: true,
   imports: [
     MatIconModule,
     PageContainerComponent,

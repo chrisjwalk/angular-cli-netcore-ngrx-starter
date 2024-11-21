@@ -11,7 +11,6 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  standalone: true,
   imports: [
     MatButtonModule,
     MatIconModule,

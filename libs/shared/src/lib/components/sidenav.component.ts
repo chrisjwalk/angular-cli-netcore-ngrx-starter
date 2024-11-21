@@ -4,7 +4,6 @@ import { MatListModule } from '@angular/material/list';
 import { SidenavListItemComponent } from './sidenav-list-item.component';
 
 @Component({
-  standalone: true,
   imports: [SidenavListItemComponent, MatListModule],
   selector: 'lib-sidenav',
   template: `

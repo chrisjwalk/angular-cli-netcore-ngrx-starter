@@ -13,7 +13,6 @@ import { signalState } from '@ngrx/signals';
 import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
-  standalone: true,
   imports: [MarkdownComponent, PageContainerComponent, PageToolbarComponent],
   selector: 'lib-home',
   template: `

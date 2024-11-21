@@ -9,7 +9,6 @@ import { MatListModule } from '@angular/material/list';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  standalone: true,
   imports: [MatIconModule, RouterModule, MatListModule],
   selector: 'lib-sidenav-list-item',
   template: `

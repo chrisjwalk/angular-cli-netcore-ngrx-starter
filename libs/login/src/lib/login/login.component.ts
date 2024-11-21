@@ -20,7 +20,6 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
 
 @Component({
   selector: 'lib-login',
-  standalone: true,
   imports: [
     ReactiveFormsModule,
     PageContainerComponent,
