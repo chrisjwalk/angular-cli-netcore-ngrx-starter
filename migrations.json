@@ -1,27 +1,18 @@
 {
   "migrations": [
-
     {
-      "version": "19.0.0",
-      "description": "Updates non-standalone Directives, Component and Pipes to 'standalone:false' and removes 'standalone:true' from those who are standalone",
-      "factory": "./bundles/explicit-standalone-flag#migrate",
-      "package": "@angular/core",
-      "name": "explicit-standalone-flag"
+      "version": "19.0.0-0",
+      "description": "Updates Angular Material to v19",
+      "factory": "./ng-update/index_bundled#updateToV19",
+      "package": "@angular/material",
+      "name": "migration-v19"
     },
     {
-      "version": "19.0.0",
-      "description": "Updates ExperimentalPendingTasks to PendingTasks",
-      "factory": "./bundles/pending-tasks#migrate",
-      "package": "@angular/core",
-      "name": "pending-tasks"
-    },
-    {
-      "version": "19.0.0",
-      "description": "Replaces `APP_INITIALIZER`, `ENVIRONMENT_INITIALIZER` & `PLATFORM_INITIALIZER` respectively with `provideAppInitializer`, `provideEnvironmentInitializer` & `providePlatformInitializer`.",
-      "factory": "./bundles/provide-initializer#migrate",
-      "optional": true,
-      "package": "@angular/core",
-      "name": "provide-initializer"
+      "version": "19.0.0-0",
+      "description": "Updates the Angular CDK to v19",
+      "factory": "./ng-update/index#updateToV19",
+      "package": "@angular/cdk",
+      "name": "migration-v19"
     }
   ]
 }
