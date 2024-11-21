@@ -14,7 +14,6 @@ import { BreakpointStore } from '@myorg/shared';
 import { WeatherForecast } from '../../models/weather-forecast';
 
 @Component({
-  standalone: true,
   imports: [MatTableModule, MatProgressSpinnerModule, LayoutModule],
   selector: 'lib-forecast-table',
   template: `

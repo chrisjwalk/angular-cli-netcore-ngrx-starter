@@ -11,7 +11,6 @@ import {
 } from '@myorg/shared';
 
 @Component({
-  standalone: true,
   imports: [
     RouterModule,
     MatSidenavModule,

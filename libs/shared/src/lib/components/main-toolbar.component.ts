@@ -11,7 +11,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  standalone: true,
   imports: [
     RouterModule,
     MatButtonModule,

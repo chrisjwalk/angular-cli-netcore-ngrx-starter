@@ -4,7 +4,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  standalone: true,
   imports: [MatButtonModule, MatIconModule, MatTooltipModule],
   selector: 'lib-page-toolbar-button',
   template: `

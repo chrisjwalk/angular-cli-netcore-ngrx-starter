@@ -19,7 +19,6 @@ import { WeatherForecastStore } from '../../state/weather-forecast.store';
 import { ForecastTableComponent } from '../forecast-table/forecast-table.component';
 
 @Component({
-  standalone: true,
   imports: [
     PageContainerComponent,
     PageToolbarButtonComponent,
