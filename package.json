@@ -135,23 +135,5 @@
   "lint-staged": {
     "*.{ts,js}": "eslint --cache --cache-location=.husky/_ --fix",
     "*.{ts,js,css,scss,md,mdx}": "prettier --write"
-  },
-  "overrides": {
-    "@angular-eslint/schematics": {
-      "@angular-devkit/core": "$@angular-devkit/core",
-      "@angular-devkit/schematics": "$@angular-devkit/schematics"
-    },
-    "@nx/angular": {
-      "@angular-devkit/core": "$@angular-devkit/core",
-      "@angular-devkit/schematics": "$@angular-devkit/schematics",
-      "@angular-devkit/build-angular": "$@angular-devkit/build-angular",
-      "@schematics/angular": "$@schematics/angular"
-    },
-    "jest-preset-angular": {
-      "@angular/core": "$@angular/core",
-      "@angular/platform-browser-dynamic": "$@angular/platform-browser-dynamic",
-      "@angular-devkit/build-angular": "$@angular-devkit/build-angular",
-      "@angular/compiler-cli": "$@angular/compiler-cli"
-    }
   }
 }
