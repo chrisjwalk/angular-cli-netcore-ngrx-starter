@@ -1,11 +1,13 @@
-import { inject } from '@angular/core';
+import { computed, inject, ResourceRef } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { AuthStore } from '@myorg/auth';
-import { withLoadingFeature } from '@myorg/shared';
+import { LayoutStore, withLoadingFeature } from '@myorg/shared';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
   signalStore,
   signalStoreFeature,
+  withComputed,
   withHooks,
   withMethods,
   withState,
@@ -19,13 +21,15 @@ import { WeatherForecastService } from '../services/weather-forecast.service';
 
 export type WeatherForecastState = {
   count: number;
+  plus: boolean;
 };
 
 export const weatherForecastsInitialState: WeatherForecastState = {
   count: null,
+  plus: null,
 };
 
-export function withWeatherForecastFeature() {
+export function withWeatherForecastEntitiesFeature() {
   return signalStoreFeature(
     withLoadingFeature(),
     withEntities<WeatherForecast>(),
@@ -34,7 +38,9 @@ export function withWeatherForecastFeature() {
       (store, weatherForecastService = inject(WeatherForecastService)) => ({
         getForecasts: rxMethod<{ count: number; plus: boolean }>(
           pipe(
-            tap(({ count }) => patchState(store, { count, loading: true })),
+            tap(({ count, plus }) =>
+              patchState(store, { count, plus, loading: true }),
+            ),
             switchMap(({ count, plus }) =>
               weatherForecastService.getForecasts(count, plus).pipe(
                 tapResponse(
@@ -63,11 +69,60 @@ export function withWeatherForecastFeature() {
   );
 }
 
+export function withWeatherForecastFeature() {
+  let weatherForecastResource: ResourceRef<WeatherForecast[]>;
+
+  return signalStoreFeature(
+    withState(weatherForecastsInitialState),
+    withComputed((store) => ({
+      request: computed(() => ({
+        count: store.count(),
+        plus: store.plus(),
+      })),
+      loading: computed(() => weatherForecastResource?.isLoading() ?? null),
+      entities: computed(() => weatherForecastResource?.value() ?? []),
+      error: computed(() => weatherForecastResource?.error() ?? null),
+      status: computed(() => weatherForecastResource?.status() ?? null),
+    })),
+    withMethods(
+      (
+        store,
+        layoutStore = inject(LayoutStore),
+        weatherForecastService = inject(WeatherForecastService),
+      ) => ({
+        getForecasts({ count, plus }: { count: number; plus: boolean }) {
+          layoutStore.setCount(count);
+          patchState(store, { count, plus });
+        },
+        setResource() {
+          weatherForecastResource = rxResource({
+            request: store.request,
+            loader: ({ request: { count, plus } }) =>
+              weatherForecastService.getForecasts(count, plus),
+          });
+        },
+      }),
+    ),
+    withHooks({
+      onInit(store) {
+        store.setResource();
+      },
+    }),
+  );
+}
+
 export const WeatherForecastStore = signalStore(
   withWeatherForecastFeature(),
   withHooks({
-    onInit({ getForecasts }, authStore = inject(AuthStore)) {
-      getForecasts({ count: 10, plus: authStore.pageRequiresLogin() });
+    onInit(
+      { getForecasts },
+      authStore = inject(AuthStore),
+      layoutStore = inject(LayoutStore),
+    ) {
+      getForecasts({
+        count: layoutStore.count(),
+        plus: authStore.pageRequiresLogin(),
+      });
     },
   }),
 );

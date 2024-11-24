@@ -12,11 +12,13 @@ import {
 export type LayoutState = {
   title: string;
   showSidenav: boolean;
+  count: number;
 };
 
 export const layoutInitialState: LayoutState = {
   title: null,
   showSidenav: false,
+  count: 10,
 };
 
 export function withLayoutFeature() {
@@ -45,6 +47,9 @@ export function withLayoutFeature() {
           ...state,
           showSidenav: !state.showSidenav,
         }));
+      },
+      setCount(count: number) {
+        patchState(store, { count });
       },
     })),
   );
