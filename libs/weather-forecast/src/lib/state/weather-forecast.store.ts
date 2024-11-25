@@ -92,7 +92,11 @@ export function withWeatherForecastFeature() {
       ) => ({
         getForecasts({ count, plus }: { count: number; plus: boolean }) {
           layoutStore.setCount(count);
-          patchState(store, { count, plus });
+          if (count !== store.count() || plus !== store.plus()) {
+            patchState(store, { count, plus });
+          } else {
+            weatherForecastResource.reload();
+          }
         },
         setResource() {
           weatherForecastResource = rxResource({
