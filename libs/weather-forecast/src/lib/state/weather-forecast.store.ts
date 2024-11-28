@@ -7,6 +7,7 @@ import {
   patchState,
   signalStore,
   signalStoreFeature,
+  type,
   withComputed,
   withHooks,
   withMethods,
@@ -14,6 +15,7 @@ import {
 } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { isEqual } from 'lodash';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import { WeatherForecast } from '../models/weather-forecast';
@@ -90,11 +92,12 @@ export function withWeatherForecastFeature() {
         layoutStore = inject(LayoutStore),
         weatherForecastService = inject(WeatherForecastService),
       ) => ({
-        getForecasts({ count, plus }: { count: number; plus: boolean }) {
-          layoutStore.setCount(count);
-          if (count !== store.count() || plus !== store.plus()) {
-            patchState(store, { count, plus });
-          } else {
+        getForecasts(request: { count: number; plus: boolean }) {
+          const reload = isEqual(store.request(), request);
+
+          layoutStore.setCount(request.count);
+          patchState(store, request);
+          if (reload) {
             weatherForecastResource.reload();
           }
         },
@@ -115,18 +118,40 @@ export function withWeatherForecastFeature() {
   );
 }
 
+export function withWeatherForecastHooks() {
+  return signalStoreFeature(
+    {
+      methods: type<{
+        getForecasts(request: { count: number; plus: boolean }): void;
+      }>(),
+    },
+    withHooks({
+      onInit(
+        { getForecasts },
+        authStore = inject(AuthStore),
+        layoutStore = inject(LayoutStore),
+      ) {
+        getForecasts({
+          count: layoutStore.count(),
+          plus: authStore.pageRequiresLogin(),
+        });
+      },
+    }),
+  );
+}
+
 export const WeatherForecastStore = signalStore(
   withWeatherForecastFeature(),
-  withHooks({
-    onInit(
-      { getForecasts },
-      authStore = inject(AuthStore),
-      layoutStore = inject(LayoutStore),
-    ) {
-      getForecasts({
-        count: layoutStore.count(),
-        plus: authStore.pageRequiresLogin(),
-      });
-    },
-  }),
+  withWeatherForecastHooks(),
 );
+
+export type WeatherForecastStore = InstanceType<typeof WeatherForecastStore>;
+
+export const WeatherForecastEntityStore = signalStore(
+  withWeatherForecastEntitiesFeature(),
+  withWeatherForecastHooks(),
+);
+
+export type WeatherForecastEntityStore = InstanceType<
+  typeof WeatherForecastEntityStore
+>;
