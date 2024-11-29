@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
-import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { ApplicationRef } from '@angular/core';
+import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { of, throwError } from 'rxjs';
 
@@ -15,6 +16,7 @@ describe('WeatherForecastStore', () => {
   let service: WeatherForecastService;
   let store: WeatherForecastStore;
   let entityStore: WeatherForecastEntityStore;
+  let appRef: ApplicationRef;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -31,6 +33,7 @@ describe('WeatherForecastStore', () => {
     store = TestBed.inject(WeatherForecastStore);
     entityStore = TestBed.inject(WeatherForecastEntityStore);
     service = TestBed.inject(WeatherForecastService);
+    appRef = TestBed.inject(ApplicationRef);
   });
 
   it('WeatherForecastStore onInit hook should call getForecasts(10)', () => {
@@ -40,17 +43,41 @@ describe('WeatherForecastStore', () => {
   });
 
   describe('signal store rxResource tests', () => {
-    xit('WeatherForecastStore.getForecasts() should return data', fakeAsync(() => {
+    it('WeatherForecastStore.getForecasts() should return data', async () => {
       jest
         .spyOn(service, 'getForecasts')
         .mockReturnValue(of([weatherForecasts[0]]));
       store.getForecasts({ count: 1, plus: false });
 
-      tick(2000);
+      await appRef.whenStable();
       expect(store.entities()).toEqual([weatherForecasts[0]]);
       expect(store.count()).toBe(1);
       expect(store.loading()).toBe(false);
-    }));
+    });
+
+    it('WeatherForecastStore.getForecasts(count) should return data of length count', async () => {
+      jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      store.getForecasts({ count: 10, plus: false });
+
+      await appRef.whenStable();
+      expect(store.entities().length).toBe(10);
+      expect(store.count()).toBe(10);
+      expect(store.loading()).toBe(false);
+    });
+
+    it('WeatherForecastStore.getForecasts(count) should catch error', async () => {
+      const error = { message: 'error' };
+      jest
+        .spyOn(service, 'getForecasts')
+        .mockImplementation(() => throwError(() => error));
+      store.getForecasts({ count: 10, plus: false });
+
+      await appRef.whenStable();
+      expect(store.entities().length).toBe(0);
+      expect(store.count()).toBe(10);
+      expect(store.loading()).toBe(false);
+      expect(store.error()).toBe(error);
+    });
   });
 
   describe('signal store entities tests', () => {
