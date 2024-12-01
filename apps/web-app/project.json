@@ -90,6 +90,7 @@
       "executor": "@nx/web:file-server",
       "options": {
         "buildTarget": "web-app:build",
+        "port": 4200,
         "staticFilePath": "dist/apps/web-app/browser",
         "spa": true
       }
