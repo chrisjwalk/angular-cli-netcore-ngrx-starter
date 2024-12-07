@@ -3,9 +3,13 @@ import { program } from 'commander';
 import fs from 'fs';
 
 type MigrationsJson = {
-  migrations: {
-    package?: string;
-  }[];
+  migrations: MigrationsJsonPackage[];
+};
+
+type MigrationsJsonPackage = {
+  name: string;
+  package: string;
+  factory: string;
 };
 
 type NpmOudated = {
@@ -51,7 +55,7 @@ async function mergeMigrations(verbose: boolean) {
   const srcParsed = JSON.parse(srcData.toString()) as MigrationsJson;
 
   const dest = `migrations-merged.json`;
-  let destParsed = { migrations: [] };
+  let destParsed = { migrations: [] } as MigrationsJson;
   try {
     const destData = await fs.promises.readFile(dest, 'utf8');
     destParsed = JSON.parse(destData.toString()) as MigrationsJson;
@@ -62,13 +66,27 @@ async function mergeMigrations(verbose: boolean) {
   }
 
   const merged = {
-    migrations: [...srcParsed.migrations, ...destParsed.migrations],
+    migrations: removeDuplicateMigrations([
+      ...srcParsed.migrations,
+      ...destParsed.migrations,
+    ]),
   };
+
   if (verbose) {
     console.log('Merged migrations:');
     console.log(merged);
   }
   await fs.promises.writeFile(dest, JSON.stringify(merged, null, 2));
+}
+
+function removeDuplicateMigrations(migrations: MigrationsJsonPackage[]) {
+  const uniqueMigrations = new Map<string, MigrationsJsonPackage>();
+
+  migrations.forEach((migration) =>
+    uniqueMigrations.set(migration.name, migration),
+  );
+
+  return Array.from(uniqueMigrations.values());
 }
 
 async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
@@ -100,8 +118,8 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
       packages.unshift('@angular/core');
     }
   }
-  if (packages.some((p) => p.startsWith('@nx/'))) {
-    packages = packages.filter((p) => !p.startsWith('@nx/'));
+  if (packages.some((p) => p.startsWith('@nx/') || p === 'nx')) {
+    packages = packages.filter((p) => !p.startsWith('@nx/') || p === 'nx');
     packages.unshift('');
   }
   if (packages.length === 0) {
