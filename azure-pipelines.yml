@@ -12,13 +12,13 @@ pool:
 steps:
   - task: NodeTool@0
     inputs:
-      versionSpec: '20.x'
+      versionSpec: '22.x'
     displayName: 'Install Node.js'
 
   - task: UseDotNet@2
-    displayName: 'Use .NET SDK 8.0.x'
+    displayName: 'Use .NET SDK 9.0.x'
     inputs:
-      version: 8.0.x
+      version: 9.0.x
 
   - script: |
       npm run dotnet:coverage
