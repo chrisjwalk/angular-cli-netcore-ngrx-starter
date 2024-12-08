@@ -2,7 +2,6 @@ export default {
   displayName: 'web-app',
   preset: '../../jest.preset.js',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
-  globals: {},
   coverageDirectory: '../../coverage/apps/web-app',
   coverageReporters: ['text', 'cobertura'],
   transform: {

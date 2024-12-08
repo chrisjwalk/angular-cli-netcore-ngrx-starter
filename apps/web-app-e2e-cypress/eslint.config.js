@@ -1,12 +1,10 @@
-const playwright = require('eslint-plugin-playwright');
+const cypress = require('eslint-plugin-cypress/flat');
 const baseConfig = require('../../eslint.config.js');
 
 module.exports = [
-  playwright.configs['flat/recommended'],
-
+  cypress.configs['recommended'],
   ...baseConfig,
   {
-    files: ['**/*.ts', '**/*.js'],
     // Override or add rules here
     rules: {},
   },
