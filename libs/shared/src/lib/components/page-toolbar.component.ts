@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 @Component({
-  standalone: true,
   selector: 'lib-page-toolbar',
   template: `
     @if (title()) {
