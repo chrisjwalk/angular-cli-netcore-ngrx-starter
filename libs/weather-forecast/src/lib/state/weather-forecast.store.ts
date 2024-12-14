@@ -1,4 +1,4 @@
-import { computed, inject, ResourceRef } from '@angular/core';
+import { computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore, withLoadingFeature } from '@myorg/shared';
@@ -11,8 +11,8 @@ import {
   withComputed,
   withHooks,
   withMethods,
-  withState,
   withProps,
+  withState,
 } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -73,8 +73,6 @@ export function withWeatherForecastEntitiesFeature() {
 }
 
 export function withWeatherForecastFeature() {
-  let weatherForecastResource: ResourceRef<WeatherForecast[]>;
-
   return signalStoreFeature(
     withState(weatherForecastsInitialState),
     withProps(() => ({
@@ -86,12 +84,21 @@ export function withWeatherForecastFeature() {
         count: store.count(),
         plus: store.plus(),
       })),
+    })),
+    withProps(({ weatherForecastService, request }) => ({
+      weatherForecastResource: rxResource({
+        request: request,
+        loader: ({ request: { count, plus } }) =>
+          weatherForecastService.getForecasts(count, plus),
+      }),
+    })),
+    withComputed(({ weatherForecastResource }) => ({
       loading: computed(() => weatherForecastResource?.isLoading() ?? null),
       entities: computed(() => weatherForecastResource?.value() ?? []),
       error: computed(() => weatherForecastResource?.error() ?? null),
       status: computed(() => weatherForecastResource?.status() ?? null),
     })),
-    withMethods(({ layoutStore, weatherForecastService, ...store }) => ({
+    withMethods(({ layoutStore, weatherForecastResource, ...store }) => ({
       getForecasts(request: { count: number; plus: boolean }) {
         const reload = isEqual(store.request(), request);
 
@@ -101,19 +108,7 @@ export function withWeatherForecastFeature() {
           weatherForecastResource.reload();
         }
       },
-      setResource() {
-        weatherForecastResource = rxResource({
-          request: store.request,
-          loader: ({ request: { count, plus } }) =>
-            weatherForecastService.getForecasts(count, plus),
-        });
-      },
     })),
-    withHooks({
-      onInit(store) {
-        store.setResource();
-      },
-    }),
   );
 }
 
