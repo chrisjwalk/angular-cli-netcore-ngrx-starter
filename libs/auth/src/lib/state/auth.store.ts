@@ -17,6 +17,8 @@ import {
   withHooks,
   withMethods,
   withState,
+  type,
+  withProps,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { filter, map, pipe, startWith, switchMap, tap } from 'rxjs';
@@ -90,6 +92,11 @@ export function withAuthFeature() {
   return signalStoreFeature(
     withState(authInitialState),
     withLoadingFeature(),
+    withProps(() => ({
+      router: inject(Router),
+      authService: inject(AuthService),
+      snackBar: inject(MatSnackBar),
+    })),
     withComputed((state) => ({
       expiresAt: computed(() =>
         state.response?.accessTokenIssued()
@@ -121,7 +128,7 @@ export function withAuthFeature() {
       ),
       loggedIn: computed(() => state.loginSuccess() && !!state.accessToken()),
     })),
-    withMethods((store, router = inject(Router)) => ({
+    withMethods(({ router, ...store }) => ({
       loginStart() {
         removeRefreshToken();
         patchState(store, {
@@ -172,79 +179,81 @@ export function withAuthFeature() {
         }
       },
     })),
-    withMethods(
-      (
-        store,
-        authService = inject(AuthService),
-        snackBar = inject(MatSnackBar),
-        router = inject(Router),
-      ) => ({
-        login: rxMethod<Login>(
-          pipe(
-            tap(() => store.loginStart()),
-            switchMap((request) =>
-              authService.login(request).pipe(
-                tapResponse(
-                  (response) => {
-                    snackBar.open('Login Successful', 'Close', {
-                      duration: 5000,
-                    });
-                    store.redirectAfterLogin();
-                    store.loginSuccessful(response);
-                  },
-                  (error) => {
-                    snackBar.open('Login failed', 'Close', {
-                      duration: 5000,
-                    });
-                    store.loginFailure(error);
-                  },
-                ),
+    withMethods(({ router, authService, snackBar, ...store }) => ({
+      login: rxMethod<Login>(
+        pipe(
+          tap(() => store.loginStart()),
+          switchMap((request) =>
+            authService.login(request).pipe(
+              tapResponse(
+                (response) => {
+                  snackBar.open('Login Successful', 'Close', {
+                    duration: 5000,
+                  });
+                  store.redirectAfterLogin();
+                  store.loginSuccessful(response);
+                },
+                (error) => {
+                  snackBar.open('Login failed', 'Close', {
+                    duration: 5000,
+                  });
+                  store.loginFailure(error);
+                },
               ),
             ),
           ),
         ),
-        refresh: rxMethod<Refresh>(
-          pipe(
-            tap(() => store.loginStart()),
-            switchMap((refresh) =>
-              authService.refresh(refresh).pipe(
-                tapResponse(
-                  (response) => store.loginSuccessful(response),
-                  (error) => store.loginFailure(error),
-                ),
+      ),
+      refresh: rxMethod<Refresh>(
+        pipe(
+          tap(() => store.loginStart()),
+          switchMap((refresh) =>
+            authService.refresh(refresh).pipe(
+              tapResponse(
+                (response) => store.loginSuccessful(response),
+                (error) => store.loginFailure(error),
               ),
             ),
           ),
         ),
-        logout: (redirectToLogin: boolean) => {
-          store.loginReset();
-          patchState(store, { loginStatus: 'logged-out' });
-          if (redirectToLogin) {
-            router.navigate(loginRouterLink);
-          } else {
-            snackBar.open('Logout Successful', 'Close', {
-              duration: 5000,
-            });
-          }
-        },
-      }),
-    ),
+      ),
+      logout: (redirectToLogin: boolean) => {
+        store.loginReset();
+        patchState(store, { loginStatus: 'logged-out' });
+        if (redirectToLogin) {
+          router.navigate(loginRouterLink);
+        } else {
+          snackBar.open('Logout Successful', 'Close', {
+            duration: 5000,
+          });
+        }
+      },
+    })),
+  );
+}
+
+export function withAuthHooks() {
+  return signalStoreFeature(
+    {
+      methods: type<{ refresh: ReturnType<typeof rxMethod<Refresh>> }>(),
+    },
+    withHooks({
+      onInit(store) {
+        const refreshToken = getRefreshToken();
+        if (refreshToken) {
+          store.refresh({ refreshToken });
+        } else {
+          patchState(store, { loginStatus: 'no-refresh-token' });
+        }
+      },
+    }),
   );
 }
 
 export const AuthStore = signalStore(
   { providedIn: 'root' },
   withAuthFeature(),
-  withHooks({
-    onInit(store) {
-      const refreshToken = getRefreshToken();
-      if (refreshToken) {
-        store.refresh({ refreshToken });
-      } else {
-        patchState(store, { loginStatus: 'no-refresh-token' });
-      }
-    },
-  }),
+  withAuthHooks(),
 );
 
 export function storeRefreshToken(response: AuthResponse) {

@@ -8,6 +8,7 @@ import {
   withComputed,
   withHooks,
   withMethods,
+  withProps,
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
@@ -43,12 +44,16 @@ export const swUpdateInitialState: SwUpdateState = {
 export function withSwUpdateFeature() {
   return signalStoreFeature(
     withState(swUpdateInitialState),
+    withProps(() => ({
+      swUpdate: inject(SwUpdate),
+      snackBar: inject(MatSnackBar),
+    })),
     withComputed((store) => ({
       updateReady: computed(
         () => store.versionEvent?.type() === 'VERSION_READY',
       ),
     })),
-    withMethods((store, swUpdate = inject(SwUpdate)) => ({
+    withMethods(({ swUpdate }) => ({
       reloadAppOnAction: rxMethod<void>(
         pipe(
           tap(async () => {
@@ -58,7 +63,7 @@ export function withSwUpdateFeature() {
         ),
       ),
     })),
-    withMethods((store, snackBar = inject(MatSnackBar)) => ({
+    withMethods(({ snackBar, ...store }) => ({
       versionUpdates: rxMethod<VersionEvent>(
         pipe(
           map((versionEvent) => patchState(store, { versionEvent })),

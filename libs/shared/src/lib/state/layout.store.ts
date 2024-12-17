@@ -24,7 +24,6 @@ export const layoutInitialState: LayoutState = {
 export function withLayoutFeature() {
   return signalStoreFeature(
     withState(layoutInitialState),
-
     withComputed(({ title }) => ({
       pageTitle: computed(() => `${title()}${title() ? ' | ' : ''}Demo App`),
     })),
