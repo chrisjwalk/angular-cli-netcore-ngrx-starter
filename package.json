@@ -50,10 +50,12 @@
     "preinstall": "npm run dotnet:restore",
     "postinstall": "npm run build:dotnet-builder",
     "prepare": "husky",
-    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild typescript"
+    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild typescript vite"
   },
   "private": true,
   "dependencies": {
+    "@analogjs/vite-plugin-angular": "1.10.3",
+    "@analogjs/vitest-angular": "1.10.3",
     "@angular/animations": "19.0.5",
     "@angular/cdk": "19.0.4",
     "@angular/common": "19.0.5",
@@ -67,6 +69,7 @@
     "@angular/service-worker": "19.0.5",
     "@ngrx/operators": "19.0.0",
     "@ngrx/signals": "19.0.0",
+    "@nx/vite": "20.3.0",
     "lodash": "4.17.21",
     "marked": "15.0.4",
     "moment": "2.30.1",
