@@ -6,7 +6,7 @@ import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/libs/shared',
+  cacheDir: '../../node_modules/.vite/libs/weather-forecast',
   plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
   // Uncomment this if you are using workers.
   // worker: {
@@ -18,10 +18,10 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
     setupFiles: ['src/test-setup.ts'],
-    reporters: ['default', 'junit'],
-    outputFile: { junit: `../../junit/libs/shared/TESTS-${Date.now()}.xml` },
+    reporters: ['default', 'verbose', 'junit'],
+    outputFile: { junit: `../../junit/libs/weather-forecast/TESTS-${Date.now()}.xml` },
     coverage: {
-      reportsDirectory: '../../coverage/libs/shared',
+      reportsDirectory: '../../coverage/libs/weather-forecast',
       provider: 'v8',
     },
   },
