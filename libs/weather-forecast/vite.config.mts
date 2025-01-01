@@ -1,25 +1,23 @@
 /// <reference types='vitest' />
-import { defineConfig } from 'vite';
+
 import angular from '@analogjs/vite-plugin-angular';
+
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   root: __dirname,
-  cacheDir: '../../node_modules/.vite/libs/weather-forecast',
-  plugins: [angular(), nxViteTsPaths(), nxCopyAssetsPlugin(['*.md'])],
-  // Uncomment this if you are using workers.
-  // worker: {
-  //  plugins: [ nxViteTsPaths() ],
-  // },
+  plugins: [angular(), nxViteTsPaths()],
   test: {
     watch: false,
     globals: true,
     environment: 'jsdom',
-    include: ['src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'],
+    include: ['**/*.spec.ts'],
     setupFiles: ['src/test-setup.ts'],
     reporters: ['default', 'verbose', 'junit'],
-    outputFile: { junit: `../../junit/libs/weather-forecast/TESTS-${Date.now()}.xml` },
+    outputFile: {
+      junit: `../../junit/libs/weather-forecast/TESTS-${Date.now()}.xml`,
+    },
     coverage: {
       reportsDirectory: '../../coverage/libs/weather-forecast',
       provider: 'v8',
