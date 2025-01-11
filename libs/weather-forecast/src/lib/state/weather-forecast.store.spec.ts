@@ -44,9 +44,9 @@ describe('WeatherForecastStore', () => {
 
   describe('signal store rxResource tests', () => {
     it('WeatherForecastStore.getForecasts() should return data', async () => {
-      jest
-        .spyOn(service, 'getForecasts')
-        .mockReturnValue(of([weatherForecasts[0]]));
+      vi.spyOn(service, 'getForecasts').mockReturnValue(
+        of([weatherForecasts[0]]),
+      );
       store.getForecasts({ count: 1, plus: false });
 
       await appRef.whenStable();
@@ -56,7 +56,7 @@ describe('WeatherForecastStore', () => {
     });
 
     it('WeatherForecastStore.getForecasts(count) should return data of length count', async () => {
-      jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
       store.getForecasts({ count: 10, plus: false });
 
       await appRef.whenStable();
@@ -67,9 +67,9 @@ describe('WeatherForecastStore', () => {
 
     it('WeatherForecastStore.getForecasts(count) should catch error', async () => {
       const error = { message: 'error' };
-      jest
-        .spyOn(service, 'getForecasts')
-        .mockImplementation(() => throwError(() => error));
+      vi.spyOn(service, 'getForecasts').mockImplementation(() =>
+        throwError(() => error),
+      );
       store.getForecasts({ count: 10, plus: false });
 
       await appRef.whenStable();
@@ -82,9 +82,9 @@ describe('WeatherForecastStore', () => {
 
   describe('signal store entities tests', () => {
     it('WeatherForecastStore.getForecasts() should return data', () => {
-      jest
-        .spyOn(service, 'getForecasts')
-        .mockReturnValue(of([weatherForecasts[0]]));
+      vi.spyOn(service, 'getForecasts').mockReturnValue(
+        of([weatherForecasts[0]]),
+      );
       entityStore.getForecasts({ count: 1, plus: false });
 
       expect(entityStore.entities()).toEqual([weatherForecasts[0]]);
@@ -93,7 +93,7 @@ describe('WeatherForecastStore', () => {
     });
 
     it('WeatherForecastStore.getForecasts(count) should return data of length count', () => {
-      jest.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
       entityStore.getForecasts({ count: 10, plus: false });
       expect(entityStore.entities().length).toBe(10);
       expect(entityStore.count()).toBe(10);
@@ -102,9 +102,9 @@ describe('WeatherForecastStore', () => {
 
     it('WeatherForecastStore.getForecasts(count) should catch error', () => {
       const error = { message: 'error' };
-      jest
-        .spyOn(service, 'getForecasts')
-        .mockImplementation(() => throwError(() => error));
+      vi.spyOn(service, 'getForecasts').mockImplementation(() =>
+        throwError(() => error),
+      );
       entityStore.getForecasts({ count: 10, plus: false });
       expect(entityStore.entities().length).toBe(0);
       expect(entityStore.count()).toBe(10);
