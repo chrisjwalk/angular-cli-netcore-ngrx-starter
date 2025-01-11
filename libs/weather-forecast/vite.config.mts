@@ -14,13 +14,19 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['**/*.spec.ts'],
     setupFiles: ['src/test-setup.ts'],
-    reporters: ['default', 'verbose', 'junit'],
+    reporters: ['default', 'junit'],
     outputFile: {
       junit: `../../junit/libs/weather-forecast/TESTS-${Date.now()}.xml`,
     },
     coverage: {
       reportsDirectory: '../../coverage/libs/weather-forecast',
+      reporter: ['text', 'cobertura'],
       provider: 'v8',
+    },
+    server: {
+      deps: {
+        inline: ['@angular/material'],
+      },
     },
   },
 });

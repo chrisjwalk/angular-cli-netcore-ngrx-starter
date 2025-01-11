@@ -54,6 +54,8 @@
   },
   "private": true,
   "dependencies": {
+    "@analogjs/vite-plugin-angular": "1.12.0",
+    "@analogjs/vitest-angular": "1.12.0",
     "@angular/animations": "19.0.6",
     "@angular/cdk": "19.0.5",
     "@angular/common": "19.0.6",
@@ -95,6 +97,7 @@
     "@nx/js": "20.3.1",
     "@nx/node": "20.3.1",
     "@nx/playwright": "20.3.1",
+    "@nx/vite": "20.3.1",
     "@nx/web": "20.3.1",
     "@nx/workspace": "20.3.1",
     "@playwright/test": "1.49.1",
@@ -108,6 +111,8 @@
     "@types/jest": "29.5.14",
     "@types/node": "22.10.5",
     "@typescript-eslint/utils": "8.19.1",
+    "@vitest/coverage-v8": "2.1.8",
+    "@vitest/ui": "2.1.8",
     "angular-eslint": "19.0.2",
     "autoprefixer": "10.4.20",
     "commander": "13.0.0",
@@ -124,6 +129,7 @@
     "jest-environment-node": "^29.4.1",
     "jest-junit": "16.0.0",
     "jest-preset-angular": "14.5.0",
+    "jsdom": "26.0.0",
     "jsonc-eslint-parser": "2.4.0",
     "lint-staged": "15.3.0",
     "nx": "20.3.1",
@@ -135,6 +141,8 @@
     "ts-node": "10.9.2",
     "typescript": "5.6.3",
     "typescript-eslint": "8.19.1",
+    "vite": "5.4.11",
+    "vitest": "2.1.8",
     "zone.js": "^0.15.0"
   },
   "lint-staged": {
