@@ -1,32 +1,20 @@
-/// <reference types='vitest' />
+import { defineConfig, UserConfig } from 'vite';
 
-import angular from '@analogjs/vite-plugin-angular';
+import { baseConfig } from '../../vite.config.mjs';
 
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { defineConfig } from 'vite';
+const name = 'weather-forecast';
 
 export default defineConfig({
+  ...baseConfig,
   root: __dirname,
-  plugins: [angular(), nxViteTsPaths()],
   test: {
-    watch: false,
-    globals: true,
-    environment: 'jsdom',
-    include: ['**/*.spec.ts'],
-    setupFiles: ['src/test-setup.ts'],
-    reporters: ['default', 'junit'],
+    ...baseConfig.test,
     outputFile: {
-      junit: `../../junit/libs/weather-forecast/TESTS-${Date.now()}.xml`,
+      junit: `${baseConfig.root}/junit/libs/${name}/TESTS-${Date.now()}.xml`,
     },
     coverage: {
-      reportsDirectory: '../../coverage/libs/weather-forecast',
-      reporter: ['text', 'cobertura'],
-      provider: 'v8',
-    },
-    server: {
-      deps: {
-        inline: ['@angular/material'],
-      },
+      ...baseConfig.test.coverage,
+      reportsDirectory: `${baseConfig.root}/coverage/libs/${name}`,
     },
   },
-});
+} as UserConfig);
