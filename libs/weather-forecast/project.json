@@ -10,7 +10,6 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "reportsDirectory": "../../coverage/libs/weather-forecast",
         "coverage": true
       }
     },

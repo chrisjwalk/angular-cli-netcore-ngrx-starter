@@ -20,7 +20,7 @@ describe('CounterComponent', () => {
 
   test('should emit increment event on click', async () => {
     const count = 5;
-    const increment = jest.fn();
+    const increment = vi.fn();
 
     await render(CounterComponent, {
       componentInputs: { count },
