@@ -36,7 +36,9 @@ describe('WeatherForecastStore', () => {
     appRef = TestBed.inject(ApplicationRef);
   });
 
-  it('WeatherForecastStore onInit hook should call getForecasts(10)', () => {
+  it('WeatherForecastStore onInit hook should call getForecasts(10)', async () => {
+    vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+    await appRef.whenStable();
     expect(store.count()).toBe(10);
     expect(store.loading()).toBe(false);
     expect(store.error()).toBe(null);

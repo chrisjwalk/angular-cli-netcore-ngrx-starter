@@ -51,7 +51,10 @@ export default createBuilder<Options>((options, context) => {
     }
 
     console.log(`Executing "dotnet ${dotnetTestArgs.join(' ')}"...`);
-    const tests = childProcess.spawn('dotnet', dotnetTestArgs, { stdio: 'pipe', cwd: options.solutionFolder });
+    const tests = childProcess.spawn('dotnet', dotnetTestArgs, {
+      stdio: 'pipe',
+      cwd: options.solutionFolder,
+    });
 
     tests.stdout.on('data', (data) => {
       context.logger.info(data.toString());
@@ -67,8 +70,7 @@ export default createBuilder<Options>((options, context) => {
 
       if (testsCode !== 0) {
         resolve({ success: false });
-      }
-      else if (options.coverage) {
+      } else if (options.coverage) {
         const dotnetCoverageArgs = ['coverage'];
         dotnetCoverageArgs.push('merge');
         dotnetCoverageArgs.push('--nologo');
@@ -87,7 +89,10 @@ export default createBuilder<Options>((options, context) => {
         dotnetCoverageArgs.push(`*.coverage`);
 
         console.log(`Executing "dotnet ${dotnetCoverageArgs.join(' ')}"...`);
-        const coverage = childProcess.spawn('dotnet', dotnetCoverageArgs, { stdio: 'pipe', cwd: options.solutionFolder });
+        const coverage = childProcess.spawn('dotnet', dotnetCoverageArgs, {
+          stdio: 'pipe',
+          cwd: options.solutionFolder,
+        });
 
         coverage.stdout.on('data', (data) => {
           context.logger.info(data.toString());
@@ -106,9 +111,7 @@ export default createBuilder<Options>((options, context) => {
       }
     });
   });
-});
-
-
+}) as any;
 
 //dotnet test --configuration Release --no-restore --no-build --logger trx --collect "Code Coverage" --results-directory .
 //dotnet coverage merge -o coverage.xml -f xml -r *.coverage
