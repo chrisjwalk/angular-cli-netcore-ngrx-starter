@@ -129,6 +129,9 @@ import { RouterModule } from '@angular/router';
       }
     `,
   ],
+  host: {
+    'data-testid': 'lib-main-toolbar',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbarComponent {
