@@ -46,4 +46,4 @@ export default createBuilder<Options>((options, context) => {
       resolve({ success: code === 0 });
     });
   });
-});
+}) as any;
