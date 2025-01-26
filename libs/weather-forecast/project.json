@@ -10,7 +10,7 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "coverage": true
+        "coverage": false
       }
     },
     "lint": {

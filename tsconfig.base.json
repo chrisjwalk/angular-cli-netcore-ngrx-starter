@@ -20,7 +20,6 @@
       "@myorg/home": ["libs/home/src/index.ts"],
       "@myorg/login": ["libs/login/src/index.ts"],
       "@myorg/shared": ["libs/shared/src/index.ts"],
-      "@myorg/vitest-example": ["libs/vitest-example/src/index.ts"],
       "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"]
     }
   },
