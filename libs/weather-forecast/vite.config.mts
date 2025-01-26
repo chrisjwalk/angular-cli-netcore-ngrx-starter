@@ -2,7 +2,7 @@ import { defineConfig, UserConfig } from 'vite';
 
 import { baseConfig } from '../../vite.config.mjs';
 
-const name = 'shared';
+const name = 'weather-forecast';
 
 export default defineConfig({
   ...baseConfig,
