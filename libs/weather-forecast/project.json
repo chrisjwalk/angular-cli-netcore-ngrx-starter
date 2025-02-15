@@ -10,7 +10,8 @@
       "executor": "@nx/vite:test",
       "outputs": ["{options.reportsDirectory}"],
       "options": {
-        "coverage": false
+        "reportsDirectory": "../../coverage/libs/weather-forcast",
+        "coverage": true
       }
     },
     "lint": {
