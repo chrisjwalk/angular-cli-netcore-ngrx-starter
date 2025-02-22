@@ -8,7 +8,7 @@ import { authInterceptor } from './auth.interceptor';
 import * as authStore from './auth.store';
 import { AuthStore, authResponseInitialState } from './auth.store';
 
-xdescribe('authInterceptor', () => {
+describe('authInterceptor', () => {
   let store: AuthStore;
   let authService: AuthService;
 
@@ -130,21 +130,17 @@ xdescribe('authInterceptor', () => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
       store.setResponse(authResponseInitialState);
+      const httpErrorResponse = new HttpErrorResponse({
+        status: 401,
+        statusText: 'Unauthorized',
+      });
 
-      const next = vi.fn().mockReturnValue(
-        throwError(
-          () =>
-            new HttpErrorResponse({
-              status: 401,
-              statusText: 'Unauthorized',
-            }),
-        ),
-      );
+      const next = vi.fn().mockReturnValue(throwError(() => httpErrorResponse));
 
       authInterceptor(req, next)
         .pipe(
           catchError((error) => {
-            expect(error).toEqual(new Error('Unauthorized'));
+            expect(error).toEqual(httpErrorResponse);
             throw error;
           }),
         )
