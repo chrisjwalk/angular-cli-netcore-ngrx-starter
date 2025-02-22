@@ -3,6 +3,7 @@ import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
   ActivatedRouteSnapshot,
+  RedirectCommand,
   Router,
   RouterStateSnapshot,
 } from '@angular/router';
@@ -87,7 +88,7 @@ describe('AuthStore', () => {
 
   it('should set the status to logged in when login is succesful', () =>
     TestBed.runInInjectionContext(() => {
-      jest.spyOn(authService, 'login').mockReturnValue(
+      vi.spyOn(authService, 'login').mockReturnValue(
         of({
           ...authResponseInitialState,
           expiresIn: 3600,
@@ -117,9 +118,9 @@ describe('AuthStore', () => {
 
   it('should set the status to error in when login is not succesful', () =>
     TestBed.runInInjectionContext(() => {
-      jest
-        .spyOn(authService, 'login')
-        .mockReturnValue(throwError(() => new Error()));
+      vi.spyOn(authService, 'login').mockReturnValue(
+        throwError(() => new Error()),
+      );
       store.login({
         email: 'username',
         password: 'password',
@@ -134,7 +135,7 @@ describe('AuthStore', () => {
 
   it('should set the status to expired in when login is succesful and but the expiresIn duration has passed', () =>
     TestBed.runInInjectionContext(() => {
-      jest.spyOn(authService, 'login').mockReturnValue(
+      vi.spyOn(authService, 'login').mockReturnValue(
         of({
           ...authResponseInitialState,
           expiresIn: 0,
@@ -157,7 +158,7 @@ describe('AuthStore', () => {
     TestBed.runInInjectionContext(() => {
       const route = new ActivatedRouteSnapshot();
       const state = { url: '/test' } as RouterStateSnapshot;
-      const navigate = jest.spyOn(router, 'navigate');
+      const navigate = vi.spyOn(router, 'navigate');
 
       store.setRedirect(route, state);
       store.redirectAfterLogin();
@@ -169,11 +170,13 @@ describe('AuthStore', () => {
     TestBed.runInInjectionContext(() => {
       const route = new ActivatedRouteSnapshot();
       const state = { url: '/test' } as RouterStateSnapshot;
-      const navigate = jest.spyOn(router, 'navigate');
+      // const navigate = vi.spyOn(router, 'navigate');
 
       requiresLoginCanActivateFn(route, state).subscribe((canActivate) => {
-        expect(canActivate).toEqual(false);
-        expect(navigate).toHaveBeenCalledWith(loginRouterLink);
+        expect(canActivate).toEqual(
+          new RedirectCommand(router.parseUrl(loginRouterLink.join('/'))),
+        );
+        // expect(navigate).toHaveBeenCalledWith(loginRouterLink);
         expect(store.pageRequiresLogin()).toEqual(true);
         requiresLoginCanDeactivateFn();
         expect(store.pageRequiresLogin()).toEqual(false);
