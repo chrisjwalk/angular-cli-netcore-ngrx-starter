@@ -33,7 +33,7 @@ describe('authInterceptor', () => {
         'success',
       );
 
-      const next = jest.fn().mockReturnValue(of(null));
+      const next = vi.fn().mockReturnValue(of(null));
 
       authInterceptor(req, next).subscribe();
 
@@ -52,7 +52,7 @@ describe('authInterceptor', () => {
 
       store.setResponse(authResponseInitialState);
 
-      const next = jest.fn().mockReturnValue(of(null));
+      const next = vi.fn().mockReturnValue(of(null));
 
       authInterceptor(req, next).subscribe();
 
@@ -76,7 +76,7 @@ describe('authInterceptor', () => {
 
       let nextCount = 0;
 
-      const next = jest.fn().mockImplementation(() => {
+      const next = vi.fn().mockImplementation(() => {
         nextCount++;
         if (nextCount === 1) {
           return throwError(
@@ -89,13 +89,13 @@ describe('authInterceptor', () => {
         }
         return of(null);
       });
-      const refresh = jest.spyOn(store, 'refresh');
+      const refresh = vi.spyOn(store, 'refresh');
 
-      jest
-        .spyOn(authStore, 'getRefreshToken')
-        .mockReturnValue(store.refreshToken());
+      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
+        store.refreshToken(),
+      );
 
-      jest.spyOn(authService, 'refresh').mockReturnValue(
+      vi.spyOn(authService, 'refresh').mockReturnValue(
         of({
           ...authResponseInitialState,
           expiresIn: 3600,
@@ -130,21 +130,17 @@ describe('authInterceptor', () => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
       store.setResponse(authResponseInitialState);
+      const httpErrorResponse = new HttpErrorResponse({
+        status: 401,
+        statusText: 'Unauthorized',
+      });
 
-      const next = jest.fn().mockReturnValue(
-        throwError(
-          () =>
-            new HttpErrorResponse({
-              status: 401,
-              statusText: 'Unauthorized',
-            }),
-        ),
-      );
+      const next = vi.fn().mockReturnValue(throwError(() => httpErrorResponse));
 
       authInterceptor(req, next)
         .pipe(
           catchError((error) => {
-            expect(error).toEqual(new Error('Unauthorized'));
+            expect(error).toEqual(httpErrorResponse);
             throw error;
           }),
         )
@@ -170,13 +166,13 @@ describe('authInterceptor', () => {
         statusText: 'Unauthorized',
       });
 
-      const next = jest
+      const next = vi
         .fn()
         .mockReturnValue(throwError(() => unauthorizedResponnse));
 
-      const logout = jest.spyOn(store, 'logout');
+      const logout = vi.spyOn(store, 'logout');
 
-      jest.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
+      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
 
       authInterceptor(req, next)
         .pipe(
@@ -209,20 +205,20 @@ describe('authInterceptor', () => {
         statusText: 'Unauthorized',
       });
 
-      const next = jest
+      const next = vi
         .fn()
         .mockReturnValue(throwError(() => unauthorizedResponnse));
 
-      const refresh = jest.spyOn(store, 'refresh');
-      const logout = jest.spyOn(store, 'logout');
+      const refresh = vi.spyOn(store, 'refresh');
+      const logout = vi.spyOn(store, 'logout');
 
-      jest
-        .spyOn(authStore, 'getRefreshToken')
-        .mockReturnValue(store.refreshToken());
+      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
+        store.refreshToken(),
+      );
 
-      jest
-        .spyOn(authService, 'refresh')
-        .mockReturnValue(throwError(() => unauthorizedResponnse));
+      vi.spyOn(authService, 'refresh').mockReturnValue(
+        throwError(() => unauthorizedResponnse),
+      );
 
       authInterceptor(req, next)
         .pipe(
@@ -265,7 +261,7 @@ describe('authInterceptor', () => {
         statusText: 'Bad Request',
       });
 
-      const next = jest
+      const next = vi
         .fn()
         .mockReturnValue(throwError(() => badRequestResponnse));
 
@@ -298,7 +294,7 @@ describe('authInterceptor', () => {
         statusText: 'Bad Request',
       });
 
-      const next = jest
+      const next = vi
         .fn()
         .mockReturnValue(throwError(() => badRequestResponnse));
 

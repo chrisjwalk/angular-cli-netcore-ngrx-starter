@@ -37,7 +37,7 @@ describe('AuthService', () => {
     authService
       .login({ email: 'email', password: 'test' })
       .subscribe((result) => {
-        expect(result).toEqual(response);
+        expect(result).toEqual([response]);
       });
 
     const req = httpTestingController.expectOne('/api/account/login');
@@ -55,7 +55,7 @@ describe('AuthService', () => {
     authService
       .refresh({ refreshToken: 'refresh-token' })
       .subscribe((result) => {
-        expect(result).toEqual(response);
+        expect(result).toEqual([response]);
       });
 
     const req = httpTestingController.expectOne('/api/account/refresh');

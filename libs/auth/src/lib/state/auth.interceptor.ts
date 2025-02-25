@@ -1,6 +1,6 @@
 import { HttpEvent, HttpHandlerFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
-import { Observable, catchError, filter, switchMap } from 'rxjs';
+import { Observable, catchError, filter, of, switchMap } from 'rxjs';
 
 import { AuthStore, getRefreshToken } from './auth.store';
 
@@ -22,7 +22,7 @@ export function authInterceptor(
 
         if (!refreshToken) {
           store.logout(true);
-          throw error;
+          return of(error);
         }
 
         store.refresh({ refreshToken });
@@ -31,19 +31,20 @@ export function authInterceptor(
           filter(() => store.loginAttempted()),
           switchMap(() => {
             if (!store.loggedIn()) {
-              throw error;
+              store.logout(true);
+              return of(error);
             }
 
             return next(setAuthorizationHeader(req, store.accessToken()));
           }),
           catchError((error) => {
             store.logout(true);
-            throw error;
+            return of(error);
           }),
         );
       }
 
-      throw error;
+      return of(error);
     }),
   );
 }
