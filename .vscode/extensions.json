@@ -3,7 +3,6 @@
     "nrwl.angular-console",
     "angular.ng-template",
     "esbenp.prettier-vscode",
-    "firsttris.vscode-jest-runner",
     "dbaeumer.vscode-eslint",
     "eamodio.gitlens",
     "bradlc.vscode-tailwindcss",
