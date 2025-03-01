@@ -49,7 +49,7 @@
     "preinstall": "npm run dotnet:restore",
     "postinstall": "npm run build:dotnet-builder",
     "prepare": "husky",
-    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild typescript vite vitest @vitest/coverage-v8 @vitest/ui eslint-config-prettier tailwindcss"
+    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild typescript vite vitest @vitest/coverage-v8 @vitest/ui eslint-config-prettier"
   },
   "private": true,
   "dependencies": {
@@ -68,6 +68,7 @@
     "@angular/service-worker": "19.2.0",
     "@ngrx/operators": "19.0.1",
     "@ngrx/signals": "19.0.1",
+    "@tailwindcss/postcss": "4.0.9",
     "lodash": "4.17.21",
     "marked": "15.0.7",
     "moment": "2.30.1",
@@ -124,7 +125,7 @@
     "postcss": "8.5.3",
     "prettier": "3.5.2",
     "rimraf": "6.0.1",
-    "tailwindcss": "3.4.17",
+    "tailwindcss": "4.0.9",
     "ts-node": "10.9.2",
     "typescript": "5.7.3",
     "typescript-eslint": "8.25.0",
