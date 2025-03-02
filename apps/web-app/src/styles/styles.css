@@ -46,7 +46,7 @@
 
 markdown {
   pre {
-    @apply p-4 overflow-auto rounded border text-sm border-neutral-900 bg-neutral-50;
+    @apply p-4 overflow-auto rounded-sm border text-sm border-neutral-900 bg-neutral-50;
 
     @media (prefers-color-scheme: dark) {
       @apply bg-neutral-900 border-neutral-50;
@@ -54,7 +54,7 @@ markdown {
   }
 
   blockquote {
-    @apply py-0.5 px-4 mx-0 my-3 border-l-8 rounded border-neutral-900 bg-neutral-50;
+    @apply py-0.5 px-4 mx-0 my-3 border-l-8 rounded-sm border-neutral-900 bg-neutral-50;
 
     @media (prefers-color-scheme: dark) {
       @apply bg-neutral-900 border-neutral-50;

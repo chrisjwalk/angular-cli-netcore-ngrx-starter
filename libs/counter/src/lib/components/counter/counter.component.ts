@@ -35,7 +35,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
         </mat-icon>
       </button>
       <div
-        class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
+        class="bg-white/95 dark:bg-neutral-700 p-4 rounded-sm flex flex-col shadow-sm truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
       >
         <div class="text-[120px] text-center" data-testid="count">
           {{ count() }}

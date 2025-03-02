@@ -35,7 +35,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
       <div class="flex flex-row justify-center">
         <form
           [formGroup]="formGroup"
-          class="flex flex-col gap-4 flex-1 max-w-sm p-4 bg-white/95 dark:bg-neutral-700 rounded shadow"
+          class="flex flex-col gap-4 flex-1 max-w-sm p-4 bg-white/95 dark:bg-neutral-700 rounded-sm shadow-sm"
           (keyup.enter)="
             store.valid() ? authStore.login(store.request()) : null
           "

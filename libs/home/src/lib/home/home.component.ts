@@ -19,7 +19,7 @@ import { MarkdownComponent } from 'ngx-markdown';
     <lib-page-toolbar [title]="layoutStore.title()" />
     <lib-page-container>
       <div
-        class="bg-white/95 dark:bg-neutral-700 p-4 rounded flex flex-col shadow"
+        class="bg-white/95 dark:bg-neutral-700 p-4 rounded-sm flex flex-col shadow-sm"
       >
         <markdown data-testid="page-markdown" [src]="state.src()" />
       </div>
