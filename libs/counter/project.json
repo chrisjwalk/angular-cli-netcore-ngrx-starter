@@ -11,7 +11,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/libs/counter",
-        "coverage": false
+        "coverage": true
       }
     },
     "lint": {

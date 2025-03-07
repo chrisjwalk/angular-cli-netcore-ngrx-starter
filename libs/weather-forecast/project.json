@@ -11,7 +11,7 @@
       "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/libs/weather-forcast",
-        "coverage": false
+        "coverage": true
       }
     },
     "lint": {
