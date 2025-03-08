@@ -18,6 +18,9 @@ import { RouterModule } from '@angular/router';
       <span matListItemLine>{{ hint() }}</span>
     </a>
   `,
+  host: {
+    'data-testid': 'lib-sidenav-list-item',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavListItemComponent {

@@ -19,6 +19,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   `,
   host: {
     class: 'flex items-center',
+    'data-testid': 'lib-page-toolbar-button',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

@@ -5,6 +5,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: ` <ng-content /> `,
   host: {
     class: 'flex p-4 flex-col',
+    'data-testid': 'lib-page-container',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

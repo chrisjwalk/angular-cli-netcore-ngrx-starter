@@ -12,6 +12,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   host: {
     class:
       'bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]',
+    'data-testid': 'lib-page-toolbar',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

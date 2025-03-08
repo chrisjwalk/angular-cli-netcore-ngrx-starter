@@ -28,6 +28,9 @@ import { SidenavListItemComponent } from './sidenav-list-item.component';
       </mat-nav-list>
     </div>
   `,
+  host: {
+    'data-testid': 'lib-sidenav',
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SidenavComponent {
