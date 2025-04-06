@@ -86,8 +86,11 @@ export function withWeatherForecastFeature() {
       })),
     })),
     withProps(({ weatherForecastService, request }) => ({
-      weatherForecastResource:
-        weatherForecastService.getForecastsResource(request),
+      weatherForecastResource: rxResource({
+        request: request,
+        loader: ({ request: { count, plus } }) =>
+          weatherForecastService.getForecasts(count, plus),
+      }),
     })),
     withComputed(({ weatherForecastResource }) => ({
       loading: computed(() => weatherForecastResource?.isLoading() ?? null),
