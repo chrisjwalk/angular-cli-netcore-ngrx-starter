@@ -25,7 +25,7 @@ export function withLayoutFeature() {
   return signalStoreFeature(
     withState(layoutInitialState),
     withComputed(({ title }) => ({
-      pageTitle: computed(() => `${title()}${title() ? ' | ' : ''}Demo App`),
+      pageTitle: computed(() => `${title() ? `${title()} | ` : ''}Demo App`),
     })),
     withMethods((store, titleService = inject(Title)) => ({
       setTitle(title: string) {
@@ -60,3 +60,5 @@ export const LayoutStore = signalStore(
   },
   withLayoutFeature(),
 );
+
+export type LayoutStore = InstanceType<typeof LayoutStore>;
