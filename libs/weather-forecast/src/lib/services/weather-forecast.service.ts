@@ -1,5 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-import { InjectionToken, inject } from '@angular/core';
+import { HttpClient, httpResource } from '@angular/common/http';
+import { InjectionToken, Signal, inject } from '@angular/core';
 
 import { WeatherForecast } from '../models/weather-forecast';
 
@@ -11,6 +11,14 @@ export const weatherForecastServiceFactory = (http = inject(HttpClient)) => ({
         params: { count },
       },
     );
+  },
+  getForecastsResource(request: Signal<{ count: number; plus: boolean }>) {
+    return httpResource<WeatherForecast[]>(() => ({
+      url: request().plus
+        ? '/api/weatherforecastsplus'
+        : '/api/weatherforecasts',
+      params: { count: request().count },
+    }));
   },
 });
 
