@@ -49,7 +49,7 @@
     "preinstall": "npm run dotnet:restore",
     "postinstall": "npm run build:dotnet-builder",
     "prepare": "husky",
-    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit esbuild typescript"
+    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit typescript"
   },
   "private": true,
   "dependencies": {
@@ -113,7 +113,7 @@
     "autoprefixer": "10.4.21",
     "commander": "13.1.0",
     "dotenv": "16.5.0",
-    "esbuild": "0.19.12",
+    "esbuild": "0.25.2",
     "eslint": "9.24.0",
     "eslint-config-prettier": "10.1.2",
     "eslint-plugin-playwright": "2.2.0",
