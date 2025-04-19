@@ -1,4 +1,4 @@
-import { computed, inject } from '@angular/core';
+import { computed, inject, Signal } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore, withLoadingFeature } from '@myorg/shared';
@@ -9,6 +9,7 @@ import {
   signalStoreFeature,
   type,
   withComputed,
+  withFeature,
   withHooks,
   withMethods,
   withProps,
@@ -19,7 +20,10 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { isEqual } from 'lodash';
 import { pipe, switchMap, tap } from 'rxjs';
 
-import { WeatherForecast } from '../models/weather-forecast';
+import {
+  WeatherForecast,
+  WeatherForecastFilter,
+} from '../models/weather-forecast';
 import { WeatherForecastService } from '../services/weather-forecast.service';
 
 export type WeatherForecastState = {
@@ -134,8 +138,35 @@ export function withWeatherForecastHooks() {
   );
 }
 
+export function weatherForecastFilter(
+  weatherForecasts: Signal<WeatherForecast[]>,
+) {
+  return signalStoreFeature(
+    withState({
+      filter: null as WeatherForecastFilter,
+    }),
+    withComputed((store) => ({
+      filteredForecasts: computed(() => {
+        return weatherForecasts().filter(
+          (forecast) =>
+            (!store.filter()?.minTemperatureC ||
+              forecast.temperatureC > store.filter()?.minTemperatureC) &&
+            (!store.filter()?.maxTemperatureC ||
+              forecast.temperatureC < store.filter()?.maxTemperatureC),
+        );
+      }),
+    })),
+    withMethods((store) => ({
+      setFilter(filter: WeatherForecastFilter) {
+        patchState(store, { filter });
+      },
+    })),
+  );
+}
+
 export const WeatherForecastStore = signalStore(
   withWeatherForecastFeature(),
+  withFeature(({ entities }) => weatherForecastFilter(entities)),
   withWeatherForecastHooks(),
 );
 
@@ -143,6 +174,7 @@ export type WeatherForecastStore = InstanceType<typeof WeatherForecastStore>;
 
 export const WeatherForecastEntityStore = signalStore(
   withWeatherForecastEntitiesFeature(),
+  withFeature(({ entities }) => weatherForecastFilter(entities)),
   withWeatherForecastHooks(),
 );
 

@@ -62,7 +62,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
     <lib-page-container>
       <lib-forecast-table
         [loading]="store.loading()"
-        [data]="store.entities()"
+        [data]="store.filteredForecasts()"
       />
     </lib-page-container>
   `,
