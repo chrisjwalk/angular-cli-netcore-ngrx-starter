@@ -83,33 +83,28 @@ export function withWeatherForecastFeature() {
       layoutStore: inject(LayoutStore),
       weatherForecastService: inject(WeatherForecastService),
     })),
-    withComputed((store) => ({
+    withComputed(({ count, plus }) => ({
       request: computed(() => ({
-        count: store.count(),
-        plus: store.plus(),
+        count: count(),
+        plus: plus(),
       })),
     })),
     withProps(({ weatherForecastService, request }) => ({
-      weatherForecastResource: rxResource({
+      weatherForecasts: rxResource({
         request: request,
         loader: ({ request: { count, plus } }) =>
           weatherForecastService.getForecasts(count, plus),
       }),
     })),
-    withComputed(({ weatherForecastResource }) => ({
-      loading: computed(() => weatherForecastResource?.isLoading() ?? null),
-      entities: computed(() => weatherForecastResource?.value() ?? []),
-      error: computed(() => weatherForecastResource?.error() ?? null),
-      status: computed(() => weatherForecastResource?.status() ?? null),
-    })),
-    withMethods(({ layoutStore, weatherForecastResource, ...store }) => ({
+
+    withMethods(({ layoutStore, weatherForecasts, ...store }) => ({
       getForecasts(request: { count: number; plus: boolean }) {
         const reload = isEqual(store.request(), request);
 
         layoutStore.setCount(request.count);
         patchState(store, request);
         if (reload) {
-          weatherForecastResource.reload();
+          weatherForecasts.reload();
         }
       },
     })),
@@ -166,7 +161,9 @@ export function weatherForecastFilter(
 
 export const WeatherForecastStore = signalStore(
   withWeatherForecastFeature(),
-  withFeature(({ entities }) => weatherForecastFilter(entities)),
+  withFeature(({ weatherForecasts }) =>
+    weatherForecastFilter(weatherForecasts.value),
+  ),
   withWeatherForecastHooks(),
 );
 

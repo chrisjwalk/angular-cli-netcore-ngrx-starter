@@ -61,7 +61,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
     </lib-page-toolbar>
     <lib-page-container>
       <lib-forecast-table
-        [loading]="store.loading()"
+        [loading]="store.weatherForecasts.isLoading()"
         [data]="store.filteredForecasts()"
       />
     </lib-page-container>

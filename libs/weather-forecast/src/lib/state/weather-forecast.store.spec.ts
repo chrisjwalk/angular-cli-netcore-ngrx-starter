@@ -40,8 +40,8 @@ describe('WeatherForecastStore', () => {
     vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
     await appRef.whenStable();
     expect(store.count()).toBe(10);
-    expect(store.loading()).toBe(false);
-    expect(store.error()).toBe(null);
+    expect(store.weatherForecasts.isLoading()).toBe(false);
+    expect(store.weatherForecasts.error()).toBeFalsy();
   });
 
   describe('signal store rxResource tests', () => {
@@ -52,9 +52,9 @@ describe('WeatherForecastStore', () => {
       store.getForecasts({ count: 1, plus: false });
 
       await appRef.whenStable();
-      expect(store.entities()).toEqual([weatherForecasts[0]]);
+      expect(store.weatherForecasts.value()).toEqual([weatherForecasts[0]]);
       expect(store.count()).toBe(1);
-      expect(store.loading()).toBe(false);
+      expect(store.weatherForecasts.isLoading()).toBe(false);
     });
 
     it('WeatherForecastStore.getForecasts(count) should return data of length count', async () => {
@@ -62,9 +62,9 @@ describe('WeatherForecastStore', () => {
       store.getForecasts({ count: 10, plus: false });
 
       await appRef.whenStable();
-      expect(store.entities().length).toBe(10);
+      expect(store.weatherForecasts.value().length).toBe(10);
       expect(store.count()).toBe(10);
-      expect(store.loading()).toBe(false);
+      expect(store.weatherForecasts.isLoading()).toBe(false);
     });
 
     it('WeatherForecastStore.getForecasts(count) should catch error', async () => {
@@ -75,10 +75,10 @@ describe('WeatherForecastStore', () => {
       store.getForecasts({ count: 10, plus: false });
 
       await appRef.whenStable();
-      expect(store.entities().length).toBe(0);
+      expect(store.weatherForecasts.value()?.length).toBeFalsy();
       expect(store.count()).toBe(10);
-      expect(store.loading()).toBe(false);
-      expect(store.error()).toBe(error);
+      expect(store.weatherForecasts.isLoading()).toBe(false);
+      expect(store.weatherForecasts.error()).toBe(error);
     });
   });
 
