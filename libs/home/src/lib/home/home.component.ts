@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import {
   LayoutStore,
   PageContainerComponent,
@@ -30,11 +25,11 @@ import { MarkdownComponent } from 'ngx-markdown';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent {
   readonly layoutStore = inject(LayoutStore);
   readonly state = signalState({ src: '/assets/home.component.md' });
 
-  ngOnInit() {
+  constructor() {
     this.layoutStore.setTitle('Home');
   }
 }

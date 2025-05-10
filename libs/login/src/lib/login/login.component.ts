@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -84,7 +79,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   private readonly formBuilder = inject(FormBuilder);
 
   readonly layoutStore = inject(LayoutStore);
@@ -93,7 +88,7 @@ export class LoginComponent implements OnInit {
 
   readonly formGroup = getLoginFormGroup(this.formBuilder, this.store);
 
-  ngOnInit() {
+  constructor() {
     this.layoutStore.setTitle('Login');
   }
 }

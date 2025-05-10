@@ -141,15 +141,15 @@ export function weatherForecastFilter(
       filter: null as WeatherForecastFilter,
     }),
     withComputed((store) => ({
-      filteredForecasts: computed(() => {
-        return weatherForecasts().filter(
+      filteredForecasts: computed(() =>
+        weatherForecasts()?.filter(
           (forecast) =>
             (!store.filter()?.minTemperatureC ||
               forecast.temperatureC > store.filter()?.minTemperatureC) &&
             (!store.filter()?.maxTemperatureC ||
               forecast.temperatureC < store.filter()?.maxTemperatureC),
-        );
-      }),
+        ),
+      ),
     })),
     withMethods((store) => ({
       setFilter(filter: WeatherForecastFilter) {

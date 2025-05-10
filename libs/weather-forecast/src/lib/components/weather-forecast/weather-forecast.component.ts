@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
@@ -71,12 +66,12 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WeatherForecastComponent implements OnInit {
+export class WeatherForecastComponent {
   readonly layoutStore = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
   readonly store = inject(WeatherForecastStore);
 
-  ngOnInit() {
+  constructor() {
     this.layoutStore.setTitle('Weather Forecasts');
   }
 }

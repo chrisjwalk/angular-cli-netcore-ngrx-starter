@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  OnInit,
   inject,
   input,
 } from '@angular/core';
@@ -50,13 +49,13 @@ import { CounterComponent } from '../counter/counter.component';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CounterContainerComponent implements OnInit {
+export class CounterContainerComponent {
   readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
 
   count = input<number | string>(null);
 
-  ngOnInit() {
+  constructor() {
     this.layoutStore.setTitle('Lazy Loaded Feature');
     this.store.inputCount(this.count);
   }
