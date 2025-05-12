@@ -6,7 +6,7 @@
     "ng": "nx",
     "nx": "nx",
     "ngcc": "ngcc",
-    "start": "nx run-many --target=serve --projects=web-app,api --parallel",
+    "start": "nx serve web-app",
     "build": "nx run-many --target=build --projects=web-app,api --parallel",
     "build:prod": "npm run build -- --configuration production",
     "build:api": "nx build api",

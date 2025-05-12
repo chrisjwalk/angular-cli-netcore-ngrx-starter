@@ -68,7 +68,13 @@
         }
       },
       "defaultConfiguration": "development",
-      "continuous": true
+      "continuous": true,
+      "dependsOn": [
+        {
+          "target": "serve",
+          "projects": ["api"]
+        }
+      ]
     },
     "extract-i18n": {
       "executor": "@angular-devkit/build-angular:extract-i18n",

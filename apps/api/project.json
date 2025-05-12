@@ -22,7 +22,8 @@
       "executor": "./tools/builders/dotnet-builder:run",
       "options": {
         "project": "apps/api/Api"
-      }
+      },
+      "continuous": true
     },
     "test": {
       "executor": "./tools/builders/dotnet-builder:test",
