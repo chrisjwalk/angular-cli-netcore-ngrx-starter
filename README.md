@@ -34,13 +34,13 @@ Both the api (dotnet) and web app (Angular) will build and run in dev mode. Open
 ## Serve Production App (PWA enabled)
 
 ```
-pnpm run serve:prod
+pnpm serve:prod
 ```
 
 ## Lint
 
 ```
-pnpm run lint
+pnpm lint
 ```
 
 ## Unit Tests
@@ -48,7 +48,7 @@ pnpm run lint
 Run unit tests by executing:
 
 ```
-pnpm run test
+pnpm test
 ```
 
 Please note that for test coverage you need dotnet-coverage to be installed:
@@ -64,7 +64,7 @@ More information is available on https://learn.microsoft.com/en-us/dotnet/core/t
 Run e2e tests by executing:
 
 ```
-pnpm run e2e
+pnpm e2e
 ```
 
 ## Build Production App
@@ -72,7 +72,7 @@ pnpm run e2e
 Build the production Angular app and Publish the release .NET app, run:
 
 ```
-pnpm run build:prod
+pnpm build:prod
 ```
 
 The contents of the. `/dist` folder should now contain something that can be deployed to and Azure web service or IIS instance.

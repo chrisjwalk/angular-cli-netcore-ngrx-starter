@@ -25,7 +25,7 @@ steps:
     displayName: 'Install pnpm'
 
   - script: |
-      pnpm run dotnet:coverage
+      pnpm dotnet:coverage
     displayName: 'Install dotnet-coverage'
 
   - script: |
@@ -33,15 +33,16 @@ steps:
     displayName: 'pnpm install'
 
   - script: |
-      pnpm run lint:all
+      pnpm lint:all
     displayName: 'Lint'
 
   - script: |
-      pnpm run test:all
+      pnpm test:all
     displayName: 'Run Tests'
 
   - script: |
-      pnpm run build:prod
+      pnpm build:api:prod
+      pnpm build:web-app:prod
     displayName: 'Build'
 
   - task: PublishTestResults@2
