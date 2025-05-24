@@ -12,8 +12,9 @@ import {
   PageToolbarComponent,
 } from '@myorg/shared';
 
-import { CounterStore } from '../../state';
+import { counterEvents, CounterStore } from '../../state';
 import { CounterComponent } from '../counter/counter.component';
+import { injectDispatch } from '@ngrx/signals/events';
 
 @Component({
   imports: [
@@ -28,7 +29,7 @@ import { CounterComponent } from '../counter/counter.component';
     @let count = store.count();
     <lib-page-toolbar [title]="layoutStore.title()">
       <lib-page-toolbar-button
-        (click)="store.incrementCount()"
+        (click)="dispatcher.incrementCount()"
         tooltip="Increment!"
       >
         <mat-icon>add</mat-icon>
@@ -38,9 +39,9 @@ import { CounterComponent } from '../counter/counter.component';
       <lib-counter
         #counter
         [count]="count"
-        (increment)="store.incrementCount()"
-        (decrement)="store.decrementCount()"
-        (setCount)="store.setCount($event)"
+        (increment)="dispatcher.incrementCount()"
+        (decrement)="dispatcher.decrementCount()"
+        (setCount)="dispatcher.setCount($event)"
       />
     </lib-page-container>
   `,
@@ -52,6 +53,7 @@ import { CounterComponent } from '../counter/counter.component';
 export class CounterContainerComponent {
   readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
+  readonly dispatcher = injectDispatch(counterEvents);
 
   count = input<number | string>(null);
 

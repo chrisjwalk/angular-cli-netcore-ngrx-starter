@@ -1,5 +1,13 @@
 import { TestBed } from '@angular/core/testing';
-import { CounterStore, conuterInitialState } from './counter.store';
+import { patchState } from '@ngrx/signals';
+import { unprotected } from '@ngrx/signals/testing';
+import {
+  CounterStore,
+  conuterInitialState,
+  decrementCount,
+  incrementCount,
+  setCount,
+} from './counter.store';
 
 describe('CounterStore', () => {
   let store: CounterStore;
@@ -16,16 +24,16 @@ describe('CounterStore', () => {
     let count = conuterInitialState.count;
     expect(store).toBeTruthy();
     expect(store.count()).toBe(count);
-    store.incrementCount();
+    patchState(unprotected(store), incrementCount());
     count++;
     expect(store.count()).toBe(count);
-    store.incrementCount();
+    patchState(unprotected(store), incrementCount());
     count++;
     expect(store.count()).toBe(count);
     count = 99;
-    store.setCount(count);
+    patchState(unprotected(store), setCount(count));
     expect(store.count()).toBe(count);
-    store.decrementCount();
+    patchState(unprotected(store), decrementCount());
     count--;
     expect(store.count()).toBe(count);
   });
