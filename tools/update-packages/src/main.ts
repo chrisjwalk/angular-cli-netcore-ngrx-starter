@@ -34,7 +34,7 @@ const execAsync = (
   );
 
 async function npmOutdated() {
-  const stdout = await execAsync(`npm outdated --json`);
+  const stdout = await execAsync(`pnpm outdated --json`);
   return stdout.toString().trim();
 }
 
@@ -142,7 +142,7 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
     }
   }
 
-  console.log('npm install');
+  console.log('pnpm install');
   if (migrationCommandsLength === 0) {
     console.log('No migrations to run');
   } else {
