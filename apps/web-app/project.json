@@ -26,7 +26,8 @@
           "apps/web-app/src/styles/material.scss"
         ],
         "inlineStyleLanguage": "scss",
-        "scripts": []
+        "scripts": [],
+        "allowedCommonJsDependencies": ["lodash"]
       },
       "configurations": {
         "production": {

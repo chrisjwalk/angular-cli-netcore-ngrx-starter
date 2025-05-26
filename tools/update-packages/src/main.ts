@@ -34,7 +34,7 @@ const execAsync = (
   );
 
 async function npmOutdated() {
-  const stdout = await execAsync(`npm outdated --json`);
+  const stdout = await execAsync(`pnpm outdated --json`);
   return stdout.toString().trim();
 }
 
@@ -128,7 +128,15 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   }
   let migrationCommandsLength = 0;
   for (const pkg of packages) {
-    const hasMigrateions = await nxMigrateLatest(pkg, verbose);
+    let hasMigrateions = false;
+    try {
+      hasMigrateions = await nxMigrateLatest(pkg, verbose);
+    } catch (e) {
+      if (verbose) {
+        console.log(`Error running nx migrate for ${pkg}`, e);
+      }
+      continue;
+    }
     if (hasMigrateions) {
       if (verbose) {
         console.log(`${pkg} has migrations`);
@@ -142,7 +150,7 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
     }
   }
 
-  console.log('npm install');
+  console.log('pnpm install --no-frozen-lockfile');
   if (migrationCommandsLength === 0) {
     console.log('No migrations to run');
   } else {

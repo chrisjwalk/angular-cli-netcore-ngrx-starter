@@ -21,23 +21,28 @@ steps:
       version: 9.0.x
 
   - script: |
-      npm run dotnet:coverage
+      npm install -g pnpm
+    displayName: 'Install pnpm'
+
+  - script: |
+      pnpm dotnet:coverage
     displayName: 'Install dotnet-coverage'
 
   - script: |
-      npm ci
-    displayName: 'npm ci'
+      pnpm install --frozen-lockfile
+    displayName: 'pnpm install'
 
   - script: |
-      npm run lint:all
+      pnpm lint:all
     displayName: 'Lint'
 
   - script: |
-      npm run test:all
+      pnpm test:all
     displayName: 'Run Tests'
 
   - script: |
-      npm run build:prod
+      pnpm build:api:prod
+      pnpm build:web-app:prod
     displayName: 'Build'
 
   - task: PublishTestResults@2

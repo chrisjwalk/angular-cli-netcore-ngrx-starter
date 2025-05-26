@@ -1,0 +1,12 @@
+packages:
+  - apps/*
+  - libs/*
+  - tools/*
+onlyBuiltDependencies:
+  - '@parcel/watcher'
+  - '@swc/core'
+  - '@tailwindcss/oxide'
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - nx
