@@ -9,7 +9,6 @@ export function authInterceptor(
   next: HttpHandlerFn,
 ): Observable<HttpEvent<unknown>> {
   const store = inject(AuthStore);
-  const loginStatus$ = store.loginStatusToObservable();
 
   if (store.loggedIn()) {
     req = setAuthorizationHeader(req, store.accessToken());
@@ -27,7 +26,7 @@ export function authInterceptor(
 
         store.refresh({ refreshToken });
 
-        return loginStatus$.pipe(
+        return store.loginStatus$.pipe(
           filter(() => store.loginAttempted()),
           switchMap(() => {
             if (!store.loggedIn()) {

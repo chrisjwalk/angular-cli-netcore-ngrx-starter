@@ -92,10 +92,11 @@ export function withAuthFeature() {
   return signalStoreFeature(
     withState(authInitialState),
     withLoadingFeature(),
-    withProps(() => ({
+    withProps(({ loginStatus }) => ({
       router: inject(Router),
       authService: inject(AuthService),
       snackBar: inject(MatSnackBar),
+      loginStatus$: toObservable(loginStatus).pipe(startWith(null)),
     })),
     withComputed((state) => ({
       expiresAt: computed(() =>
@@ -166,9 +167,7 @@ export function withAuthFeature() {
       loginRequired(pageRequiresLogin: boolean) {
         patchState(store, { pageRequiresLogin });
       },
-      loginStatusToObservable() {
-        return toObservable(store.loginStatus).pipe(startWith(null));
-      },
+
       setRedirect(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
         patchState(store, { redirect: { route, state } });
       },
@@ -274,11 +273,10 @@ export function requiresLoginCanActivateFn(
 ) {
   const store = inject(AuthStore);
   const router = inject(Router);
-  const loginStatus$ = store.loginStatusToObservable();
 
   store.loginRequired(true);
 
-  return loginStatus$.pipe(
+  return store.loginStatus$.pipe(
     filter(() => store.loginAttempted()),
     map(() => store.loggedIn()),
     map((loggedIn) => {
