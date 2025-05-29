@@ -7,8 +7,10 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@angular-devkit/build-angular:application",
-      "outputs": ["{options.outputPath}"],
+      "executor": "@angular/build:application",
+      "outputs": [
+        "{options.outputPath}"
+      ],
       "options": {
         "outputPath": "dist/apps/web-app",
         "index": "apps/web-app/src/index.html",
@@ -27,7 +29,9 @@
         ],
         "inlineStyleLanguage": "scss",
         "scripts": [],
-        "allowedCommonJsDependencies": ["lodash"]
+        "allowedCommonJsDependencies": [
+          "lodash"
+        ]
       },
       "configurations": {
         "production": {
@@ -56,7 +60,7 @@
       "defaultConfiguration": "production"
     },
     "serve": {
-      "executor": "@angular-devkit/build-angular:dev-server",
+      "executor": "@angular/build:dev-server",
       "options": {
         "proxyConfig": "apps/web-app/proxy.conf.json"
       },
@@ -73,23 +77,29 @@
       "dependsOn": [
         {
           "target": "serve",
-          "projects": ["api"]
+          "projects": [
+            "api"
+          ]
         }
       ]
     },
     "extract-i18n": {
-      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "executor": "@angular/build:extract-i18n",
       "options": {
         "buildTarget": "web-app:build"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "outputs": [
+        "{options.outputFile}"
+      ]
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "../../coverage/apps/web-app",
         "coverage": true

@@ -68,14 +68,13 @@ describe('WeatherForecastStore', () => {
     });
 
     it('WeatherForecastStore.getForecasts(count) should catch error', async () => {
-      const error = { message: 'error' };
+      const error = new Error('error');
       vi.spyOn(service, 'getForecasts').mockImplementation(() =>
         throwError(() => error),
       );
       store.getForecasts({ count: 10, plus: false });
 
       await appRef.whenStable();
-      expect(store.weatherForecasts.value()?.length).toBeFalsy();
       expect(store.count()).toBe(10);
       expect(store.weatherForecasts.isLoading()).toBe(false);
       expect(store.weatherForecasts.error()).toBe(error);

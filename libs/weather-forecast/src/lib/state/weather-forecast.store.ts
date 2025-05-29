@@ -91,8 +91,8 @@ export function withWeatherForecastFeature() {
     })),
     withProps(({ weatherForecastService, request }) => ({
       weatherForecasts: rxResource({
-        request: request,
-        loader: ({ request: { count, plus } }) =>
+        params: request,
+        stream: ({ params: { count, plus } }) =>
           weatherForecastService.getForecasts(count, plus),
       }),
     })),
