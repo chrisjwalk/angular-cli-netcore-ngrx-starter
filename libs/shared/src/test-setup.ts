@@ -1,12 +1,18 @@
-import '@analogjs/vitest-angular/setup-zone';
+import '@analogjs/vitest-angular/setup-snapshots';
 
-import { getTestBed } from '@angular/core/testing';
+import { provideZonelessChangeDetection, NgModule } from '@angular/core';
 import {
   BrowserDynamicTestingModule,
   platformBrowserDynamicTesting,
 } from '@angular/platform-browser-dynamic/testing';
+import { getTestBed } from '@angular/core/testing';
+
+@NgModule({
+  providers: [provideZonelessChangeDetection()],
+})
+export class ZonelessTestModule {}
 
 getTestBed().initTestEnvironment(
-  BrowserDynamicTestingModule,
+  [BrowserDynamicTestingModule, ZonelessTestModule],
   platformBrowserDynamicTesting(),
 );
