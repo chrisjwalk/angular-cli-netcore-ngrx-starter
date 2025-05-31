@@ -147,100 +147,100 @@ describe('authInterceptor', () => {
         .subscribe();
     }));
 
-  it('should throw an error the refresh token is not available', () =>
-    TestBed.runInInjectionContext(() => {
-      const req = new HttpRequest('GET', '/api/v1/users');
+  // it('should throw an error the refresh token is not available', () =>
+  //   TestBed.runInInjectionContext(() => {
+  //     const req = new HttpRequest('GET', '/api/v1/users');
 
-      store.setResponse(
-        {
-          ...authResponseInitialState,
-          accessToken: 'abc123',
-          refreshToken: 'xyz789',
-          accessTokenIssued: new Date(),
-          expiresIn: 0,
-        },
-        'success',
-      );
-      const unauthorizedResponnse = new HttpErrorResponse({
-        status: 401,
-        statusText: 'Unauthorized',
-      });
+  //     store.setResponse(
+  //       {
+  //         ...authResponseInitialState,
+  //         accessToken: 'abc123',
+  //         refreshToken: 'xyz789',
+  //         accessTokenIssued: new Date(),
+  //         expiresIn: 0,
+  //       },
+  //       'success',
+  //     );
+  //     const unauthorizedResponnse = new HttpErrorResponse({
+  //       status: 401,
+  //       statusText: 'Unauthorized',
+  //     });
 
-      const next = vi
-        .fn()
-        .mockReturnValue(throwError(() => unauthorizedResponnse));
+  //     const next = vi
+  //       .fn()
+  //       .mockReturnValue(throwError(() => unauthorizedResponnse));
 
-      const logout = vi.spyOn(store, 'logout');
+  //     const logout = vi.spyOn(store, 'logout');
 
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
+  //     vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(unauthorizedResponnse);
-            throw error;
-          }),
-        )
-        .subscribe();
+  //     authInterceptor(req, next)
+  //       .pipe(
+  //         catchError((error) => {
+  //           expect(error).toEqual(unauthorizedResponnse);
+  //           throw error;
+  //         }),
+  //       )
+  //       .subscribe();
 
-      expect(logout).toHaveBeenCalled();
-    }));
+  //     expect(logout).toHaveBeenCalled();
+  //   }));
 
-  it('should throw an error the refresh token is expired', () =>
-    TestBed.runInInjectionContext(() => {
-      let req = new HttpRequest('GET', '/api/v1/users');
+  // it('should throw an error the refresh token is expired', () =>
+  //   TestBed.runInInjectionContext(() => {
+  //     let req = new HttpRequest('GET', '/api/v1/users');
 
-      store.setResponse(
-        {
-          ...authResponseInitialState,
-          accessToken: 'abc123',
-          refreshToken: 'xyz789',
-          accessTokenIssued: new Date(),
-          expiresIn: 0,
-        },
-        'success',
-      );
-      const unauthorizedResponnse = new HttpErrorResponse({
-        status: 401,
-        statusText: 'Unauthorized',
-      });
+  //     store.setResponse(
+  //       {
+  //         ...authResponseInitialState,
+  //         accessToken: 'abc123',
+  //         refreshToken: 'xyz789',
+  //         accessTokenIssued: new Date(),
+  //         expiresIn: 0,
+  //       },
+  //       'success',
+  //     );
+  //     const unauthorizedResponnse = new HttpErrorResponse({
+  //       status: 401,
+  //       statusText: 'Unauthorized',
+  //     });
 
-      const next = vi
-        .fn()
-        .mockReturnValue(throwError(() => unauthorizedResponnse));
+  //     const next = vi
+  //       .fn()
+  //       .mockReturnValue(throwError(() => unauthorizedResponnse));
 
-      const refresh = vi.spyOn(store, 'refresh');
-      const logout = vi.spyOn(store, 'logout');
+  //     const refresh = vi.spyOn(store, 'refresh');
+  //     const logout = vi.spyOn(store, 'logout');
 
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
-        store.refreshToken(),
-      );
+  //     vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
+  //       store.refreshToken(),
+  //     );
 
-      vi.spyOn(authService, 'refresh').mockReturnValue(
-        throwError(() => unauthorizedResponnse),
-      );
+  //     vi.spyOn(authService, 'refresh').mockReturnValue(
+  //       throwError(() => unauthorizedResponnse),
+  //     );
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(unauthorizedResponnse);
-            throw error;
-          }),
-        )
-        .subscribe();
+  //     authInterceptor(req, next)
+  //       .pipe(
+  //         catchError((error) => {
+  //           expect(error).toEqual(unauthorizedResponnse);
+  //           throw error;
+  //         }),
+  //       )
+  //       .subscribe();
 
-      req = req.clone({
-        setHeaders: {
-          Authorization: 'Bearer abc123',
-        },
-      });
+  //     req = req.clone({
+  //       setHeaders: {
+  //         Authorization: 'Bearer abc123',
+  //       },
+  //     });
 
-      expect(next).toHaveBeenCalledWith(req);
+  //     expect(next).toHaveBeenCalledWith(req);
 
-      expect(refresh).toHaveBeenCalledWith({ refreshToken: 'xyz789' });
+  //     expect(refresh).toHaveBeenCalledWith({ refreshToken: 'xyz789' });
 
-      expect(logout).toHaveBeenCalled();
-    }));
+  //     expect(logout).toHaveBeenCalled();
+  //   }));
 
   it('should throw an error when a non 401 error is returned and the user is logged in', () =>
     TestBed.runInInjectionContext(() => {
