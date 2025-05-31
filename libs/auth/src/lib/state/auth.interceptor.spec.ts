@@ -15,12 +15,12 @@ import { AuthStore, authResponseInitialState } from './auth.store';
   template: ``,
   standalone: true,
 })
-export class MockComponent {}
+export class Mock {}
 
 export const mockRoutes = [
   {
     path: 'login',
-    component: MockComponent,
+    component: Mock,
   },
 ];
 

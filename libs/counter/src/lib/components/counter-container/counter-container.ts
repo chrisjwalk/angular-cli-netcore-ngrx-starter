@@ -7,22 +7,22 @@ import {
 import { MatIconModule } from '@angular/material/icon';
 import {
   LayoutStore,
-  PageContainerComponent,
-  PageToolbarButtonComponent,
-  PageToolbarComponent,
+  PageContainer,
+  PageToolbarButton,
+  PageToolbar,
 } from '@myorg/shared';
 
 import { counterEvents, CounterStore } from '../../state';
-import { CounterComponent } from '../counter/counter.component';
+import { Counter } from '../counter/counter';
 import { injectDispatch } from '@ngrx/signals/events';
 
 @Component({
   imports: [
     MatIconModule,
-    PageContainerComponent,
-    PageToolbarComponent,
-    PageToolbarButtonComponent,
-    CounterComponent,
+    PageContainer,
+    PageToolbar,
+    PageToolbarButton,
+    Counter,
   ],
   selector: 'lib-counter-container',
   template: `
@@ -50,7 +50,7 @@ import { injectDispatch } from '@ngrx/signals/events';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CounterContainerComponent {
+export class CounterContainer {
   readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
   readonly dispatcher = injectDispatch(counterEvents);

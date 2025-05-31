@@ -5,8 +5,8 @@ import { RouterModule } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
-  MainToolbarComponent,
-  SidenavComponent,
+  MainToolbar,
+  Sidenav,
   SwUpdateStore,
 } from '@myorg/shared';
 
@@ -14,8 +14,8 @@ import {
   imports: [
     RouterModule,
     MatSidenavModule,
-    SidenavComponent,
-    MainToolbarComponent,
+    Sidenav,
+    MainToolbar,
     MatSnackBarModule,
   ],
   selector: 'app-root',
@@ -53,7 +53,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [SwUpdateStore],
 })
-export class AppComponent {
+export class App {
   readonly swUpdateStore = inject(SwUpdateStore);
   readonly store = inject(LayoutStore);
   readonly authStore = inject(AuthStore);

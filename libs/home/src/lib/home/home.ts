@@ -1,14 +1,10 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import {
-  LayoutStore,
-  PageContainerComponent,
-  PageToolbarComponent,
-} from '@myorg/shared';
+import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
 import { signalState } from '@ngrx/signals';
 import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
-  imports: [MarkdownComponent, PageContainerComponent, PageToolbarComponent],
+  imports: [MarkdownComponent, PageContainer, PageToolbar],
   selector: 'lib-home',
   template: `
     <lib-page-toolbar [title]="layoutStore.title()" />
@@ -25,9 +21,9 @@ import { MarkdownComponent } from 'ngx-markdown';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {
+export class Home {
   readonly layoutStore = inject(LayoutStore);
-  readonly state = signalState({ src: '/assets/home.component.md' });
+  readonly state = signalState({ src: '/assets/home.md' });
 
   constructor() {
     this.layoutStore.setTitle('Home');

@@ -4,16 +4,16 @@ import {
   requiresLoginCanDeactivateFn,
 } from '@myorg/auth';
 
-import { WeatherForecastComponent } from './components/weather-forecast/weather-forecast.component';
+import { WeatherForecast } from './components/weather-forecast/weather-forecast';
 
 export const weatherForecastRoutes: Route[] = [
   {
     path: '',
-    component: WeatherForecastComponent,
+    component: WeatherForecast,
   },
   {
     path: 'plus',
-    component: WeatherForecastComponent,
+    component: WeatherForecast,
     canActivate: [requiresLoginCanActivateFn],
     canDeactivate: [requiresLoginCanDeactivateFn],
   },

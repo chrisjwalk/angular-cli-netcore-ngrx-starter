@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/angular';
-import { PageContainerComponent } from './page-container.component';
+import { PageContainer } from './page-container';
 
-describe('PageContainerComponent', () => {
+describe('PageContainer', () => {
   it('should create', async () => {
-    await render(PageContainerComponent);
+    await render(PageContainer);
 
     expect(screen.getByTestId('lib-page-container')).toBeTruthy();
   });

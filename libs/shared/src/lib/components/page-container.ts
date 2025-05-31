@@ -9,4 +9,4 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageContainerComponent {}
+export class PageContainer {}

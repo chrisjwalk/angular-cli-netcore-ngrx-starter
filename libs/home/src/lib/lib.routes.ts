@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 import { provideMarkdown } from 'ngx-markdown';
 
-import { HomeComponent } from './home/home.component';
+import { Home } from './home/home';
 
 export const homeRoutes: Route[] = [
   {
     path: '',
-    component: HomeComponent,
+    component: Home,
     providers: [provideMarkdown()],
   },
 ];

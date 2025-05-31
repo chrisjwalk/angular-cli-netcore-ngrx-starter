@@ -5,23 +5,23 @@ import { MatInputModule } from '@angular/material/input';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
-  PageContainerComponent,
-  PageToolbarButtonComponent,
-  PageToolbarComponent,
+  PageContainer,
+  PageToolbarButton,
+  PageToolbar,
 } from '@myorg/shared';
 
 import { WeatherForecastStore } from '../../state/weather-forecast.store';
-import { ForecastTableComponent } from '../forecast-table/forecast-table.component';
+import { ForecastTable } from '../forecast-table/forecast-table';
 
 @Component({
   imports: [
-    PageContainerComponent,
-    PageToolbarButtonComponent,
+    PageContainer,
+    PageToolbarButton,
     MatFormFieldModule,
     MatInputModule,
-    PageToolbarComponent,
+    PageToolbar,
     MatIconModule,
-    ForecastTableComponent,
+    ForecastTable,
   ],
   providers: [WeatherForecastStore],
   selector: 'lib-weather-forecast',
@@ -66,7 +66,7 @@ import { ForecastTableComponent } from '../forecast-table/forecast-table.compone
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class WeatherForecastComponent {
+export class WeatherForecast {
   readonly layoutStore = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
   readonly store = inject(WeatherForecastStore);

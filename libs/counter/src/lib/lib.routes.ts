@@ -1,12 +1,12 @@
 import { Route } from '@angular/router';
 
-import { CounterContainerComponent } from './components/counter-container/counter-container.component';
+import { CounterContainer } from './components/counter-container/counter-container';
 import { CounterStore } from './state';
 
 export const counterRoutes: Route[] = [
   {
     path: '',
-    component: CounterContainerComponent,
+    component: CounterContainer,
     providers: [CounterStore],
   },
 ];

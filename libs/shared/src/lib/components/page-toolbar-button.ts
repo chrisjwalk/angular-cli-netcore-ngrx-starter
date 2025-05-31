@@ -23,6 +23,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class PageToolbarButtonComponent {
+export class PageToolbarButton {
   tooltip = input<string>(null);
 }

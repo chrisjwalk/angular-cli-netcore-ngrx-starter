@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/angular';
 
 import { CounterStore } from '../../state';
-import { CounterContainerComponent } from './counter-container.component';
+import { CounterContainer } from './counter-container';
 
-describe('CounterContainerComponent', () => {
+describe('CounterContainer', () => {
   test('should exist', async () => {
-    await render(CounterContainerComponent, {
+    await render(CounterContainer, {
       providers: [CounterStore],
     });
 

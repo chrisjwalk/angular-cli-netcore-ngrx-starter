@@ -66,7 +66,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [BreakpointStore],
 })
-export class ForecastTableComponent {
+export class ForecastTable {
   breakpointStore = inject(BreakpointStore);
 
   loading = input<boolean>(null);

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/angular';
-import { SidenavComponent } from './sidenav.component';
+import { Sidenav } from './sidenav';
 
-describe('SidenavComponent', () => {
+describe('Sidenav', () => {
   it('should create', async () => {
-    await render(SidenavComponent);
+    await render(Sidenav);
 
     expect(screen.getByTestId('lib-sidenav')).toBeTruthy();
   });

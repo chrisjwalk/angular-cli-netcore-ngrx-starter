@@ -1,17 +1,17 @@
 import { render, screen } from '@testing-library/angular';
 
 import { weatherForecasts } from '../../services/weather-forecast.service.spec';
-import { ForecastTableComponent } from './forecast-table.component';
+import { ForecastTable } from './forecast-table';
 
-describe('ForecastTableComponent', () => {
+describe('ForecastTable', () => {
   test('should exist', async () => {
-    await render(ForecastTableComponent);
+    await render(ForecastTable);
 
     expect(screen.getByTestId('lib-forecast-table')).toBeTruthy();
   });
 
   test('should have the correct number of rows', async () => {
-    await render(ForecastTableComponent, {
+    await render(ForecastTable, {
       componentInputs: { data: weatherForecasts },
     });
 

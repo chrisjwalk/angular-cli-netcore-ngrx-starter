@@ -91,7 +91,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CounterComponent {
+export class Counter {
   count = input<number>(null);
 
   increment = output();

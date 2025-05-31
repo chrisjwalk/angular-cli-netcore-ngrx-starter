@@ -1,11 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { render, screen } from '@testing-library/angular';
-import { MainToolbarComponent } from './main-toolbar.component';
+import { MainToolbar } from './main-toolbar';
 
-describe('MainToolbarComponent', () => {
+describe('MainToolbar', () => {
   it('should create', async () => {
-    await render(MainToolbarComponent, {
+    await render(MainToolbar, {
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
 

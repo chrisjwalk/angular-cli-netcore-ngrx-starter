@@ -5,11 +5,11 @@ import { provideRouter } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { render, screen } from '@testing-library/angular';
 
-import { AppComponent } from './app.component';
+import { App } from './app';
 
-describe('AppComponent', () => {
+describe('App', () => {
   test('should exist', async () => {
-    await render(AppComponent, {
+    await render(App, {
       providers: [
         provideHttpClientTesting(),
         provideRouter([]),

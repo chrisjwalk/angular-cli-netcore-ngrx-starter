@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, output } from '@angular/core';
 import { MatListModule } from '@angular/material/list';
 
-import { SidenavListItemComponent } from './sidenav-list-item.component';
+import { SidenavListItem } from './sidenav-list-item';
 
 @Component({
-  imports: [SidenavListItemComponent, MatListModule],
+  imports: [SidenavListItem, MatListModule],
   selector: 'lib-sidenav',
   template: `
     <div class="p-2">
@@ -33,7 +33,7 @@ import { SidenavListItemComponent } from './sidenav-list-item.component';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class SidenavComponent {
+export class Sidenav {
   toggleSidenav = output();
   closeSidenav = output();
 }

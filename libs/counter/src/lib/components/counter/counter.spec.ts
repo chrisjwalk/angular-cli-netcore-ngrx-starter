@@ -1,17 +1,17 @@
 import { fireEvent, render, screen } from '@testing-library/angular';
 
-import { CounterComponent } from './counter.component';
+import { Counter } from './counter';
 
-describe('CounterComponent', () => {
+describe('Counter', () => {
   test('should exist', async () => {
-    await render(CounterComponent);
+    await render(Counter);
 
     expect(screen.getByTestId('lib-counter')).toBeTruthy();
   });
 
   test('should render counter', async () => {
     const count = 5;
-    await render(CounterComponent, {
+    await render(Counter, {
       componentInputs: { count },
     });
 
@@ -22,7 +22,7 @@ describe('CounterComponent', () => {
     const count = 5;
     const increment = vi.fn();
 
-    await render(CounterComponent, {
+    await render(Counter, {
       componentInputs: { count },
       componentOutputs: { increment: { emit: increment } as any },
     });

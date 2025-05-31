@@ -134,7 +134,7 @@ import { RouterModule } from '@angular/router';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MainToolbarComponent {
+export class MainToolbar {
   loggedIn = input<boolean>(null);
 
   toggleSidenav = output<void>();

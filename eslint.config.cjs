@@ -37,6 +37,7 @@ module.exports = [
       '@/semi': ['error', 'always'],
       '@/no-extra-semi': 'error',
       '@/quotes': ['error', 'single', { allowTemplateLiterals: true }],
+      '@angular-eslint/component-class-suffix': 'off',
     },
   },
 ];

@@ -1,9 +1,9 @@
 import { render, screen } from '@testing-library/angular';
-import { PageToolbarButtonComponent } from './page-toolbar-button.component';
+import { PageToolbarButton } from './page-toolbar-button';
 
-describe('PageToolbarButtonComponent', () => {
+describe('PageToolbarButton', () => {
   it('should create', async () => {
-    await render(PageToolbarButtonComponent);
+    await render(PageToolbarButton);
     expect(screen.getByTestId('lib-page-toolbar-button')).toBeTruthy();
   });
 });

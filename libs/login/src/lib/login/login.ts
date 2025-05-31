@@ -5,11 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { AuthStore } from '@myorg/auth';
-import {
-  LayoutStore,
-  PageContainerComponent,
-  PageToolbarComponent,
-} from '@myorg/shared';
+import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
 
 import { LoginStore, getLoginFormGroup } from '../state/login.store';
 
@@ -17,8 +13,8 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
   selector: 'lib-login',
   imports: [
     ReactiveFormsModule,
-    PageContainerComponent,
-    PageToolbarComponent,
+    PageContainer,
+    PageToolbar,
     MatFormFieldModule,
     MatInputModule,
     MatButtonModule,
@@ -79,7 +75,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoginComponent {
+export class Login {
   private readonly formBuilder = inject(FormBuilder);
 
   readonly layoutStore = inject(LayoutStore);
