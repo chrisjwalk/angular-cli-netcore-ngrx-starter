@@ -4,7 +4,7 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
+import { MatIcon } from '@angular/material/icon';
 import {
   LayoutStore,
   PageContainer,
@@ -17,13 +17,7 @@ import { Counter } from '../counter/counter';
 import { injectDispatch } from '@ngrx/signals/events';
 
 @Component({
-  imports: [
-    MatIconModule,
-    PageContainer,
-    PageToolbar,
-    PageToolbarButton,
-    Counter,
-  ],
+  imports: [MatIcon, PageContainer, PageToolbar, PageToolbarButton, Counter],
   selector: 'lib-counter-container',
   template: `
     @let count = store.count();

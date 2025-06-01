@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
 
 @Component({
-  imports: [MatButtonModule, MatIconModule, MatTooltipModule],
+  imports: [MatTooltip, MatIconButton],
   selector: 'lib-page-toolbar-button',
   template: `
     <button

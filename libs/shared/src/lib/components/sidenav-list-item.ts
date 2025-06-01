@@ -4,12 +4,24 @@ import {
   input,
   output,
 } from '@angular/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { RouterModule } from '@angular/router';
+import { MatIcon } from '@angular/material/icon';
+import {
+  MatListItem,
+  MatListItemIcon,
+  MatListItemLine,
+  MatListItemTitle,
+} from '@angular/material/list';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [MatIconModule, RouterModule, MatListModule],
+  imports: [
+    MatIcon,
+    RouterLink,
+    MatListItem,
+    MatListItemIcon,
+    MatListItemLine,
+    MatListItemTitle,
+  ],
   selector: 'lib-sidenav-list-item',
   template: `
     <a mat-list-item [routerLink]="routerLink()" (click)="navigate.emit()">

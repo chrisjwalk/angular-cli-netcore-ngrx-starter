@@ -4,20 +4,14 @@ import {
   input,
   output,
 } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { RouterModule } from '@angular/router';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { MatToolbar } from '@angular/material/toolbar';
+import { MatTooltip } from '@angular/material/tooltip';
+import { RouterLink } from '@angular/router';
 
 @Component({
-  imports: [
-    RouterModule,
-    MatButtonModule,
-    MatIconModule,
-    MatToolbarModule,
-    MatTooltipModule,
-  ],
+  imports: [MatIcon, MatToolbar, MatTooltip, RouterLink, MatIconButton],
   selector: 'lib-main-toolbar',
   template: `
     <mat-toolbar class="app-main-toolbar fixed top-0 w-full z-50 flex gap-2">

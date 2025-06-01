@@ -1,4 +1,3 @@
-import { LayoutModule } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -6,15 +5,36 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatTableModule } from '@angular/material/table';
+import {
+  MatCell,
+  MatHeaderCell,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+  MatCellDef,
+  MatHeaderCellDef,
+  MatColumnDef,
+} from '@angular/material/table';
 import { patchState, signalState } from '@ngrx/signals';
 
 import { BreakpointStore } from '@myorg/shared';
 import { WeatherForecast } from '../../models/weather-forecast';
 
 @Component({
-  imports: [MatTableModule, MatProgressSpinnerModule, LayoutModule],
+  imports: [
+    MatTable,
+    MatHeaderCell,
+    MatCell,
+    MatHeaderRow,
+    MatRowDef,
+    MatRow,
+    MatHeaderRowDef,
+    MatCellDef,
+    MatHeaderCellDef,
+    MatColumnDef,
+  ],
   selector: 'lib-forecast-table',
   template: `
     @if (loading()) {

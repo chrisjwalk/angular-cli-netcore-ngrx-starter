@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
+import { MatFormField } from '@angular/material/form-field';
+import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
   PageContainer,
-  PageToolbarButton,
   PageToolbar,
+  PageToolbarButton,
 } from '@myorg/shared';
 
 import { WeatherForecastStore } from '../../state/weather-forecast.store';
@@ -17,10 +17,10 @@ import { ForecastTable } from '../forecast-table/forecast-table';
   imports: [
     PageContainer,
     PageToolbarButton,
-    MatFormFieldModule,
-    MatInputModule,
+    MatFormField,
+    MatInput,
     PageToolbar,
-    MatIconModule,
+    MatIcon,
     ForecastTable,
   ],
   providers: [WeatherForecastStore],

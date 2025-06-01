@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButton } from '@angular/material/button';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
 
@@ -15,10 +15,11 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
     ReactiveFormsModule,
     PageContainer,
     PageToolbar,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
+    MatFormField,
+    MatInput,
+    MatButton,
+    MatProgressSpinner,
+    MatLabel,
   ],
   template: `
     <lib-page-toolbar [title]="layoutStore.title()"> </lib-page-toolbar>

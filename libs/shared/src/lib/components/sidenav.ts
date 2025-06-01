@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component, output } from '@angular/core';
-import { MatListModule } from '@angular/material/list';
+import { MatNavList } from '@angular/material/list';
 
 import { SidenavListItem } from './sidenav-list-item';
 
 @Component({
-  imports: [SidenavListItem, MatListModule],
+  imports: [SidenavListItem, MatNavList],
   selector: 'lib-sidenav',
   template: `
     <div class="p-2">

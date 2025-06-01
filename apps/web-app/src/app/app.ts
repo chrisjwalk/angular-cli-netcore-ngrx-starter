@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { RouterModule } from '@angular/router';
+import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
+import { RouterOutlet } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
@@ -12,11 +11,11 @@ import {
 
 @Component({
   imports: [
-    RouterModule,
-    MatSidenavModule,
+    RouterOutlet,
+    MatSidenav,
+    MatSidenavContainer,
     Sidenav,
     MainToolbar,
-    MatSnackBarModule,
   ],
   selector: 'app-root',
   template: `
