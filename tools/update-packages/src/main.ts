@@ -25,28 +25,43 @@ const execAsync = (
   command: string,
   options: {
     encoding: BufferEncoding;
-  } & ExecOptions = { encoding: 'utf8' },
+    ignoreExitCode?: boolean;
+  } & ExecOptions = { encoding: 'utf8', ignoreExitCode: false },
 ) =>
   new Promise<string>((resolve, reject) =>
-    exec(command, options, (error, stdout, stderr) =>
-      stderr !== '' ? reject(stderr) : resolve(stdout),
-    ),
+    exec(command, options, (error, stdout, stderr) => {
+      // For commands like 'pnpm outdated', exit code 1 is expected when there are updates
+      if (error && !options.ignoreExitCode) {
+        reject(error);
+      } else if (stderr && stderr.trim() !== '' && !options.ignoreExitCode) {
+        reject(new Error(stderr));
+      } else {
+        resolve(stdout);
+      }
+    }),
   );
 
 async function npmOutdated() {
-  const stdout = await execAsync(`pnpm outdated --json`);
+  // pnpm outdated returns exit code 1 when there are updates, which is expected
+  const stdout = await execAsync(`pnpm outdated --json`, {
+    encoding: 'utf8',
+    ignoreExitCode: true,
+  });
   return stdout.toString().trim();
 }
 
 async function nxMigrateLatest(pkg: string, verbose: boolean) {
-  const cmd = `npx nx migrate ${pkg}${pkg ? '@' : ''}latest`;
+  const cmd = `npx nx migrate ${pkg}${pkg ? '@' : ''}latest --verbose`;
   console.log(cmd);
-  const stdout = await execAsync(cmd);
+  const stdout = await execAsync(cmd, {
+    encoding: 'utf8',
+    ignoreExitCode: true,
+  });
   if (verbose) {
     console.log(stdout);
   }
-  const hasMigrateions = stdout.includes('migrations.json has been generated');
-  return hasMigrateions;
+  const hasMigrations = stdout.includes('migrations.json has been generated');
+  return hasMigrations;
 }
 
 async function mergeMigrations(verbose: boolean) {
@@ -128,16 +143,16 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   }
   let migrationCommandsLength = 0;
   for (const pkg of packages) {
-    let hasMigrateions = false;
+    let hasMigrations = false;
     try {
-      hasMigrateions = await nxMigrateLatest(pkg, verbose);
+      hasMigrations = await nxMigrateLatest(pkg, verbose);
     } catch (e) {
       if (verbose) {
         console.log(`Error running nx migrate for ${pkg}`, e);
       }
       continue;
     }
-    if (hasMigrateions) {
+    if (hasMigrations) {
       if (verbose) {
         console.log(`${pkg} has migrations`);
       }
