@@ -8,9 +8,8 @@
   "targets": {
     "build": {
       "executor": "@angular/build:application",
-      "outputs": [
-        "{options.outputPath}"
-      ],
+      "outputs": ["{options.outputPath}"],
+      "dependsOn": ["update-readme"],
       "options": {
         "outputPath": "dist/apps/web-app",
         "index": "apps/web-app/src/index.html",
@@ -29,9 +28,7 @@
         ],
         "inlineStyleLanguage": "scss",
         "scripts": [],
-        "allowedCommonJsDependencies": [
-          "lodash"
-        ]
+        "allowedCommonJsDependencies": ["lodash"]
       },
       "configurations": {
         "production": {
@@ -77,9 +74,7 @@
       "dependsOn": [
         {
           "target": "serve",
-          "projects": [
-            "api"
-          ]
+          "projects": ["api"]
         }
       ]
     },
@@ -91,15 +86,11 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
       "executor": "@nx/vite:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "../../coverage/apps/web-app",
         "coverage": true
@@ -112,6 +103,13 @@
         "port": 4200,
         "staticFilePath": "dist/apps/web-app/browser",
         "spa": true
+      }
+    },
+    "update-readme": {
+      "executor": "nx:run-commands",
+      "outputs": [],
+      "options": {
+        "command": "cat docs/github-readme.md > README.md && cat apps/web-app/src/assets/home.md >> README.md"
       }
     }
   }
