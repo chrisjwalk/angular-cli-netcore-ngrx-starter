@@ -2,6 +2,10 @@
 
 This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial) with [Angular](https://angular.dev) and .NET 9.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
 
+## Demo
+
+See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](https://angularclinetcorengrxstarter.azurewebsites.net/)
+
 ## Getting Started?
 
 - **Make sure you have at least Node 20.x or higher (w/ pnpm 10+) installed!**
@@ -44,6 +48,14 @@ Run unit tests by executing:
 ```
 pnpm test
 ```
+
+Please note that for test coverage you need dotnet-coverage to be installed:
+
+```
+dotnet tool install --global dotnet-coverage
+```
+
+More information is available on https://learn.microsoft.com/en-us/dotnet/core/tools/dotnet-test
 
 ## End-to-end Tests
 
