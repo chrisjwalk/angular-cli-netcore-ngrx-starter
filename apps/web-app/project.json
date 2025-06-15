@@ -9,7 +9,6 @@
     "build": {
       "executor": "@angular/build:application",
       "outputs": ["{options.outputPath}"],
-      "dependsOn": ["update-readme"],
       "options": {
         "outputPath": "dist/apps/web-app",
         "index": "apps/web-app/src/index.html",

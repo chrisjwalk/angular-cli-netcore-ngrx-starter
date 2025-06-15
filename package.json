@@ -14,6 +14,7 @@
     "build:web-app": "nx build web-app",
     "build:web-app:prod": "nx build web-app --configuration production",
     "build:dotnet-builder": "rimraf ./tools/builders/dotnet-builder/dist && tsc -p ./tools/builders/dotnet-builder",
+    "update-readme": "nx run web-app:update-readme",
     "clean": "rimraf ./dist ./junit ./coverage ./.angular ./.nx && nx reset",
     "clean:node_modules": "rimraf ./node_modules ./package-lock.json",
     "serve:api": "nx serve api",
@@ -47,7 +48,7 @@
     "dotnet:build": "dotnet build apps/api",
     "dotnet:update": "dotnet outdated -u apps/api",
     "preinstall": "pnpm dotnet:restore",
-    "postinstall": "pnpm build:dotnet-builder",
+    "postinstall": "pnpm build:dotnet-builder && pnpm update-readme",
     "prepare": "husky",
     "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit typescript"
   },
