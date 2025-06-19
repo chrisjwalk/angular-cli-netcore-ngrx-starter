@@ -153,5 +153,49 @@ describe('WeatherForecastStore', () => {
       store.setFilter({ minTemperatureC: 0, maxTemperatureC: 30 });
       expect(store.filteredForecasts().length).toBe(0);
     });
+
+    it('should return empty if min > max', async () => {
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      store.getForecasts({ count: weatherForecasts.length, plus: false });
+      await appRef.whenStable();
+      store.setFilter({ minTemperatureC: 50, maxTemperatureC: 0 });
+      expect(store.filteredForecasts().length).toBe(0);
+    });
+
+    it('should return all if filter is undefined/null', async () => {
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      store.getForecasts({ count: weatherForecasts.length, plus: false });
+      await appRef.whenStable();
+      store.setFilter({
+        minTemperatureC: undefined as any,
+        maxTemperatureC: undefined as any,
+      });
+      expect(store.filteredForecasts().length).toBe(weatherForecasts.length);
+      store.setFilter({
+        minTemperatureC: null as any,
+        maxTemperatureC: null as any,
+      });
+      expect(store.filteredForecasts().length).toBe(weatherForecasts.length);
+    });
+
+    it('should update count and plus state on getForecasts', async () => {
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      store.getForecasts({ count: 7, plus: true });
+      await appRef.whenStable();
+      expect(store.count()).toBe(7);
+      expect(store.plus()).toBe(true);
+    });
+
+    it('should reactively update filteredForecasts when filter changes', async () => {
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      store.getForecasts({ count: weatherForecasts.length, plus: false });
+      await appRef.whenStable();
+      store.setFilter({ minTemperatureC: 0, maxTemperatureC: 100 });
+      const initial = store.filteredForecasts();
+      store.setFilter({ minTemperatureC: 30, maxTemperatureC: 100 });
+      const updated = store.filteredForecasts();
+      expect(updated.length).toBeLessThan(initial.length);
+      expect(updated.every((f) => f.temperatureC >= 30)).toBe(true);
+    });
   });
 });

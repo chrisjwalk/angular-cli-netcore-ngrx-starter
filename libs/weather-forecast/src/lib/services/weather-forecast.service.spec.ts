@@ -6,6 +6,7 @@ import {
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 
+import { ApplicationRef, signal } from '@angular/core';
 import { WeatherForecast } from '../models/weather-forecast';
 import { WeatherForecastService } from './weather-forecast.service';
 
@@ -85,6 +86,7 @@ export const weatherForecasts: WeatherForecast[] = [
 describe('WeatherForecastService', () => {
   let weatherForecastService: WeatherForecastService;
   let httpTestingController: HttpTestingController;
+  let applicationRef: ApplicationRef;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -98,6 +100,11 @@ describe('WeatherForecastService', () => {
 
     weatherForecastService = TestBed.inject(WeatherForecastService);
     httpTestingController = TestBed.inject(HttpTestingController);
+    applicationRef = TestBed.inject(ApplicationRef);
+  });
+
+  afterEach(() => {
+    httpTestingController.verify();
   });
 
   it('WeatherForecastService.getForecasts() should return data', () => {
@@ -134,5 +141,46 @@ describe('WeatherForecastService', () => {
     );
     expect(req.request.method).toEqual('GET');
     req.flush(weatherForecasts);
+  });
+
+  it('WeatherForecastService.getForecastsHttpResource() should return httpResource with correct url and params', () => {
+    TestBed.runInInjectionContext(async () => {
+      const requestSignal = signal({ count: 2, plus: false });
+      const resource =
+        weatherForecastService.getForecastsHttpResource(requestSignal);
+
+      // This will trigger the http request
+      applicationRef.tick();
+
+      const req = httpTestingController.expectOne(
+        '/api/weatherforecasts?count=2',
+      );
+      expect(req.request.method).toBe('GET');
+      expect(resource.status()).toBe('loading');
+      req.flush([weatherForecasts[0], weatherForecasts[1]]);
+      await applicationRef.whenStable();
+      expect(resource.status()).toBe('idle');
+    });
+  });
+
+  it('WeatherForecastService.getForecastsHttpResource() should use plus endpoint when plus is true', () => {
+    TestBed.runInInjectionContext(async () => {
+      // return;
+      const requestSignal = signal({ count: 3, plus: true });
+      const resource =
+        weatherForecastService.getForecastsHttpResource(requestSignal);
+
+      // This will trigger the http request
+      applicationRef.tick();
+
+      const req = httpTestingController.expectOne(
+        '/api/weatherforecastsplus?count=3',
+      );
+      expect(req.request.method).toBe('GET');
+      expect(resource.status()).toBe('loading');
+      req.flush([weatherForecasts[0], weatherForecasts[1]]);
+      await applicationRef.whenStable();
+      expect(resource.status()).toBe('idle');
+    });
   });
 });

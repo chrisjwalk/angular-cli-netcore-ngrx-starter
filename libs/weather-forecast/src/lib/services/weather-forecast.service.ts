@@ -12,7 +12,7 @@ export const weatherForecastServiceFactory = (http = inject(HttpClient)) => ({
       },
     );
   },
-  getForecastsResource(request: Signal<{ count: number; plus: boolean }>) {
+  getForecastsHttpResource(request: Signal<{ count: number; plus: boolean }>) {
     return httpResource<WeatherForecast[]>(() => ({
       url: request().plus
         ? '/api/weatherforecastsplus'
