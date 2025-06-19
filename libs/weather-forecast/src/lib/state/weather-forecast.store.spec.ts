@@ -113,4 +113,45 @@ describe('WeatherForecastStore', () => {
       expect(entityStore.error()).toBe(error);
     });
   });
+
+  describe('weather forecast filtering', () => {
+    it('should filter forecasts by temperature range', async () => {
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of(weatherForecasts));
+      store.getForecasts({ count: weatherForecasts.length, plus: false });
+
+      await appRef.whenStable();
+
+      // Initial state should show all forecasts
+      expect(store.weatherForecasts.value().length).toBe(
+        weatherForecasts.length,
+      );
+
+      // Filter to only show forecasts with temperature >= 0
+      store.setFilter({ minTemperatureC: 0, maxTemperatureC: 100 });
+      const filteredMin = store.filteredForecasts();
+      console.log('Filtered forecasts (minTemperatureC >= 0):', filteredMin);
+      expect(filteredMin.every((f) => f.temperatureC >= 0)).toBe(true);
+
+      // Add max temperature filter <= 30
+      store.setFilter({ minTemperatureC: 0, maxTemperatureC: 30 });
+      const filtered = store.filteredForecasts();
+      expect(
+        filtered.every((f) => f.temperatureC >= 0 && f.temperatureC <= 30),
+      ).toBe(true);
+
+      // Reset filters should show all forecasts again
+      store.setFilter({ minTemperatureC: -100, maxTemperatureC: 100 });
+      expect(store.filteredForecasts().length).toBe(weatherForecasts.length);
+    });
+
+    it('should handle empty forecast list', async () => {
+      vi.spyOn(service, 'getForecasts').mockReturnValue(of([]));
+      store.getForecasts({ count: 0, plus: false });
+
+      await appRef.whenStable();
+
+      store.setFilter({ minTemperatureC: 0, maxTemperatureC: 30 });
+      expect(store.filteredForecasts().length).toBe(0);
+    });
+  });
 });

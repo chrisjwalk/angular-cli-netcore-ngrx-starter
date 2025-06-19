@@ -17,7 +17,7 @@ import {
 } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { isEqual } from 'lodash';
+import { isEqual, isNil } from 'lodash';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
@@ -144,10 +144,10 @@ export function weatherForecastFilter(
       filteredForecasts: computed(() =>
         weatherForecasts()?.filter(
           (forecast) =>
-            (!store.filter()?.minTemperatureC ||
-              forecast.temperatureC > store.filter()?.minTemperatureC) &&
-            (!store.filter()?.maxTemperatureC ||
-              forecast.temperatureC < store.filter()?.maxTemperatureC),
+            (isNil(store.filter()?.minTemperatureC) ||
+              forecast.temperatureC >= store.filter()?.minTemperatureC) &&
+            (isNil(store.filter()?.maxTemperatureC) ||
+              forecast.temperatureC <= store.filter()?.maxTemperatureC),
         ),
       ),
     })),
