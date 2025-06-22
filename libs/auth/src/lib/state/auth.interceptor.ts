@@ -36,10 +36,6 @@ export function authInterceptor(
 
             return next(setAuthorizationHeader(req, store.accessToken()));
           }),
-          catchError((error) => {
-            store.logout(true);
-            return of(error);
-          }),
         );
       }
 

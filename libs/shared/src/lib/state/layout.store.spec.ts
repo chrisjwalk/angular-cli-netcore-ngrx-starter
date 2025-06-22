@@ -40,6 +40,14 @@ describe('LayoutStore', () => {
     expect(store.showSidenav()).toBe(false);
   });
 
+  it('should set showSidenav', () => {
+    expect(store.showSidenav()).toBe(layoutInitialState.showSidenav);
+    store.setShowSidenav(true);
+    expect(store.showSidenav()).toBe(true);
+    store.setShowSidenav(false);
+    expect(store.showSidenav()).toBe(false);
+  });
+
   it('should set count', () => {
     expect(store.count()).toBe(layoutInitialState.count);
     store.setCount(20);

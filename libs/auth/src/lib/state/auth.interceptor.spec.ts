@@ -323,4 +323,47 @@ describe('authInterceptor', () => {
         )
         .subscribe();
     }));
+
+  it('should retry request after refresh if user is logged in', () =>
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/api/v1/users');
+      store.setResponse(
+        {
+          ...authResponseInitialState,
+          accessToken: 'abc123',
+          refreshToken: 'xyz789',
+          accessTokenIssued: new Date(),
+          expiresIn: 0,
+        },
+        'success',
+      );
+      let nextCount = 0;
+      const next = vi.fn().mockImplementation(() => {
+        nextCount++;
+        if (nextCount === 1) {
+          return throwError(
+            () =>
+              new HttpErrorResponse({
+                status: 401,
+                statusText: 'Unauthorized',
+              }),
+          );
+        }
+        return of('success');
+      });
+      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
+        store.refreshToken(),
+      );
+      vi.spyOn(store, 'refresh').mockImplementation(() => {
+        store.loginSuccessful({
+          ...authResponseInitialState,
+          accessToken: 'newtoken',
+          refreshToken: 'xyz789',
+        });
+      });
+      authInterceptor(req, next).subscribe((result) => {
+        expect(result).toBe('success');
+        expect(next).toHaveBeenCalledTimes(2);
+      });
+    }));
 });

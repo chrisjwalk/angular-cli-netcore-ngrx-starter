@@ -9,7 +9,7 @@ import {
 } from '@angular/router';
 import { loadingInitialState } from '@myorg/shared';
 import { getState } from '@ngrx/signals';
-import { of, throwError } from 'rxjs';
+import { of, throwError, firstValueFrom } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import {
@@ -182,4 +182,19 @@ describe('AuthStore', () => {
         expect(store.pageRequiresLogin()).toEqual(false);
       });
     }));
+
+  it('should allow navigation if already logged in', async () => {
+    TestBed.runInInjectionContext(async () => {
+      const route = new ActivatedRouteSnapshot();
+      const state = { url: '/test' } as RouterStateSnapshot;
+      store.loginSuccessful({
+        ...authResponseInitialState,
+        accessToken: 'token',
+      });
+      const canActivate = await firstValueFrom(
+        requiresLoginCanActivateFn(route, state),
+      );
+      expect(canActivate).toBe(true);
+    });
+  });
 });
