@@ -23,7 +23,7 @@ export const counterEvents = eventGroup({
   },
 });
 
-export const conuterInitialState: CounterState = { count: 0 };
+export const counterInitialState: CounterState = { count: 0 };
 
 export function incrementCount() {
   return (state: CounterState) => ({
@@ -45,7 +45,7 @@ export function setCount(count: number) {
 
 export function withCounterFeature() {
   return signalStoreFeature(
-    withState(conuterInitialState),
+    withState(counterInitialState),
     withMethods((store) => ({
       inputCount: rxMethod<number | string>(
         pipe(
