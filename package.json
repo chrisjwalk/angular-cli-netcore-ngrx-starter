@@ -50,7 +50,7 @@
     "preinstall": "pnpm dotnet:restore",
     "postinstall": "pnpm build:dotnet-builder && pnpm update-readme",
     "prepare": "husky",
-    "update-packages": "ts-node ./tools/update-packages/src/main.ts --omit typescript"
+    "update-packages": "ts-node ./tools/update-packages/src/main.ts"
   },
   "private": true,
   "dependencies": {
@@ -70,6 +70,8 @@
     "@ngrx/operators": "19.2.1",
     "@ngrx/signals": "19.2.1",
     "@tailwindcss/postcss": "4.1.11",
+    "chalk": "5.4.1",
+    "inquirer": "12.6.3",
     "lodash": "4.17.21",
     "marked": "16.0.0",
     "moment": "2.30.1",
