@@ -2,8 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 import {
+  counterInitialState,
   CounterStore,
-  conuterInitialState,
   decrementCount,
   incrementCount,
   setCount,
@@ -21,7 +21,7 @@ describe('CounterStore', () => {
   });
 
   it('should keep track of count', () => {
-    let count = conuterInitialState.count;
+    let count = counterInitialState.count;
     expect(store).toBeTruthy();
     expect(store.count()).toBe(count);
     patchState(unprotected(store), incrementCount());
