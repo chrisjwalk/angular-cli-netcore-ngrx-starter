@@ -122,9 +122,17 @@ async function selectOmittedPackages(packages: string[]): Promise<string[]> {
   return omit;
 }
 
-async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
+async function main({
+  verbose,
+  omit,
+  interactive = true,
+}: {
+  verbose: boolean;
+  omit: string[];
+  interactive?: boolean;
+}) {
   const sectionDivider = chalk.gray('─'.repeat(56));
-  console.log(chalk.bold(' Nx Package Update Tool'));
+  console.log(chalk.bold(' Nx migrate runner'));
   console.log(sectionDivider);
   if (verbose) {
     console.log(chalk.gray(`Verbose: ${verbose}`));
@@ -134,7 +142,7 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   let packages = Object.keys(parsed);
 
   // Interactive omit selection if not provided
-  if (!omit || omit.length === 0) {
+  if ((!omit || omit.length === 0) && interactive) {
     const selectedOmit = await selectOmittedPackages(packages);
     omit = selectedOmit;
   }
@@ -187,6 +195,9 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
   if (packages.length === 0) {
     console.log('\n' + chalk.yellow('No packages to update after grouping.'));
     return;
+  } else {
+    console.log('\n' + chalk.bold('Running migration commands:'));
+    console.log(sectionDivider);
   }
 
   let migrationCommandsLength = 0;
@@ -197,6 +208,7 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
     let hasMigrations = false;
     const cmd = `npx nx migrate ${pkg}${pkg ? '@' : ''}latest --verbose`;
     migrationCommands.push(cmd);
+    console.log('  ' + chalk.whiteBright(cmd));
     try {
       hasMigrations = await nxMigrateLatest(pkg, verbose, false); // don't print command in nxMigrateLatest
       updatedPackages.push(pkg);
@@ -220,12 +232,7 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
     }
   }
 
-  if (migrationCommands.length) {
-    console.log('\n' + chalk.bold('Running migration commands:'));
-    console.log(sectionDivider);
-    migrationCommands.forEach((cmd) => {
-      console.log('   ' + chalk.whiteBright(cmd));
-    });
+  if (packages.length) {
     console.log(sectionDivider + '\n');
   }
 
@@ -272,11 +279,44 @@ async function main({ verbose, omit }: { verbose: boolean; omit: string[] }) {
     console.log(chalk.cyan('│') + pad(cmd) + chalk.cyan('│')),
   );
   console.log(boxBottom);
+
+  // Prompt to run next steps commands interactively if enabled
+  if (interactive !== false) {
+    for (const cmd of nextSteps) {
+      const { run } = await inquirer.prompt([
+        {
+          type: 'confirm',
+          name: 'run',
+          message: `Run now: ${cmd}?`,
+          default: true,
+        },
+      ]);
+      if (run) {
+        try {
+          console.log(chalk.gray(`\nRunning: ${cmd}`));
+          const output = await execAsync(cmd, {
+            encoding: 'utf8',
+            ignoreExitCode: true,
+          });
+          console.log(output);
+        } catch (e) {
+          console.error(chalk.red(`Error running command: ${cmd}`), e);
+        }
+      }
+    }
+  }
 }
 
 program
   .option('-o, --omit [omit...]', 'Omit packages', [])
   .option('-v, --verbose [verbose]', 'Verbose', false)
-  .action((options) => main(options));
+  .option('-i, --interactive [interactive]', 'Prompt to run next steps', true)
+  .action((options) => {
+    // Normalize interactive flag to boolean
+    if (typeof options.interactive === 'string') {
+      options.interactive = options.interactive !== 'false';
+    }
+    main(options);
+  });
 
 program.parse();
