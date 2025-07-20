@@ -2,6 +2,7 @@ packages:
   - apps/*
   - libs/*
   - tools/*
+
 onlyBuiltDependencies:
   - '@parcel/watcher'
   - '@swc/core'
@@ -10,3 +11,4 @@ onlyBuiltDependencies:
   - lmdb
   - msgpackr-extract
   - nx
+  - unrs-resolver
