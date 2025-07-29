@@ -50,8 +50,8 @@ export function withWeatherForecastEntitiesFeature() {
             ),
             switchMap(({ count, plus }) =>
               weatherForecastService.getForecasts(count, plus).pipe(
-                tapResponse(
-                  (weatherForecasts) =>
+                tapResponse({
+                  next: (weatherForecasts) =>
                     patchState(
                       store,
                       setAllEntities(weatherForecasts, {
@@ -62,11 +62,11 @@ export function withWeatherForecastEntitiesFeature() {
                         loading: false,
                       } as any,
                     ),
-                  (error) => {
+                  error: (error) => {
                     console.error(error);
                     patchState(store, { error, loading: false });
                   },
-                ),
+                }),
               ),
             ),
           ),

@@ -184,21 +184,21 @@ export function withAuthFeature() {
           tap(() => store.loginStart()),
           switchMap((request) =>
             authService.login(request).pipe(
-              tapResponse(
-                (response) => {
+              tapResponse({
+                next: (response) => {
                   snackBar.open('Login Successful', 'Close', {
                     duration: 5000,
                   });
                   store.redirectAfterLogin();
                   store.loginSuccessful(response);
                 },
-                (error) => {
+                error: (error) => {
                   snackBar.open('Login failed', 'Close', {
                     duration: 5000,
                   });
                   store.loginFailure(error);
                 },
-              ),
+              }),
             ),
           ),
         ),
@@ -208,10 +208,10 @@ export function withAuthFeature() {
           tap(() => store.loginStart()),
           switchMap((refresh) =>
             authService.refresh(refresh).pipe(
-              tapResponse(
-                (response) => store.loginSuccessful(response),
-                (error) => store.loginFailure(error),
-              ),
+              tapResponse({
+                next: (response) => store.loginSuccessful(response),
+                error: (error) => store.loginFailure(error),
+              }),
             ),
           ),
         ),
