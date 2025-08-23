@@ -1,11 +1,19 @@
 {
   "migrations": [
     {
-      "description": "Replace deprecated tapResponse signature",
-      "version": "20.0.0-rc.0",
-      "factory": "./20_0_0-rc_0-tap-response/index",
-      "package": "@ngrx/operators",
-      "name": "20.0.0-rc_0-tap-response"
+      "version": "20.2.0",
+      "factory": "./karma/migration",
+      "description": "Remove any karma configuration files that only contain the default content. The default configuration is automatically available without a specific project file.",
+      "package": "@angular/cli",
+      "name": "remove-default-karma-config"
+    },
+    {
+      "version": "20.2.0",
+      "description": "Replaces usages of the deprecated Router.getCurrentNavigation method with the Router.currentNavigation signal",
+      "factory": "./bundles/router-current-navigation.cjs#migrate",
+      "optional": true,
+      "package": "@angular/core",
+      "name": "router-current-navigation"
     }
   ]
 }
