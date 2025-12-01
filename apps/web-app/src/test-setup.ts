@@ -12,7 +12,10 @@ import { getTestBed } from '@angular/core/testing';
 })
 export class ZonelessTestModule {}
 
-getTestBed().initTestEnvironment(
-  [BrowserDynamicTestingModule, ZonelessTestModule],
-  platformBrowserDynamicTesting(),
-);
+if (!(globalThis as any).__testEnvironmentInitialized) {
+  getTestBed().initTestEnvironment(
+    [BrowserDynamicTestingModule, ZonelessTestModule],
+    platformBrowserDynamicTesting(),
+  );
+  (globalThis as any).__testEnvironmentInitialized = true;
+}
