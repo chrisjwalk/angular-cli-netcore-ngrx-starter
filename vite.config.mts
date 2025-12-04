@@ -10,6 +10,8 @@ export const baseConfig = {
   test: {
     watch: false,
     globals: true,
+    isolate: true,
+    threads: true,
     environment: 'jsdom',
     include: ['**/*.spec.ts'],
     setupFiles: ['src/test-setup.ts'],
