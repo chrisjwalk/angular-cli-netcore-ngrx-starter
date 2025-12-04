@@ -1,6 +1,6 @@
-# Nx + Angular + .NET 9.0
+# Nx + Angular + .NET 10.0
 
-This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial) with [Angular](https://angular.dev) and .NET 9.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
+This is basic demo of how to use a full stack [Nx monorepo](https://nx.dev/getting-started/tutorials/angular-monorepo-tutorial) with [Angular](https://angular.dev) and .NET 10.0 with [Microsoft.AspNetCore.SpaServices.Extensions](https://docs.microsoft.com/en-us/aspnet/core/client-side/spa/angular) and a demo Azure pipeline for Azure DevOps.
 
 ## Demo
 
@@ -9,11 +9,11 @@ See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](
 ## Getting Started?
 
 - **Make sure you have at least Node 20.x or higher (w/ pnpm 10+) installed!**
-- **This repository uses ASP.NET 9.0, which has a hard requirement on .NET SDK 9.0.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
+- **This repository uses ASP.NET 10.0, which has a hard requirement on .NET SDK 10.0.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
 
 ## Visual Studio 2022
 
-Make sure you have .NET 9.0 installed and/or the latest VS2022.
+Make sure you have .NET 10.0 installed and/or the latest VS2026.
 
 ## Visual Studio Code
 
