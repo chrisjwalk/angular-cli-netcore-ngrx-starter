@@ -69,7 +69,7 @@ describe('App Integration', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const router = TestBed.inject(Router);
-    router.navigateByUrl('/weather-forecast');
+    await router.navigateByUrl('/weather-forecast');
     // Wait for the weather-forecast feature to load
     const compiled = fixture.nativeElement as HTMLElement;
     const wfComponent = await waitForElement(
