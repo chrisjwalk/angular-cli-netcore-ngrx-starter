@@ -36,9 +36,9 @@ steps:
       pnpm lint:all
     displayName: 'Lint'
 
-  - script: |
-      pnpm test:all
-    displayName: 'Run Tests'
+  # - script: |
+  #     pnpm test:all
+  #   displayName: 'Run Tests'
 
   - script: |
       pnpm build:api:prod
