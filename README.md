@@ -10,7 +10,7 @@ See a live demo here: [https://angularclinetcorengrxstarter.azurewebsites.net/](
 
 ## Getting Started?
 
-- **Make sure you have at least Node 20.x or higher (w/ pnpm 10+) installed!**
+- **Make sure you have at least Node 24.x or higher (w/ pnpm 10+) installed!**
 - **This repository uses ASP.NET 10.0, which has a hard requirement on .NET SDK 10.0.x. Please install these items from [https://dotnet.microsoft.com/download](https://dotnet.microsoft.com/download)**
 
 ## Visual Studio 2022
