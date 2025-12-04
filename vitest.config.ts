@@ -7,5 +7,10 @@ export default defineConfig({
     isolate: true,
     // Keep threads enabled for parallelism but isolation ensures clean state.
     threads: true,
+    // Ensure the Angular TestBed environment is initialized before tests run.
+    // This runs `libs/shared/src/test-setup.shared.ts` which calls
+    // `getTestBed().initTestEnvironment(...)` so any imports that use
+    // Angular's `inject()` don't instantiate the test module early.
+    setupFiles: ['./libs/shared/src/test-setup.shared.ts'],
   },
 });

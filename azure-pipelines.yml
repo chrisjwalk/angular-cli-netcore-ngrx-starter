@@ -37,8 +37,8 @@ steps:
     displayName: 'Lint'
 
   - script: |
-      pnpm nx run-many --target=test --all --configuration ci --parallel=false
-    displayName: 'Run Tests (serialized)'
+      pnpm test:all
+    displayName: 'Run Tests'
 
   - script: |
       pnpm build:api:prod
