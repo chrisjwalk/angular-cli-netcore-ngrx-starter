@@ -42,7 +42,7 @@ export default createBuilder<Options>((options, context) => {
 
     if (options.coverage) {
       dotnetTestArgs.push('--collect');
-      dotnetTestArgs.push('"Code Coverage"');
+      dotnetTestArgs.push('"Code_Coverage"');
     }
 
     if (options.resultsDirectory) {
@@ -85,8 +85,7 @@ export default createBuilder<Options>((options, context) => {
           dotnetCoverageArgs.push(options.coverageOutputFormat);
         }
 
-        dotnetCoverageArgs.push('--recursive');
-        dotnetCoverageArgs.push(`*.coverage`);
+        dotnetCoverageArgs.push('**/*.coverage');
 
         console.log(`Executing "dotnet ${dotnetCoverageArgs.join(' ')}"...`);
         const coverage = childProcess.spawn('dotnet', dotnetCoverageArgs, {
