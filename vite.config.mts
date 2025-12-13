@@ -11,7 +11,6 @@ export const baseConfig = {
     watch: false,
     globals: true,
     isolate: true,
-    threads: true,
     environment: 'jsdom',
     include: ['**/*.spec.ts'],
     setupFiles: ['src/test-setup.ts'],
@@ -19,6 +18,7 @@ export const baseConfig = {
     coverage: {
       provider: 'v8',
       reporter: ['text', 'cobertura'],
+      include: ['src/**/*.{ts,tsx}'],
     },
     server: {
       deps: {
