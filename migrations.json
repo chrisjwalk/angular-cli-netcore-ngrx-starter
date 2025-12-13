@@ -1,11 +1,21 @@
 {
   "migrations": [
     {
-      "description": "Rename withEffects to withEventHandlers",
-      "version": "21.0.0-beta.0",
-      "factory": "./21_0_0-beta_0-rename-withEffects-to-withEventHandlers/index",
-      "package": "@ngrx/signals",
-      "name": "21_0_0-beta_0-rename-withEffects-to-withEventHandlers"
+      "version": "22.2.0-beta.1",
+      "requires": {
+        "vitest": ">=4.0.0"
+      },
+      "description": "Create AI Instructions to help migrate users workspaces past breaking changes for Vitest 4.",
+      "implementation": "./src/migrations/update-22-2-0/create-ai-instructions-for-vitest-4",
+      "package": "@nx/vite",
+      "name": "update-22-2-0"
+    },
+    {
+      "version": "22.2.0-beta.2",
+      "description": "Migrate Vitest usage from @nx/vite to @nx/vitest package.",
+      "implementation": "./src/migrations/update-22-2-0/migrate-vitest-to-vitest-package",
+      "package": "@nx/vite",
+      "name": "migrate-vitest-to-vitest-package"
     }
   ]
 }
