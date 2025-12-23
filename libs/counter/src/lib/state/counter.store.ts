@@ -1,5 +1,6 @@
 import {
   patchState,
+  signalMethod,
   signalStore,
   signalStoreFeature,
   type,
@@ -7,8 +8,6 @@ import {
   withState,
 } from '@ngrx/signals';
 import { eventGroup, on, withReducer } from '@ngrx/signals/events';
-import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { filter, map, pipe, tap } from 'rxjs';
 
 export type CounterState = {
   count: number;
@@ -47,13 +46,11 @@ export function withCounterFeature() {
   return signalStoreFeature(
     withState(counterInitialState),
     withMethods((store) => ({
-      inputCount: rxMethod<number | string>(
-        pipe(
-          map((count) => +count),
-          filter((count) => !isNaN(count)),
-          tap((count) => patchState(store, setCount(+count))),
-        ),
-      ),
+      inputCount: signalMethod<number | string>((count) => {
+        if (!isNaN(+count)) {
+          patchState(store, setCount(+count));
+        }
+      }),
     })),
   );
 }
