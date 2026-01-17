@@ -11,6 +11,7 @@ onlyBuiltDependencies:
   - lmdb
   - msgpackr-extract
   - nx
+  - oxc-resolver
   - unrs-resolver
 
 overrides:
