@@ -1,7 +1,6 @@
 import { render, screen } from '@testing-library/angular';
 import { weatherForecasts } from '../../services/weather-forecast.service.spec';
 import { ForecastTable } from './forecast-table';
-import { BreakpointStore } from '@myorg/shared';
 import { patchState } from '@ngrx/signals';
 import { unprotected } from '@ngrx/signals/testing';
 
