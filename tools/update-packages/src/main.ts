@@ -205,7 +205,7 @@ async function main({
   const migratedPackages: string[] = [];
   const migrationCommands: string[] = [];
   for (const pkg of packages) {
-    let hasMigrations = false;
+    let hasMigrations: boolean;
     const cmd = `npx nx migrate ${pkg}${pkg ? '@' : ''}latest --verbose`;
     migrationCommands.push(cmd);
     console.log('  ' + chalk.whiteBright(cmd));
