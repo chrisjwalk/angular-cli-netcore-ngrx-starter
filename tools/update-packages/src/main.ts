@@ -23,6 +23,28 @@ type NpmOudated = {
     location: string;
   };
 };
+
+function extractJsonObject(rawOutput: string): string {
+  const trimmed = rawOutput.trim();
+  if (!trimmed) {
+    return '{}';
+  }
+
+  const firstBrace = trimmed.indexOf('{');
+  const lastBrace = trimmed.lastIndexOf('}');
+
+  if (firstBrace === -1 || lastBrace === -1 || lastBrace < firstBrace) {
+    throw new Error('Could not find JSON object in pnpm outdated output.');
+  }
+
+  return trimmed.slice(firstBrace, lastBrace + 1);
+}
+
+function parseOutdatedOutput(rawOutput: string): NpmOudated {
+  const jsonPayload = extractJsonObject(rawOutput);
+  return JSON.parse(jsonPayload) as NpmOudated;
+}
+
 const execAsync = (
   command: string,
   options: {
@@ -138,7 +160,7 @@ async function main({
     console.log(chalk.gray(`Verbose: ${verbose}`));
   }
   const data = await npmOutdated();
-  const parsed = JSON.parse(data.toString()) as NpmOudated;
+  const parsed = parseOutdatedOutput(data.toString());
   let packages = Object.keys(parsed);
 
   // Interactive omit selection if not provided
