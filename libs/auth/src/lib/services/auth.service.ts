@@ -3,6 +3,9 @@ import { InjectionToken, inject } from '@angular/core';
 
 import { AuthResponse, Login, Refresh } from '../state/auth.store';
 
+// HttpBackend is used directly (bypassing interceptors) to avoid an infinite
+// loop: the auth interceptor would otherwise intercept its own refresh/login
+// requests and try to refresh again on 401.
 const authServiceFactory = (httpBackend = inject(HttpBackend)) => {
   const http = new HttpClient(httpBackend);
   return {

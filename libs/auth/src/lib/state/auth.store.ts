@@ -145,7 +145,7 @@ export function withAuthFeature() {
         });
         storeRefreshToken(response);
       },
-      loginFailure(error: any) {
+      loginFailure(error: unknown) {
         console.error(error);
         patchState(store, {
           error,
@@ -256,15 +256,27 @@ export const AuthStore = signalStore(
 );
 
 export function storeRefreshToken(response: AuthResponse) {
-  localStorage.setItem(refreshTokenKey, response.refreshToken);
+  try {
+    localStorage.setItem(refreshTokenKey, response.refreshToken);
+  } catch {
+    console.error('Failed to store refresh token');
+  }
 }
 
 export function getRefreshToken() {
-  return localStorage.getItem(refreshTokenKey);
+  try {
+    return localStorage.getItem(refreshTokenKey);
+  } catch {
+    return null;
+  }
 }
 
 export function removeRefreshToken() {
-  return localStorage.removeItem(refreshTokenKey);
+  try {
+    return localStorage.removeItem(refreshTokenKey);
+  } catch {
+    // ignore
+  }
 }
 
 export function requiresLoginCanActivateFn(

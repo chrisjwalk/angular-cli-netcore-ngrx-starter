@@ -38,7 +38,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
               <input matInput formControlName="email" />
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Pasasword</mat-label>
+              <mat-label>Password</mat-label>
               <input matInput formControlName="password" type="password" />
             </mat-form-field>
           } @else {

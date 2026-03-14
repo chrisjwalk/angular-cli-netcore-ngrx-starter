@@ -23,7 +23,7 @@ import { SidenavListItem } from './sidenav-list-item';
           icon="hotel"
           hint="Lazy Loaded Feature"
         >
-          <span>Coutner</span>
+          <span>Counter</span>
         </lib-sidenav-list-item>
       </mat-nav-list>
     </div>

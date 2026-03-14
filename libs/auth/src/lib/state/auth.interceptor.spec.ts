@@ -3,7 +3,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { catchError, of, throwError } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { authInterceptor } from './auth.interceptor';
@@ -153,14 +153,11 @@ describe('authInterceptor', () => {
 
       const next = vi.fn().mockReturnValue(throwError(() => httpErrorResponse));
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(httpErrorResponse);
-            throw error;
-          }),
-        )
-        .subscribe();
+      authInterceptor(req, next).subscribe({
+        error: (error) => {
+          expect(error).toEqual(httpErrorResponse);
+        },
+      });
     }));
 
   it('should throw an error the refresh token is not available', () =>
@@ -190,14 +187,11 @@ describe('authInterceptor', () => {
 
       vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(unauthorizedResponnse);
-            throw error;
-          }),
-        )
-        .subscribe();
+      authInterceptor(req, next).subscribe({
+        error: (error) => {
+          expect(error).toEqual(unauthorizedResponnse);
+        },
+      });
 
       expect(logout).toHaveBeenCalled();
     }));
@@ -236,14 +230,11 @@ describe('authInterceptor', () => {
         throwError(() => unauthorizedResponnse),
       );
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(unauthorizedResponnse);
-            throw error;
-          }),
-        )
-        .subscribe();
+      authInterceptor(req, next).subscribe({
+        error: (error) => {
+          expect(error).toEqual(unauthorizedResponnse);
+        },
+      });
 
       req = req.clone({
         setHeaders: {
@@ -281,14 +272,11 @@ describe('authInterceptor', () => {
         .fn()
         .mockReturnValue(throwError(() => badRequestResponnse));
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(badRequestResponnse);
-            throw error;
-          }),
-        )
-        .subscribe();
+      authInterceptor(req, next).subscribe({
+        error: (error) => {
+          expect(error).toEqual(badRequestResponnse);
+        },
+      });
     }));
 
   it('should throw an error when a non 401 error is returned and the user expired', () =>
@@ -314,14 +302,11 @@ describe('authInterceptor', () => {
         .fn()
         .mockReturnValue(throwError(() => badRequestResponnse));
 
-      authInterceptor(req, next)
-        .pipe(
-          catchError((error) => {
-            expect(error).toEqual(badRequestResponnse);
-            throw error;
-          }),
-        )
-        .subscribe();
+      authInterceptor(req, next).subscribe({
+        error: (error) => {
+          expect(error).toEqual(badRequestResponnse);
+        },
+      });
     }));
 
   it('should retry request after refresh if user is logged in', () =>

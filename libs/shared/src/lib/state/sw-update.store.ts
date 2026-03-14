@@ -34,7 +34,7 @@ export const swUpdateInitialState: SwUpdateState = {
     currentVersion: versionDefault,
     latestVersion: versionDefault,
   },
-  message: `App update avalable! Reload?`,
+  message: `App update available! Reload?`,
   action: `OK`,
   snackbarConfig: {
     duration: 15000,

@@ -1,6 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
-import { signalState } from '@ngrx/signals';
 import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
@@ -12,7 +11,7 @@ import { MarkdownComponent } from 'ngx-markdown';
       <div
         class="bg-white/95 dark:bg-neutral-700 p-4 rounded-sm flex flex-col shadow-sm"
       >
-        <markdown data-testid="page-markdown" [src]="state.src()" />
+        <markdown data-testid="page-markdown" [src]="markdownSrc" />
       </div>
     </lib-page-container>
   `,
@@ -23,7 +22,7 @@ import { MarkdownComponent } from 'ngx-markdown';
 })
 export class Home {
   readonly layoutStore = inject(LayoutStore);
-  readonly state = signalState({ src: '/assets/home.md' });
+  readonly markdownSrc = '/assets/home.md';
 
   constructor() {
     this.layoutStore.setTitle('Home');
