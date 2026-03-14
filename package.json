@@ -93,6 +93,7 @@
     "@eslint/js": "10.0.1",
     "@nx/angular": "22.5.4",
     "@nx/devkit": "22.5.4",
+    "@nx/esbuild": "22.5.4",
     "@nx/eslint": "22.5.4",
     "@nx/eslint-plugin": "22.5.4",
     "@nx/js": "22.5.4",
