@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { AuthStore } from '@myorg/auth';
@@ -18,6 +18,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
     PageContainer,
     PageToolbarButton,
     MatFormField,
+    MatLabel,
     MatInput,
     PageToolbar,
     MatIcon,
@@ -28,11 +29,12 @@ import { ForecastTable } from '../forecast-table/forecast-table';
   template: `
     <lib-page-toolbar [title]="layoutStore.title()">
       <mat-form-field appearance="outline">
+        <mat-label>Forecast Days</mat-label>
         <input
           matInput
           #count
           type="number"
-          placeholder="Forecast Days"
+          [attr.aria-label]="'Number of forecast days'"
           (keyup.enter)="
             store.getForecasts({
               count: +count.value,

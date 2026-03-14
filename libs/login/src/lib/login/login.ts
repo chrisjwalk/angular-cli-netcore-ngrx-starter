@@ -35,11 +35,21 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
           @if (!authStore.loginLoading()) {
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
-              <input matInput formControlName="email" />
+              <input
+                matInput
+                formControlName="email"
+                type="email"
+                autocomplete="email"
+              />
             </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Password</mat-label>
-              <input matInput formControlName="password" type="password" />
+              <input
+                matInput
+                formControlName="password"
+                type="password"
+                autocomplete="current-password"
+              />
             </mat-form-field>
           } @else {
             <div class="flex flex-col gap-4">

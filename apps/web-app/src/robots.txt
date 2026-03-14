@@ -1,8 +1,2 @@
-User-Agent: slurp
-Disallow: /
-
-User-agent: baiduspider
-Disallow: /
-
-User-agent: yandex
-Disallow: /
+User-agent: *
+Allow: /

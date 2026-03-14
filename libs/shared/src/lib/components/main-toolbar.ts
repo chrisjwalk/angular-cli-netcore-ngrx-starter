@@ -36,7 +36,10 @@ import { NAV_LINKS } from './nav-links';
           fill="none"
           viewBox="0 0 223 236"
           width="32"
+          role="img"
+          aria-labelledby="angular-logo-title"
         >
+          <title id="angular-logo-title">Angular logo</title>
           <g clip-path="url(#a)">
             <path
               fill="url(#b)"
