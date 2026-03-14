@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Set Nx base for affected commands (PR only)
+        if: github.event_name == 'pull_request'
+        run: echo "NX_BASE=origin/${{ github.base_ref }}" >> $GITHUB_ENV
+
+      - name: Lint
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm nx affected --target=lint --base=$NX_BASE
+          else
+            pnpm lint:all
+          fi
+
+      - name: Test
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm nx affected --target=test --base=$NX_BASE --configuration ci
+          else
+            pnpm test:all
+          fi
+
+      - name: Build
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm nx affected --target=build --base=$NX_BASE
+          else
+            pnpm build:prod
+          fi
+
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+          if-no-files-found: ignore
+
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: junit/
+          if-no-files-found: ignore
