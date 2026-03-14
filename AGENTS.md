@@ -46,3 +46,52 @@ Git is configured locally in this repo to commit as the bot:
 ## Issue Workflow
 
 Create issues as `chrisjwalk` (the default active account). Always create a GitHub issue before starting work on a feature or fix, and reference it in the branch name and PR.
+
+# Coding Conventions
+
+## Styling: Tailwind over CSS
+
+Prefer Tailwind utility classes over component or global CSS whenever possible.
+
+- Use inline Tailwind classes directly on elements in templates
+- Only fall back to component `styles` or global CSS when Tailwind cannot express the rule (e.g. CSS custom properties, complex `:host` selectors, or third-party class overrides like `.mat-drawer-container`)
+- Tailwind variants (`hover:`, `focus:`, `dark:`, `motion-reduce:`, arbitrary values like `w-[9999px]`) cover most cases
+
+```html
+<!-- ✅ preferred -->
+<a class="absolute -left-[9999px] top-0 focus:left-0 bg-black text-white">...</a>
+
+<!-- ❌ avoid -->
+<a class="skip-link">...</a>
+<!-- with .skip-link { position: absolute; ... } in styles -->
+```
+
+## Reactive state: `rxMethod` over manual subscribe
+
+Use `rxMethod` (from `@ngrx/signals/rxjs-interop`) instead of manually subscribing to Observables. It handles subscription lifecycle automatically and works in both signal stores and components.
+
+```typescript
+// ✅ preferred — in a store's withMethods() or as a component class field
+private readonly handleNavigation = rxMethod<NavigationEnd>(
+  pipe(tap(() => { /* side effect */ }))
+);
+constructor() { this.handleNavigation(this.router.events.pipe(filter(...))); }
+
+// ❌ avoid
+this.router.events.pipe(filter(...), takeUntilDestroyed()).subscribe(() => { ... });
+```
+
+## Reactive state: `signalMethod` over Angular `effect()`
+
+Use `signalMethod` (from `@ngrx/signals`) instead of `effect()` when reacting to signal changes inside a store or component. `signalMethod` is explicit about its input, testable, and avoids the pitfalls of untracked reads inside effects.
+
+```typescript
+// ✅ preferred — in withMethods()
+inputCount: signalMethod<number>((count) => patchState(store, { count }));
+
+// ❌ avoid
+effect(() => {
+  const count = this.count();
+  patchState(store, { count });
+});
+```
