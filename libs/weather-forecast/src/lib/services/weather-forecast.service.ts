@@ -1,17 +1,21 @@
 import { HttpClient, httpResource } from '@angular/common/http';
-import { InjectionToken, Signal, inject } from '@angular/core';
+import { Injectable, Signal, inject } from '@angular/core';
 
 import { WeatherForecast } from '../models/weather-forecast';
 
-export const weatherForecastServiceFactory = (http = inject(HttpClient)) => ({
+@Injectable({ providedIn: 'root' })
+export class WeatherForecastService {
+  private readonly http = inject(HttpClient);
+
   getForecasts(count: number, plus: boolean) {
-    return http.get<WeatherForecast[]>(
+    return this.http.get<WeatherForecast[]>(
       plus ? '/api/weatherforecastsplus' : '/api/weatherforecasts',
       {
         params: { count },
       },
     );
-  },
+  }
+
   getForecastsHttpResource(request: Signal<{ count: number; plus: boolean }>) {
     return httpResource<WeatherForecast[]>(() => ({
       url: request().plus
@@ -19,17 +23,5 @@ export const weatherForecastServiceFactory = (http = inject(HttpClient)) => ({
         : '/api/weatherforecasts',
       params: { count: request().count },
     }));
-  },
-});
-
-export const WeatherForecastService = new InjectionToken(
-  'WeatherForecastService',
-  {
-    providedIn: 'root',
-    factory: weatherForecastServiceFactory,
-  },
-);
-
-export type WeatherForecastService = ReturnType<
-  typeof weatherForecastServiceFactory
->;
+  }
+}

@@ -1,26 +1,20 @@
 import { HttpBackend, HttpClient } from '@angular/common/http';
-import { InjectionToken, inject } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 import { AuthResponse, Login, Refresh } from '../state/auth.store';
 
-// HttpBackend is used directly (bypassing interceptors) to avoid an infinite
-// loop: the auth interceptor would otherwise intercept its own refresh/login
-// requests and try to refresh again on 401.
-const authServiceFactory = (httpBackend = inject(HttpBackend)) => {
-  const http = new HttpClient(httpBackend);
-  return {
-    login(login: Login) {
-      return http.post<AuthResponse>('/api/account/login', login);
-    },
-    refresh(refresh: Refresh) {
-      return http.post<AuthResponse>('/api/account/refresh', refresh);
-    },
-  };
-};
+// HttpBackend is injected directly (bypassing interceptors) to avoid an
+// infinite loop: the auth interceptor would otherwise intercept its own
+// refresh/login requests and try to refresh again on 401.
+@Injectable({ providedIn: 'root' })
+export class AuthService {
+  private readonly http = new HttpClient(inject(HttpBackend));
 
-export const AuthService = new InjectionToken('AuthService', {
-  providedIn: 'root',
-  factory: authServiceFactory,
-});
+  login(login: Login) {
+    return this.http.post<AuthResponse>('/api/account/login', login);
+  }
 
-export type AuthService = ReturnType<typeof authServiceFactory>;
+  refresh(refresh: Refresh) {
+    return this.http.post<AuthResponse>('/api/account/refresh', refresh);
+  }
+}
