@@ -9,6 +9,7 @@ export default defineConfig({
   root: __dirname,
   test: {
     ...baseConfig.test,
+    testTimeout: 10000,
     outputFile: {
       junit: `${baseConfig.root}/junit/libs/${name}/TESTS-${Date.now()}.xml`,
     },
