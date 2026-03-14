@@ -17,7 +17,6 @@ import {
 } from '@ngrx/signals';
 import { setAllEntities, withEntities } from '@ngrx/signals/entities';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { isEqual, isNil } from 'lodash';
 import { pipe, switchMap, tap } from 'rxjs';
 
 import {
@@ -97,7 +96,8 @@ export function withWeatherForecastFeature() {
 
     withMethods(({ layoutStore, weatherForecasts, ...store }) => ({
       getForecasts(request: { count: number; plus: boolean }) {
-        const reload = isEqual(store.request(), request);
+        const reload =
+          JSON.stringify(store.request()) === JSON.stringify(request);
 
         layoutStore.setCount(request.count);
         patchState(store, request);
@@ -142,9 +142,9 @@ export function weatherForecastFilter(
       filteredForecasts: computed(() =>
         weatherForecasts()?.filter(
           (forecast) =>
-            (isNil(store.filter()?.minTemperatureC) ||
+            (store.filter()?.minTemperatureC == null ||
               forecast.temperatureC >= store.filter()?.minTemperatureC) &&
-            (isNil(store.filter()?.maxTemperatureC) ||
+            (store.filter()?.maxTemperatureC == null ||
               forecast.temperatureC <= store.filter()?.maxTemperatureC),
         ),
       ),
