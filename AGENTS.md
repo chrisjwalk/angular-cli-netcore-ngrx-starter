@@ -12,3 +12,37 @@
 - For Nx plugin best practices, check `node_modules/@nx/<plugin>/PLUGIN.md`. Not all plugins have this file - proceed without it if unavailable.
 
 <!-- nx configuration end-->
+
+# GitHub Workflow
+
+## Accounts
+
+- **chrisjwalk** — repo owner; creates issues, reviews and merges PRs
+- **chrisjwalk-bot** — collaborator (push access); opens branches and PRs so the owner can review them
+
+Both accounts are configured in the `gh` CLI on this machine.
+
+## PR Workflow
+
+Always follow this pattern when pushing branches and creating PRs:
+
+```bash
+# 1. Switch to bot before pushing
+gh auth switch --user chrisjwalk-bot
+git push origin <branch>
+gh pr create ...
+
+# 2. Switch back to owner account afterwards
+gh auth switch --user chrisjwalk
+```
+
+## Git Commit Identity
+
+Git is configured locally in this repo to commit as the bot:
+
+- `user.name` = `chrisjwalk-bot`
+- `user.email` = `268224883+chrisjwalk-bot@users.noreply.github.com`
+
+## Issue Workflow
+
+Create issues as `chrisjwalk` (the default active account). Always create a GitHub issue before starting work on a feature or fix, and reference it in the branch name and PR.
