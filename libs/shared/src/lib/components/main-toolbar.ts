@@ -10,6 +10,8 @@ import { MatToolbar } from '@angular/material/toolbar';
 import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 
+import { NAV_LINKS } from './nav-links';
+
 @Component({
   imports: [MatIcon, MatToolbar, MatTooltip, RouterLink, MatIconButton],
   selector: 'lib-main-toolbar',
@@ -83,22 +85,16 @@ import { RouterLink } from '@angular/router';
       </a>
       <span class="flex-1"></span>
       <div class="hidden md:flex gap-2">
-        <button
-          mat-icon-button
-          [routerLink]="['/weather-forecast']"
-          matTooltip="Get Data Feature"
-          aria-label="Get Data Feature"
-        >
-          <mat-icon>get_app</mat-icon>
-        </button>
-        <button
-          mat-icon-button
-          [routerLink]="['/feature']"
-          matTooltip="Lazy Loaded Feature"
-          aria-label="Lazy Loaded Feature"
-        >
-          <mat-icon>hotel</mat-icon>
-        </button>
+        @for (link of navLinks; track link.routerLink) {
+          <button
+            mat-icon-button
+            [routerLink]="link.routerLink"
+            [matTooltip]="link.hint"
+            [attr.aria-label]="link.hint"
+          >
+            <mat-icon>{{ link.icon }}</mat-icon>
+          </button>
+        }
         @if (loggedIn()) {
           <button
             mat-icon-button
@@ -129,6 +125,8 @@ import { RouterLink } from '@angular/router';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbar {
+  readonly navLinks = NAV_LINKS;
+
   loggedIn = input<boolean>(null);
 
   toggleSidenav = output<void>();
