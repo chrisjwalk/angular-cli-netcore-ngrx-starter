@@ -1,6 +1,8 @@
+import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
@@ -8,6 +10,7 @@ import {
   Sidenav,
   SwUpdateStore,
 } from '@myorg/shared';
+import { filter } from 'rxjs/operators';
 
 @Component({
   imports: [
@@ -19,6 +22,7 @@ import {
   ],
   selector: 'app-root',
   template: `
+    <a class="skip-link" href="#main-content">Skip to main content</a>
     <lib-main-toolbar
       (toggleSidenav)="store.toggleSidenav()"
       (logout)="authStore.logout(authStore.pageRequiresLogin())"
@@ -35,7 +39,9 @@ import {
           (closeSidenav)="store.closeSidenav()"
         />
       </mat-sidenav>
-      <router-outlet />
+      <main id="main-content" tabindex="-1">
+        <router-outlet />
+      </main>
     </mat-sidenav-container>
   `,
   styles: [
@@ -43,6 +49,28 @@ import {
       .mat-drawer-container {
         margin-top: var(--mat-toolbar-standard-height);
         height: calc(100% - var(--mat-toolbar-standard-height));
+      }
+
+      .skip-link {
+        position: absolute;
+        left: -9999px;
+        top: 0;
+        z-index: 9999;
+        padding: 8px 16px;
+        background: #000;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 0 0 4px 0;
+
+        &:focus {
+          left: 0;
+        }
+      }
+
+      main {
+        outline: none;
+        height: 100%;
+        overflow: auto;
       }
     `,
   ],
@@ -56,4 +84,19 @@ export class App {
   readonly swUpdateStore = inject(SwUpdateStore);
   readonly store = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
+
+  private readonly router = inject(Router);
+  private readonly document = inject(DOCUMENT);
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => {
+        const main = this.document.getElementById('main-content');
+        main?.focus({ preventScroll: false });
+      });
+  }
 }

@@ -10,9 +10,11 @@ import {
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
 import {
+  PreloadAllModules,
   provideRouter,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
+  withPreloading,
 } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
 import { authInterceptor } from '@myorg/auth';
@@ -27,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withEnabledBlockingInitialNavigation(),
+      withPreloading(PreloadAllModules),
     ),
     provideAnimations(),
     provideServiceWorker('/ngsw-worker.js', {

@@ -36,7 +36,7 @@ describe('WeatherForecast', () => {
     const store = fixture.debugElement.injector.get(WeatherForecastStore);
     const getForecasts = vi.spyOn(store, 'getForecasts');
 
-    const input = screen.getByPlaceholderText('Forecast Days');
+    const input = screen.getByLabelText('Number of forecast days');
     await fireEvent.input(input, { target: { value: '5' } });
     await fireEvent.keyUp(input, { key: 'Enter' });
 
