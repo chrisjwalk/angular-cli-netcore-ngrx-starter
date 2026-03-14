@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
@@ -10,7 +9,8 @@ import {
   Sidenav,
   SwUpdateStore,
 } from '@myorg/shared';
-import { filter } from 'rxjs/operators';
+import { rxMethod } from '@ngrx/signals/rxjs-interop';
+import { filter, pipe, tap } from 'rxjs';
 
 @Component({
   imports: [
@@ -22,7 +22,11 @@ import { filter } from 'rxjs/operators';
   ],
   selector: 'app-root',
   template: `
-    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <a
+      class="absolute -left-[9999px] top-0 z-[9999] py-2 px-4 bg-black text-white no-underline rounded-br focus:left-0"
+      href="#main-content"
+      >Skip to main content</a
+    >
     <lib-main-toolbar
       (toggleSidenav)="store.toggleSidenav()"
       (logout)="authStore.logout(authStore.pageRequiresLogin())"
@@ -39,7 +43,11 @@ import { filter } from 'rxjs/operators';
           (closeSidenav)="store.closeSidenav()"
         />
       </mat-sidenav>
-      <main id="main-content" tabindex="-1">
+      <main
+        id="main-content"
+        tabindex="-1"
+        class="outline-none h-full overflow-auto"
+      >
         <router-outlet />
       </main>
     </mat-sidenav-container>
@@ -49,28 +57,6 @@ import { filter } from 'rxjs/operators';
       .mat-drawer-container {
         margin-top: var(--mat-toolbar-standard-height);
         height: calc(100% - var(--mat-toolbar-standard-height));
-      }
-
-      .skip-link {
-        position: absolute;
-        left: -9999px;
-        top: 0;
-        z-index: 9999;
-        padding: 8px 16px;
-        background: #000;
-        color: #fff;
-        text-decoration: none;
-        border-radius: 0 0 4px 0;
-
-        &:focus {
-          left: 0;
-        }
-      }
-
-      main {
-        outline: none;
-        height: 100%;
-        overflow: auto;
       }
     `,
   ],
@@ -85,18 +71,26 @@ export class App {
   readonly store = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
 
-  private readonly router = inject(Router);
   private readonly document = inject(DOCUMENT);
+  private readonly router = inject(Router);
+
+  private readonly focusMainOnNavigation = rxMethod<NavigationEnd>(
+    pipe(
+      tap(() => {
+        this.document
+          .getElementById('main-content')
+          ?.focus({ preventScroll: false });
+      }),
+    ),
+  );
 
   constructor() {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        takeUntilDestroyed(),
-      )
-      .subscribe(() => {
-        const main = this.document.getElementById('main-content');
-        main?.focus({ preventScroll: false });
-      });
+    this.focusMainOnNavigation(
+      this.router.events.pipe(
+        filter(
+          (event): event is NavigationEnd => event instanceof NavigationEnd,
+        ),
+      ),
+    );
   }
 }
