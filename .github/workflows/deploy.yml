@@ -1,0 +1,86 @@
+name: Deploy
+
+# Runs after CI completes successfully on main.
+# This ensures the deploy only happens when all tests and lint pass.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+
+# Required for OIDC token requests (passwordless Azure auth).
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  deploy:
+    name: Deploy to Azure App Service
+    runs-on: ubuntu-latest
+    # Only deploy when the CI workflow succeeded
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
+
+    # Requires these secrets configured in GitHub → Settings → Secrets:
+    #   AZURE_CLIENT_ID        — Entra ID app registration / managed identity client ID
+    #   AZURE_TENANT_ID        — Azure tenant ID
+    #   AZURE_SUBSCRIPTION_ID  — Azure subscription ID
+    #   AZURE_WEBAPP_NAME      — App Service resource name (e.g. angularclinetcorengrxstarter)
+    #
+    # To set up passwordless OIDC auth, add a Federated Credential to your
+    # Entra ID app registration:
+    #   Issuer:   https://token.actions.githubusercontent.com
+    #   Subject:  repo:<org>/<repo>:environment:production
+    #   Audience: api://AzureADTokenExchange
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 10.0.x
+
+      - name: Install dotnet-coverage
+        run: pnpm dotnet:coverage
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build API (Release)
+        run: pnpm build:api:prod
+
+      - name: Build web app (production)
+        run: pnpm build:web-app:prod
+
+      # The .NET app serves the Angular SPA from apps/web-app/browser/ relative
+      # to its working directory (see Program.cs PhysicalFileProvider). Both
+      # outputs land in dist/ with the correct structure:
+      #   dist/              ← .NET publish output (Api.dll etc.)
+      #   dist/apps/web-app/browser/  ← Angular SPA
+
+      - name: Log in to Azure (OIDC)
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
+          package: dist
+
+      # NOTE: Database migrations are not run automatically here.
+      # If you use EF Core migrations, consider adding a step like:
+      #   dotnet ef database update --project apps/api/Api
+      # or use a startup migration strategy in Program.cs.
