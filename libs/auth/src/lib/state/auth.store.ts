@@ -146,7 +146,6 @@ export function withAuthFeature() {
         storeRefreshToken(response);
       },
       loginFailure(error: unknown) {
-        console.error(error);
         patchState(store, {
           error,
           loginStatus: 'error',
@@ -259,7 +258,7 @@ export function storeRefreshToken(response: AuthResponse) {
   try {
     localStorage.setItem(refreshTokenKey, response.refreshToken);
   } catch {
-    console.error('Failed to store refresh token');
+    // localStorage may be unavailable (e.g., private browsing); user will need to re-login on next visit
   }
 }
 

@@ -62,7 +62,6 @@ export function withWeatherForecastEntitiesFeature() {
                     patchState(store, { loading: false });
                   },
                   error: (error) => {
-                    console.error(error);
                     patchState(store, { error, loading: false });
                   },
                 }),
