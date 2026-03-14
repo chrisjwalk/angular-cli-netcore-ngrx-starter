@@ -1,0 +1,22 @@
+version: 2
+
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    groups:
+      angular:
+        patterns: ["@angular/*", "@angular-devkit/*"]
+      ngrx:
+        patterns: ["@ngrx/*"]
+      nx:
+        patterns: ["@nx/*", "nx"]
+      material:
+        patterns: ["@angular/material", "@angular/cdk"]
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
