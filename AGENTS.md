@@ -22,19 +22,44 @@
 
 Both accounts are configured in the `gh` CLI on this machine.
 
-## PR Workflow
+## Complete Workflow — follow every step in order
 
-Always follow this pattern when pushing branches and creating PRs:
+**1. Create an issue first** (as `chrisjwalk`, the default account):
 
 ```bash
-# 1. Switch to bot before pushing
-gh auth switch --user chrisjwalk-bot
-git push origin <branch>
-gh pr create ...
+gh issue create --title "..." --body "..."
+# note the issue number, e.g. #42
+```
 
-# 2. Switch back to owner account afterwards
+**2. Create a branch** referencing the issue:
+
+```bash
+git checkout -b feat/short-description-42
+```
+
+**3. Implement, commit** (git is configured to commit as `chrisjwalk-bot`):
+
+```bash
+git commit -m "feat: description (closes #42)
+
+Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+```
+
+**4. Push and open PR as `chrisjwalk-bot`**:
+
+```bash
+gh auth switch --user chrisjwalk-bot
+git push origin feat/short-description-42
+gh pr create --title "..." --body "Closes #42 ..."
+```
+
+**5. Switch back to owner**:
+
+```bash
 gh auth switch --user chrisjwalk
 ```
+
+> ⚠️ Never open a PR without a corresponding issue. Never push as `chrisjwalk-bot` without switching back to `chrisjwalk` afterwards.
 
 ## Git Commit Identity
 
@@ -42,10 +67,6 @@ Git is configured locally in this repo to commit as the bot:
 
 - `user.name` = `chrisjwalk-bot`
 - `user.email` = `268224883+chrisjwalk-bot@users.noreply.github.com`
-
-## Issue Workflow
-
-Create issues as `chrisjwalk` (the default active account). Always create a GitHub issue before starting work on a feature or fix, and reference it in the branch name and PR.
 
 # Coding Conventions
 
