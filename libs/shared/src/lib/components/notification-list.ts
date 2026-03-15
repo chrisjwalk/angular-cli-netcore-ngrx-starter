@@ -20,7 +20,9 @@ const KIND_ICON: Record<NotificationKind, string> = {
   imports: [DatePipe, MatButton, MatIcon, MatIconButton],
   selector: 'lib-notification-list',
   template: `
-    <div class="w-80 max-h-[70vh] flex flex-col">
+    <div
+      class="w-full max-h-[70vh] flex flex-col bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-2xl rounded overflow-hidden"
+    >
       <div
         class="flex items-center justify-between px-4 py-2 border-b border-neutral-200 dark:border-neutral-600"
       >
@@ -35,16 +37,20 @@ const KIND_ICON: Record<NotificationKind, string> = {
       <div class="overflow-y-auto flex-1">
         @for (n of store.notifications(); track n.id) {
           <div
-            class="flex gap-3 p-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0"
-            [class.bg-blue-50]="!n.read"
-            [class.dark:bg-blue-950]="!n.read"
+            class="flex gap-3 p-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0 border-l-4"
+            [class]="!n.read ? 'border-l-blue-500' : 'border-l-transparent'"
           >
             <mat-icon class="shrink-0 mt-0.5 text-neutral-500">
               {{ iconFor(n.kind) }}
             </mat-icon>
 
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium m-0 leading-tight">{{ n.title }}</p>
+              <p
+                class="text-sm m-0 leading-tight"
+                [class.font-semibold]="!n.read"
+              >
+                {{ n.title }}
+              </p>
               @if (n.detail) {
                 <p
                   class="text-xs text-neutral-500 dark:text-neutral-400 m-0 mt-0.5"

@@ -4,6 +4,7 @@ import {
   ComponentRef,
   DestroyRef,
   ElementRef,
+  Injector,
   computed,
   inject,
 } from '@angular/core';
@@ -39,6 +40,7 @@ export class NotificationBell {
   readonly store = inject(NotificationStore);
 
   private readonly el = inject(ElementRef);
+  private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
   private readonly bottomSheet = inject(MatBottomSheet);
   private readonly breakpointObserver = inject(BreakpointObserver);
@@ -60,7 +62,7 @@ export class NotificationBell {
 
   open(): void {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      this.bottomSheet.open(NotificationList);
+      this.bottomSheet.open(NotificationList, { injector: this.injector });
     } else {
       this.toggleOverlay();
     }
@@ -68,6 +70,7 @@ export class NotificationBell {
 
   private toggleOverlay(): void {
     if (this.overlayRef?.hasAttached()) {
+      this.store.markAllRead();
       this.overlayRef.detach();
       return;
     }
@@ -76,6 +79,7 @@ export class NotificationBell {
       this.overlayRef = this.overlay.create({
         hasBackdrop: true,
         backdropClass: 'cdk-overlay-transparent-backdrop',
+        width: '320px',
         positionStrategy: this.overlay
           .position()
           .flexibleConnectedTo(this.el)
@@ -92,13 +96,13 @@ export class NotificationBell {
       });
 
       this.overlayRef.backdropClick().subscribe(() => {
+        this.store.markAllRead();
         this.overlayRef?.detach();
       });
     }
 
     this.panelRef = this.overlayRef.attach(
-      new ComponentPortal(NotificationList),
+      new ComponentPortal(NotificationList, null, this.injector),
     );
-    this.store.markAllRead();
   }
 }
