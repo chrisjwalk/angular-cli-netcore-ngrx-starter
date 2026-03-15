@@ -79,7 +79,11 @@ export class Debug {
     this.store.add({
       kind: 'sw-update',
       title: 'App update available',
-      detail: 'A new version is ready. Reload to apply.',
+      detail: 'A new version is ready. Reload to update.',
+      action: {
+        label: 'Reload',
+        handler: () => window.location.reload(),
+      },
     });
   }
 
