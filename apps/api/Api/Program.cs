@@ -41,6 +41,17 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddCors(options =>
+  options.AddPolicy("SwaPreview", policy =>
+    policy
+      .SetIsOriginAllowed(origin =>
+        Uri.TryCreate(origin, UriKind.Absolute, out var uri)
+        && uri.Host.EndsWith(".azurestaticapps.net"))
+      .AllowAnyMethod()
+      .AllowAnyHeader()
+  )
+);
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -84,6 +95,8 @@ app.UseSwaggerUI(c =>
 });
 
 app.UseRouting();
+
+app.UseCors("SwaPreview");
 
 app.UseAuthorization();
 

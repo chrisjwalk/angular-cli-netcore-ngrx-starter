@@ -50,6 +50,15 @@
           "extractLicenses": false,
           "sourceMap": true,
           "namedChunks": true
+        },
+        "preview": {
+          "fileReplacements": [
+            {
+              "replace": "apps/web-app/src/environments/environment.ts",
+              "with": "apps/web-app/src/environments/environment.preview.ts"
+            }
+          ],
+          "outputHashing": "all"
         }
       },
       "defaultConfiguration": "production"

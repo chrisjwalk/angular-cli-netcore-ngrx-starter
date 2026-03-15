@@ -19,12 +19,16 @@ import {
 import { provideServiceWorker } from '@angular/service-worker';
 import { authInterceptor } from '@myorg/auth';
 
+import { apiBaseUrlInterceptor } from './api-base-url.interceptor';
 import { routes } from './app.routes';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
-    provideHttpClient(withFetch(), withInterceptors([authInterceptor])),
+    provideHttpClient(
+      withFetch(),
+      withInterceptors([apiBaseUrlInterceptor, authInterceptor]),
+    ),
     provideRouter(
       routes,
       withComponentInputBinding(),
