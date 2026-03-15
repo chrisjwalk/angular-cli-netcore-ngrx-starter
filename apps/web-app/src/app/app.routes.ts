@@ -18,5 +18,10 @@ export const routes: Route[] = [
     path: 'login',
     loadChildren: () => import('@myorg/login').then((m) => m.loginRoutes),
   },
+  {
+    path: 'debug',
+    loadChildren: () =>
+      import('./debug/debug.routes').then((m) => m.debugRoutes),
+  },
   { path: '**', redirectTo: '' },
 ];
