@@ -49,7 +49,7 @@
     "dotnet:build": "dotnet build apps/api",
     "dotnet:update": "dotnet outdated -u apps/api",
     "preinstall": "pnpm dotnet:restore",
-    "postinstall": "pnpm build:dotnet-builder && pnpm update-readme",
+    "postinstall": "pnpm build:dotnet-builder",
     "prepare": "husky",
     "update-packages": "ts-node ./tools/update-packages/src/main.ts"
   },
@@ -138,9 +138,5 @@
     "typescript-eslint": "8.57.0",
     "vite": "8.0.0",
     "vitest": "4.1.0"
-  },
-  "lint-staged": {
-    "*.{ts,js}": "eslint --cache --cache-location=.husky/_ --fix",
-    "*.{ts,js,css,scss,md,mdx}": "prettier --write"
   }
 }
