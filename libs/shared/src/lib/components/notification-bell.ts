@@ -3,9 +3,7 @@ import {
   Component,
   ComponentRef,
   DestroyRef,
-  ElementRef,
   Injector,
-  ViewChild,
   computed,
   inject,
 } from '@angular/core';
@@ -24,14 +22,13 @@ import { NotificationList } from './notification-list';
   selector: 'lib-notification-bell',
   template: `
     <button
-      #bellButton
       mat-icon-button
       [matBadge]="store.unreadCount()"
       [matBadgeHidden]="store.unreadCount() === 0"
       matBadgeColor="warn"
       matBadgeSize="small"
       [attr.aria-label]="ariaLabel()"
-      (click)="open()"
+      (click)="open($event)"
     >
       <mat-icon>notifications</mat-icon>
     </button>
@@ -40,8 +37,6 @@ import { NotificationList } from './notification-list';
 })
 export class NotificationBell {
   readonly store = inject(NotificationStore);
-
-  @ViewChild('bellButton') private readonly bellButton!: ElementRef;
 
   private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
@@ -63,15 +58,15 @@ export class NotificationBell {
     this.destroyRef.onDestroy(() => this.overlayRef?.dispose());
   }
 
-  open(): void {
+  open(event: MouseEvent): void {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       this.bottomSheet.open(NotificationList, { injector: this.injector });
     } else {
-      this.toggleOverlay();
+      this.toggleOverlay(event.currentTarget as HTMLElement);
     }
   }
 
-  private toggleOverlay(): void {
+  private toggleOverlay(anchor: HTMLElement): void {
     if (this.overlayRef?.hasAttached()) {
       this.store.markAllRead();
       this.overlayRef.detach();
@@ -85,7 +80,7 @@ export class NotificationBell {
         width: '320px',
         positionStrategy: this.overlay
           .position()
-          .flexibleConnectedTo(this.bellButton)
+          .flexibleConnectedTo(anchor)
           .withPositions([
             {
               originX: 'end',
