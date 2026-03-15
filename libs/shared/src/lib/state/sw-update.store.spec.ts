@@ -1,16 +1,16 @@
 import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NavigationEnd, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { SwUpdate, VersionEvent } from '@angular/service-worker';
-import { EMPTY, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
+import { NotificationStore } from './notification.store';
 import { SwUpdateStore, swUpdateInitialState } from './sw-update.store';
 
 describe('SwUpdateStore', () => {
   let store: SwUpdateStore;
-  let snackBar: MatSnackBar;
+  let notificationStore: InstanceType<typeof NotificationStore>;
   let versionUpdatesSubject: Subject<VersionEvent>;
   let routerEventsSubject: Subject<NavigationEnd>;
 
@@ -21,6 +21,7 @@ describe('SwUpdateStore', () => {
     TestBed.configureTestingModule({
       providers: [
         provideNoopAnimations(),
+        NotificationStore,
         SwUpdateStore,
         {
           provide: SwUpdate,
@@ -39,7 +40,7 @@ describe('SwUpdateStore', () => {
     });
 
     store = TestBed.inject(SwUpdateStore);
-    snackBar = TestBed.inject(MatSnackBar);
+    notificationStore = TestBed.inject(NotificationStore);
   }
 
   beforeEach(() => setup(true));
@@ -48,10 +49,8 @@ describe('SwUpdateStore', () => {
     expect(store).toBeDefined();
   });
 
-  it('should have correct initial state', () => {
-    expect(store.message()).toBe(swUpdateInitialState.message);
-    expect(store.action()).toBe(swUpdateInitialState.action);
-    expect(store.snackbarConfig()).toEqual(swUpdateInitialState.snackbarConfig);
+  it('should have correct initial versionEvent state', () => {
+    expect(store.versionEvent()).toEqual(swUpdateInitialState.versionEvent);
   });
 
   it('updateReady should be false initially', () => {
@@ -87,66 +86,44 @@ describe('SwUpdateStore', () => {
     expect(store.updateReady()).toBe(false);
   });
 
-  it('should open snackbar with correct args when VERSION_READY event is received', () => {
-    const openSpy = vi.spyOn(snackBar, 'open').mockReturnValue({
-      onAction: () => EMPTY,
-      dismiss: vi.fn(),
-      afterDismissed: () => EMPTY,
-      afterOpened: () => EMPTY,
-      instance: {} as never,
-      containerInstance: {} as never,
-    });
-
+  it('should add a sw-update notification when VERSION_READY event is received', () => {
     versionUpdatesSubject.next({
       type: 'VERSION_READY',
       currentVersion: { hash: 'abc', appData: null },
       latestVersion: { hash: 'def', appData: null },
     } as VersionEvent);
 
-    expect(openSpy).toHaveBeenCalledWith(
-      swUpdateInitialState.message,
-      swUpdateInitialState.action,
-      swUpdateInitialState.snackbarConfig,
-    );
+    expect(notificationStore.notifications()).toHaveLength(1);
+    expect(notificationStore.notifications()[0]).toMatchObject({
+      kind: 'sw-update',
+      title: 'App update available',
+    });
   });
 
-  it('should not open snackbar for VERSION_DETECTED events', () => {
-    const openSpy = vi.spyOn(snackBar, 'open');
-
+  it('should not add notification for VERSION_DETECTED events', () => {
     versionUpdatesSubject.next({
       type: 'VERSION_DETECTED',
       version: { hash: 'def', appData: null },
     } as VersionEvent);
 
-    expect(openSpy).not.toHaveBeenCalled();
+    expect(notificationStore.notifications()).toHaveLength(0);
   });
 
-  it('should not open snackbar for VERSION_INSTALLATION_FAILED events', () => {
-    const openSpy = vi.spyOn(snackBar, 'open');
-
+  it('should not add notification for VERSION_INSTALLATION_FAILED events', () => {
     versionUpdatesSubject.next({
       type: 'VERSION_INSTALLATION_FAILED',
       version: { hash: 'def', appData: null },
       error: 'install failed',
     } as VersionEvent);
 
-    expect(openSpy).not.toHaveBeenCalled();
+    expect(notificationStore.notifications()).toHaveLength(0);
   });
 
-  it('should call activateUpdate when snackbar action is clicked', async () => {
+  it('should call activateUpdate when notification action is triggered', async () => {
     const activateUpdateSpy = vi.spyOn(
       TestBed.inject(SwUpdate),
       'activateUpdate',
     );
-    const actionSubject = new Subject<void>();
-    vi.spyOn(snackBar, 'open').mockReturnValue({
-      onAction: () => actionSubject.asObservable(),
-      dismiss: vi.fn(),
-      afterDismissed: () => EMPTY,
-      afterOpened: () => EMPTY,
-      instance: {} as never,
-      containerInstance: {} as never,
-    });
 
     versionUpdatesSubject.next({
       type: 'VERSION_READY',
@@ -154,7 +131,8 @@ describe('SwUpdateStore', () => {
       latestVersion: { hash: 'def', appData: null },
     } as VersionEvent);
 
-    actionSubject.next();
+    const notification = notificationStore.notifications()[0];
+    await notification.action?.handler();
     await TestBed.inject(ApplicationRef).whenStable();
 
     expect(activateUpdateSpy).toHaveBeenCalled();
@@ -182,14 +160,12 @@ describe('SwUpdateStore', () => {
     TestBed.resetTestingModule();
     setup(false);
 
-    const openSpy = vi.spyOn(snackBar, 'open');
-
     versionUpdatesSubject.next({
       type: 'VERSION_READY',
       currentVersion: { hash: 'abc', appData: null },
       latestVersion: { hash: 'def', appData: null },
     } as VersionEvent);
 
-    expect(openSpy).not.toHaveBeenCalled();
+    expect(notificationStore.notifications()).toHaveLength(0);
   });
 });

@@ -11,9 +11,17 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
 
 import { NAV_LINKS } from './nav-links';
+import { NotificationBell } from './notification-bell';
 
 @Component({
-  imports: [MatIcon, MatToolbar, MatTooltip, RouterLink, MatIconButton],
+  imports: [
+    MatIcon,
+    MatToolbar,
+    MatTooltip,
+    RouterLink,
+    MatIconButton,
+    NotificationBell,
+  ],
   selector: 'lib-main-toolbar',
   template: `
     <mat-toolbar class="app-main-toolbar fixed top-0 w-full z-50 flex gap-2">
@@ -87,6 +95,7 @@ import { NAV_LINKS } from './nav-links';
         Demo App
       </a>
       <span class="flex-1"></span>
+      <lib-notification-bell />
       <div class="hidden md:flex gap-2">
         @for (link of navLinks; track link.routerLink) {
           <button
