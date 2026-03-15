@@ -80,3 +80,25 @@ jobs:
           name: test-results
           path: junit/
           if-no-files-found: ignore
+
+      - name: Coverage summary
+        if: always()
+        uses: irongut/CodeCoverageSummary@v1.3.0
+        with:
+          filename: coverage/**/cobertura-coverage.xml
+          badge: true
+          fail_below_min: false
+          format: markdown
+          output: both
+          thresholds: '60 80'
+
+      - name: Write coverage to job summary
+        if: always()
+        run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
+
+      - name: Add coverage PR comment
+        if: always() && github.event_name == 'pull_request'
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: code-coverage-results.md
