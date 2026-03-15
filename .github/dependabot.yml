@@ -15,8 +15,13 @@ updates:
         patterns: ["@nx/*", "nx"]
       material:
         patterns: ["@angular/material", "@angular/cdk"]
+      all-deps:
+        patterns: ["*"]
 
   - package-ecosystem: github-actions
     directory: /
     schedule:
       interval: monthly
+    groups:
+      github-actions:
+        patterns: ["*"]
