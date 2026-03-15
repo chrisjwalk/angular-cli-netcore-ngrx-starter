@@ -47,7 +47,7 @@ import { filter, pipe, tap } from 'rxjs';
       <main
         id="main-content"
         tabindex="-1"
-        class="outline-none h-full overflow-auto [scrollbar-gutter:stable]"
+        class="outline-none h-full overflow-auto"
       >
         <router-outlet />
       </main>
