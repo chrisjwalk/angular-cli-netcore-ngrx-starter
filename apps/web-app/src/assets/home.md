@@ -29,8 +29,9 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 **Tooling**
 
 - [Nx](https://nx.dev) — monorepo build system with affected commands
-- [Vitest](https://vitest.dev) — unit tests
+- [Vitest](https://vitest.dev) — unit tests with ~93% line coverage
 - [Playwright](https://playwright.dev) — end-to-end tests
+- [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) — pre-commit hooks for linting, formatting, and keeping `home.md` in sync
 - [pnpm](https://pnpm.io) — package manager
 
 ## Demo
