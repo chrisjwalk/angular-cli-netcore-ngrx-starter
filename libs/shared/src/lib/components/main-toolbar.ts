@@ -95,8 +95,7 @@ import { NotificationBell } from './notification-bell';
         Demo App
       </a>
       <span class="flex-1"></span>
-      <lib-notification-bell />
-      <div class="hidden md:flex gap-2">
+      <div class="hidden md:flex gap-2 items-center">
         @for (link of navLinks; track link.routerLink) {
           <button
             mat-icon-button
@@ -107,17 +106,19 @@ import { NotificationBell } from './notification-bell';
             <mat-icon>{{ link.icon }}</mat-icon>
           </button>
         }
-        @if (loggedIn()) {
-          <button
-            mat-icon-button
-            (click)="logout.emit()"
-            matTooltip="Log out"
-            aria-label="Log out"
-          >
-            <mat-icon>logout</mat-icon>
-          </button>
-        }
       </div>
+      <lib-notification-bell />
+      @if (loggedIn()) {
+        <button
+          mat-icon-button
+          class="hidden md:inline-flex"
+          (click)="logout.emit()"
+          matTooltip="Log out"
+          aria-label="Log out"
+        >
+          <mat-icon>logout</mat-icon>
+        </button>
+      }
     </mat-toolbar>
   `,
   styles: [
