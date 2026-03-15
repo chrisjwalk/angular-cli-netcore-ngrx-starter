@@ -97,4 +97,21 @@ describe('NotificationList', () => {
       screen.queryByRole('button', { name: /mark all read/i }),
     ).toBeFalsy();
   });
+
+  it('should not show unread indicator for already-read notifications', async () => {
+    const { store, fixture } = await setup();
+    store.add({ kind: 'info', title: 'Read item' });
+    store.markRead(store.notifications()[0].id);
+    fixture.detectChanges();
+    await screen.findByText('Read item');
+    expect(document.querySelectorAll('[aria-label="Unread"]')).toHaveLength(0);
+  });
+
+  it('iconFor should return notifications icon for unknown kind', async () => {
+    const { fixture } = await setup();
+    const component = fixture.debugElement
+      .componentInstance as NotificationList;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    expect(component.iconFor('unknown' as any)).toBe('notifications');
+  });
 });

@@ -49,6 +49,16 @@ describe('NotificationStore', () => {
     expect(store.unreadCount()).toBe(0);
   });
 
+  it('should only mark the targeted notification as read (not others)', () => {
+    store.add({ kind: 'info', title: 'A' });
+    store.add({ kind: 'info', title: 'B' });
+    const idA = store.notifications()[0].id;
+    store.markRead(idA);
+    expect(store.notifications()[0].read).toBe(true);
+    expect(store.notifications()[1].read).toBe(false);
+    expect(store.unreadCount()).toBe(1);
+  });
+
   it('should mark all notifications as read', () => {
     store.add({ kind: 'info', title: 'A' });
     store.add({ kind: 'error', title: 'B' });
