@@ -86,6 +86,14 @@ const KIND_ICON: Record<NotificationKind, string> = {
       </div>
     </div>
   `,
+  styles: [
+    `
+      :host {
+        display: block;
+        width: 100%;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class NotificationList {
