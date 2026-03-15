@@ -21,7 +21,7 @@ const KIND_ICON: Record<NotificationKind, string> = {
   selector: 'lib-notification-list',
   template: `
     <div
-      class="w-full min-h-[200px] max-h-[70vh] flex flex-col bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-2xl rounded overflow-hidden"
+      class="w-full max-h-[70vh] flex flex-col bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-2xl rounded overflow-hidden"
     >
       <div
         class="flex items-center justify-between px-4 py-2 border-b border-neutral-200 dark:border-neutral-600"
@@ -37,8 +37,9 @@ const KIND_ICON: Record<NotificationKind, string> = {
       <div class="overflow-y-auto flex-1">
         @for (n of store.notifications(); track n.id) {
           <div
-            class="flex gap-3 p-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0 border-l-4"
-            [class]="!n.read ? 'border-l-blue-500' : 'border-l-transparent'"
+            class="flex gap-3 p-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0"
+            [class.border-l-4]="!n.read"
+            [class.border-l-blue-500]="!n.read"
           >
             <mat-icon class="shrink-0 mt-0.5 text-neutral-500">
               {{ iconFor(n.kind) }}
@@ -79,7 +80,9 @@ const KIND_ICON: Record<NotificationKind, string> = {
             </div>
           </div>
         } @empty {
-          <p class="text-sm text-neutral-500 text-center py-8 m-0">
+          <p
+            class="text-sm text-neutral-500 text-center py-8 m-0 min-h-[160px] flex items-center justify-center"
+          >
             No notifications
           </p>
         }
