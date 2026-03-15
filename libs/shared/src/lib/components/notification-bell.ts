@@ -28,7 +28,7 @@ import { NotificationList } from './notification-list';
       matBadgeColor="warn"
       matBadgeSize="small"
       [attr.aria-label]="ariaLabel()"
-      (click)="open($event)"
+      (click)="open()"
     >
       <mat-icon>notifications</mat-icon>
     </button>
@@ -58,15 +58,15 @@ export class NotificationBell {
     this.destroyRef.onDestroy(() => this.overlayRef?.dispose());
   }
 
-  open(event: MouseEvent): void {
+  open(): void {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
       this.bottomSheet.open(NotificationList, { injector: this.injector });
     } else {
-      this.toggleOverlay(event.currentTarget as HTMLElement);
+      this.toggleOverlay();
     }
   }
 
-  private toggleOverlay(anchor: HTMLElement): void {
+  private toggleOverlay(): void {
     if (this.overlayRef?.hasAttached()) {
       this.store.markAllRead();
       this.overlayRef.detach();
@@ -80,16 +80,9 @@ export class NotificationBell {
         width: '320px',
         positionStrategy: this.overlay
           .position()
-          .flexibleConnectedTo(anchor)
-          .withPositions([
-            {
-              originX: 'end',
-              originY: 'bottom',
-              overlayX: 'end',
-              overlayY: 'top',
-              offsetY: 8,
-            },
-          ]),
+          .global()
+          .right('8px')
+          .top('72px'),
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
       });
 
