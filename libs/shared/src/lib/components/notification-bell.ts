@@ -5,6 +5,7 @@ import {
   DestroyRef,
   ElementRef,
   Injector,
+  ViewChild,
   computed,
   inject,
 } from '@angular/core';
@@ -23,6 +24,7 @@ import { NotificationList } from './notification-list';
   selector: 'lib-notification-bell',
   template: `
     <button
+      #bellButton
       mat-icon-button
       [matBadge]="store.unreadCount()"
       [matBadgeHidden]="store.unreadCount() === 0"
@@ -39,7 +41,8 @@ import { NotificationList } from './notification-list';
 export class NotificationBell {
   readonly store = inject(NotificationStore);
 
-  private readonly el = inject(ElementRef);
+  @ViewChild('bellButton') private readonly bellButton!: ElementRef;
+
   private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
   private readonly bottomSheet = inject(MatBottomSheet);
@@ -82,7 +85,7 @@ export class NotificationBell {
         width: '320px',
         positionStrategy: this.overlay
           .position()
-          .flexibleConnectedTo(this.el)
+          .flexibleConnectedTo(this.bellButton)
           .withPositions([
             {
               originX: 'end',
