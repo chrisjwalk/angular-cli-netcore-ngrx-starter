@@ -4,6 +4,14 @@
 
 A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://angular.dev) (zoneless, signals) and a .NET 10.0 Web API backend. Deployed to Azure App Service with automated PR preview deployments via Azure Static Web Apps.
 
+## Features
+
+- **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
+- **Notification centre** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
+- **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
+- **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
+- **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
+
 ## Tech stack
 
 **Frontend**
@@ -83,3 +91,7 @@ pnpm build:prod
 ```
 
 Builds the Angular app and publishes the .NET project to `/dist`, ready to deploy to Azure App Service.
+
+## Contributing
+
+`apps/web-app/src/assets/home.md` is auto-generated from this file — **edit `README.md` only**. The lint-staged hook regenerates `home.md` automatically whenever `README.md` is committed.
