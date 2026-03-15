@@ -77,12 +77,12 @@ export class NotificationBell {
       this.overlayRef = this.overlay.create({
         hasBackdrop: true,
         backdropClass: 'cdk-overlay-transparent-backdrop',
-        width: '320px',
+        width: '380px',
         positionStrategy: this.overlay
           .position()
           .global()
           .right('8px')
-          .top('72px'),
+          .top('64px'),
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
       });
 
