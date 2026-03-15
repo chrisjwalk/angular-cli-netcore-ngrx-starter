@@ -46,12 +46,20 @@ const KIND_ICON: Record<NotificationKind, string> = {
             </mat-icon>
 
             <div class="flex-1 min-w-0">
-              <p
-                class="text-sm m-0 leading-tight"
-                [class.font-semibold]="!n.read"
-              >
-                {{ n.title }}
-              </p>
+              <div class="flex items-center gap-1.5">
+                <p
+                  class="text-sm m-0 leading-tight flex-1"
+                  [class.font-semibold]="!n.read"
+                >
+                  {{ n.title }}
+                </p>
+                @if (!n.read) {
+                  <span
+                    class="w-2 h-2 rounded-full bg-blue-500 shrink-0"
+                    aria-label="Unread"
+                  ></span>
+                }
+              </div>
               @if (n.detail) {
                 <p
                   class="text-xs text-neutral-500 dark:text-neutral-400 m-0 mt-0.5"
