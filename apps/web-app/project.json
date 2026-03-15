@@ -116,7 +116,7 @@
       "executor": "nx:run-commands",
       "outputs": [],
       "options": {
-        "command": "cat docs/github-readme.md > README.md && cat apps/web-app/src/assets/home.md >> README.md"
+        "command": "sed -n '/^# /,$p' README.md > apps/web-app/src/assets/home.md"
       }
     }
   }

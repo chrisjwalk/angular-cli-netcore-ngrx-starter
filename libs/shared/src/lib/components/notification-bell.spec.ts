@@ -48,4 +48,42 @@ describe('NotificationBell', () => {
     const button = screen.getByRole('button');
     expect(button.getAttribute('aria-label')).toContain('2 unread');
   });
+
+  it('should use singular form in aria-label when exactly 1 notification is unread', async () => {
+    const { fixture } = await setup();
+    const store = fixture.debugElement.injector.get(NotificationStore);
+    store.add({ kind: 'info', title: 'One' });
+    fixture.detectChanges();
+    expect(screen.getByRole('button').getAttribute('aria-label')).toBe(
+      '1 unread notification',
+    );
+  });
+
+  it('should open bottom sheet on handset devices', async () => {
+    const { fixture } = await setup();
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const component = fixture.debugElement.componentInstance as any;
+    const breakpointObserver = fixture.debugElement.injector.get(
+      component['breakpointObserver'].constructor,
+    );
+    vi.spyOn(breakpointObserver, 'isMatched').mockReturnValue(true);
+    const bottomSheet = fixture.debugElement.injector.get(
+      component['bottomSheet'].constructor,
+    );
+    vi.spyOn(bottomSheet, 'open').mockImplementation(
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      () => null as any,
+    );
+    fireEvent.click(screen.getByRole('button'));
+    expect(bottomSheet.open).toHaveBeenCalled();
+  });
+
+  it('should close the overlay when bell is clicked while panel is open', async () => {
+    const { component } = await setup();
+    fireEvent.click(screen.getByRole('button')); // open
+    const markAllReadSpy = vi.spyOn(component.store, 'markAllRead');
+    fireEvent.click(screen.getByRole('button')); // close
+    expect(markAllReadSpy).toHaveBeenCalled();
+    fireEvent.click(screen.getByRole('button')); // re-open — reuses existing overlayRef
+  });
 });
