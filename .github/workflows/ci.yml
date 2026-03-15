@@ -50,12 +50,7 @@ jobs:
           fi
 
       - name: Test
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm nx affected --target=test --base=$NX_BASE --configuration ci
-          else
-            pnpm test:all
-          fi
+        run: pnpm test:all
 
       - name: Build
         run: |
