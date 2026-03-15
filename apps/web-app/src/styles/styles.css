@@ -15,6 +15,7 @@
 
   html {
     font-display: swap;
+    scrollbar-gutter: stable;
   }
 
   @media (prefers-color-scheme: dark) {
