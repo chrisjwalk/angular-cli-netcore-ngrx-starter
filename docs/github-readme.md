@@ -1,1 +1,1 @@
-[![Build status](https://freshpondmedia.visualstudio.com/FreshPondMediaGit/_apis/build/status/chrisjwalk.angular-cli-netcore-ngrx-starter)](https://freshpondmedia.visualstudio.com/FreshPondMediaGit/_build/latest?definitionId=43)
+[![CI](https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter/actions/workflows/ci.yml)
