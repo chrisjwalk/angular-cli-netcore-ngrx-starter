@@ -81,8 +81,8 @@ export class NotificationBell {
         positionStrategy: this.overlay
           .position()
           .global()
-          .right('8px')
-          .top('64px'),
+          .right('16px')
+          .top('56px'),
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
       });
 
