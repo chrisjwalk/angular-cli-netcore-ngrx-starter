@@ -1,5 +1,8 @@
 import { HttpErrorResponse, HttpRequest } from '@angular/common/http';
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
@@ -7,7 +10,6 @@ import { of, throwError } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 import { authInterceptor } from './auth.interceptor';
-import * as authStore from './auth.store';
 import { AuthStore, authResponseInitialState } from './auth.store';
 
 @Component({
@@ -17,16 +19,12 @@ import { AuthStore, authResponseInitialState } from './auth.store';
 })
 export class Mock {}
 
-export const mockRoutes = [
-  {
-    path: 'login',
-    component: Mock,
-  },
-];
+export const mockRoutes = [{ path: 'login', component: Mock }];
 
 describe('authInterceptor', () => {
   let store: AuthStore;
   let authService: AuthService;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -35,41 +33,38 @@ describe('authInterceptor', () => {
 
     store = TestBed.inject(AuthStore);
     authService = TestBed.inject(AuthService);
+    httpTestingController = TestBed.inject(HttpTestingController);
+
+    // The store always attempts a silent refresh on init via HttpOnly cookie.
+    // Respond with 401 to start tests in the 'no-refresh-token' state.
+    httpTestingController
+      .expectOne('/api/auth/refresh')
+      .flush({}, { status: 401, statusText: 'Unauthorized' });
   });
+
   it('should add an Authorization header to the request if the user is logged in', () =>
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
       store.setResponse(
-        {
-          ...authResponseInitialState,
-          accessToken: 'abc123',
-          refreshToken: 'xyz789',
-        },
+        { ...authResponseInitialState, accessToken: 'abc123' },
         'success',
       );
 
       const next = vi.fn().mockReturnValue(of(null));
-
       authInterceptor(req, next).subscribe();
 
       expect(next).toHaveBeenCalledWith(
-        req.clone({
-          setHeaders: {
-            Authorization: 'Bearer abc123',
-          },
-        }),
+        req.clone({ setHeaders: { Authorization: 'Bearer abc123' } }),
       );
     }));
 
   it('should not add an Authorization header to the request if the user is not logged in', () =>
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
-
       store.setResponse(authResponseInitialState);
 
       const next = vi.fn().mockReturnValue(of(null));
-
       authInterceptor(req, next).subscribe();
 
       expect(next).toHaveBeenCalledWith(req);
@@ -83,7 +78,6 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
@@ -91,7 +85,6 @@ describe('authInterceptor', () => {
       );
 
       let nextCount = 0;
-
       const next = vi.fn().mockImplementation(() => {
         nextCount++;
         if (nextCount === 1) {
@@ -105,62 +98,47 @@ describe('authInterceptor', () => {
         }
         return of(null);
       });
+
       const refresh = vi.spyOn(store, 'refresh');
-
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
-        store.refreshToken(),
-      );
-
       vi.spyOn(authService, 'refresh').mockReturnValue(
         of({
           ...authResponseInitialState,
           expiresIn: 3600,
           accessToken: 'cde345',
-          refreshToken: null,
         }),
       );
 
       authInterceptor(req, next).subscribe();
 
-      req = req.clone({
-        setHeaders: {
-          Authorization: 'Bearer abc123',
-        },
-      });
-
+      req = req.clone({ setHeaders: { Authorization: 'Bearer abc123' } });
       expect(next).toHaveBeenCalledWith(req);
+      expect(refresh).toHaveBeenCalled();
 
-      expect(refresh).toHaveBeenCalledWith({ refreshToken: 'xyz789' });
-
-      req = req.clone({
-        setHeaders: {
-          Authorization: 'Bearer cde345',
-        },
-      });
-
+      req = req.clone({ setHeaders: { Authorization: 'Bearer cde345' } });
       expect(next).toHaveBeenLastCalledWith(req);
     }));
 
-  it('should throw an error if the user is not logged in and the access token is expired', () =>
+  it('should throw an error if the user is not logged in and server returns 401', () =>
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
-
       store.setResponse(authResponseInitialState);
+
       const httpErrorResponse = new HttpErrorResponse({
         status: 401,
         statusText: 'Unauthorized',
       });
+      vi.spyOn(authService, 'refresh').mockReturnValue(
+        throwError(() => httpErrorResponse),
+      );
 
       const next = vi.fn().mockReturnValue(throwError(() => httpErrorResponse));
 
       authInterceptor(req, next).subscribe({
-        error: (error) => {
-          expect(error).toEqual(httpErrorResponse);
-        },
+        error: (error) => expect(error).toEqual(httpErrorResponse),
       });
     }));
 
-  it('should throw an error the refresh token is not available', () =>
+  it('should call logout and throw when the refresh attempt fails', () =>
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
@@ -168,88 +146,33 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
         'success',
       );
-      const unauthorizedResponnse = new HttpErrorResponse({
+
+      const unauthorizedResponse = new HttpErrorResponse({
         status: 401,
         statusText: 'Unauthorized',
       });
 
       const next = vi
         .fn()
-        .mockReturnValue(throwError(() => unauthorizedResponnse));
-
+        .mockReturnValue(throwError(() => unauthorizedResponse));
       const logout = vi.spyOn(store, 'logout');
-
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(null);
-
-      authInterceptor(req, next).subscribe({
-        error: (error) => {
-          expect(error).toEqual(unauthorizedResponnse);
-        },
-      });
-
-      expect(logout).toHaveBeenCalled();
-    }));
-
-  it('should throw an error the refresh token is expired', () =>
-    TestBed.runInInjectionContext(() => {
-      let req = new HttpRequest('GET', '/api/v1/users');
-
-      store.setResponse(
-        {
-          ...authResponseInitialState,
-          accessToken: 'abc123',
-          refreshToken: 'xyz789',
-          accessTokenIssued: new Date(),
-          expiresIn: 0,
-        },
-        'success',
-      );
-      const unauthorizedResponnse = new HttpErrorResponse({
-        status: 401,
-        statusText: 'Unauthorized',
-      });
-
-      const next = vi
-        .fn()
-        .mockReturnValue(throwError(() => unauthorizedResponnse));
-
-      const refresh = vi.spyOn(store, 'refresh');
-      const logout = vi.spyOn(store, 'logout');
-
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
-        store.refreshToken(),
-      );
-
       vi.spyOn(authService, 'refresh').mockReturnValue(
-        throwError(() => unauthorizedResponnse),
+        throwError(() => unauthorizedResponse),
       );
 
       authInterceptor(req, next).subscribe({
-        error: (error) => {
-          expect(error).toEqual(unauthorizedResponnse);
-        },
+        error: (error) => expect(error).toEqual(unauthorizedResponse),
       });
-
-      req = req.clone({
-        setHeaders: {
-          Authorization: 'Bearer abc123',
-        },
-      });
-
-      expect(next).toHaveBeenCalledWith(req);
-
-      expect(refresh).toHaveBeenCalledWith({ refreshToken: 'xyz789' });
 
       expect(logout).toHaveBeenCalled();
     }));
 
-  it('should throw an error when a non 401 error is returned and the user is logged in', () =>
+  it('should throw an error when a non-401 error is returned and the user is logged in', () =>
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
@@ -257,29 +180,26 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 3600,
         },
         'success',
       );
-      const badRequestResponnse = new HttpErrorResponse({
+      const badRequestResponse = new HttpErrorResponse({
         status: 400,
         statusText: 'Bad Request',
       });
 
       const next = vi
         .fn()
-        .mockReturnValue(throwError(() => badRequestResponnse));
+        .mockReturnValue(throwError(() => badRequestResponse));
 
       authInterceptor(req, next).subscribe({
-        error: (error) => {
-          expect(error).toEqual(badRequestResponnse);
-        },
+        error: (error) => expect(error).toEqual(badRequestResponse),
       });
     }));
 
-  it('should throw an error when a non 401 error is returned and the user expired', () =>
+  it('should throw an error when a non-401 error is returned and the token is expired', () =>
     TestBed.runInInjectionContext(() => {
       const req = new HttpRequest('GET', '/api/v1/users');
 
@@ -287,25 +207,22 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
         'success',
       );
-      const badRequestResponnse = new HttpErrorResponse({
+      const badRequestResponse = new HttpErrorResponse({
         status: 400,
         statusText: 'Bad Request',
       });
 
       const next = vi
         .fn()
-        .mockReturnValue(throwError(() => badRequestResponnse));
+        .mockReturnValue(throwError(() => badRequestResponse));
 
       authInterceptor(req, next).subscribe({
-        error: (error) => {
-          expect(error).toEqual(badRequestResponnse);
-        },
+        error: (error) => expect(error).toEqual(badRequestResponse),
       });
     }));
 
@@ -316,12 +233,12 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 0,
         },
         'success',
       );
+
       let nextCount = 0;
       const next = vi.fn().mockImplementation(() => {
         nextCount++;
@@ -336,16 +253,14 @@ describe('authInterceptor', () => {
         }
         return of('success');
       });
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue(
-        store.refreshToken(),
-      );
+
       vi.spyOn(store, 'refresh').mockImplementation(() => {
         store.loginSuccessful({
           ...authResponseInitialState,
           accessToken: 'newtoken',
-          refreshToken: 'xyz789',
         });
       });
+
       authInterceptor(req, next).subscribe((result) => {
         expect(result).toBe('success');
         expect(next).toHaveBeenCalledTimes(2);
@@ -360,9 +275,8 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
-          expiresIn: 0, // expired client-side
+          expiresIn: 0,
         },
         'success',
       );
@@ -376,9 +290,7 @@ describe('authInterceptor', () => {
       const refresh = vi.spyOn(store, 'refresh');
 
       authInterceptor(req, next).subscribe({
-        error: (error) => {
-          expect(error).toEqual(badRequestResponse);
-        },
+        error: (error) => expect(error).toEqual(badRequestResponse),
       });
 
       expect(refresh).not.toHaveBeenCalled();
@@ -392,7 +304,6 @@ describe('authInterceptor', () => {
         {
           ...authResponseInitialState,
           accessToken: 'abc123',
-          refreshToken: 'xyz789',
           accessTokenIssued: new Date(),
           expiresIn: 3600,
         },
@@ -402,19 +313,16 @@ describe('authInterceptor', () => {
       // Simulate a refresh already in flight
       store.loginStart();
 
-      const next = vi
-        .fn()
-        .mockReturnValue(
-          throwError(
-            () =>
-              new HttpErrorResponse({
-                status: 401,
-                statusText: 'Unauthorized',
-              }),
-          ),
-        );
+      const next = vi.fn().mockReturnValue(
+        throwError(
+          () =>
+            new HttpErrorResponse({
+              status: 401,
+              statusText: 'Unauthorized',
+            }),
+        ),
+      );
       const refresh = vi.spyOn(store, 'refresh');
-      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue('xyz789');
 
       authInterceptor(req, next).subscribe();
 

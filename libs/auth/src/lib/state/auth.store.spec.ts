@@ -1,4 +1,7 @@
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
@@ -25,6 +28,7 @@ describe('AuthStore', () => {
   let store: AuthStore;
   let authService: AuthService;
   let router: Router;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +37,14 @@ describe('AuthStore', () => {
 
     store = TestBed.inject(AuthStore);
     authService = TestBed.inject(AuthService);
+    httpTestingController = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
+
+    // The store always attempts a silent refresh on init. Respond with 401 to
+    // simulate no active session so tests begin in the 'no-refresh-token' state.
+    httpTestingController
+      .expectOne('/api/auth/refresh')
+      .flush({}, { status: 401, statusText: 'Unauthorized' });
   });
 
   it('should be created', () =>
@@ -93,7 +104,6 @@ describe('AuthStore', () => {
           ...authResponseInitialState,
           expiresIn: 3600,
           accessToken: 'access-token',
-          refreshToken: 'refresh-token',
         }),
       );
       store.login({
@@ -104,7 +114,6 @@ describe('AuthStore', () => {
       expect(store.loggedOut()).toBe(false);
       expect(store.loggedIn()).toBe(true);
       expect(store.accessToken()).toBe('access-token');
-      expect(store.refreshToken()).toBe('refresh-token');
       expect(store.expiresAt()).toEqual(
         new Date(store.response().accessTokenIssued.getTime() + 3600 * 1000),
       );
@@ -133,6 +142,18 @@ describe('AuthStore', () => {
       expect(store.expired()).toEqual(null);
     }));
 
+  it('should set the status to requires-2fa when the server requests a 2FA code', () =>
+    TestBed.runInInjectionContext(() => {
+      vi.spyOn(authService, 'login').mockReturnValue(
+        of({ requiresTwoFactor: true }),
+      );
+      store.login({ email: 'username', password: 'password' });
+      expect(store.loginStatus()).toBe('requires-2fa');
+      expect(store.requiresTwoFactor()).toBe(true);
+      expect(store.loggedIn()).toBe(false);
+      expect(store.loginAttempted()).toBe(true);
+    }));
+
   it('should set the status to expired in when login is succesful and but the expiresIn duration has passed', () =>
     TestBed.runInInjectionContext(() => {
       vi.spyOn(authService, 'login').mockReturnValue(
@@ -140,7 +161,6 @@ describe('AuthStore', () => {
           ...authResponseInitialState,
           expiresIn: 0,
           accessToken: 'access-token',
-          refreshToken: 'refresh-token',
         }),
       );
       store.login({

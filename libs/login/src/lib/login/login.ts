@@ -33,24 +33,41 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
           "
         >
           @if (!authStore.loginLoading()) {
-            <mat-form-field appearance="outline">
-              <mat-label>Email</mat-label>
-              <input
-                matInput
-                formControlName="email"
-                type="email"
-                autocomplete="email"
-              />
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Password</mat-label>
-              <input
-                matInput
-                formControlName="password"
-                type="password"
-                autocomplete="current-password"
-              />
-            </mat-form-field>
+            @if (authStore.requiresTwoFactor()) {
+              <p class="text-sm text-neutral-600 dark:text-neutral-300">
+                Two-factor authentication is required. Enter the code from your
+                authenticator app.
+              </p>
+              <mat-form-field appearance="outline">
+                <mat-label>Authenticator code</mat-label>
+                <input
+                  matInput
+                  formControlName="twoFactorCode"
+                  type="text"
+                  inputmode="numeric"
+                  autocomplete="one-time-code"
+                />
+              </mat-form-field>
+            } @else {
+              <mat-form-field appearance="outline">
+                <mat-label>Email</mat-label>
+                <input
+                  matInput
+                  formControlName="email"
+                  type="email"
+                  autocomplete="email"
+                />
+              </mat-form-field>
+              <mat-form-field appearance="outline">
+                <mat-label>Password</mat-label>
+                <input
+                  matInput
+                  formControlName="password"
+                  type="password"
+                  autocomplete="current-password"
+                />
+              </mat-form-field>
+            }
           } @else {
             <div class="flex flex-col gap-4">
               <div
@@ -73,7 +90,9 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                     color="accent"
                   />
                 }
-                <span>Login</span>
+                <span>{{
+                  authStore.requiresTwoFactor() ? 'Verify' : 'Login'
+                }}</span>
               </span>
             </button>
           </div>

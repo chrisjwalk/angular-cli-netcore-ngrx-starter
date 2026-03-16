@@ -32,7 +32,6 @@ describe('AuthService', () => {
       ...authResponseInitialState,
       expiresIn: 0,
       accessToken: 'access-token',
-      refreshToken: 'refresh-token',
     };
     authService
       .login({ email: 'email', password: 'test' })
@@ -40,7 +39,7 @@ describe('AuthService', () => {
         expect(result).toEqual([response]);
       });
 
-    const req = httpTestingController.expectOne('/api/account/login');
+    const req = httpTestingController.expectOne('/api/auth/login');
     expect(req.request.method).toEqual('POST');
     req.flush([response]);
   });
@@ -50,16 +49,21 @@ describe('AuthService', () => {
       ...authResponseInitialState,
       expiresIn: 0,
       accessToken: 'access-token',
-      refreshToken: 'refresh-token',
     };
-    authService
-      .refresh({ refreshToken: 'refresh-token' })
-      .subscribe((result) => {
-        expect(result).toEqual([response]);
-      });
+    authService.refresh().subscribe((result) => {
+      expect(result).toEqual([response]);
+    });
 
-    const req = httpTestingController.expectOne('/api/account/refresh');
+    const req = httpTestingController.expectOne('/api/auth/refresh');
     expect(req.request.method).toEqual('POST');
     req.flush([response]);
+  });
+
+  it('authService.logout() should call the logout endpoint', () => {
+    authService.logout().subscribe();
+
+    const req = httpTestingController.expectOne('/api/auth/logout');
+    expect(req.request.method).toEqual('POST');
+    req.flush(null);
   });
 });
