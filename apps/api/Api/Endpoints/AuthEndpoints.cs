@@ -175,10 +175,11 @@ public static class AuthEndpoints
       Expires = DateTimeOffset.UtcNow.Add(RefreshTokenLifetime),
     };
 
+  // lgtm[cs/web/cookie-httponly-not-set] - intentionally JS-readable presence indicator
   private static CookieOptions GetIndicatorCookieOptions(bool isDevelopment) =>
     new()
     {
-      HttpOnly = false, // must be JS-readable
+      HttpOnly = false, // must be JS-readable so Angular can check cookie presence
       Secure = !isDevelopment,
       SameSite = SameSiteMode.Strict,
       Expires = DateTimeOffset.UtcNow.Add(RefreshTokenLifetime),
