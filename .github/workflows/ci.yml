@@ -9,6 +9,10 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+permissions:
+  contents: read
+  pull-requests: write # sticky-pull-request-comment
+
 jobs:
   ci:
     runs-on: ubuntu-latest
@@ -83,6 +87,7 @@ jobs:
 
       - name: Coverage summary
         if: always()
+        continue-on-error: true # no coverage files on PRs with no code changes
         uses: irongut/CodeCoverageSummary@v1.3.0
         with:
           filename: coverage/**/cobertura-coverage.xml
@@ -92,8 +97,14 @@ jobs:
           output: both
           thresholds: '60 80'
 
+      - name: Check for coverage results
+        id: coverage
+        if: always()
+        run: |
+          [ -f code-coverage-results.md ] && echo "exists=true" >> $GITHUB_OUTPUT || echo "exists=false" >> $GITHUB_OUTPUT
+
       - name: Annotate coverage report
-        if: always() && github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request' && steps.coverage.outputs.exists == 'true'
         run: |
           echo "> [!NOTE]" > coverage-note.md
           echo "> Coverage shown for **affected projects only**. Per-file thresholds (80%) are enforced by vitest." >> coverage-note.md
@@ -102,11 +113,11 @@ jobs:
           mv coverage-note.md code-coverage-results.md
 
       - name: Write coverage to job summary
-        if: always()
+        if: always() && steps.coverage.outputs.exists == 'true'
         run: cat code-coverage-results.md >> $GITHUB_STEP_SUMMARY
 
       - name: Add coverage PR comment
-        if: always() && github.event_name == 'pull_request'
+        if: always() && github.event_name == 'pull_request' && steps.coverage.outputs.exists == 'true'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
