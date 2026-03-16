@@ -1,8 +1,10 @@
 using System;
 using System.IO;
+using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.RateLimiting;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.StaticFiles;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +17,11 @@ using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme);
+builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme, options =>
+{
+  options.BearerTokenExpiration = TimeSpan.FromHours(1);
+  options.RefreshTokenExpiration = TimeSpan.FromDays(7);
+});
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddDbContext<AppDbContext>(
@@ -41,12 +47,32 @@ builder.Services.AddSwaggerGen(c =>
 
 builder.Services.AddControllers();
 
+builder.Services.AddRateLimiter(options =>
+{
+  // Per-IP fixed window: max 10 account requests per minute.
+  // Covers login, register, and password-reset to guard against brute force.
+  options.AddPolicy("account", context =>
+    RateLimitPartition.GetFixedWindowLimiter(
+      context.Connection.RemoteIpAddress?.ToString() ?? "unknown",
+      _ => new FixedWindowRateLimiterOptions
+      {
+        Window = TimeSpan.FromMinutes(1),
+        PermitLimit = 10,
+        QueueProcessingOrder = QueueProcessingOrder.OldestFirst,
+        QueueLimit = 0,
+      }
+    )
+  );
+  options.RejectionStatusCode = 429;
+});
+
 builder.Services.AddCors(options =>
   options.AddPolicy("SwaPreview", policy =>
     policy
       .SetIsOriginAllowed(origin =>
         Uri.TryCreate(origin, UriKind.Absolute, out var uri)
-        && uri.Host.EndsWith(".azurestaticapps.net"))
+        && (uri.Host.EndsWith(".azurestaticapps.net")
+            || (builder.Environment.IsDevelopment() && uri.Host == "localhost")))
       .AllowAnyMethod()
       .AllowAnyHeader()
   )
@@ -98,11 +124,15 @@ app.UseRouting();
 
 app.UseCors("SwaPreview");
 
+app.UseRateLimiter();
+
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapGroup("/api/account").MapIdentityApi<AppUser>();
+app.MapGroup("/api/account")
+  .MapIdentityApi<AppUser>()
+  .RequireRateLimiting("account");
 
 app.UseSpa(spa =>
 {

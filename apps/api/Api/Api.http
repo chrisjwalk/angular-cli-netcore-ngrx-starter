@@ -1,7 +1,7 @@
 @Api_HostAddress = https://localhost:60254/api
-@access_token = CfDJ8PULUqOvBGtLke-t-WHQZCRpca10PJlB5sSWw3cA_Z32ln-EpCXqiFfNfyxbWusvVIxVO-ZpXb0a1IxaEHZ9aEkZQc2KAt6haODvGIQ51geLkvoVOxSlpeyw2aOd-FRvbto5SIISBki5RGTutdVbEwXu4i4wBfByMYu7rrdSByeey15MsS1VpYvgEa8Z9O9rnnjkfjgGf6I6rab8AuJhA_TUjIxDOxJOEjiE5MSCW7flK8tYPtxNYPP4ALG1M_vDMpL7NFgyw9n3blVAU-nStL-qOp4D1FyXfTSfwvWi6lw72K_PABS3bST--TIy45ewiWn2zkRCOwKBe-a6fpNHBIQdl96-2teIOM5x6nCBDnraBCkbUSiUBBS79C5YsrGQODs55iuq1emRJulmCrt7zCJzw5m-WkuM1KYDTDAZZmO6HFbCHImpraqsNPw73tbIDPTHS4-EO2m8o-xTonp2MiyGsWiM4_DjntDlahwy5Nt9yzgLVIukNTL7xUZT54et7GYFN4Af1B-7ZlYppDzBr1PWHIkExOuwrnmBZkon6t11l6CdFImISJioAwDw5LRrQUcyciGR5DVLOxcxh21_5J3OoRWvqrdMjjOJCaVq3Ip5PMsLKaXCzO13IvacRfeTJVmCyv3WkTCiDiZ-9H2TZ-yXj4U766G7u5rR9bauZfHLp7NwT9ZtHHHMNC-UXlMBww
-@email = test@test.com
-@password = SuperSecret1!
+@access_token = <paste_access_token_here>
+@email = <your_email>
+@password = <your_password>
 
 ### Register
 POST {{Api_HostAddress}}/account/register

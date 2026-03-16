@@ -16,7 +16,7 @@ export function authInterceptor(
 
   return next(req).pipe(
     catchError((error) => {
-      if (error?.status === 401 || store.expired()) {
+      if (error?.status === 401) {
         const refreshToken = getRefreshToken();
 
         if (!refreshToken) {
@@ -24,7 +24,12 @@ export function authInterceptor(
           return throwError(() => error);
         }
 
-        store.refresh({ refreshToken });
+        // Guard against concurrent 401s: only start a new refresh when one
+        // isn't already in flight. Any other failing request will subscribe to
+        // loginStatus$ and wait for the same refresh to complete.
+        if (!store.loginLoading()) {
+          store.refresh({ refreshToken });
+        }
 
         return store.loginStatus$.pipe(
           filter(() => store.loginAttempted()),

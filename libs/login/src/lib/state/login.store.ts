@@ -16,8 +16,8 @@ export type LoginState = {
 };
 
 export const defaultLoginRequest: Login = {
-  email: 'test@test.com',
-  password: 'SuperSecret1!',
+  email: '',
+  password: '',
   twoFactorCode: null,
   twoFactorRecoveryCode: null,
 };

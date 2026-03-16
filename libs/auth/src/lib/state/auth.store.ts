@@ -131,7 +131,6 @@ export function withAuthFeature() {
     })),
     withMethods(({ router, ...store }) => ({
       loginStart() {
-        removeRefreshToken();
         patchState(store, {
           error: null,
           response: authResponseInitialState,
@@ -139,11 +138,13 @@ export function withAuthFeature() {
         });
       },
       loginSuccessful(response: AuthResponse) {
+        // Atomically swap tokens: persist new token before clearing the old one
+        // so a page reload between the two operations never loses the session.
+        storeRefreshToken(response);
         patchState(store, {
           loginStatus: 'success',
           response: { ...response, accessTokenIssued: new Date() },
         });
-        storeRefreshToken(response);
       },
       loginFailure(error: unknown) {
         patchState(store, {
@@ -180,7 +181,13 @@ export function withAuthFeature() {
     withMethods(({ router, authService, snackBar, ...store }) => ({
       login: rxMethod<Login>(
         pipe(
-          tap(() => store.loginStart()),
+          tap(() => {
+            // Clear any stale token at the start of a fresh login only.
+            // The refresh flow intentionally keeps the old token until a new
+            // one has been successfully stored.
+            removeRefreshToken();
+            store.loginStart();
+          }),
           switchMap((request) =>
             authService.login(request).pipe(
               tapResponse({
