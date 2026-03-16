@@ -14,6 +14,9 @@ public record LoginRequest(string Email, string Password, string? TwoFactorCode,
 public static class AuthEndpoints
 {
   private const string RefreshTokenCookie = "refreshToken";
+  // JS-readable indicator that a refresh-token cookie exists.
+  // Lets Angular skip /api/auth/refresh on startup when the user has never logged in.
+  private const string AuthStatusCookie = "auth_status";
   private static readonly TimeSpan RefreshTokenLifetime = TimeSpan.FromDays(7);
 
   public static IEndpointRouteBuilder MapAuthEndpoints(
@@ -109,6 +112,7 @@ public static class AuthEndpoints
       }
 
       context.Response.Cookies.Delete(RefreshTokenCookie, GetCookieOptions(isDevelopment));
+      context.Response.Cookies.Delete(AuthStatusCookie, GetIndicatorCookieOptions(isDevelopment));
       return Results.Ok();
     });
 
@@ -144,6 +148,14 @@ public static class AuthEndpoints
       GetCookieOptions(isDevelopment)
     );
 
+    // Presence indicator — not HttpOnly so Angular can read it to decide
+    // whether to attempt a silent refresh on startup.
+    context.Response.Cookies.Append(
+      AuthStatusCookie,
+      "1",
+      GetIndicatorCookieOptions(isDevelopment)
+    );
+
     var accessToken = tokenService.GenerateAccessToken(user);
 
     return Results.Ok(new
@@ -159,6 +171,15 @@ public static class AuthEndpoints
     {
       HttpOnly = true,
       Secure = !isDevelopment, // allow non-HTTPS in dev
+      SameSite = SameSiteMode.Strict,
+      Expires = DateTimeOffset.UtcNow.Add(RefreshTokenLifetime),
+    };
+
+  private static CookieOptions GetIndicatorCookieOptions(bool isDevelopment) =>
+    new()
+    {
+      HttpOnly = false, // must be JS-readable
+      Secure = !isDevelopment,
       SameSite = SameSiteMode.Strict,
       Expires = DateTimeOffset.UtcNow.Add(RefreshTokenLifetime),
     };

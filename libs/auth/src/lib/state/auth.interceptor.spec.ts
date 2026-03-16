@@ -35,11 +35,9 @@ describe('authInterceptor', () => {
     authService = TestBed.inject(AuthService);
     httpTestingController = TestBed.inject(HttpTestingController);
 
-    // The store always attempts a silent refresh on init via HttpOnly cookie.
-    // Respond with 401 to start tests in the 'no-refresh-token' state.
-    httpTestingController
-      .expectOne('/api/auth/refresh')
-      .flush({}, { status: 401, statusText: 'Unauthorized' });
+    // No auth_status cookie in the test environment — store skips the refresh
+    // call and immediately transitions to 'no-refresh-token'.
+    httpTestingController.verify();
   });
 
   it('should add an Authorization header to the request if the user is logged in', () =>

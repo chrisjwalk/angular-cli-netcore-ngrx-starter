@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -240,14 +241,23 @@ export function withAuthFeature() {
 export function withAuthHooks() {
   return signalStoreFeature(
     {
+      state: type<Pick<AuthState, 'loginStatus'>>(),
       methods: type<{ refresh: ReturnType<typeof rxMethod<void>> }>(),
     },
     withHooks({
       onInit(store) {
-        // Attempt a silent token refresh on startup. If the HttpOnly refresh-token
-        // cookie is present the server issues a new access token; otherwise it
-        // returns 401 and the store transitions to 'no-refresh-token'.
-        store.refresh();
+        const document = inject(DOCUMENT);
+        const hasSession = document.cookie
+          .split(';')
+          .some((c) => c.trim().startsWith('auth_status='));
+
+        if (hasSession) {
+          // Presence indicator found — attempt silent cookie-based restore.
+          store.refresh();
+        } else {
+          // No session cookie — skip the network call entirely.
+          patchState(store, { loginStatus: 'no-refresh-token' });
+        }
       },
     }),
   );
