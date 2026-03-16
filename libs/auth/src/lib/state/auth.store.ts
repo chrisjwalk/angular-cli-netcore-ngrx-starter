@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,10 +26,6 @@ import { filter, map, pipe, startWith, switchMap, tap } from 'rxjs';
 
 import { AuthService } from '../services/auth.service';
 
-export type Refresh = {
-  refreshToken: string;
-};
-
 export type Login = {
   email: string;
   password: string;
@@ -40,8 +37,10 @@ export type AuthResponse = {
   tokenType: string;
   accessToken: string;
   expiresIn: number;
-  refreshToken: string;
 };
+
+// Login returns either full tokens or a 2FA challenge.
+export type LoginResponse = AuthResponse | { requiresTwoFactor: true };
 
 export type AuthResponseState = AuthResponse & {
   accessTokenIssued: Date;
@@ -51,7 +50,6 @@ export const authResponseInitialState: AuthResponseState = {
   tokenType: null,
   accessToken: null,
   expiresIn: null,
-  refreshToken: null,
   accessTokenIssued: null,
 };
 
@@ -61,6 +59,7 @@ export type LoginStatus =
   | 'loading'
   | 'success'
   | 'error'
+  | 'requires-2fa'
   | 'logged-out';
 
 export type AuthState = {
@@ -84,7 +83,6 @@ export const authInitialState: AuthState = {
 
 export type AuthStore = InstanceType<typeof AuthStore>;
 
-export const refreshTokenKey = 'refreshToken';
 export const loginRouterLink = ['/login'];
 export const homeRouterLink = ['/'];
 
@@ -108,7 +106,7 @@ export function withAuthFeature() {
           : null,
       ),
       accessToken: computed(() => state.response.accessToken()),
-      refreshToken: computed(() => state.response.refreshToken()),
+      requiresTwoFactor: computed(() => state.loginStatus() === 'requires-2fa'),
       loginSuccess: computed(() => state.loginStatus() === 'success'),
       loginError: computed(() => state.loginStatus() === 'error'),
       loginLoading: computed(() => state.loginStatus() === 'loading'),
@@ -125,7 +123,8 @@ export function withAuthFeature() {
         () =>
           state.loginError() ||
           state.loginSuccess() ||
-          state.noRefreshTokenAvailable(),
+          state.noRefreshTokenAvailable() ||
+          state.requiresTwoFactor(),
       ),
       loggedIn: computed(() => state.loginSuccess() && !!state.accessToken()),
     })),
@@ -138,9 +137,6 @@ export function withAuthFeature() {
         });
       },
       loginSuccessful(response: AuthResponse) {
-        // Atomically swap tokens: persist new token before clearing the old one
-        // so a page reload between the two operations never loses the session.
-        storeRefreshToken(response);
         patchState(store, {
           loginStatus: 'success',
           response: { ...response, accessTokenIssued: new Date() },
@@ -153,7 +149,6 @@ export function withAuthFeature() {
         });
       },
       loginReset() {
-        removeRefreshToken();
         patchState(store, authInitialState);
       },
       redirectAfterLogin() {
@@ -181,22 +176,23 @@ export function withAuthFeature() {
     withMethods(({ router, authService, snackBar, ...store }) => ({
       login: rxMethod<Login>(
         pipe(
-          tap(() => {
-            // Clear any stale token at the start of a fresh login only.
-            // The refresh flow intentionally keeps the old token until a new
-            // one has been successfully stored.
-            removeRefreshToken();
-            store.loginStart();
-          }),
+          tap(() => store.loginStart()),
           switchMap((request) =>
             authService.login(request).pipe(
               tapResponse({
                 next: (response) => {
+                  if (
+                    'requiresTwoFactor' in response &&
+                    response.requiresTwoFactor
+                  ) {
+                    patchState(store, { loginStatus: 'requires-2fa' });
+                    return;
+                  }
                   snackBar.open('Login Successful', 'Close', {
                     duration: 5000,
                   });
                   store.redirectAfterLogin();
-                  store.loginSuccessful(response);
+                  store.loginSuccessful(response as AuthResponse);
                 },
                 error: (error) => {
                   snackBar.open('Login failed', 'Close', {
@@ -209,20 +205,25 @@ export function withAuthFeature() {
           ),
         ),
       ),
-      refresh: rxMethod<Refresh>(
+      refresh: rxMethod<void>(
         pipe(
           tap(() => store.loginStart()),
-          switchMap((refresh) =>
-            authService.refresh(refresh).pipe(
+          switchMap(() =>
+            authService.refresh().pipe(
               tapResponse({
                 next: (response) => store.loginSuccessful(response),
-                error: (error) => store.loginFailure(error),
+                // A 401 on refresh means no valid session exists — treat it as
+                // "no stored session" so the login form is shown without an error.
+                error: () =>
+                  patchState(store, { loginStatus: 'no-refresh-token' }),
               }),
             ),
           ),
         ),
       ),
       logout: (redirectToLogin: boolean) => {
+        // Revoke the server-side refresh token and clear the HttpOnly cookie.
+        authService.logout().subscribe();
         store.loginReset();
         patchState(store, { loginStatus: 'logged-out' });
         if (redirectToLogin) {
@@ -240,14 +241,21 @@ export function withAuthFeature() {
 export function withAuthHooks() {
   return signalStoreFeature(
     {
-      methods: type<{ refresh: ReturnType<typeof rxMethod<Refresh>> }>(),
+      state: type<Pick<AuthState, 'loginStatus'>>(),
+      methods: type<{ refresh: ReturnType<typeof rxMethod<void>> }>(),
     },
     withHooks({
       onInit(store) {
-        const refreshToken = getRefreshToken();
-        if (refreshToken) {
-          store.refresh({ refreshToken });
+        const document = inject(DOCUMENT);
+        const hasSession = document.cookie
+          .split(';')
+          .some((c) => c.trim().startsWith('auth_status='));
+
+        if (hasSession) {
+          // Presence indicator found — attempt silent cookie-based restore.
+          store.refresh();
         } else {
+          // No session cookie — skip the network call entirely.
           patchState(store, { loginStatus: 'no-refresh-token' });
         }
       },
@@ -260,30 +268,6 @@ export const AuthStore = signalStore(
   withAuthFeature(),
   withAuthHooks(),
 );
-
-export function storeRefreshToken(response: AuthResponse) {
-  try {
-    localStorage.setItem(refreshTokenKey, response.refreshToken);
-  } catch {
-    // localStorage may be unavailable (e.g., private browsing); user will need to re-login on next visit
-  }
-}
-
-export function getRefreshToken() {
-  try {
-    return localStorage.getItem(refreshTokenKey);
-  } catch {
-    return null;
-  }
-}
-
-export function removeRefreshToken() {
-  try {
-    return localStorage.removeItem(refreshTokenKey);
-  } catch {
-    // ignore
-  }
-}
 
 export function requiresLoginCanActivateFn(
   route: ActivatedRouteSnapshot,

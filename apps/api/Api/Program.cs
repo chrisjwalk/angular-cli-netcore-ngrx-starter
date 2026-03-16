@@ -1,6 +1,8 @@
 using System;
 using System.IO;
+using System.Text;
 using System.Threading.RateLimiting;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -12,16 +14,42 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddAuthentication().AddBearerToken(IdentityConstants.BearerScheme, options =>
+// In production the JWT signing key lives in an environment variable.
+// Override config so that all consumers (JWT options + TokenService) read from a single path.
+if (!builder.Environment.IsDevelopment())
 {
-  options.BearerTokenExpiration = TimeSpan.FromHours(1);
-  options.RefreshTokenExpiration = TimeSpan.FromDays(7);
-});
+  var envJwtKey = Environment.GetEnvironmentVariable("JWT_KEY");
+  if (!string.IsNullOrEmpty(envJwtKey))
+    builder.Configuration["Jwt:Key"] = envJwtKey;
+}
+
+builder.Services
+  .AddAuthentication(options =>
+  {
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+  })
+  .AddJwtBearer(options =>
+  {
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+      ValidateIssuer = true,
+      ValidIssuer = builder.Configuration["Jwt:Issuer"],
+      ValidateAudience = true,
+      ValidAudience = builder.Configuration["Jwt:Audience"],
+      ValidateLifetime = true,
+      ValidateIssuerSigningKey = true,
+      IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+      ClockSkew = TimeSpan.Zero,
+    };
+  });
+
 builder.Services.AddAuthorizationBuilder();
 
 builder.Services.AddDbContext<AppDbContext>(
@@ -36,7 +64,10 @@ builder.Services.AddDbContext<AppDbContext>(
 builder
   .Services.AddIdentityCore<AppUser>()
   .AddEntityFrameworkStores<AppDbContext>()
+  .AddSignInManager()
   .AddApiEndpoints();
+
+builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -75,6 +106,7 @@ builder.Services.AddCors(options =>
             || (builder.Environment.IsDevelopment() && uri.Host == "localhost")))
       .AllowAnyMethod()
       .AllowAnyHeader()
+      .AllowCredentials() // required for HttpOnly cookie exchange
   )
 );
 
@@ -126,10 +158,16 @@ app.UseCors("SwaPreview");
 
 app.UseRateLimiter();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
+// Custom JWT auth endpoints: login / refresh / logout
+app.MapAuthEndpoints(app.Environment.IsDevelopment());
+
+// Keep Identity account-management endpoints (password reset, email confirmation, 2FA setup, etc.)
+// Login and refresh from this group are superseded by /api/auth/* above.
 app.MapGroup("/api/account")
   .MapIdentityApi<AppUser>()
   .RequireRateLimiting("account");

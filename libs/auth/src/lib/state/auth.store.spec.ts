@@ -1,4 +1,8 @@
-import { provideHttpClientTesting } from '@angular/common/http/testing';
+import {
+  HttpTestingController,
+  provideHttpClientTesting,
+} from '@angular/common/http/testing';
+import { DOCUMENT } from '@angular/common';
 import { TestBed } from '@angular/core/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import {
@@ -25,6 +29,7 @@ describe('AuthStore', () => {
   let store: AuthStore;
   let authService: AuthService;
   let router: Router;
+  let httpTestingController: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -33,7 +38,12 @@ describe('AuthStore', () => {
 
     store = TestBed.inject(AuthStore);
     authService = TestBed.inject(AuthService);
+    httpTestingController = TestBed.inject(HttpTestingController);
     router = TestBed.inject(Router);
+
+    // No auth_status cookie in the test environment — store skips the refresh
+    // call and immediately transitions to 'no-refresh-token'.
+    httpTestingController.verify();
   });
 
   it('should be created', () =>
@@ -41,7 +51,7 @@ describe('AuthStore', () => {
       expect(store).toBeDefined();
     }));
 
-  it('should have the no refresh token state when no refresh token is unavailble', () =>
+  it('should have the no refresh token state when no auth_status cookie is present', () =>
     TestBed.runInInjectionContext(() => {
       expect(getState(store)).toEqual({
         ...authInitialState,
@@ -93,7 +103,6 @@ describe('AuthStore', () => {
           ...authResponseInitialState,
           expiresIn: 3600,
           accessToken: 'access-token',
-          refreshToken: 'refresh-token',
         }),
       );
       store.login({
@@ -104,7 +113,6 @@ describe('AuthStore', () => {
       expect(store.loggedOut()).toBe(false);
       expect(store.loggedIn()).toBe(true);
       expect(store.accessToken()).toBe('access-token');
-      expect(store.refreshToken()).toBe('refresh-token');
       expect(store.expiresAt()).toEqual(
         new Date(store.response().accessTokenIssued.getTime() + 3600 * 1000),
       );
@@ -133,6 +141,18 @@ describe('AuthStore', () => {
       expect(store.expired()).toEqual(null);
     }));
 
+  it('should set the status to requires-2fa when the server requests a 2FA code', () =>
+    TestBed.runInInjectionContext(() => {
+      vi.spyOn(authService, 'login').mockReturnValue(
+        of({ requiresTwoFactor: true }),
+      );
+      store.login({ email: 'username', password: 'password' });
+      expect(store.loginStatus()).toBe('requires-2fa');
+      expect(store.requiresTwoFactor()).toBe(true);
+      expect(store.loggedIn()).toBe(false);
+      expect(store.loginAttempted()).toBe(true);
+    }));
+
   it('should set the status to expired in when login is succesful and but the expiresIn duration has passed', () =>
     TestBed.runInInjectionContext(() => {
       vi.spyOn(authService, 'login').mockReturnValue(
@@ -140,7 +160,6 @@ describe('AuthStore', () => {
           ...authResponseInitialState,
           expiresIn: 0,
           accessToken: 'access-token',
-          refreshToken: 'refresh-token',
         }),
       );
       store.login({
@@ -195,6 +214,46 @@ describe('AuthStore', () => {
         requiresLoginCanActivateFn(route, state),
       );
       expect(canActivate).toBe(true);
+    });
+  });
+
+  describe('with auth_status cookie', () => {
+    let cookieStore: AuthStore;
+    let cookieHttpController: HttpTestingController;
+
+    beforeEach(() => {
+      TestBed.inject(DOCUMENT).cookie = 'auth_status=1';
+      TestBed.resetTestingModule();
+      TestBed.configureTestingModule({
+        providers: [provideHttpClientTesting(), provideNoopAnimations()],
+      });
+      cookieStore = TestBed.inject(AuthStore);
+      cookieHttpController = TestBed.inject(HttpTestingController);
+    });
+
+    afterEach(() => {
+      // Clear the indicator cookie so it does not bleed into other tests.
+      TestBed.inject(DOCUMENT).cookie =
+        'auth_status=; expires=Thu, 01 Jan 1970 00:00:00 GMT';
+    });
+
+    it('should call /api/auth/refresh when auth_status cookie is present', () => {
+      cookieHttpController
+        .expectOne('/api/auth/refresh')
+        .flush({}, { status: 401, statusText: 'Unauthorized' });
+
+      expect(cookieStore.loginStatus()).toBe('no-refresh-token');
+    });
+
+    it('should transition to success when refresh succeeds', () => {
+      cookieHttpController.expectOne('/api/auth/refresh').flush({
+        tokenType: 'Bearer',
+        accessToken: 'new-access-token',
+        expiresIn: 3600,
+      });
+
+      expect(cookieStore.loginStatus()).toBe('success');
+      expect(cookieStore.accessToken()).toBe('new-access-token');
     });
   });
 });
