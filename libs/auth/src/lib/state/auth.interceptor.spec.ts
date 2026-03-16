@@ -75,7 +75,7 @@ describe('authInterceptor', () => {
       expect(next).toHaveBeenCalledWith(req);
     }));
 
-  it('should refresh the access token if the user is logged in and the access token is expired', () =>
+  it('should refresh the access token when the server responds with 401', () =>
     TestBed.runInInjectionContext(() => {
       let req = new HttpRequest('GET', '/api/v1/users');
 
@@ -98,8 +98,8 @@ describe('authInterceptor', () => {
           return throwError(
             () =>
               new HttpErrorResponse({
-                status: 400,
-                statusText: 'Bad request',
+                status: 401,
+                statusText: 'Unauthorized',
               }),
           );
         }
@@ -350,5 +350,74 @@ describe('authInterceptor', () => {
         expect(result).toBe('success');
         expect(next).toHaveBeenCalledTimes(2);
       });
+    }));
+
+  it('should not trigger refresh for non-401 errors even when the token is expired', () =>
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/api/v1/users');
+
+      store.setResponse(
+        {
+          ...authResponseInitialState,
+          accessToken: 'abc123',
+          refreshToken: 'xyz789',
+          accessTokenIssued: new Date(),
+          expiresIn: 0, // expired client-side
+        },
+        'success',
+      );
+      const badRequestResponse = new HttpErrorResponse({
+        status: 400,
+        statusText: 'Bad Request',
+      });
+      const next = vi
+        .fn()
+        .mockReturnValue(throwError(() => badRequestResponse));
+      const refresh = vi.spyOn(store, 'refresh');
+
+      authInterceptor(req, next).subscribe({
+        error: (error) => {
+          expect(error).toEqual(badRequestResponse);
+        },
+      });
+
+      expect(refresh).not.toHaveBeenCalled();
+    }));
+
+  it('should not start a duplicate refresh when one is already in progress', () =>
+    TestBed.runInInjectionContext(() => {
+      const req = new HttpRequest('GET', '/api/v1/users');
+
+      store.setResponse(
+        {
+          ...authResponseInitialState,
+          accessToken: 'abc123',
+          refreshToken: 'xyz789',
+          accessTokenIssued: new Date(),
+          expiresIn: 3600,
+        },
+        'success',
+      );
+
+      // Simulate a refresh already in flight
+      store.loginStart();
+
+      const next = vi
+        .fn()
+        .mockReturnValue(
+          throwError(
+            () =>
+              new HttpErrorResponse({
+                status: 401,
+                statusText: 'Unauthorized',
+              }),
+          ),
+        );
+      const refresh = vi.spyOn(store, 'refresh');
+      vi.spyOn(authStore, 'getRefreshToken').mockReturnValue('xyz789');
+
+      authInterceptor(req, next).subscribe();
+
+      expect(refresh).not.toHaveBeenCalled();
     }));
 });
