@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +30,19 @@ if (!builder.Environment.IsDevelopment())
   if (!string.IsNullOrEmpty(envJwtKey))
     builder.Configuration["Jwt:Key"] = envJwtKey;
 }
+
+// Fail fast: refuse to start if any required config is absent.
+// This surfaces missing env vars immediately in logs rather than as
+// cryptic 500s at runtime.
+var requiredConfig = new[] { "Jwt:Key", "Jwt:Issuer", "Jwt:Audience" };
+var missingConfig = requiredConfig
+  .Where(key => string.IsNullOrEmpty(builder.Configuration[key]))
+  .ToList();
+if (missingConfig.Count > 0)
+  throw new InvalidOperationException(
+    $"Required configuration values are missing: {string.Join(", ", missingConfig)}. " +
+    "Set them as environment variables (e.g. JWT_KEY, Jwt__Issuer, Jwt__Audience) before starting the application."
+  );
 
 builder.Services
   .AddAuthentication(options =>
@@ -68,6 +83,13 @@ builder
   .AddApiEndpoints();
 
 builder.Services.AddScoped<TokenService>();
+
+var connectionString = builder.Environment.IsDevelopment()
+  ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
+  : Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+
+builder.Services.AddHealthChecks()
+  .AddSqlServer(connectionString!, name: "sql", tags: ["ready"]);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -162,6 +184,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Liveness: app process is up — used by deploy smoke test.
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+  Predicate = _ => false, // exclude all tagged checks (e.g. SQL)
+});
+
+// Readiness: app + dependencies (DB) — used for monitoring.
+app.MapHealthChecks("/health/ready");
 
 // Custom JWT auth endpoints: login / refresh / logout
 app.MapAuthEndpoints(app.Environment.IsDevelopment());

@@ -80,6 +80,22 @@ jobs:
           app-name: ${{ secrets.AZURE_WEBAPP_NAME }}
           package: dist
 
+      - name: Smoke test
+        run: |
+          url="https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net/health/live"
+          echo "Smoke testing $url"
+          for i in 1 2 3 4 5; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" "$url")
+            echo "Attempt $i: HTTP $status"
+            if [ "$status" = "200" ]; then
+              echo "Smoke test passed"
+              exit 0
+            fi
+            sleep 15
+          done
+          echo "Smoke test failed — last status was $status"
+          exit 1
+
       # NOTE: Database migrations are not run automatically here.
       # If you use EF Core migrations, consider adding a step like:
       #   dotnet ef database update --project apps/api/Api
