@@ -1,5 +1,7 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.RateLimiting;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -28,6 +30,19 @@ if (!builder.Environment.IsDevelopment())
   if (!string.IsNullOrEmpty(envJwtKey))
     builder.Configuration["Jwt:Key"] = envJwtKey;
 }
+
+// Fail fast: refuse to start if any required config is absent.
+// This surfaces missing env vars immediately in logs rather than as
+// cryptic 500s at runtime.
+var requiredConfig = new[] { "Jwt:Key", "Jwt:Issuer", "Jwt:Audience" };
+var missingConfig = requiredConfig
+  .Where(key => string.IsNullOrEmpty(builder.Configuration[key]))
+  .ToList();
+if (missingConfig.Count > 0)
+  throw new InvalidOperationException(
+    $"Required configuration values are missing: {string.Join(", ", missingConfig)}. " +
+    "Set them as environment variables (e.g. JWT_KEY, Jwt__Issuer, Jwt__Audience) before starting the application."
+  );
 
 builder.Services
   .AddAuthentication(options =>
