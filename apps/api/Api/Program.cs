@@ -74,7 +74,9 @@ builder.Services.AddDbContext<AppDbContext>(
         ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
         : Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING")
     )
-);builder
+);
+
+builder
   .Services.AddIdentityCore<AppUser>()
   .AddEntityFrameworkStores<AppDbContext>()
   .AddSignInManager()
