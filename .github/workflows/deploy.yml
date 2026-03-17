@@ -82,7 +82,7 @@ jobs:
 
       - name: Smoke test
         run: |
-          url="https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net/api/weatherforecasts"
+          url="https://${{ secrets.AZURE_WEBAPP_NAME }}.azurewebsites.net/health/live"
           echo "Smoke testing $url"
           for i in 1 2 3 4 5; do
             status=$(curl -s -o /dev/null -w "%{http_code}" "$url")

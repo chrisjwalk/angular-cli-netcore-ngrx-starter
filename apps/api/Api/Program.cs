@@ -74,15 +74,20 @@ builder.Services.AddDbContext<AppDbContext>(
         ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
         : Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING")
     )
-);
-
-builder
+);builder
   .Services.AddIdentityCore<AppUser>()
   .AddEntityFrameworkStores<AppDbContext>()
   .AddSignInManager()
   .AddApiEndpoints();
 
 builder.Services.AddScoped<TokenService>();
+
+var connectionString = builder.Environment.IsDevelopment()
+  ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
+  : Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING");
+
+builder.Services.AddHealthChecks()
+  .AddSqlServer(connectionString!, name: "sql", tags: ["ready"]);
 
 builder.Services.AddEndpointsApiExplorer();
 
@@ -177,6 +182,15 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+// Liveness: app process is up — used by deploy smoke test.
+app.MapHealthChecks("/health/live", new Microsoft.AspNetCore.Diagnostics.HealthChecks.HealthCheckOptions
+{
+  Predicate = _ => false, // exclude all tagged checks (e.g. SQL)
+});
+
+// Readiness: app + dependencies (DB) — used for monitoring.
+app.MapHealthChecks("/health/ready");
 
 // Custom JWT auth endpoints: login / refresh / logout
 app.MapAuthEndpoints(app.Environment.IsDevelopment());
