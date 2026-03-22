@@ -222,23 +222,9 @@
   position: relative;
   list-style: none;
   padding: 0.875rem 1.25rem 0.875rem 3.5rem;
-  background: var(--md-sys-color-surface-container-lowest);
-  border-radius: 0.625rem;
-  border: 1px solid var(--md-sys-color-outline-variant);
+  background: var(--md-sys-color-surface-container);
   margin: 0;
   line-height: 1.6;
-}
-
-/* Adjacent items share borders and collapse inner corners */
-.doc-prose.prose p:has(> strong) + ul > li + li {
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
-  margin-top: -1px;
-}
-
-.doc-prose.prose p:has(> strong) + ul > li:not(:last-child) {
-  border-bottom-left-radius: 0;
-  border-bottom-right-radius: 0;
 }
 
 /* Icon box */
