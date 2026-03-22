@@ -52,17 +52,14 @@ describe('App Integration', () => {
     fixture.detectChanges();
     const router = TestBed.inject(Router);
     router.initialNavigation();
-    // Wait for the home feature to load
     const compiled = fixture.nativeElement as HTMLElement;
-    const pageToolbar = await waitForElement(
-      () => compiled.querySelector('[data-testid="lib-page-toolbar"]'),
+    const homeComponent = await waitForElement(
+      () => compiled.querySelector('[data-testid="lib-home"]'),
       applicationRef,
     );
-    expect(pageToolbar.textContent?.toLowerCase()).toContain('home');
-    const pageContainer = compiled.querySelector(
-      '[data-testid="lib-page-container"]',
-    );
-    expect(pageContainer).toBeTruthy();
+    expect(homeComponent).toBeTruthy();
+    const markdown = compiled.querySelector('[data-testid="page-markdown"]');
+    expect(markdown).toBeTruthy();
   });
 
   it('should navigate to /weather-forecast and load the feature', async () => {

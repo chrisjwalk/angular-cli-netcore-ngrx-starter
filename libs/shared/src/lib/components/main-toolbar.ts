@@ -10,7 +10,7 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatTooltip } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { NAV_LINKS } from './nav-links';
 import { NotificationBell } from './notification-bell';
@@ -22,6 +22,7 @@ import { ThemeService } from './theme.service';
     MatToolbar,
     MatTooltip,
     RouterLink,
+    RouterLinkActive,
     MatIconButton,
     NotificationBell,
   ],
@@ -94,22 +95,21 @@ import { ThemeService } from './theme.service';
           </defs>
         </svg>
       </a>
-      <a class="no-underline text-on-surface" [routerLink]="['/']">
+      <a class="no-underline text-on-surface font-medium" [routerLink]="['/']">
         Demo App
       </a>
-      <span class="flex-1"></span>
-      <div class="hidden md:flex gap-2 items-center">
+      <nav class="hidden md:flex items-stretch h-full ml-2">
         @for (link of navLinks; track link.routerLink) {
-          <button
-            mat-icon-button
+          <a
             [routerLink]="link.routerLink"
-            [matTooltip]="link.hint"
-            [attr.aria-label]="link.hint"
+            routerLinkActive="text-primary border-b-2 border-primary"
+            class="no-underline text-on-surface-variant text-sm px-3 h-full flex items-center hover:text-on-surface transition-colors"
           >
-            <mat-icon>{{ link.icon }}</mat-icon>
-          </button>
+            {{ link.label }}
+          </a>
         }
-      </div>
+      </nav>
+      <span class="flex-1"></span>
       <button
         mat-icon-button
         (click)="themeService.toggle()"

@@ -108,23 +108,29 @@ html[data-theme='dark'] {
   }
 }
 
-// ─── Form field: pill-shaped, borderless at rest, primary focus ring ────────
+// ─── Form field: borderless at rest, primary focus ring ─────────────────────
 // CSS custom properties from https://material.angular.dev/components/form-field/styling
 .mat-mdc-form-field {
-  // Rounded pill shape
-  --mdc-outlined-text-field-container-shape: 0.75rem;
+  // 8px radius — matches dark mode design reference
+  --mat-form-field-outlined-container-shape: 0.5rem;
 
   // No visible border at rest or on hover
-  --mdc-outlined-text-field-outline-color: transparent;
-  --mdc-outlined-text-field-hover-outline-color: transparent;
+  --mat-form-field-outlined-outline-color: transparent;
+  --mat-form-field-outlined-hover-outline-color: transparent;
 
   // Primary-colored 2px ring on focus
-  --mdc-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
-  --mdc-outlined-text-field-focus-outline-width: 2px;
+  --mat-form-field-outlined-focus-outline-color: var(--md-sys-color-primary);
 }
 
-// Surface-container-lowest background for outlined fields
-// (outlined appearance has no built-in background variable)
+// Field background = page background so it reads as subtly recessed inside the card.
+// border-radius must be set explicitly — the token only applies to notched-outline elements.
 .mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
-  background-color: var(--md-sys-color-surface-container-lowest);
+  background-color: var(--md-sys-color-background);
+  border-radius: var(--mat-form-field-outlined-container-shape);
+}
+
+// ─── Filled button: match field radius and height from dark mode design reference ───────
+:root {
+  --mat-button-filled-container-shape: 0.5rem;
+  --mat-button-filled-container-height: 2.75rem; // 44px
 }
