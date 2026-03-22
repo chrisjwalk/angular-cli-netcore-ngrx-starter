@@ -7,7 +7,9 @@ import {
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatFormField, MatSuffix } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore } from '@myorg/shared';
@@ -21,6 +23,9 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
     MatButton,
     MatIconButton,
     MatIcon,
+    MatFormField,
+    MatInput,
+    MatSuffix,
     MatProgressSpinner,
   ],
   template: `
@@ -53,14 +58,20 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   for="login-2fa"
                   >Authenticator code</label
                 >
-                <input
-                  id="login-2fa"
-                  formControlName="twoFactorCode"
-                  type="text"
-                  inputmode="numeric"
-                  autocomplete="one-time-code"
-                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all placeholder:text-on-surface-variant/40"
-                />
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="w-full"
+                >
+                  <input
+                    matInput
+                    id="login-2fa"
+                    formControlName="twoFactorCode"
+                    type="text"
+                    inputmode="numeric"
+                    autocomplete="one-time-code"
+                  />
+                </mat-form-field>
               </div>
             } @else {
               <div class="flex flex-col gap-1.5">
@@ -69,14 +80,20 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   for="login-email"
                   >Email</label
                 >
-                <input
-                  id="login-email"
-                  formControlName="email"
-                  type="email"
-                  autocomplete="email"
-                  placeholder="you@example.com"
-                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all placeholder:text-on-surface-variant/40"
-                />
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="w-full"
+                >
+                  <input
+                    matInput
+                    id="login-email"
+                    formControlName="email"
+                    type="email"
+                    autocomplete="email"
+                    placeholder="you@example.com"
+                  />
+                </mat-form-field>
               </div>
               <div class="flex flex-col gap-1.5">
                 <label
@@ -84,21 +101,23 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   for="login-password"
                   >Password</label
                 >
-                <div
-                  class="flex items-center bg-surface-container-lowest rounded-xl focus-within:ring-2 focus-within:ring-primary/60 transition-all"
+                <mat-form-field
+                  appearance="outline"
+                  subscriptSizing="dynamic"
+                  class="w-full"
                 >
                   <input
+                    matInput
                     id="login-password"
                     formControlName="password"
                     [type]="showPassword() ? 'text' : 'password'"
                     autocomplete="current-password"
                     placeholder="••••••••"
-                    class="flex-1 min-w-0 bg-transparent px-4 py-3 text-sm text-on-surface focus:outline-none placeholder:text-on-surface-variant/40"
                   />
                   <button
+                    matSuffix
                     mat-icon-button
                     type="button"
-                    class="shrink-0 mr-1 text-on-surface-variant"
                     [attr.aria-label]="
                       showPassword() ? 'Hide password' : 'Show password'
                     "
@@ -108,7 +127,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                       showPassword() ? 'visibility_off' : 'visibility'
                     }}</mat-icon>
                   </button>
-                </div>
+                </mat-form-field>
               </div>
             }
           } @else {

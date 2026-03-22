@@ -107,3 +107,24 @@ html[data-theme='dark'] {
     }
   }
 }
+
+// ─── Form field: pill-shaped, borderless at rest, primary focus ring ────────
+// CSS custom properties from https://material.angular.dev/components/form-field/styling
+.mat-mdc-form-field {
+  // Rounded pill shape
+  --mdc-outlined-text-field-container-shape: 0.75rem;
+
+  // No visible border at rest or on hover
+  --mdc-outlined-text-field-outline-color: transparent;
+  --mdc-outlined-text-field-hover-outline-color: transparent;
+
+  // Primary-colored 2px ring on focus
+  --mdc-outlined-text-field-focus-outline-color: var(--md-sys-color-primary);
+  --mdc-outlined-text-field-focus-outline-width: 2px;
+}
+
+// Surface-container-lowest background for outlined fields
+// (outlined appearance has no built-in background variable)
+.mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  background-color: var(--md-sys-color-surface-container-lowest);
+}
