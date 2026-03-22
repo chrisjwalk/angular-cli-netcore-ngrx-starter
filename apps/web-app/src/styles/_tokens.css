@@ -1,0 +1,122 @@
+/**
+ * Nexus Kinetic Design System tokens — sourced from Stitch project
+ * "Web App Shell - Light Mode (Updated)" / "Web App Shell - Dark Mode (Refined)"
+ *
+ * These are defined as --md-sys-color-* so Angular Material M3 can read them
+ * directly when use-system-variables: true is set in material.scss.
+ * The Tailwind @theme block in styles.css maps these to utility classes.
+ */
+
+/* ─── Light mode (default) ─────────────────────────────────────────────── */
+:root {
+  --md-sys-color-primary: #475f87;
+  --md-sys-color-on-primary: #f6f7ff;
+  --md-sys-color-primary-container: #d6e3ff;
+  --md-sys-color-on-primary-container: #3a5279;
+  --md-sys-color-primary-fixed: #d6e3ff;
+  --md-sys-color-primary-fixed-dim: #bfd5ff;
+  --md-sys-color-on-primary-fixed: #274066;
+  --md-sys-color-on-primary-fixed-variant: #445c84;
+  --md-sys-color-inverse-primary: #b7d0fe;
+
+  --md-sys-color-secondary: #715670;
+  --md-sys-color-on-secondary: #fff7fa;
+  --md-sys-color-secondary-container: #fbd8f7;
+  --md-sys-color-on-secondary-container: #634962;
+  --md-sys-color-secondary-fixed: #fbd8f7;
+  --md-sys-color-secondary-fixed-dim: #eccae9;
+  --md-sys-color-on-secondary-fixed: #4f374f;
+  --md-sys-color-on-secondary-fixed-variant: #6d536d;
+
+  --md-sys-color-tertiary: #904b41;
+  --md-sys-color-on-tertiary: #fff7f6;
+  --md-sys-color-tertiary-container: #f09a8d;
+  --md-sys-color-on-tertiary-container: #561f17;
+  --md-sys-color-tertiary-fixed: #f09a8d;
+  --md-sys-color-tertiary-fixed-dim: #e18d81;
+  --md-sys-color-on-tertiary-fixed: #350603;
+  --md-sys-color-on-tertiary-fixed-variant: #62271f;
+
+  --md-sys-color-error: #ba1a1a;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #ffdad6;
+  --md-sys-color-on-error-container: #410002;
+
+  --md-sys-color-surface: #f8f9fa;
+  --md-sys-color-surface-dim: #d1dce0;
+  --md-sys-color-surface-bright: #f8f9fa;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f1f4f6;
+  --md-sys-color-surface-container: #eaeff1;
+  --md-sys-color-surface-container-high: #e2e9ec;
+  --md-sys-color-surface-container-highest: #dbe4e7;
+  --md-sys-color-on-surface: #2b3437;
+  --md-sys-color-on-surface-variant: #586064;
+  --md-sys-color-surface-tint: #475f87;
+  --md-sys-color-surface-variant: #dbe4e7;
+  --md-sys-color-inverse-surface: #0c0f10;
+  --md-sys-color-inverse-on-surface: #9b9d9e;
+
+  --md-sys-color-outline: #858d91;
+  --md-sys-color-outline-variant: #c2cbcf;
+
+  --md-sys-color-background: #f8f9fa;
+  --md-sys-color-on-background: #2b3437;
+
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+}
+
+/* ─── Dark mode ─────────────────────────────────────────────────────────── */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --md-sys-color-primary: #4a628a;
+    --md-sys-color-on-primary: #ffffff;
+    --md-sys-color-primary-container: #2c4060;
+    --md-sys-color-on-primary-container: #bfd5ff;
+    --md-sys-color-primary-fixed: #d6e3ff;
+    --md-sys-color-primary-fixed-dim: #bfd5ff;
+    --md-sys-color-on-primary-fixed: #274066;
+    --md-sys-color-on-primary-fixed-variant: #445c84;
+    --md-sys-color-inverse-primary: #475f87;
+
+    --md-sys-color-secondary: #d4adcf;
+    --md-sys-color-on-secondary: #3a2039;
+    --md-sys-color-secondary-container: #523d52;
+    --md-sys-color-on-secondary-container: #f1c8ec;
+
+    --md-sys-color-tertiary: #e8b0a9;
+    --md-sys-color-on-tertiary: #5c1f18;
+    --md-sys-color-tertiary-container: #7a342c;
+    --md-sys-color-on-tertiary-container: #ffdad6;
+
+    --md-sys-color-error: #ffb4ab;
+    --md-sys-color-on-error: #690005;
+    --md-sys-color-error-container: #93000a;
+    --md-sys-color-on-error-container: #ffdad6;
+
+    --md-sys-color-surface: #131313;
+    --md-sys-color-surface-dim: #0e0e0e;
+    --md-sys-color-surface-bright: #393939;
+    --md-sys-color-surface-container-lowest: #0e0e0e;
+    --md-sys-color-surface-container-low: #1c1b1b;
+    --md-sys-color-surface-container: #201f1f;
+    --md-sys-color-surface-container-high: #2a2a2a;
+    --md-sys-color-surface-container-highest: #353534;
+    --md-sys-color-on-surface: #e5e2e1;
+    --md-sys-color-on-surface-variant: #c2c6d9;
+    --md-sys-color-surface-tint: #4a628a;
+    --md-sys-color-surface-variant: #353534;
+    --md-sys-color-inverse-surface: #e5e2e1;
+    --md-sys-color-inverse-on-surface: #313030;
+
+    --md-sys-color-outline: #8c90a2;
+    --md-sys-color-outline-variant: #424656;
+
+    --md-sys-color-background: #131313;
+    --md-sys-color-on-background: #e5e2e1;
+
+    --md-sys-color-shadow: #000000;
+    --md-sys-color-scrim: #000000;
+  }
+}

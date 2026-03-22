@@ -21,10 +21,10 @@ const KIND_ICON: Record<NotificationKind, string> = {
   selector: 'lib-notification-list',
   template: `
     <div
-      class="w-full max-h-[70vh] flex flex-col bg-white dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 shadow-2xl rounded overflow-hidden"
+      class="w-full max-h-[70vh] flex flex-col bg-surface-container-low text-on-surface shadow-2xl rounded overflow-hidden"
     >
       <div
-        class="flex items-center justify-between px-4 py-2 border-b border-neutral-200 dark:border-neutral-600"
+        class="flex items-center justify-between px-4 py-2 border-b border-outline-variant"
       >
         <h2 class="text-base font-medium m-0">Notifications</h2>
         @if (store.unreadCount() > 0) {
@@ -37,11 +37,11 @@ const KIND_ICON: Record<NotificationKind, string> = {
       <div class="overflow-y-auto flex-1">
         @for (n of store.notifications(); track n.id) {
           <div
-            class="flex gap-3 p-3 border-b border-neutral-100 dark:border-neutral-700 last:border-0"
+            class="flex gap-3 p-3 border-b border-outline-variant/30 last:border-0"
             [class.border-l-4]="!n.read"
-            [class.border-l-blue-500]="!n.read"
+            [class.border-l-primary]="!n.read"
           >
-            <mat-icon class="shrink-0 mt-0.5 text-neutral-500">
+            <mat-icon class="shrink-0 mt-0.5 text-on-surface-variant">
               {{ iconFor(n.kind) }}
             </mat-icon>
 
@@ -55,19 +55,17 @@ const KIND_ICON: Record<NotificationKind, string> = {
                 </p>
                 @if (!n.read) {
                   <span
-                    class="w-2 h-2 rounded-full bg-blue-500 shrink-0"
+                    class="w-2 h-2 rounded-full bg-primary shrink-0"
                     aria-label="Unread"
                   ></span>
                 }
               </div>
               @if (n.detail) {
-                <p
-                  class="text-xs text-neutral-500 dark:text-neutral-400 m-0 mt-0.5"
-                >
+                <p class="text-xs text-on-surface-variant m-0 mt-0.5">
                   {{ n.detail }}
                 </p>
               }
-              <p class="text-xs text-neutral-400 m-0 mt-1">
+              <p class="text-xs text-on-surface-variant/70 m-0 mt-1">
                 {{ n.createdAt | date: 'short' }}
               </p>
             </div>
@@ -89,7 +87,7 @@ const KIND_ICON: Record<NotificationKind, string> = {
           </div>
         } @empty {
           <p
-            class="text-sm text-neutral-500 text-center py-8 m-0 min-h-[160px] flex items-center justify-center"
+            class="text-sm text-on-surface-variant text-center py-8 m-0 min-h-[160px] flex items-center justify-center"
           >
             No notifications
           </p>

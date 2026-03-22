@@ -3,16 +3,20 @@
 @include mat.elevation-classes();
 @include mat.app-background();
 
-// Define a dark theme
-$dark-theme: mat.define-theme(
+// Single theme definition — colors are driven by CSS variables (_tokens.css)
+// via use-system-variables: true, so the palette here only affects density
+// and serves as a fallback.
+$theme: mat.define-theme(
   (
     color: (
-      theme-type: dark,
+      theme-type: light,
       primary: mat.$azure-palette,
-      tertiary: mat.$orange-palette,
+      use-system-variables: true,
     ),
     typography: (
-      plain-family: 'Roboto, sans-serif',
+      plain-family: 'Inter, sans-serif',
+      brand-family: 'Manrope, sans-serif',
+      bold-weight: 700,
     ),
     density: (
       scale: -1,
@@ -20,41 +24,18 @@ $dark-theme: mat.define-theme(
   )
 );
 
-// Define a light theme
-$light-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: light,
-      primary: mat.$azure-palette,
-      tertiary: mat.$violet-palette,
-    ),
-  )
-);
-
 html {
-  // Apply the dark theme by default
-  @include mat.all-component-themes($dark-theme);
-  // Apply the light theme only when the user prefers light themes.
-  @media (prefers-color-scheme: light) {
-    // Use the `-color` mixins to only apply color styles without reapplying the same
-    // typography and density styles.
-    @include mat.all-component-colors($light-theme);
-  }
+  @include mat.all-component-themes($theme);
 }
 
 :root {
-  --mat-toolbar-container-background-color: #{mat.get-theme-color(
-      $light-theme,
-      primary-container
-    )};
-  --mat-sidenav-content-background-color: rgb(250, 250, 250);
   --mat-toolbar-standard-height: 56px;
-
-  @media (prefers-color-scheme: dark) {
-    --mat-sidenav-content-background-color: rgb(33, 33, 33);
-    --mat-toolbar-container-background-color: rgb(40, 40, 40);
-    --mat-toolbar-container-text-color: rgba(255, 255, 255, 0.75);
-  }
+  // Toolbar and sidenav surfaces come from the token layer
+  --mat-toolbar-container-background-color: var(
+    --md-sys-color-surface-container-high
+  );
+  --mat-toolbar-container-text-color: var(--md-sys-color-on-surface);
+  --mat-sidenav-content-background-color: var(--md-sys-color-surface);
 
   .mat-mdc-form-field {
     .mdc-notched-outline__notch {
