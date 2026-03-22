@@ -3,9 +3,11 @@ import {
   Component,
   DestroyRef,
   inject,
+  signal,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
+import { MatIconButton, MatButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore } from '@myorg/shared';
@@ -14,7 +16,13 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
 
 @Component({
   selector: 'lib-login',
-  imports: [ReactiveFormsModule, MatButton, MatProgressSpinner],
+  imports: [
+    ReactiveFormsModule,
+    MatButton,
+    MatIconButton,
+    MatIcon,
+    MatProgressSpinner,
+  ],
   template: `
     <div class="h-full flex items-center justify-center p-6 bg-background">
       <div class="w-full max-w-sm">
@@ -51,7 +59,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   type="text"
                   inputmode="numeric"
                   autocomplete="one-time-code"
-                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/40"
+                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all placeholder:text-on-surface-variant/40"
                 />
               </div>
             } @else {
@@ -67,7 +75,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   type="email"
                   autocomplete="email"
                   placeholder="you@example.com"
-                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/40"
+                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all placeholder:text-on-surface-variant/40"
                 />
               </div>
               <div class="flex flex-col gap-1.5">
@@ -76,14 +84,29 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   for="login-password"
                   >Password</label
                 >
-                <input
-                  id="login-password"
-                  formControlName="password"
-                  type="password"
-                  autocomplete="current-password"
-                  placeholder="••••••••"
-                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/40"
-                />
+                <div class="relative">
+                  <input
+                    id="login-password"
+                    formControlName="password"
+                    [type]="showPassword() ? 'text' : 'password'"
+                    autocomplete="current-password"
+                    placeholder="••••••••"
+                    class="w-full bg-surface-container-lowest rounded-xl px-4 py-3 pr-12 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all placeholder:text-on-surface-variant/40"
+                  />
+                  <button
+                    mat-icon-button
+                    type="button"
+                    class="absolute right-1 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                    [attr.aria-label]="
+                      showPassword() ? 'Hide password' : 'Show password'
+                    "
+                    (click)="showPassword.set(!showPassword())"
+                  >
+                    <mat-icon>{{
+                      showPassword() ? 'visibility_off' : 'visibility'
+                    }}</mat-icon>
+                  </button>
+                </div>
               </div>
             }
           } @else {
@@ -128,6 +151,7 @@ export class Login {
   readonly layoutStore = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
   readonly store = inject(LoginStore);
+  readonly showPassword = signal(false);
 
   readonly formGroup = getLoginFormGroup(this.formBuilder, this.store);
 
