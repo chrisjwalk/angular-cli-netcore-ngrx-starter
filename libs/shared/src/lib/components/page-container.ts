@@ -4,7 +4,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'lib-page-container',
   template: ` <ng-content /> `,
   host: {
-    class: 'flex p-4 flex-col',
+    class: 'flex px-6 pb-6 flex-col',
     'data-testid': 'lib-page-container',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,

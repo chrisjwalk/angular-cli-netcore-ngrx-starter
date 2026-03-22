@@ -1,9 +1,11 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  afterNextRender,
   computed,
   inject,
   input,
+  viewChild,
 } from '@angular/core';
 import {
   MatCell,
@@ -16,8 +18,10 @@ import {
   MatCellDef,
   MatHeaderCellDef,
   MatColumnDef,
+  MatTableDataSource,
 } from '@angular/material/table';
-import { patchState, signalState } from '@ngrx/signals';
+import { MatPaginator } from '@angular/material/paginator';
+import { patchState, signalMethod, signalState } from '@ngrx/signals';
 
 import { BreakpointStore } from '@myorg/shared';
 import { WeatherForecast } from '../../models/weather-forecast';
@@ -34,6 +38,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
     MatCellDef,
     MatHeaderCellDef,
     MatColumnDef,
+    MatPaginator,
   ],
   selector: 'lib-forecast-table',
   template: `
@@ -47,8 +52,8 @@ import { WeatherForecast } from '../../models/weather-forecast';
         ></div>
       </div>
     } @else {
-      <div class="mat-elevation-z2">
-        <mat-table #table [dataSource]="data()">
+      <div class="overflow-hidden rounded-2xl">
+        <mat-table #table [dataSource]="dataSource">
           <ng-container matColumnDef="dateFormatted">
             <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
             <mat-cell *matCellDef="let forecast">
@@ -81,6 +86,12 @@ import { WeatherForecast } from '../../models/weather-forecast';
             data-testid="table-row"
           ></mat-row>
         </mat-table>
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 25]"
+          [pageSize]="10"
+          showFirstLastButtons
+          aria-label="Select page of forecasts"
+        ></mat-paginator>
       </div>
     }
   `,
@@ -95,6 +106,20 @@ export class ForecastTable {
 
   loading = input<boolean>(null);
   data = input<WeatherForecast[]>(null);
+
+  readonly dataSource = new MatTableDataSource<WeatherForecast>([]);
+  readonly paginator = viewChild(MatPaginator);
+
+  private readonly syncData = signalMethod<WeatherForecast[]>((data) => {
+    this.dataSource.data = data ?? [];
+  });
+
+  constructor() {
+    this.syncData(this.data);
+    afterNextRender(() => {
+      this.dataSource.paginator = this.paginator();
+    });
+  }
 
   state = signalState({
     columns: [

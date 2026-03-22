@@ -133,4 +133,31 @@ html[data-theme='dark'] {
 :root {
   --mat-button-filled-container-shape: 0.5rem;
   --mat-button-filled-container-height: 2.75rem; // 44px
+
+  // ─── Table ────────────────────────────────────────────────────────────────
+  // https://material.angular.dev/components/table/styling
+  --mat-table-background-color: var(--md-sys-color-surface-container-lowest);
+  --mat-table-header-headline-color: var(--md-sys-color-on-surface-variant);
+  --mat-table-row-item-label-text-color: var(--md-sys-color-on-surface);
+  --mat-table-row-item-outline-color: var(--md-sys-color-outline-variant);
+  --mat-table-row-item-container-height: 52px;
+  --mat-table-header-container-height: 44px;
+
+  // ─── Paginator ────────────────────────────────────────────────────────────
+  // https://material.angular.dev/components/paginator/styling
+  --mat-paginator-container-background-color: var(
+    --md-sys-color-surface-container-lowest
+  );
+  --mat-paginator-container-text-color: var(--md-sys-color-on-surface-variant);
+  --mat-paginator-enabled-icon-color: var(--md-sys-color-on-surface-variant);
+}
+
+// Slightly elevated header row so it reads as distinct from data rows
+mat-table .mat-mdc-header-row {
+  background-color: var(--md-sys-color-surface-container);
+}
+
+// Subtle hover tint on data rows
+mat-table .mat-mdc-row:hover {
+  background-color: var(--md-sys-color-surface-container-low);
 }
