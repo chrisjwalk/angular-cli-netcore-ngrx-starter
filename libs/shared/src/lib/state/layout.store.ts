@@ -13,12 +13,14 @@ export type LayoutState = {
   title: string;
   showSidenav: boolean;
   count: number;
+  hideToolbar: boolean;
 };
 
 export const layoutInitialState: LayoutState = {
   title: null,
   showSidenav: false,
   count: 10,
+  hideToolbar: false,
 };
 
 export function withLayoutFeature() {
@@ -49,6 +51,9 @@ export function withLayoutFeature() {
       },
       setCount(count: number) {
         patchState(store, { count });
+      },
+      setHideToolbar(hideToolbar: boolean) {
+        patchState(store, { hideToolbar });
       },
     })),
   );

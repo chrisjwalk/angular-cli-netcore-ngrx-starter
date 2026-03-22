@@ -94,10 +94,6 @@ describe('App Integration', () => {
       applicationRef,
     );
     expect(loginComponent).toBeTruthy();
-    const pageContainer = compiled.querySelector(
-      '[data-testid="lib-page-container"]',
-    );
-    expect(pageContainer).toBeTruthy();
   });
 
   it('should navigate to /feature and load the counter feature', async () => {

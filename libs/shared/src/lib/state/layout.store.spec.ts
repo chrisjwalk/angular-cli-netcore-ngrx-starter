@@ -53,4 +53,12 @@ describe('LayoutStore', () => {
     store.setCount(20);
     expect(store.count()).toBe(20);
   });
+
+  it('should set hideToolbar', () => {
+    expect(store.hideToolbar()).toBe(false);
+    store.setHideToolbar(true);
+    expect(store.hideToolbar()).toBe(true);
+    store.setHideToolbar(false);
+    expect(store.hideToolbar()).toBe(false);
+  });
 });

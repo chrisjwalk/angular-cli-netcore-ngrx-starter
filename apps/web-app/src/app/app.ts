@@ -28,12 +28,17 @@ import { filter, pipe, tap } from 'rxjs';
       href="#main-content"
       >Skip to main content</a
     >
-    <lib-main-toolbar
-      (toggleSidenav)="store.toggleSidenav()"
-      (logout)="authStore.logout(authStore.pageRequiresLogin())"
-      [loggedIn]="authStore.loggedIn()"
-    />
-    <mat-sidenav-container fullscreen>
+    @if (!store.hideToolbar()) {
+      <lib-main-toolbar
+        (toggleSidenav)="store.toggleSidenav()"
+        (logout)="authStore.logout(authStore.pageRequiresLogin())"
+        [loggedIn]="authStore.loggedIn()"
+      />
+    }
+    <mat-sidenav-container
+      fullscreen
+      [class.has-toolbar]="!store.hideToolbar()"
+    >
       <mat-sidenav
         mode="over"
         [opened]="store.showSidenav()"
@@ -56,6 +61,9 @@ import { filter, pipe, tap } from 'rxjs';
   styles: [
     `
       .mat-drawer-container {
+        height: 100%;
+      }
+      .mat-drawer-container.has-toolbar {
         margin-top: var(--mat-toolbar-standard-height);
         height: calc(100% - var(--mat-toolbar-standard-height));
       }
