@@ -75,8 +75,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
           }
           <div class="flex gap-4 justify-end">
             <button
-              mat-raised-button
-              color="primary"
+              mat-flat-button
               [disabled]="!store.valid() || authStore.loginLoading()"
               (click)="authStore.login(store.request())"
             >

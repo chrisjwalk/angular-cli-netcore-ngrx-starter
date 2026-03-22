@@ -58,9 +58,42 @@ html[data-theme='dark'] {
   @include mat.all-component-colors($dark-theme);
 }
 
+// Bridge: Angular Material components reference --mat-sys-* internally but
+// with use-system-variables: true it sets them to `initial`. We override here
+// using :root (specificity 0,1,0 > html's 0,0,1) so our values always win.
+// Since --md-sys-color-* already switches between light/dark via _tokens.css,
+// this single mapping handles both themes automatically.
 :root {
+  --mat-sys-primary: var(--md-sys-color-primary);
+  --mat-sys-on-primary: var(--md-sys-color-on-primary);
+  --mat-sys-primary-container: var(--md-sys-color-primary-container);
+  --mat-sys-on-primary-container: var(--md-sys-color-on-primary-container);
+  --mat-sys-inverse-primary: var(--md-sys-color-inverse-primary);
+  --mat-sys-secondary: var(--md-sys-color-secondary);
+  --mat-sys-secondary-container: var(--md-sys-color-secondary-container);
+  --mat-sys-on-secondary-container: var(--md-sys-color-on-secondary-container);
+  --mat-sys-tertiary-container: var(--md-sys-color-tertiary-container);
+  --mat-sys-error: var(--md-sys-color-error);
+  --mat-sys-on-error: var(--md-sys-color-on-error);
+  --mat-sys-on-error-container: var(--md-sys-color-on-error-container);
+  --mat-sys-surface: var(--md-sys-color-surface);
+  --mat-sys-surface-container: var(--md-sys-color-surface-container);
+  --mat-sys-surface-container-low: var(--md-sys-color-surface-container-low);
+  --mat-sys-surface-container-high: var(--md-sys-color-surface-container-high);
+  --mat-sys-surface-container-highest: var(
+    --md-sys-color-surface-container-highest
+  );
+  --mat-sys-surface-variant: var(--md-sys-color-surface-variant);
+  --mat-sys-on-surface: var(--md-sys-color-on-surface);
+  --mat-sys-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --mat-sys-inverse-surface: var(--md-sys-color-inverse-surface);
+  --mat-sys-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+  --mat-sys-outline: var(--md-sys-color-outline);
+  --mat-sys-outline-variant: var(--md-sys-color-outline-variant);
+  --mat-sys-background: var(--md-sys-color-background);
+  --mat-sys-on-background: var(--md-sys-color-on-background);
+
   --mat-toolbar-standard-height: 56px;
-  // Toolbar and sidenav surfaces come from the token layer
   --mat-toolbar-container-background-color: var(
     --md-sys-color-surface-container-high
   );
