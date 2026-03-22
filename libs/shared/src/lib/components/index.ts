@@ -7,3 +7,4 @@ export * from './page-toolbar-button';
 export * from './page-toolbar';
 export * from './sidenav-list-item';
 export * from './sidenav';
+export * from './theme.service';

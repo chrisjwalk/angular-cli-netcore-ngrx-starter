@@ -1,6 +1,22 @@
 @import 'tailwindcss';
 @import './_tokens.css';
 
+/*
+ * Override the built-in dark: variant so it respects both OS preference
+ * (when theme is "system") and the data-theme attribute on <html>
+ * (when the user has manually selected a theme).
+ */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme='light']) & {
+      @slot;
+    }
+  }
+  html[data-theme='dark'] & {
+    @slot;
+  }
+}
+
 @theme {
   /* Fonts */
   --font-sans: 'Inter', sans-serif;
@@ -70,6 +86,9 @@
 
   html {
     font-display: swap;
+    /* Ensure body text/background follows the active token set in all modes */
+    background-color: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-background);
   }
 
   @media (prefers-color-scheme: dark) {
@@ -78,6 +97,12 @@
     a:visited {
       @apply text-primary;
     }
+  }
+
+  html[data-theme='dark'] a,
+  html[data-theme='dark'] a:hover,
+  html[data-theme='dark'] a:visited {
+    @apply text-primary;
   }
 }
 
@@ -118,25 +143,19 @@ markdown {
   pre {
     @apply p-4 overflow-auto rounded-sm border text-sm border-neutral-900 bg-neutral-50;
 
-    @media (prefers-color-scheme: dark) {
-      @apply bg-neutral-900 border-neutral-50;
-    }
+    @apply dark:bg-neutral-900 dark:border-neutral-50;
   }
 
   blockquote {
     @apply py-0.5 px-4 mx-0 my-3 border-l-8 rounded-sm border-neutral-900 bg-neutral-50;
 
-    @media (prefers-color-scheme: dark) {
-      @apply bg-neutral-900 border-neutral-50;
-    }
+    @apply dark:bg-neutral-900 dark:border-neutral-50;
   }
 
   code {
     @apply py-0.5 px-1 bg-neutral-50;
 
-    @media (prefers-color-scheme: dark) {
-      @apply bg-neutral-900;
-    }
+    @apply dark:bg-neutral-900;
   }
 
   h1 {

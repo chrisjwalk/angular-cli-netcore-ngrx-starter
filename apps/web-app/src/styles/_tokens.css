@@ -68,8 +68,16 @@
 }
 
 /* ─── Dark mode ─────────────────────────────────────────────────────────── */
+/*
+ * Dark tokens apply when:
+ *   1. OS is in dark mode AND the theme is not explicitly forced to light, OR
+ *   2. data-theme="dark" is set on <html> (user has explicitly chosen dark).
+ *
+ * This allows a JS theme service to override the OS preference by setting
+ * the data-theme attribute on <html>.
+ */
 @media (prefers-color-scheme: dark) {
-  :root {
+  html:not([data-theme='light']) {
     --md-sys-color-primary: #4a628a;
     --md-sys-color-on-primary: #ffffff;
     --md-sys-color-primary-container: #2c4060;
@@ -119,4 +127,56 @@
     --md-sys-color-shadow: #000000;
     --md-sys-color-scrim: #000000;
   }
+}
+
+/* Explicit dark override — user has manually selected dark theme */
+html[data-theme='dark'] {
+  --md-sys-color-primary: #4a628a;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #2c4060;
+  --md-sys-color-on-primary-container: #bfd5ff;
+  --md-sys-color-primary-fixed: #d6e3ff;
+  --md-sys-color-primary-fixed-dim: #bfd5ff;
+  --md-sys-color-on-primary-fixed: #274066;
+  --md-sys-color-on-primary-fixed-variant: #445c84;
+  --md-sys-color-inverse-primary: #475f87;
+
+  --md-sys-color-secondary: #d4adcf;
+  --md-sys-color-on-secondary: #3a2039;
+  --md-sys-color-secondary-container: #523d52;
+  --md-sys-color-on-secondary-container: #f1c8ec;
+
+  --md-sys-color-tertiary: #e8b0a9;
+  --md-sys-color-on-tertiary: #5c1f18;
+  --md-sys-color-tertiary-container: #7a342c;
+  --md-sys-color-on-tertiary-container: #ffdad6;
+
+  --md-sys-color-error: #ffb4ab;
+  --md-sys-color-on-error: #690005;
+  --md-sys-color-error-container: #93000a;
+  --md-sys-color-on-error-container: #ffdad6;
+
+  --md-sys-color-surface: #131313;
+  --md-sys-color-surface-dim: #0e0e0e;
+  --md-sys-color-surface-bright: #393939;
+  --md-sys-color-surface-container-lowest: #0e0e0e;
+  --md-sys-color-surface-container-low: #1c1b1b;
+  --md-sys-color-surface-container: #201f1f;
+  --md-sys-color-surface-container-high: #2a2a2a;
+  --md-sys-color-surface-container-highest: #353534;
+  --md-sys-color-on-surface: #e5e2e1;
+  --md-sys-color-on-surface-variant: #c2c6d9;
+  --md-sys-color-surface-tint: #4a628a;
+  --md-sys-color-surface-variant: #353534;
+  --md-sys-color-inverse-surface: #e5e2e1;
+  --md-sys-color-inverse-on-surface: #313030;
+
+  --md-sys-color-outline: #8c90a2;
+  --md-sys-color-outline-variant: #424656;
+
+  --md-sys-color-background: #131313;
+  --md-sys-color-on-background: #e5e2e1;
+
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
 }

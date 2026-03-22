@@ -27,14 +27,14 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
       <div class="flex flex-row justify-center">
         <form
           [formGroup]="formGroup"
-          class="flex flex-col gap-4 flex-1 max-w-sm p-4 bg-white/95 dark:bg-neutral-700 rounded-sm shadow-sm"
+          class="flex flex-col gap-4 flex-1 max-w-sm p-4 bg-surface-container rounded-sm shadow-sm"
           (keyup.enter)="
             store.valid() ? authStore.login(store.request()) : null
           "
         >
           @if (!authStore.loginLoading()) {
             @if (authStore.requiresTwoFactor()) {
-              <p class="text-sm text-neutral-600 dark:text-neutral-300">
+              <p class="text-sm text-on-surface-variant">
                 Two-factor authentication is required. Enter the code from your
                 authenticator app.
               </p>
@@ -70,9 +70,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
             }
           } @else {
             <div class="flex flex-col gap-4">
-              <div
-                class="loading h-48 bg-neutral-300 dark:bg-neutral-700"
-              ></div>
+              <div class="loading h-48 bg-surface-container-high"></div>
             </div>
           }
           <div class="flex gap-4 justify-end">

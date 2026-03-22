@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  inject,
   input,
   output,
 } from '@angular/core';
@@ -12,6 +14,7 @@ import { RouterLink } from '@angular/router';
 
 import { NAV_LINKS } from './nav-links';
 import { NotificationBell } from './notification-bell';
+import { ThemeService } from './theme.service';
 
 @Component({
   imports: [
@@ -107,6 +110,14 @@ import { NotificationBell } from './notification-bell';
           </button>
         }
       </div>
+      <button
+        mat-icon-button
+        (click)="themeService.toggle()"
+        [matTooltip]="themeTooltip()"
+        aria-label="Toggle color theme"
+      >
+        <mat-icon>{{ themeIcon() }}</mat-icon>
+      </button>
       <lib-notification-bell />
       @if (loggedIn()) {
         <button
@@ -138,10 +149,25 @@ import { NotificationBell } from './notification-bell';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbar {
+  readonly themeService = inject(ThemeService);
   readonly navLinks = NAV_LINKS;
 
   loggedIn = input<boolean>(null);
 
   toggleSidenav = output<void>();
   logout = output<void>();
+
+  readonly themeIcon = computed(() => {
+    const t = this.themeService.theme();
+    if (t === 'light') return 'light_mode';
+    if (t === 'dark') return 'dark_mode';
+    return 'brightness_auto';
+  });
+
+  readonly themeTooltip = computed(() => {
+    const t = this.themeService.theme();
+    if (t === 'light') return 'Theme: Light (click for Dark)';
+    if (t === 'dark') return 'Theme: Dark (click for System)';
+    return 'Theme: System (click for Light)';
+  });
 }
