@@ -69,8 +69,8 @@ import { MatTooltip } from '@angular/material/tooltip';
       />
     </mat-form-field>
     <button
-      mat-button
-      class="!text-base/10 bg-surface-container-low dark:bg-surface-container-high"
+      mat-flat-button
+      color="primary"
       (click)="setCount.emit(+setvalue.value)"
     >
       Submit
