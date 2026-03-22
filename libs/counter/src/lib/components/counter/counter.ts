@@ -37,7 +37,7 @@ import { MatTooltip } from '@angular/material/tooltip';
         </mat-icon>
       </button>
       <div
-        class="bg-surface-container p-4 rounded-sm flex flex-col shadow-sm truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
+        class="bg-surface-container-lowest dark:bg-surface-container p-4 rounded-sm flex flex-col shadow-sm truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
       >
         <div class="text-[120px] text-center" data-testid="count">
           {{ count() }}
@@ -70,7 +70,7 @@ import { MatTooltip } from '@angular/material/tooltip';
     </mat-form-field>
     <button
       mat-button
-      class="!text-base/10 bg-surface-container-high"
+      class="!text-base/10 bg-surface-container-low dark:bg-surface-container-high"
       (click)="setCount.emit(+setvalue.value)"
     >
       Submit

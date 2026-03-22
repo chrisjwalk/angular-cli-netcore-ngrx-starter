@@ -94,10 +94,11 @@ html[data-theme='dark'] {
   --mat-sys-on-background: var(--md-sys-color-on-background);
 
   --mat-toolbar-standard-height: 56px;
-  --mat-toolbar-container-background-color: var(
-    --md-sys-color-surface-container-high
-  );
+  --mat-toolbar-container-background-color: var(--md-sys-color-surface);
   --mat-toolbar-container-text-color: var(--md-sys-color-on-surface);
+  --mat-sidenav-container-background-color: var(
+    --md-sys-color-surface-container-lowest
+  );
   --mat-sidenav-content-background-color: var(--md-sys-color-surface);
 
   .mat-mdc-form-field {

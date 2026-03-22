@@ -27,7 +27,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
       <div class="flex flex-row justify-center">
         <form
           [formGroup]="formGroup"
-          class="flex flex-col gap-4 flex-1 max-w-sm p-4 bg-surface-container rounded-sm shadow-sm"
+          class="flex flex-col gap-4 flex-1 max-w-sm p-4 bg-surface-container-lowest dark:bg-surface-container rounded-sm shadow-sm"
           (keyup.enter)="
             store.valid() ? authStore.login(store.request()) : null
           "
@@ -70,7 +70,9 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
             }
           } @else {
             <div class="flex flex-col gap-4">
-              <div class="loading h-48 bg-surface-container-high"></div>
+              <div
+                class="loading h-48 bg-surface-container-low dark:bg-surface-container-high"
+              ></div>
             </div>
           }
           <div class="flex gap-4 justify-end">

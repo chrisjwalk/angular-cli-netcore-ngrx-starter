@@ -39,8 +39,12 @@ import { WeatherForecast } from '../../models/weather-forecast';
   template: `
     @if (loading()) {
       <div class="flex flex-col gap-4">
-        <div class="loading h-12 bg-surface-container-high"></div>
-        <div class="loading h-96 bg-surface-container-high"></div>
+        <div
+          class="loading h-12 bg-surface-container-low dark:bg-surface-container-high"
+        ></div>
+        <div
+          class="loading h-96 bg-surface-container-low dark:bg-surface-container-high"
+        ></div>
       </div>
     } @else {
       <div class="mat-elevation-z2">

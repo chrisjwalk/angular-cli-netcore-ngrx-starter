@@ -8,7 +8,9 @@ import { MarkdownComponent } from 'ngx-markdown';
   template: `
     <lib-page-toolbar [title]="layoutStore.title()" />
     <lib-page-container>
-      <div class="bg-surface-container p-4 rounded-sm flex flex-col shadow-sm">
+      <div
+        class="bg-surface-container-lowest dark:bg-surface-container p-4 rounded-sm flex flex-col shadow-sm"
+      >
         <markdown data-testid="page-markdown" [src]="markdownSrc" />
       </div>
     </lib-page-container>
