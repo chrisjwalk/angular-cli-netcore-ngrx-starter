@@ -84,19 +84,21 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                   for="login-password"
                   >Password</label
                 >
-                <div class="relative">
+                <div
+                  class="flex items-center bg-surface-container-lowest rounded-xl focus-within:ring-2 focus-within:ring-primary/60 transition-all"
+                >
                   <input
                     id="login-password"
                     formControlName="password"
                     [type]="showPassword() ? 'text' : 'password'"
                     autocomplete="current-password"
                     placeholder="••••••••"
-                    class="w-full bg-surface-container-lowest rounded-xl px-4 py-3 pr-12 text-sm text-on-surface focus:outline-none focus:ring-2 focus:ring-primary/60 transition-all placeholder:text-on-surface-variant/40"
+                    class="flex-1 min-w-0 bg-transparent px-4 py-3 text-sm text-on-surface focus:outline-none placeholder:text-on-surface-variant/40"
                   />
                   <button
                     mat-icon-button
                     type="button"
-                    class="absolute right-1 top-1/2 -translate-y-1/2 text-on-surface-variant"
+                    class="shrink-0 mr-1 text-on-surface-variant"
                     [attr.aria-label]="
                       showPassword() ? 'Hide password' : 'Show password'
                     "
