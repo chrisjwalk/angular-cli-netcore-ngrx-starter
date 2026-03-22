@@ -3,12 +3,9 @@ import {
   Component,
   DestroyRef,
   inject,
-  OnInit,
 } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatInput } from '@angular/material/input';
 import { MatProgressSpinner } from '@angular/material/progress-spinner';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore } from '@myorg/shared';
@@ -17,18 +14,9 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
 
 @Component({
   selector: 'lib-login',
-  imports: [
-    ReactiveFormsModule,
-    MatFormField,
-    MatInput,
-    MatButton,
-    MatProgressSpinner,
-    MatLabel,
-  ],
+  imports: [ReactiveFormsModule, MatButton, MatProgressSpinner],
   template: `
-    <div
-      class="flex flex-col min-h-full items-center justify-center p-6 bg-background"
-    >
+    <div class="h-full flex items-center justify-center p-6 bg-background">
       <div class="w-full max-w-sm">
         <div class="mb-8">
           <h2 class="text-on-surface text-2xl font-bold tracking-tight mb-1">
@@ -40,7 +28,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
         </div>
         <form
           [formGroup]="formGroup"
-          class="flex flex-col gap-4 bg-surface-container-low rounded-2xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
+          class="flex flex-col gap-5 bg-surface-container-low rounded-2xl p-8 shadow-[0_8px_32px_rgba(0,0,0,0.2)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]"
           (keyup.enter)="
             store.valid() ? authStore.login(store.request()) : null
           "
@@ -51,49 +39,66 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
                 Two-factor authentication is required. Enter the code from your
                 authenticator app.
               </p>
-              <mat-form-field appearance="outline">
-                <mat-label>Authenticator code</mat-label>
+              <div class="flex flex-col gap-1.5">
+                <label
+                  class="text-on-surface-variant text-xs font-semibold"
+                  for="login-2fa"
+                  >Authenticator code</label
+                >
                 <input
-                  matInput
+                  id="login-2fa"
                   formControlName="twoFactorCode"
                   type="text"
                   inputmode="numeric"
                   autocomplete="one-time-code"
+                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/40"
                 />
-              </mat-form-field>
+              </div>
             } @else {
-              <mat-form-field appearance="outline">
-                <mat-label>Email</mat-label>
+              <div class="flex flex-col gap-1.5">
+                <label
+                  class="text-on-surface-variant text-xs font-semibold"
+                  for="login-email"
+                  >Email</label
+                >
                 <input
-                  matInput
+                  id="login-email"
                   formControlName="email"
                   type="email"
                   autocomplete="email"
+                  placeholder="you@example.com"
+                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/40"
                 />
-              </mat-form-field>
-              <mat-form-field appearance="outline">
-                <mat-label>Password</mat-label>
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label
+                  class="text-on-surface-variant text-xs font-semibold"
+                  for="login-password"
+                  >Password</label
+                >
                 <input
-                  matInput
+                  id="login-password"
                   formControlName="password"
                   type="password"
                   autocomplete="current-password"
+                  placeholder="••••••••"
+                  class="bg-surface-container-lowest rounded-xl px-4 py-3 text-sm text-on-surface border border-outline-variant/40 focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all placeholder:text-on-surface-variant/40"
                 />
-              </mat-form-field>
+              </div>
             }
           } @else {
             <div class="flex flex-col gap-4">
               <div
-                class="loading h-14 rounded-lg bg-surface-container-low dark:bg-surface-container-high"
+                class="loading h-[3.25rem] rounded-xl bg-surface-container dark:bg-surface-container-high"
               ></div>
               <div
-                class="loading h-14 rounded-lg bg-surface-container-low dark:bg-surface-container-high"
+                class="loading h-[3.25rem] rounded-xl bg-surface-container dark:bg-surface-container-high"
               ></div>
             </div>
           }
           <button
             mat-flat-button
-            class="w-full mt-2"
+            class="w-full mt-1"
             [disabled]="!store.valid() || authStore.loginLoading()"
             (click)="authStore.login(store.request())"
           >
@@ -111,7 +116,7 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
     </div>
   `,
   host: {
-    class: 'flex flex-col flex-1 min-h-full',
+    class: 'h-full block',
     'data-testid': 'lib-login',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
