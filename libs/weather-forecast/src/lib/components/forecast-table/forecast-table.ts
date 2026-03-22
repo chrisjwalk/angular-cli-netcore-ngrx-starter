@@ -89,7 +89,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
         </mat-table>
         <mat-paginator
           [pageSizeOptions]="[5, 10, 25]"
-          [pageSize]="10"
+          [pageSize]="5"
           showFirstLastButtons
           aria-label="Select page of forecasts"
         ></mat-paginator>

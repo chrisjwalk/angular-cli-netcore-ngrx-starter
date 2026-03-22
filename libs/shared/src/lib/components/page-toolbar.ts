@@ -14,7 +14,8 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
     <ng-content />
   `,
   host: {
-    class: 'flex flex-row items-center gap-4 whitespace-nowrap px-8 pt-8 pb-5',
+    class:
+      'flex flex-row items-center gap-4 whitespace-nowrap px-8 pt-8 pb-5 w-full max-w-[1440px] mx-auto',
     'data-testid': 'lib-page-toolbar',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,

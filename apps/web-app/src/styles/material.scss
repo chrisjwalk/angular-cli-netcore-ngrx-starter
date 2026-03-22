@@ -153,6 +153,12 @@ html[data-theme='dark'] {
   --mat-paginator-enabled-icon-color: var(--md-sys-color-on-surface-variant);
 }
 
+// Purge all remaining MDC table cell borders — token alone doesn't cover them all
+mat-table .mdc-data-table__cell,
+mat-table .mdc-data-table__header-cell {
+  border-bottom: none;
+}
+
 // Slightly elevated header row so it reads as distinct from data rows
 mat-table .mat-mdc-header-row {
   background-color: var(--md-sys-color-surface-container);
