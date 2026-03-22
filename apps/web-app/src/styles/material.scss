@@ -136,17 +136,18 @@ html[data-theme='dark'] {
 
   // ─── Table ────────────────────────────────────────────────────────────────
   // https://material.angular.dev/components/table/styling
-  --mat-table-background-color: var(--md-sys-color-surface-container-lowest);
+  --mat-table-background-color: var(--md-sys-color-surface-container-low);
   --mat-table-header-headline-color: var(--md-sys-color-on-surface-variant);
   --mat-table-row-item-label-text-color: var(--md-sys-color-on-surface);
-  --mat-table-row-item-outline-color: var(--md-sys-color-outline-variant);
-  --mat-table-row-item-container-height: 52px;
-  --mat-table-header-container-height: 44px;
+  // No-line philosophy: no visible row dividers; depth via tonal backgrounds
+  --mat-table-row-item-outline-color: transparent;
+  --mat-table-row-item-container-height: 56px;
+  --mat-table-header-container-height: 48px;
 
   // ─── Paginator ────────────────────────────────────────────────────────────
   // https://material.angular.dev/components/paginator/styling
   --mat-paginator-container-background-color: var(
-    --md-sys-color-surface-container-lowest
+    --md-sys-color-surface-container-low
   );
   --mat-paginator-container-text-color: var(--md-sys-color-on-surface-variant);
   --mat-paginator-enabled-icon-color: var(--md-sys-color-on-surface-variant);

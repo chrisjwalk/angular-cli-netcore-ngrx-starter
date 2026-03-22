@@ -27,36 +27,37 @@ import { ForecastTable } from '../forecast-table/forecast-table';
   providers: [WeatherForecastStore],
   selector: 'lib-weather-forecast',
   template: `
-    <lib-page-toolbar [title]="layoutStore.title()">
-      <mat-form-field appearance="outline">
-        <mat-label>Forecast Days</mat-label>
-        <input
-          matInput
-          #count
-          type="number"
-          [attr.aria-label]="'Number of forecast days'"
-          (keyup.enter)="
+    <lib-page-toolbar [title]="layoutStore.title()" />
+    <lib-page-container>
+      <div class="forecast-filter-bar mb-6 flex items-center gap-4">
+        <mat-form-field appearance="outline">
+          <mat-label>Forecast Days</mat-label>
+          <input
+            matInput
+            #count
+            type="number"
+            [attr.aria-label]="'Number of forecast days'"
+            (keyup.enter)="
+              store.getForecasts({
+                count: +count.value,
+                plus: authStore.pageRequiresLogin(),
+              })
+            "
+            [value]="store.count()"
+          />
+        </mat-form-field>
+        <lib-page-toolbar-button
+          (click)="
             store.getForecasts({
               count: +count.value,
               plus: authStore.pageRequiresLogin(),
             })
           "
-          [value]="store.count()"
-        />
-      </mat-form-field>
-      <lib-page-toolbar-button
-        (click)="
-          store.getForecasts({
-            count: +count.value,
-            plus: authStore.pageRequiresLogin(),
-          })
-        "
-        tooltip="Get Forecasts"
-      >
-        <mat-icon>refresh</mat-icon>
-      </lib-page-toolbar-button>
-    </lib-page-toolbar>
-    <lib-page-container>
+          tooltip="Get Forecasts"
+        >
+          <mat-icon>refresh</mat-icon>
+        </lib-page-toolbar-button>
+      </div>
       <lib-forecast-table
         [loading]="store.weatherForecasts.isLoading()"
         [data]="store.filteredForecasts()"

@@ -240,7 +240,7 @@
   border-radius: 0.375rem;
 }
 
-lib-page-toolbar {
+.forecast-filter-bar {
   .mat-mdc-form-field-subscript-wrapper {
     @apply hidden;
   }

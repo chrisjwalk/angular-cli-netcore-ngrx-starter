@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
   Component,
-  afterNextRender,
   computed,
   inject,
   input,
@@ -52,7 +51,9 @@ import { WeatherForecast } from '../../models/weather-forecast';
         ></div>
       </div>
     } @else {
-      <div class="overflow-hidden rounded-2xl">
+      <div
+        class="overflow-hidden rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
+      >
         <mat-table #table [dataSource]="dataSource">
           <ng-container matColumnDef="dateFormatted">
             <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
@@ -114,11 +115,17 @@ export class ForecastTable {
     this.dataSource.data = data ?? [];
   });
 
+  // signalMethod reacts whenever this.paginator() changes — correctly
+  // connects the paginator after the @if(loading()) branch resolves.
+  private readonly connectPaginator = signalMethod<MatPaginator | undefined>(
+    (paginator) => {
+      this.dataSource.paginator = paginator ?? null;
+    },
+  );
+
   constructor() {
     this.syncData(this.data);
-    afterNextRender(() => {
-      this.dataSource.paginator = this.paginator();
-    });
+    this.connectPaginator(this.paginator);
   }
 
   state = signalState({
