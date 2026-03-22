@@ -4,11 +4,53 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 ## Features
 
-- **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
-- **Notification centre** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
-- **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
-- **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
-- **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
+<div class="not-prose my-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="flex flex-col overflow-hidden rounded-2xl bg-surface-container-lowest">
+    <div class="flex h-28 items-center justify-center bg-surface-container">
+      <div class="rounded-2xl bg-primary-container p-3 text-3xl leading-none">🔐</div>
+    </div>
+    <div class="flex flex-col gap-2 p-5">
+      <p class="font-semibold text-on-surface">Authentication</p>
+      <p class="text-sm leading-relaxed text-on-surface-variant">Register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity.</p>
+    </div>
+  </div>
+  <div class="flex flex-col overflow-hidden rounded-2xl bg-surface-container-lowest">
+    <div class="flex h-28 items-center justify-center bg-surface-container">
+      <div class="rounded-2xl bg-primary-container p-3 text-3xl leading-none">🔔</div>
+    </div>
+    <div class="flex flex-col gap-2 p-5">
+      <p class="font-semibold text-on-surface">Notification centre</p>
+      <p class="text-sm leading-relaxed text-on-surface-variant">Persistent panel with unread count, mark-as-read, dismiss, and one-click action support.</p>
+    </div>
+  </div>
+  <div class="flex flex-col overflow-hidden rounded-2xl bg-surface-container-lowest">
+    <div class="flex h-28 items-center justify-center bg-surface-container">
+      <div class="rounded-2xl bg-primary-container p-3 text-3xl leading-none">⚡</div>
+    </div>
+    <div class="flex flex-col gap-2 p-5">
+      <p class="font-semibold text-on-surface">PWA / Service worker</p>
+      <p class="text-sm leading-relaxed text-on-surface-variant">Offline support with an in-app prompt to reload when a new version is available.</p>
+    </div>
+  </div>
+  <div class="flex flex-col overflow-hidden rounded-2xl bg-surface-container-lowest">
+    <div class="flex h-28 items-center justify-center bg-surface-container">
+      <div class="rounded-2xl bg-primary-container p-3 text-3xl leading-none">🐛</div>
+    </div>
+    <div class="flex flex-col gap-2 p-5">
+      <p class="font-semibold text-on-surface">Debug page</p>
+      <p class="text-sm leading-relaxed text-on-surface-variant">Trigger test notifications and inspect service worker state at <code>/debug</code>.</p>
+    </div>
+  </div>
+  <div class="flex flex-col overflow-hidden rounded-2xl bg-surface-container-lowest">
+    <div class="flex h-28 items-center justify-center bg-surface-container">
+      <div class="rounded-2xl bg-primary-container p-3 text-3xl leading-none">🚀</div>
+    </div>
+    <div class="flex flex-col gap-2 p-5">
+      <p class="font-semibold text-on-surface">PR preview deployments</p>
+      <p class="text-sm leading-relaxed text-on-surface-variant">Every pull request gets a live preview URL via Azure Static Web Apps.</p>
+    </div>
+  </div>
+</div>
 
 ## Tech stack
 
