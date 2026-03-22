@@ -102,10 +102,10 @@ import { ThemeService } from './theme.service';
         @for (link of navLinks; track link.routerLink) {
           <a
             [routerLink]="link.routerLink"
-            routerLinkActive="text-primary border-b-2 border-primary"
+            routerLinkActive="nav-active text-primary"
             class="no-underline text-on-surface-variant text-sm px-3 h-full flex items-center hover:text-on-surface transition-colors"
           >
-            {{ link.label }}
+            <span>{{ link.label }}</span>
           </a>
         }
       </nav>
@@ -140,6 +140,11 @@ import { ThemeService } from './theme.service';
         .logo {
           height: var(--mat-toolbar-standard-height);
         }
+      }
+
+      a.nav-active span {
+        border-bottom: 2px solid var(--md-sys-color-primary);
+        padding-bottom: 1px;
       }
     `,
   ],
