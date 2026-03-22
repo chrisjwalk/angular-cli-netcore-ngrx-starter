@@ -171,13 +171,6 @@
     font-weight: 700;
   }
 
-  /* Tighten list spacing slightly */
-  ul > li,
-  ol > li {
-    margin-top: 0.375em;
-    margin-bottom: 0.375em;
-  }
-
   /* Code blocks */
   pre {
     border-radius: 0.75rem;
@@ -208,6 +201,66 @@
    redundant H1 that ngx-markdown renders from the markdown source. */
 .doc-prose markdown h1:first-of-type {
   display: none;
+}
+
+/* ── Doc page: card-style list items ─────────────────────────────────────── */
+
+/*
+ * Unordered list items on the doc page are styled as card rows with a small
+ * primary-container icon box on the left — matching the "Technology of Light
+ * and Motion" list aesthetic in the Document Page design.
+ */
+.doc-prose .prose ul {
+  padding-left: 0;
+  list-style: none;
+}
+
+.doc-prose .prose ul > li {
+  position: relative;
+  list-style: none;
+  padding: 0.875rem 1.25rem 0.875rem 3.5rem;
+  background: var(--md-sys-color-surface-container-lowest);
+  border-radius: 0.625rem;
+  border: 1px solid var(--md-sys-color-outline-variant);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Collapse gap between adjacent items so they read as a group */
+.doc-prose .prose ul > li + li {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  margin-top: -1px; /* overlap borders */
+}
+
+.doc-prose .prose ul > li:not(:last-child) {
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+/* Icon box */
+.doc-prose .prose ul > li::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0.9375rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  background-color: var(--md-sys-color-primary-container);
+  border-radius: 0.375rem;
+}
+
+/* Feature name (bold) stands out slightly */
+.doc-prose .prose ul > li > strong:first-child {
+  color: var(--md-sys-color-on-surface);
+  font-weight: 600;
+}
+
+/* Add a little breathing room after each ul group */
+.doc-prose .prose ul {
+  margin-bottom: 1.5rem;
+  border-radius: 0.625rem;
+  overflow: hidden;
 }
 
 lib-page-toolbar {
