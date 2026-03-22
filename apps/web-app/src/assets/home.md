@@ -50,6 +50,15 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
       <p class="text-sm leading-relaxed text-on-surface-variant">Every pull request gets a live preview URL via Azure Static Web Apps.</p>
     </div>
   </div>
+  <div class="flex flex-col overflow-hidden rounded-2xl bg-surface-container-lowest">
+    <div class="flex h-28 items-center justify-center bg-surface-container">
+      <div class="rounded-2xl bg-primary-container p-3 text-3xl leading-none">🌗</div>
+    </div>
+    <div class="flex flex-col gap-2 p-5">
+      <p class="font-semibold text-on-surface">Theme support</p>
+      <p class="text-sm leading-relaxed text-on-surface-variant">Light, dark, and system-preference modes powered by Material Design 3 colour tokens.</p>
+    </div>
+  </div>
 </div>
 
 ## Tech stack
