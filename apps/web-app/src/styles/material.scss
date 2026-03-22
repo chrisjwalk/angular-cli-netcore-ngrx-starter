@@ -3,29 +3,59 @@
 @include mat.elevation-classes();
 @include mat.app-background();
 
-// Single theme definition — colors are driven by CSS variables (_tokens.css)
-// via use-system-variables: true, so the palette here only affects density
-// and serves as a fallback.
-$theme: mat.define-theme(
+// Shared typography and density config
+$_typography: (
+  plain-family: 'Inter, sans-serif',
+  brand-family: 'Manrope, sans-serif',
+  bold-weight: 700,
+);
+
+$_density: (
+  scale: -1,
+);
+
+// Light theme — base component styles + color from CSS variables
+$light-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
       primary: mat.$azure-palette,
       use-system-variables: true,
     ),
-    typography: (
-      plain-family: 'Inter, sans-serif',
-      brand-family: 'Manrope, sans-serif',
-      bold-weight: 700,
+    typography: $_typography,
+    density: $_density,
+  )
+);
+
+// Dark theme — generates correct dark-mode state-layer opacities,
+// ripple colors, and overlay colors. Colors still come from our
+// CSS custom properties via use-system-variables: true.
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      use-system-variables: true,
     ),
-    density: (
-      scale: -1,
-    ),
+    typography: $_typography,
+    density: $_density,
   )
 );
 
 html {
-  @include mat.all-component-themes($theme);
+  @include mat.all-component-themes($light-theme);
+}
+
+// Override with dark theme in dark mode so state-layer colors
+// and ripple overlays are computed for dark backgrounds.
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme='light']) {
+    @include mat.all-component-colors($dark-theme);
+  }
+}
+
+html[data-theme='dark'] {
+  @include mat.all-component-colors($dark-theme);
 }
 
 :root {
