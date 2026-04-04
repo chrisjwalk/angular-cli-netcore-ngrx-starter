@@ -1,10 +1,15 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
+import { MatButton, MatIconButton } from '@angular/material/button';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
 import { MatInput } from '@angular/material/input';
 import { AuthStore } from '@myorg/auth';
-import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
+import {
+  BreakpointStore,
+  LayoutStore,
+  PageContainer,
+  PageToolbar,
+} from '@myorg/shared';
 
 import { WeatherForecastStore } from '../../state/weather-forecast.store';
 import { ForecastTable } from '../forecast-table/forecast-table';
@@ -13,6 +18,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
   imports: [
     PageContainer,
     MatButton,
+    MatIconButton,
     MatFormField,
     MatLabel,
     MatInput,
@@ -20,7 +26,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
     MatIcon,
     ForecastTable,
   ],
-  providers: [WeatherForecastStore],
+  providers: [WeatherForecastStore, BreakpointStore],
   selector: 'lib-weather-forecast',
   template: `
     <lib-page-toolbar [title]="layoutStore.title()" />
@@ -45,21 +51,36 @@ import { ForecastTable } from '../forecast-table/forecast-table';
               [value]="store.count()"
             />
           </mat-form-field>
-          <button
-            mat-flat-button
-            class="!px-3 sm:!px-4"
-            color="primary"
-            (click)="
-              store.getForecasts({
-                count: +count.value,
-                plus: authStore.pageRequiresLogin(),
-              })
-            "
-            aria-label="Get Forecasts"
-          >
-            <mat-icon class="sm:!mr-2 !mr-0">refresh</mat-icon>
-            <span class="hidden sm:inline">Get Forecasts</span>
-          </button>
+          @if (breakpointStore.handset()) {
+            <button
+              mat-icon-button
+              color="primary"
+              (click)="
+                store.getForecasts({
+                  count: +count.value,
+                  plus: authStore.pageRequiresLogin(),
+                })
+              "
+              aria-label="Get Forecasts"
+            >
+              <mat-icon>refresh</mat-icon>
+            </button>
+          } @else {
+            <button
+              mat-flat-button
+              color="primary"
+              (click)="
+                store.getForecasts({
+                  count: +count.value,
+                  plus: authStore.pageRequiresLogin(),
+                })
+              "
+              aria-label="Get Forecasts"
+            >
+              <mat-icon>refresh</mat-icon>
+              Get Forecasts
+            </button>
+          }
         </div>
       </div>
       <lib-forecast-table
@@ -77,6 +98,7 @@ export class WeatherForecast {
   readonly layoutStore = inject(LayoutStore);
   readonly authStore = inject(AuthStore);
   readonly store = inject(WeatherForecastStore);
+  readonly breakpointStore = inject(BreakpointStore);
 
   constructor() {
     this.layoutStore.setTitle('Weather Forecasts');
