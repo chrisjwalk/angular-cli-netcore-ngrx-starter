@@ -26,15 +26,8 @@ import { ForecastTable } from '../forecast-table/forecast-table';
     <lib-page-toolbar [title]="layoutStore.title()" />
     <lib-page-container>
       <div
-        class="forecast-filter-bar mb-6 flex flex-wrap items-center justify-between gap-4 rounded-2xl bg-surface-container p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+        class="forecast-filter-bar mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-surface-container p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       >
-        <div class="flex items-center gap-3">
-          <span class="h-2 w-2 rounded-full bg-primary"></span>
-          <span
-            class="text-xs font-medium uppercase tracking-widest text-on-surface-variant"
-            >Active Forecast</span
-          >
-        </div>
         <div class="flex items-center gap-3">
           <mat-form-field appearance="outline">
             <mat-label>Forecast Days</mat-label>
@@ -64,7 +57,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
             aria-label="Get Forecasts"
           >
             <mat-icon>refresh</mat-icon>
-            Get Forecasts
+            <span class="hidden sm:inline">Get Forecasts</span>
           </button>
         </div>
       </div>

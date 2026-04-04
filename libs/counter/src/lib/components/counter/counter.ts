@@ -23,72 +23,70 @@ import { MatTooltip } from '@angular/material/tooltip';
   selector: 'lib-counter',
   template: `
     <div
-      class="count-row flex gap-2 items-center content-center justify-center w-full whitespace-nowrap"
+      class="w-full overflow-hidden rounded-2xl bg-surface-container-low shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
     >
-      <button
-        class="!w-[92px] !h-[92px]"
-        mat-icon-button
-        (click)="decrement.emit()"
-        matTooltip="Decrement"
-        aria-label="Decrement"
-      >
-        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]">
-          keyboard_arrow_left
-        </mat-icon>
-      </button>
-      <div
-        class="bg-surface-container-lowest dark:bg-surface-container p-4 rounded-sm flex flex-col shadow-sm truncate min-[600px]:min-w-[300px] max-[599px]:flex-1"
-      >
-        <div class="text-[120px] text-center" data-testid="count">
-          {{ count() }}
+      <!-- Counter display -->
+      <div class="flex flex-col items-center gap-8 px-8 py-12">
+        <div class="flex items-center gap-8">
+          <button
+            class="!h-[72px] !w-[72px]"
+            mat-icon-button
+            (click)="decrement.emit()"
+            matTooltip="Decrement"
+            aria-label="Decrement"
+          >
+            <mat-icon class="!h-[56px] !w-[56px] !text-[60px]">remove</mat-icon>
+          </button>
+          <div
+            class="min-w-[200px] text-center font-display text-[120px] font-black leading-none tracking-tight text-on-surface"
+            data-testid="count"
+          >
+            {{ count() }}
+          </div>
+          <button
+            class="!h-[72px] !w-[72px]"
+            mat-icon-button
+            (click)="increment.emit()"
+            matTooltip="Increment"
+            aria-label="Increment"
+          >
+            <mat-icon class="!h-[56px] !w-[56px] !text-[60px]">add</mat-icon>
+          </button>
+        </div>
+
+        <!-- Set value -->
+        <div class="flex items-center gap-3">
+          <mat-form-field appearance="outline">
+            <mat-label>Set Count</mat-label>
+            <input
+              matInput
+              #setvalue
+              type="number"
+              (keyup.enter)="setCount.emit(+setvalue.value)"
+              [value]="count()"
+            />
+          </mat-form-field>
+          <button
+            mat-flat-button
+            color="primary"
+            (click)="setCount.emit(+setvalue.value)"
+          >
+            Submit
+          </button>
         </div>
       </div>
-      <button
-        class="!w-[92px] !h-[92px]"
-        mat-icon-button
-        (click)="increment.emit()"
-        matTooltip="Increment"
-        aria-label="Increment"
-      >
-        <mat-icon class="!w-[72px] !h-[72px] !text-[76px]">
-          keyboard_arrow_right
-        </mat-icon>
-      </button>
     </div>
-    <mat-form-field appearance="outline" class="mt-1 w-[320px]">
-      <mat-label>
-        Enter the value you'd like to set the count to here
-      </mat-label>
-      <input
-        matInput
-        #setvalue
-        type="number"
-        placeholder="Set Count"
-        (keyup.enter)="setCount.emit(+setvalue.value)"
-        [value]="count()"
-      />
-    </mat-form-field>
-    <button
-      mat-flat-button
-      color="primary"
-      (click)="setCount.emit(+setvalue.value)"
-    >
-      Submit
-    </button>
   `,
+
   styles: [
     `
-      :host ::ng-deep {
-        .mat-mdc-form-field {
-          .mat-mdc-form-field-subscript-wrapper {
-            display: none;
-          }
-        }
+      :host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+        display: none;
       }
     `,
   ],
   host: {
-    class: 'flex flex-col gap-4 items-center',
+    class: 'flex w-full',
     'data-testid': 'lib-counter',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
