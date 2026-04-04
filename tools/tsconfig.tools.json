@@ -4,7 +4,8 @@
     "outDir": "../dist/out-tsc/tools",
     "rootDir": ".",
     "module": "commonjs",
-    "moduleResolution": "node",
+    "moduleResolution": "node10",
+    "ignoreDeprecations": "6.0",
     "target": "es5",
     "types": ["node"]
   },

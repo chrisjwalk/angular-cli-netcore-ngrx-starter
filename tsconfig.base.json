@@ -15,6 +15,7 @@
     "skipLibCheck": true,
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@myorg/auth": ["libs/auth/src/index.ts"],
       "@myorg/counter": ["libs/counter/src/index.ts"],
