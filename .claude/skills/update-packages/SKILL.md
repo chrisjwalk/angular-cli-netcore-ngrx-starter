@@ -68,9 +68,7 @@ All 9 projects must pass before committing.
 
 ```bash
 git add -A
-git commit -m "chore: update all packages to latest (closes #<issue-number>)
-
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
+git commit -m "chore: update all packages to latest (closes #<issue-number>)"
 ```
 
 ### 8. Push and open PR
