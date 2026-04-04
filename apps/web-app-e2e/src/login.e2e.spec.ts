@@ -11,13 +11,13 @@ test.describe('Login page', () => {
     await page.goto('/login');
 
     await expect(page.getByLabel('Email')).toBeVisible();
-    await expect(page.getByLabel('Password')).toBeVisible();
+    await expect(page.getByLabel('Password', { exact: true })).toBeVisible();
   });
 
-  test('should display a Login button', async ({ page }) => {
+  test('should display a Sign in button', async ({ page }) => {
     await page.goto('/login');
 
-    await expect(page.getByRole('button', { name: /login/i })).toBeVisible();
+    await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
   });
 
   test('login button should be disabled when form is invalid', async ({
@@ -28,7 +28,7 @@ test.describe('Login page', () => {
     // Clear the pre-filled email so the form becomes invalid
     await page.getByLabel('Email').fill('');
 
-    await expect(page.getByRole('button', { name: /login/i })).toBeDisabled();
+    await expect(page.getByRole('button', { name: /sign in/i })).toBeDisabled();
   });
 
   test('login button should be enabled when form is valid', async ({
@@ -37,8 +37,8 @@ test.describe('Login page', () => {
     await page.goto('/login');
 
     await page.getByLabel('Email').fill('user@example.com');
-    await page.getByLabel('Password').fill('password123');
+    await page.getByLabel('Password', { exact: true }).fill('password123');
 
-    await expect(page.getByRole('button', { name: /login/i })).toBeEnabled();
+    await expect(page.getByRole('button', { name: /sign in/i })).toBeEnabled();
   });
 });

@@ -4,23 +4,23 @@ test.describe('Navigation', () => {
   test.describe('toolbar (desktop)', () => {
     test.use({ viewport: { width: 1280, height: 720 } });
 
-    test('should navigate to weather forecast page via toolbar button', async ({
+    test('should navigate to weather forecast page via toolbar link', async ({
       page,
     }) => {
       await page.goto('/');
 
-      await page.getByRole('button', { name: 'Get Data Feature' }).click();
+      await page.getByRole('link', { name: 'Weather Forecasts' }).click();
 
       await expect(page).toHaveURL(/\/weather-forecast/);
       await expect(page.getByTestId('lib-weather-forecast')).toBeVisible();
     });
 
-    test('should navigate to counter page via toolbar button', async ({
+    test('should navigate to counter page via toolbar link', async ({
       page,
     }) => {
       await page.goto('/');
 
-      await page.getByRole('button', { name: 'Lazy Loaded Feature' }).click();
+      await page.getByRole('link', { name: 'Counter' }).click();
 
       await expect(page).toHaveURL(/\/feature/);
       await expect(page.getByTestId('lib-counter-container')).toBeVisible();
