@@ -47,6 +47,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
           </mat-form-field>
           <button
             mat-flat-button
+            class="!px-3 sm:!px-4"
             color="primary"
             (click)="
               store.getForecasts({
@@ -56,7 +57,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
             "
             aria-label="Get Forecasts"
           >
-            <mat-icon>refresh</mat-icon>
+            <mat-icon class="sm:!mr-2 !mr-0">refresh</mat-icon>
             <span class="hidden sm:inline">Get Forecasts</span>
           </button>
         </div>
