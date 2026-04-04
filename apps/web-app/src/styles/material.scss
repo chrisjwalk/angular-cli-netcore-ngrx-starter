@@ -3,62 +3,168 @@
 @include mat.elevation-classes();
 @include mat.app-background();
 
-// Define a dark theme
-$dark-theme: mat.define-theme(
-  (
-    color: (
-      theme-type: dark,
-      primary: mat.$azure-palette,
-      tertiary: mat.$orange-palette,
-    ),
-    typography: (
-      plain-family: 'Roboto, sans-serif',
-    ),
-    density: (
-      scale: -1,
-    ),
-  )
+// Shared typography and density config
+$_typography: (
+  plain-family: 'Inter, sans-serif',
+  brand-family: 'Manrope, sans-serif',
+  bold-weight: 700,
 );
 
-// Define a light theme
+$_density: (
+  scale: -1,
+);
+
+// Light theme — base component styles + color from CSS variables
 $light-theme: mat.define-theme(
   (
     color: (
       theme-type: light,
       primary: mat.$azure-palette,
-      tertiary: mat.$violet-palette,
+      use-system-variables: true,
     ),
+    typography: $_typography,
+    density: $_density,
+  )
+);
+
+// Dark theme — generates correct dark-mode state-layer opacities,
+// ripple colors, and overlay colors. Colors still come from our
+// CSS custom properties via use-system-variables: true.
+$dark-theme: mat.define-theme(
+  (
+    color: (
+      theme-type: dark,
+      primary: mat.$azure-palette,
+      use-system-variables: true,
+    ),
+    typography: $_typography,
+    density: $_density,
   )
 );
 
 html {
-  // Apply the dark theme by default
-  @include mat.all-component-themes($dark-theme);
-  // Apply the light theme only when the user prefers light themes.
-  @media (prefers-color-scheme: light) {
-    // Use the `-color` mixins to only apply color styles without reapplying the same
-    // typography and density styles.
-    @include mat.all-component-colors($light-theme);
+  @include mat.all-component-themes($light-theme);
+}
+
+// Override with dark theme in dark mode so state-layer colors
+// and ripple overlays are computed for dark backgrounds.
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme='light']) {
+    @include mat.all-component-colors($dark-theme);
   }
 }
 
-:root {
-  --mat-toolbar-container-background-color: #{mat.get-theme-color(
-      $light-theme,
-      primary-container
-    )};
-  --mat-sidenav-content-background-color: rgb(250, 250, 250);
-  --mat-toolbar-standard-height: 56px;
+html[data-theme='dark'] {
+  @include mat.all-component-colors($dark-theme);
+}
 
-  @media (prefers-color-scheme: dark) {
-    --mat-sidenav-content-background-color: rgb(33, 33, 33);
-    --mat-toolbar-container-background-color: rgb(40, 40, 40);
-    --mat-toolbar-container-text-color: rgba(255, 255, 255, 0.75);
-  }
+// Bridge: Angular Material components reference --mat-sys-* internally but
+// with use-system-variables: true it sets them to `initial`. We override here
+// using :root (specificity 0,1,0 > html's 0,0,1) so our values always win.
+// Since --md-sys-color-* already switches between light/dark via _tokens.css,
+// this single mapping handles both themes automatically.
+:root {
+  --mat-sys-primary: var(--md-sys-color-primary);
+  --mat-sys-on-primary: var(--md-sys-color-on-primary);
+  --mat-sys-primary-container: var(--md-sys-color-primary-container);
+  --mat-sys-on-primary-container: var(--md-sys-color-on-primary-container);
+  --mat-sys-inverse-primary: var(--md-sys-color-inverse-primary);
+  --mat-sys-secondary: var(--md-sys-color-secondary);
+  --mat-sys-secondary-container: var(--md-sys-color-secondary-container);
+  --mat-sys-on-secondary-container: var(--md-sys-color-on-secondary-container);
+  --mat-sys-tertiary-container: var(--md-sys-color-tertiary-container);
+  --mat-sys-error: var(--md-sys-color-error);
+  --mat-sys-on-error: var(--md-sys-color-on-error);
+  --mat-sys-on-error-container: var(--md-sys-color-on-error-container);
+  --mat-sys-surface: var(--md-sys-color-surface);
+  --mat-sys-surface-container: var(--md-sys-color-surface-container);
+  --mat-sys-surface-container-low: var(--md-sys-color-surface-container-low);
+  --mat-sys-surface-container-high: var(--md-sys-color-surface-container-high);
+  --mat-sys-surface-container-highest: var(
+    --md-sys-color-surface-container-highest
+  );
+  --mat-sys-surface-variant: var(--md-sys-color-surface-variant);
+  --mat-sys-on-surface: var(--md-sys-color-on-surface);
+  --mat-sys-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --mat-sys-inverse-surface: var(--md-sys-color-inverse-surface);
+  --mat-sys-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+  --mat-sys-outline: var(--md-sys-color-outline);
+  --mat-sys-outline-variant: var(--md-sys-color-outline-variant);
+  --mat-sys-background: var(--md-sys-color-background);
+  --mat-sys-on-background: var(--md-sys-color-on-background);
+
+  --mat-toolbar-standard-height: 56px;
+  --mat-toolbar-container-background-color: var(--md-sys-color-surface);
+  --mat-toolbar-container-text-color: var(--md-sys-color-on-surface);
+  --mat-sidenav-container-background-color: var(
+    --md-sys-color-surface-container-lowest
+  );
+  --mat-sidenav-content-background-color: var(--md-sys-color-surface);
 
   .mat-mdc-form-field {
     .mdc-notched-outline__notch {
       border-right: none;
     }
   }
+}
+
+// ─── Form field: borderless at rest, primary focus ring ─────────────────────
+// CSS custom properties from https://material.angular.dev/components/form-field/styling
+.mat-mdc-form-field {
+  // 8px radius — matches dark mode design reference
+  --mat-form-field-outlined-container-shape: 0.5rem;
+
+  // No visible border at rest or on hover
+  --mat-form-field-outlined-outline-color: transparent;
+  --mat-form-field-outlined-hover-outline-color: transparent;
+
+  // Primary-colored 2px ring on focus
+  --mat-form-field-outlined-focus-outline-color: var(--md-sys-color-primary);
+}
+
+// Field background = page background so it reads as subtly recessed inside the card.
+// border-radius must be set explicitly — the token only applies to notched-outline elements.
+.mat-mdc-form-field .mat-mdc-text-field-wrapper.mdc-text-field--outlined {
+  background-color: var(--md-sys-color-background);
+  border-radius: var(--mat-form-field-outlined-container-shape);
+}
+
+// ─── Filled button: match field radius and height from dark mode design reference ───────
+:root {
+  --mat-button-filled-container-shape: 0.5rem;
+  --mat-button-filled-container-height: 2.75rem; // 44px
+
+  // ─── Table ────────────────────────────────────────────────────────────────
+  // https://material.angular.dev/components/table/styling
+  --mat-table-background-color: var(--md-sys-color-surface-container-low);
+  --mat-table-header-headline-color: var(--md-sys-color-on-surface-variant);
+  --mat-table-row-item-label-text-color: var(--md-sys-color-on-surface);
+  // No-line philosophy: no visible row dividers; depth via tonal backgrounds
+  --mat-table-row-item-outline-color: transparent;
+  --mat-table-row-item-container-height: 56px;
+  --mat-table-header-container-height: 48px;
+
+  // ─── Paginator ────────────────────────────────────────────────────────────
+  // https://material.angular.dev/components/paginator/styling
+  --mat-paginator-container-background-color: var(
+    --md-sys-color-surface-container-low
+  );
+  --mat-paginator-container-text-color: var(--md-sys-color-on-surface-variant);
+  --mat-paginator-enabled-icon-color: var(--md-sys-color-on-surface-variant);
+}
+
+// Purge all remaining MDC table cell borders — token alone doesn't cover them all
+mat-table .mdc-data-table__cell,
+mat-table .mdc-data-table__header-cell {
+  border-bottom: none;
+}
+
+// Slightly elevated header row so it reads as distinct from data rows
+mat-table .mat-mdc-header-row {
+  background-color: var(--md-sys-color-surface-container);
+}
+
+// Subtle hover tint on data rows
+mat-table .mat-mdc-row:hover {
+  background-color: var(--md-sys-color-surface-container-low);
 }

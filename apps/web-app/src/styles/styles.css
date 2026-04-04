@@ -1,7 +1,80 @@
 @import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+@source '../assets/*.md';
+@import './_tokens.css';
+
+/*
+ * Override the built-in dark: variant so it respects both OS preference
+ * (when theme is "system") and the data-theme attribute on <html>
+ * (when the user has manually selected a theme).
+ */
+@custom-variant dark {
+  @media (prefers-color-scheme: dark) {
+    html:not([data-theme='light']) & {
+      @slot;
+    }
+  }
+  html[data-theme='dark'] & {
+    @slot;
+  }
+}
 
 @theme {
-  --font-sans: Roboto, sans-serif;
+  /* Fonts */
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Manrope', sans-serif;
+
+  /* Primary */
+  --color-primary: var(--md-sys-color-primary);
+  --color-on-primary: var(--md-sys-color-on-primary);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+  --color-inverse-primary: var(--md-sys-color-inverse-primary);
+
+  /* Secondary */
+  --color-secondary: var(--md-sys-color-secondary);
+  --color-on-secondary: var(--md-sys-color-on-secondary);
+  --color-secondary-container: var(--md-sys-color-secondary-container);
+  --color-on-secondary-container: var(--md-sys-color-on-secondary-container);
+
+  /* Tertiary */
+  --color-tertiary: var(--md-sys-color-tertiary);
+  --color-on-tertiary: var(--md-sys-color-on-tertiary);
+  --color-tertiary-container: var(--md-sys-color-tertiary-container);
+  --color-on-tertiary-container: var(--md-sys-color-on-tertiary-container);
+
+  /* Error */
+  --color-error: var(--md-sys-color-error);
+  --color-on-error: var(--md-sys-color-on-error);
+  --color-error-container: var(--md-sys-color-error-container);
+  --color-on-error-container: var(--md-sys-color-on-error-container);
+
+  /* Surface */
+  --color-surface: var(--md-sys-color-surface);
+  --color-surface-dim: var(--md-sys-color-surface-dim);
+  --color-surface-bright: var(--md-sys-color-surface-bright);
+  --color-surface-container-lowest: var(
+    --md-sys-color-surface-container-lowest
+  );
+  --color-surface-container-low: var(--md-sys-color-surface-container-low);
+  --color-surface-container: var(--md-sys-color-surface-container);
+  --color-surface-container-high: var(--md-sys-color-surface-container-high);
+  --color-surface-container-highest: var(
+    --md-sys-color-surface-container-highest
+  );
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-inverse-surface: var(--md-sys-color-inverse-surface);
+  --color-inverse-on-surface: var(--md-sys-color-inverse-on-surface);
+  --color-surface-tint: var(--md-sys-color-surface-tint);
+
+  /* Outline */
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  /* Background */
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
 }
 
 @layer base {
@@ -15,14 +88,23 @@
 
   html {
     font-display: swap;
+    /* Ensure body text/background follows the active token set in all modes */
+    background-color: var(--md-sys-color-background);
+    color: var(--md-sys-color-on-background);
   }
 
   @media (prefers-color-scheme: dark) {
     a,
     a:hover,
     a:visited {
-      @apply text-sky-300;
+      @apply text-primary;
     }
+  }
+
+  html[data-theme='dark'] a,
+  html[data-theme='dark'] a:hover,
+  html[data-theme='dark'] a:visited {
+    @apply text-primary;
   }
 }
 
@@ -59,63 +141,107 @@
   }
 }
 
-markdown {
-  pre {
-    @apply p-4 overflow-auto rounded-sm border text-sm border-neutral-900 bg-neutral-50;
+/* ── Prose (ngx-markdown rendered content) ────────────────────────────────── */
 
-    @media (prefers-color-scheme: dark) {
-      @apply bg-neutral-900 border-neutral-50;
-    }
-  }
+/*
+ * Map typography plugin CSS variables to our Nexus Kinetic design tokens.
+ * Because --md-sys-color-* already switches in dark mode we don't need
+ * a separate prose-invert ruleset.
+ */
+.prose {
+  --tw-prose-body: var(--md-sys-color-on-surface);
+  --tw-prose-headings: var(--md-sys-color-on-surface);
+  --tw-prose-lead: var(--md-sys-color-on-surface-variant);
+  --tw-prose-links: var(--md-sys-color-primary);
+  --tw-prose-bold: var(--md-sys-color-on-surface);
+  --tw-prose-counters: var(--md-sys-color-on-surface-variant);
+  --tw-prose-bullets: var(--md-sys-color-outline);
+  --tw-prose-hr: var(--md-sys-color-outline-variant);
+  --tw-prose-quotes: var(--md-sys-color-on-surface-variant);
+  --tw-prose-quote-borders: var(--md-sys-color-primary);
+  --tw-prose-captions: var(--md-sys-color-on-surface-variant);
+  --tw-prose-code: var(--md-sys-color-on-surface);
+  --tw-prose-pre-code: var(--md-sys-color-on-surface);
+  --tw-prose-pre-bg: var(--md-sys-color-surface-container);
+  --tw-prose-th-borders: var(--md-sys-color-outline-variant);
+  --tw-prose-td-borders: var(--md-sys-color-outline-variant);
 
-  blockquote {
-    @apply py-0.5 px-4 mx-0 my-3 border-l-8 rounded-sm border-neutral-900 bg-neutral-50;
-
-    @media (prefers-color-scheme: dark) {
-      @apply bg-neutral-900 border-neutral-50;
-    }
-  }
-
-  code {
-    @apply py-0.5 px-1 bg-neutral-50;
-
-    @media (prefers-color-scheme: dark) {
-      @apply bg-neutral-900;
-    }
-  }
-
+  /* h1 font is the display face; rest use body face */
   h1 {
-    @apply text-3xl font-bold my-5 md:text-4xl;
+    font-family: var(--font-display);
+    font-weight: 700;
   }
 
-  h2 {
-    @apply text-2xl font-bold mb-4 mt-8 md:text-3xl;
+  /* Code blocks */
+  pre {
+    border-radius: 0.75rem;
+    border: 1px solid var(--md-sys-color-outline-variant);
+    font-size: 0.875em;
   }
 
-  h3 {
-    @apply text-xl font-bold my-3 md:text-2xl;
+  /* Inline code */
+  code:not(pre code) {
+    background: var(--md-sys-color-surface-container);
+    border-radius: 0.3em;
+    padding: 0.15em 0.45em;
+    font-size: 0.875em;
+    font-weight: 400;
   }
 
-  h4 {
-    @apply text-lg font-bold my-2 md:text-lg;
-  }
-
-  p {
-    @apply my-3;
-  }
-
-  ul {
-    @apply list-disc pl-10;
+  /* Blockquote accent */
+  blockquote {
+    background: var(--md-sys-color-surface-container-low);
+    border-radius: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    border-left: 4px solid var(--md-sys-color-primary);
+    font-style: normal;
   }
 }
 
-lib-page-toolbar {
+/* On the home doc page the hero section shows the title; suppress the
+   redundant H1 that ngx-markdown renders from the markdown source. */
+.doc-prose markdown h1:first-of-type {
+  display: none;
+}
+
+/* ── Doc page: card-style list items ─────────────────────────────────────── */
+
+/*
+ * Only lists that follow a bold section label (e.g. **Frontend**, **Backend**)
+ * get card-row treatment — those render as <p><strong>…</strong></p> + <ul>.
+ * The Features list follows an <h2>, so it is intentionally excluded.
+ */
+.doc-prose.prose p:has(> strong) + ul {
+  padding-left: 0;
+  list-style: none;
+  border-radius: 0.625rem;
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.doc-prose.prose p:has(> strong) + ul > li {
+  position: relative;
+  list-style: none;
+  padding: 0.875rem 1.25rem 0.875rem 3.5rem;
+  background: var(--md-sys-color-surface-container);
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* Icon box */
+.doc-prose.prose p:has(> strong) + ul > li::before {
+  content: '';
+  position: absolute;
+  left: 1rem;
+  top: 0.9375rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  background-color: var(--md-sys-color-primary-container);
+  border-radius: 0.375rem;
+}
+
+.forecast-filter-bar {
   .mat-mdc-form-field-subscript-wrapper {
     @apply hidden;
-  }
-
-  .mat-mdc-text-field-wrapper.mdc-text-field--outlined
-    .mat-mdc-form-field-infix {
-    @apply py-1 min-h-[34px];
   }
 }

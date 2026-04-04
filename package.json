@@ -71,6 +71,7 @@
     "@ngrx/operators": "21.0.1",
     "@ngrx/signals": "21.0.1",
     "@tailwindcss/postcss": "4.2.2",
+    "@tailwindcss/typography": "^0.5.19",
     "chalk": "5.6.2",
     "inquirer": "13.3.2",
     "marked": "17.0.5",

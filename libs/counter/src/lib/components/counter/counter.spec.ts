@@ -27,7 +27,7 @@ describe('Counter', () => {
       componentOutputs: { increment: { emit: increment } as any },
     });
 
-    fireEvent.click(screen.getByText('keyboard_arrow_right'));
+    fireEvent.click(screen.getByLabelText('Increment'));
     expect(increment).toHaveBeenCalledTimes(1);
   });
 });

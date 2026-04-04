@@ -1,6 +1,8 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
+  inject,
   input,
   output,
 } from '@angular/core';
@@ -8,10 +10,11 @@ import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatTooltip } from '@angular/material/tooltip';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 import { NAV_LINKS } from './nav-links';
 import { NotificationBell } from './notification-bell';
+import { ThemeService } from './theme.service';
 
 @Component({
   imports: [
@@ -19,6 +22,7 @@ import { NotificationBell } from './notification-bell';
     MatToolbar,
     MatTooltip,
     RouterLink,
+    RouterLinkActive,
     MatIconButton,
     NotificationBell,
   ],
@@ -91,22 +95,29 @@ import { NotificationBell } from './notification-bell';
           </defs>
         </svg>
       </a>
-      <a class="no-underline dark:!text-neutral-300" [routerLink]="['/']">
+      <a class="no-underline text-on-surface font-medium" [routerLink]="['/']">
         Demo App
       </a>
-      <span class="flex-1"></span>
-      <div class="hidden md:flex gap-2 items-center">
+      <nav class="hidden md:flex items-stretch h-full ml-2">
         @for (link of navLinks; track link.routerLink) {
-          <button
-            mat-icon-button
+          <a
             [routerLink]="link.routerLink"
-            [matTooltip]="link.hint"
-            [attr.aria-label]="link.hint"
+            routerLinkActive="nav-active text-primary"
+            class="no-underline text-on-surface-variant text-sm px-3 h-full flex items-center hover:text-on-surface transition-colors"
           >
-            <mat-icon>{{ link.icon }}</mat-icon>
-          </button>
+            <span>{{ link.label }}</span>
+          </a>
         }
-      </div>
+      </nav>
+      <span class="flex-1"></span>
+      <button
+        mat-icon-button
+        (click)="themeService.toggle()"
+        [matTooltip]="themeTooltip()"
+        aria-label="Toggle color theme"
+      >
+        <mat-icon>{{ themeIcon() }}</mat-icon>
+      </button>
       <lib-notification-bell />
       @if (loggedIn()) {
         <button
@@ -130,6 +141,11 @@ import { NotificationBell } from './notification-bell';
           height: var(--mat-toolbar-standard-height);
         }
       }
+
+      a.nav-active span {
+        border-bottom: 2px solid var(--md-sys-color-primary);
+        padding-bottom: 1px;
+      }
     `,
   ],
   host: {
@@ -138,10 +154,25 @@ import { NotificationBell } from './notification-bell';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainToolbar {
+  readonly themeService = inject(ThemeService);
   readonly navLinks = NAV_LINKS;
 
   loggedIn = input<boolean>(null);
 
   toggleSidenav = output<void>();
   logout = output<void>();
+
+  readonly themeIcon = computed(() => {
+    const t = this.themeService.theme();
+    if (t === 'light') return 'light_mode';
+    if (t === 'dark') return 'dark_mode';
+    return 'brightness_auto';
+  });
+
+  readonly themeTooltip = computed(() => {
+    const t = this.themeService.theme();
+    if (t === 'light') return 'Theme: Light (click for Dark)';
+    if (t === 'dark') return 'Theme: Dark (click for System)';
+    return 'Theme: System (click for Light)';
+  });
 }

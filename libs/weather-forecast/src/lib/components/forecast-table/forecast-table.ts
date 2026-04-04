@@ -4,6 +4,7 @@ import {
   computed,
   inject,
   input,
+  viewChild,
 } from '@angular/core';
 import {
   MatCell,
@@ -16,8 +17,10 @@ import {
   MatCellDef,
   MatHeaderCellDef,
   MatColumnDef,
+  MatTableDataSource,
 } from '@angular/material/table';
-import { patchState, signalState } from '@ngrx/signals';
+import { MatPaginator } from '@angular/material/paginator';
+import { patchState, signalMethod, signalState } from '@ngrx/signals';
 
 import { BreakpointStore } from '@myorg/shared';
 import { WeatherForecast } from '../../models/weather-forecast';
@@ -34,17 +37,24 @@ import { WeatherForecast } from '../../models/weather-forecast';
     MatCellDef,
     MatHeaderCellDef,
     MatColumnDef,
+    MatPaginator,
   ],
   selector: 'lib-forecast-table',
   template: `
     @if (loading()) {
       <div class="flex flex-col gap-4">
-        <div class="loading h-12 bg-neutral-300 dark:bg-neutral-700"></div>
-        <div class="loading h-96 bg-neutral-300 dark:bg-neutral-700"></div>
+        <div
+          class="loading h-12 bg-surface-container-low dark:bg-surface-container-high"
+        ></div>
+        <div
+          class="loading h-96 bg-surface-container-low dark:bg-surface-container-high"
+        ></div>
       </div>
     } @else {
-      <div class="mat-elevation-z2">
-        <mat-table #table [dataSource]="data()">
+      <div
+        class="flex flex-col flex-1 overflow-hidden rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
+      >
+        <mat-table #table [dataSource]="dataSource">
           <ng-container matColumnDef="dateFormatted">
             <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
             <mat-cell *matCellDef="let forecast">
@@ -77,10 +87,18 @@ import { WeatherForecast } from '../../models/weather-forecast';
             data-testid="table-row"
           ></mat-row>
         </mat-table>
+        <div class="flex-1"></div>
+        <mat-paginator
+          [pageSizeOptions]="[5, 10, 25]"
+          [pageSize]="5"
+          showFirstLastButtons
+          aria-label="Select page of forecasts"
+        ></mat-paginator>
       </div>
     }
   `,
   host: {
+    class: 'flex flex-col',
     'data-testid': 'lib-forecast-table',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -91,6 +109,26 @@ export class ForecastTable {
 
   loading = input<boolean>(null);
   data = input<WeatherForecast[]>(null);
+
+  readonly dataSource = new MatTableDataSource<WeatherForecast>([]);
+  readonly paginator = viewChild(MatPaginator);
+
+  private readonly syncData = signalMethod<WeatherForecast[]>((data) => {
+    this.dataSource.data = data ?? [];
+  });
+
+  // signalMethod reacts whenever this.paginator() changes — correctly
+  // connects the paginator after the @if(loading()) branch resolves.
+  private readonly connectPaginator = signalMethod<MatPaginator | undefined>(
+    (paginator) => {
+      this.dataSource.paginator = paginator ?? null;
+    },
+  );
+
+  constructor() {
+    this.syncData(this.data);
+    this.connectPaginator(this.paginator);
+  }
 
   state = signalState({
     columns: [

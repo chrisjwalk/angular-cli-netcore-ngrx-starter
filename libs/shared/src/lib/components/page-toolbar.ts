@@ -4,14 +4,18 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   selector: 'lib-page-toolbar',
   template: `
     @if (title()) {
-      <h1 class="text-lg font-normal inline">{{ title() }}</h1>
+      <h1
+        class="font-display text-4xl font-black tracking-tight text-on-surface"
+      >
+        {{ title() }}
+      </h1>
     }
     <span class="flex-1"></span>
     <ng-content />
   `,
   host: {
     class:
-      'bg-white/95 dark:bg-neutral-700 flex flex-row whitespace-nowrap gap-2 py-0 px-4 box-border items-center h-[46px]',
+      'flex flex-row items-center gap-4 whitespace-nowrap px-8 pt-8 pb-5 w-full max-w-[1440px] mx-auto',
     'data-testid': 'lib-page-toolbar',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,

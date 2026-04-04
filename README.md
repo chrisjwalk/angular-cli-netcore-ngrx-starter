@@ -7,7 +7,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 ## Features
 
 - **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
-- **Notification centre** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
+- **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
 - **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
 - **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
 - **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
