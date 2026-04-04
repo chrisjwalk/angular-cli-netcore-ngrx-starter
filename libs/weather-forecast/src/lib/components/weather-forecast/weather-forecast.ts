@@ -32,7 +32,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
     <lib-page-toolbar [title]="layoutStore.title()" />
     <lib-page-container>
       <div
-        class="forecast-filter-bar mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-surface-container p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+        class="forecast-filter-bar mb-8 flex flex-wrap items-center gap-4 rounded-2xl bg-surface-container p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       >
         <div class="flex items-center gap-3">
           <mat-form-field appearance="outline">
