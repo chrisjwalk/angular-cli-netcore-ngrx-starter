@@ -10,7 +10,7 @@ description: >
 
 Follow these steps in order.
 
-### 1. Create a GitHub issue (as `chrisjwalk`)
+### 1. Create a GitHub issue to track the update
 
 ```bash
 gh issue create --title "chore: update all packages to latest" --body "..."
@@ -27,8 +27,7 @@ git checkout -b feat/consolidate-deps-<issue-number>
 
 ### 3. Run the update-packages script
 
-Always omit `typescript` — upgrading TypeScript is a breaking change that
-requires a dedicated branch and tsconfig work (see issue #101 for context).
+Optionally omit any packages you want to track separately (e.g. `typescript`) or that may have dependency conflicts.
 
 ```bash
 npx ts-node ./tools/update-packages/src/main.ts --omit typescript --interactive false
@@ -74,13 +73,11 @@ git commit -m "chore: update all packages to latest (closes #<issue-number>)
 Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
 ```
 
-### 8. Push and open PR as `chrisjwalk-bot`, then switch back
+### 8. Push and open PR
 
 ```bash
-gh auth switch --user chrisjwalk-bot
 git push origin feat/consolidate-deps-<issue-number>
 gh pr create --title "chore: update all packages to latest" --body "Closes #<issue-number> ..."
-gh auth switch --user chrisjwalk
 ```
 
 ### 9. Close stale dependabot PRs
@@ -97,7 +94,7 @@ Leave open any dependabot PRs for packages that were intentionally omitted
 
 ## Notes
 
-- `typescript` is always omitted — track TS upgrades separately in issue #101
+- `typescript` major upgrades are best tracked in a dedicated branch due to tsconfig breaking changes
 - If a package is a transitive dep not shown by `pnpm outdated`, use
   `pnpm.overrides` in `package.json` to force the version
 - After merging, watch for new dependabot PRs — dependabot may recreate stale
