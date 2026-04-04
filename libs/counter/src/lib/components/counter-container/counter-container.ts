@@ -4,31 +4,18 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { MatIcon } from '@angular/material/icon';
-import {
-  LayoutStore,
-  PageContainer,
-  PageToolbarButton,
-  PageToolbar,
-} from '@myorg/shared';
+import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
 
 import { counterEvents, CounterStore } from '../../state';
 import { Counter } from '../counter/counter';
 import { injectDispatch } from '@ngrx/signals/events';
 
 @Component({
-  imports: [MatIcon, PageContainer, PageToolbar, PageToolbarButton, Counter],
+  imports: [PageContainer, PageToolbar, Counter],
   selector: 'lib-counter-container',
   template: `
     @let count = store.count();
-    <lib-page-toolbar [title]="layoutStore.title()">
-      <lib-page-toolbar-button
-        (click)="dispatcher.incrementCount()"
-        tooltip="Increment!"
-      >
-        <mat-icon>add</mat-icon>
-      </lib-page-toolbar-button>
-    </lib-page-toolbar>
+    <lib-page-toolbar [title]="layoutStore.title()" />
     <lib-page-container>
       <lib-counter
         #counter
