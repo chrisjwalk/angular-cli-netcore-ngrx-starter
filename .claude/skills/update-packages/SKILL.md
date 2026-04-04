@@ -27,7 +27,9 @@ git checkout -b feat/consolidate-deps-<issue-number>
 
 ### 3. Run the update-packages script
 
-Optionally omit any packages you want to track separately (e.g. `typescript`) or that may have dependency conflicts.
+Use `--omit` to skip any packages with known breaking changes or major version
+bumps that need separate handling. Major version upgrades should be omitted by
+default unless you've verified they are safe.
 
 ```bash
 npx ts-node ./tools/update-packages/src/main.ts --omit typescript --interactive false
@@ -92,7 +94,8 @@ Leave open any dependabot PRs for packages that were intentionally omitted
 
 ## Notes
 
-- `typescript` major upgrades are best tracked in a dedicated branch due to tsconfig breaking changes
+- Omit packages with major version bumps by default — run them separately once
+  you've confirmed they are safe (e.g. no breaking changes affecting the codebase)
 - If a package is a transitive dep not shown by `pnpm outdated`, use
   `pnpm.overrides` in `package.json` to force the version
 - After merging, watch for new dependabot PRs — dependabot may recreate stale
