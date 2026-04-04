@@ -207,32 +207,6 @@ All tests must pass before committing.
 
 ---
 
-## Step 5 – Follow the GitHub workflow
-
-```bash
-# 1. Create issue (as chrisjwalk)
-gh issue create --title "feat: add MyStore" --body "..."
-
-# 2. Branch
-git checkout -b feat/my-store-<issue-number>
-
-# 3. Commit
-git add -A
-git commit -m "feat: add MyStore (closes #<issue-number>)
-
-Co-authored-by: Copilot <223556219+Copilot@users.noreply.github.com>"
-
-# 4. Push & PR (as chrisjwalk-bot)
-gh auth switch --user chrisjwalk-bot
-git push origin feat/my-store-<issue-number>
-gh pr create --title "feat: add MyStore" --body "Closes #<issue-number>"
-
-# 5. Switch back
-gh auth switch --user chrisjwalk
-```
-
----
-
 ## Quick reference – common patterns
 
 ### Entity store with filter
