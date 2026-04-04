@@ -52,7 +52,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
       </div>
     } @else {
       <div
-        class="overflow-hidden rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
+        class="flex flex-col flex-1 overflow-hidden rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
       >
         <mat-table #table [dataSource]="dataSource">
           <ng-container matColumnDef="dateFormatted">
@@ -87,6 +87,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
             data-testid="table-row"
           ></mat-row>
         </mat-table>
+        <div class="flex-1"></div>
         <mat-paginator
           [pageSizeOptions]="[5, 10, 25]"
           [pageSize]="5"
@@ -97,6 +98,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
     }
   `,
   host: {
+    class: 'flex flex-col',
     'data-testid': 'lib-forecast-table',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,

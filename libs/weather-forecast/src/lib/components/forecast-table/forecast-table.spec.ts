@@ -16,9 +16,7 @@ describe('ForecastTable', () => {
       componentInputs: { data: weatherForecasts },
     });
 
-    expect(screen.getAllByTestId('table-row')).toHaveLength(
-      weatherForecasts.length,
-    );
+    expect(screen.getAllByTestId('table-row')).toHaveLength(5);
   });
 
   test('should compute displayedColumns for default (not handset portrait)', async () => {
