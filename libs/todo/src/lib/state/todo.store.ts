@@ -19,10 +19,12 @@ import { TodoService } from '../services/todo.service';
 
 export type TodoState = {
   syncEnabled: boolean;
+  mutationError: string | null;
 };
 
 export const todoInitialState: TodoState = {
   syncEnabled: false,
+  mutationError: null,
 };
 
 export function withTodoFeature() {
@@ -54,13 +56,23 @@ export function withTodoFeature() {
         todos.reload();
       },
 
+      clearMutationError() {
+        patchState(store, { mutationError: null });
+      },
+
       create: rxMethod<CreateTodoRequest>(
         pipe(
           switchMap((todo) =>
             todoService.create(todo).pipe(
               tapResponse({
-                next: () => todos.reload(),
-                error: (error) => console.error('Failed to create todo', error),
+                next: () => {
+                  patchState(store, { mutationError: null });
+                  todos.reload();
+                },
+                error: () =>
+                  patchState(store, {
+                    mutationError: 'Failed to create todo. Please try again.',
+                  }),
               }),
             ),
           ),
@@ -72,8 +84,14 @@ export function withTodoFeature() {
           switchMap(({ id, changes }) =>
             todoService.update(id, changes).pipe(
               tapResponse({
-                next: () => todos.reload(),
-                error: (error) => console.error('Failed to update todo', error),
+                next: () => {
+                  patchState(store, { mutationError: null });
+                  todos.reload();
+                },
+                error: () =>
+                  patchState(store, {
+                    mutationError: 'Failed to update todo. Please try again.',
+                  }),
               }),
             ),
           ),
@@ -85,8 +103,14 @@ export function withTodoFeature() {
           switchMap((id) =>
             todoService.remove(id).pipe(
               tapResponse({
-                next: () => todos.reload(),
-                error: (error) => console.error('Failed to remove todo', error),
+                next: () => {
+                  patchState(store, { mutationError: null });
+                  todos.reload();
+                },
+                error: () =>
+                  patchState(store, {
+                    mutationError: 'Failed to delete todo. Please try again.',
+                  }),
               }),
             ),
           ),
@@ -98,8 +122,14 @@ export function withTodoFeature() {
           switchMap((todo) =>
             todoService.update(todo.id, { completed: !todo.completed }).pipe(
               tapResponse({
-                next: () => todos.reload(),
-                error: (error) => console.error('Failed to toggle todo', error),
+                next: () => {
+                  patchState(store, { mutationError: null });
+                  todos.reload();
+                },
+                error: () =>
+                  patchState(store, {
+                    mutationError: 'Failed to update todo. Please try again.',
+                  }),
               }),
             ),
           ),

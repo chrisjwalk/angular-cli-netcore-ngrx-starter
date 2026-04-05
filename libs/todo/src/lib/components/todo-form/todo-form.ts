@@ -93,13 +93,14 @@ export class TodoForm {
 
   handleSubmit(event: SubmitEvent): void {
     event.preventDefault();
-    submit(this.todoForm, (value) => {
+    submit(this.todoForm, (field) => {
       this.create.emit({
-        title: value.title.trim(),
-        description: value.description.trim(),
+        title: field.title().value().trim(),
+        description: field.description().value().trim(),
         completed: false,
       });
       this.model.set({ title: '', description: '' });
+      return Promise.resolve();
     });
   }
 }
