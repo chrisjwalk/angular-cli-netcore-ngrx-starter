@@ -66,7 +66,7 @@ import { Todo } from '../../models/todo';
             </button>
           </li>
         } @empty {
-          <li class="w-full max-w-md">
+          <li class="mx-auto w-full max-w-md">
             <div
               class="flex gap-4 rounded-xl border border-outline-variant bg-surface-container-low p-4"
             >
