@@ -116,3 +116,52 @@ effect(() => {
   patchState(store, { count });
 });
 ```
+
+## Angular components: `.ts`-only, inline templates, no `Component` suffix
+
+All Angular components live in a single `.ts` file. Never generate separate `.html` or `.css` files.
+
+- Use inline `template` in `@Component` (never `templateUrl`)
+- Never use `styles` or `styleUrl` — use Tailwind classes instead (see above)
+- File names drop the `.component` segment: `todo.ts`, not `todo.component.ts`
+- Class names drop the `Component` suffix: `Todo`, not `TodoComponent`
+- Always set `changeDetection: ChangeDetectionStrategy.OnPush`
+- Add a `data-testid` on the host via the `host` property
+
+```typescript
+// ✅ preferred
+@Component({
+  selector: 'lib-todo',
+  template: `<ul class="flex flex-col gap-2">
+    ...
+  </ul>`,
+  host: { class: 'block', 'data-testid': 'lib-todo' },
+  changeDetection: ChangeDetectionStrategy.OnPush,
+})
+export class Todo {}
+
+// ❌ avoid
+@Component({
+  selector: 'lib-todo',
+  templateUrl: './todo.component.html',
+  styleUrl: './todo.component.css',
+})
+export class TodoComponent {}
+```
+
+## Component specs: use `@testing-library/angular`
+
+Use `render` + `screen` from `@testing-library/angular` in component specs (not `TestBed.createComponent`). Spec files also drop the `.component` segment: `todo.spec.ts`, not `todo.component.spec.ts`.
+
+```typescript
+// ✅ preferred
+import { render, screen } from '@testing-library/angular';
+import { Todo } from './todo';
+
+describe('Todo', () => {
+  it('should create', async () => {
+    await render(Todo);
+    expect(screen.getByTestId('lib-todo')).toBeTruthy();
+  });
+});
+```
