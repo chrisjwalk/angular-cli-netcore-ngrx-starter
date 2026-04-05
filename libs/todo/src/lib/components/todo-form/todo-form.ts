@@ -1,75 +1,63 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  output,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, output } from '@angular/core';
+import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { MatFormField, MatLabel, MatError } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
 import { MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { FormField, form, required, submit } from '@angular/forms/signals';
+import { SignalFormControl } from '@angular/forms/signals/compat';
+import { required } from '@angular/forms/signals';
 
 import { CreateTodoRequest } from '../../models/todo';
 
-interface TodoModel {
-  title: string;
-  description: string;
-}
-
 @Component({
   selector: 'lib-todo-form',
-  imports: [MatButton, MatIcon, FormField],
+  imports: [
+    ReactiveFormsModule,
+    MatFormField,
+    MatLabel,
+    MatError,
+    MatInput,
+    MatButton,
+    MatIcon,
+  ],
   template: `
     <form
-      class="flex flex-col gap-4 rounded-2xl bg-surface-container p-4 sm:flex-row sm:items-end"
-      (submit)="handleSubmit($event)"
+      class="flex flex-col gap-4 rounded-2xl bg-surface-container p-4 sm:flex-row sm:items-start"
+      [formGroup]="form"
+      (ngSubmit)="submit()"
     >
-      <div class="flex flex-1 flex-col gap-1.5">
-        <label
-          class="text-xs font-semibold text-on-surface-variant"
-          for="todo-title"
-        >
-          Title
-        </label>
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        class="flex-1"
+      >
+        <mat-label>Title</mat-label>
         <input
-          id="todo-title"
-          [formField]="todoForm.title"
+          matInput
+          formControlName="title"
           placeholder="What needs to be done?"
           autocomplete="off"
-          class="h-14 rounded-lg border bg-surface px-3 text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none transition-colors focus:ring-2 focus:ring-primary"
-          [class.border-outline]="
-            !(todoForm.title().touched() && !todoForm.title().valid())
-          "
-          [class.border-error]="
-            todoForm.title().touched() && !todoForm.title().valid()
-          "
         />
-        @if (todoForm.title().touched() && todoForm.title().errors().length) {
-          <p class="text-xs text-error">
-            {{ todoForm.title().errors()[0].message }}
-          </p>
-        }
-      </div>
-      <div class="flex flex-1 flex-col gap-1.5">
-        <label
-          class="text-xs font-semibold text-on-surface-variant"
-          for="todo-description"
-        >
-          Description
-        </label>
+        <mat-error>Title is required</mat-error>
+      </mat-form-field>
+      <mat-form-field
+        appearance="outline"
+        subscriptSizing="dynamic"
+        class="flex-1"
+      >
+        <mat-label>Description</mat-label>
         <input
-          id="todo-description"
-          [formField]="todoForm.description"
+          matInput
+          formControlName="description"
           placeholder="Optional details…"
           autocomplete="off"
-          class="h-14 rounded-lg border border-outline bg-surface px-3 text-sm text-on-surface placeholder:text-on-surface-variant/50 outline-none transition-colors focus:ring-2 focus:ring-primary"
         />
-      </div>
+      </mat-form-field>
       <button
         mat-flat-button
         type="submit"
         class="h-14 shrink-0"
-        [disabled]="!formValid()"
+        [disabled]="form.invalid"
       >
         <mat-icon>add</mat-icon>
         Add
@@ -85,22 +73,23 @@ interface TodoModel {
 export class TodoForm {
   readonly create = output<CreateTodoRequest>();
 
-  readonly model = signal<TodoModel>({ title: '', description: '' });
-  readonly todoForm = form(this.model, (s) => {
-    required(s.title, { message: 'Title is required' });
+  readonly form = new FormGroup({
+    title: new SignalFormControl('', (s) => {
+      required(s, { message: 'Title is required' });
+    }),
+    description: new SignalFormControl(''),
   });
-  readonly formValid = computed(() => this.todoForm.title().valid());
 
-  handleSubmit(event: SubmitEvent): void {
-    event.preventDefault();
-    submit(this.todoForm, (field) => {
-      this.create.emit({
-        title: field.title().value().trim(),
-        description: field.description().value().trim(),
-        completed: false,
-      });
-      this.model.set({ title: '', description: '' });
-      return Promise.resolve();
+  submit() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
+    }
+    this.create.emit({
+      title: (this.form.value.title ?? '').trim(),
+      description: (this.form.value.description ?? '').trim(),
+      completed: false,
     });
+    this.form.reset({ title: '', description: '' });
   }
 }
