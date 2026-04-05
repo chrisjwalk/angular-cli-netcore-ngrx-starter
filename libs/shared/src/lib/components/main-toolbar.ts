@@ -164,15 +164,23 @@ export class MainToolbar {
 
   readonly themeIcon = computed(() => {
     const t = this.themeService.theme();
-    if (t === 'light') return 'light_mode';
-    if (t === 'dark') return 'dark_mode';
+    if (t === 'light') {
+      return 'light_mode';
+    }
+    if (t === 'dark') {
+      return 'dark_mode';
+    }
     return 'brightness_auto';
   });
 
   readonly themeTooltip = computed(() => {
     const t = this.themeService.theme();
-    if (t === 'light') return 'Theme: Light (click for Dark)';
-    if (t === 'dark') return 'Theme: Dark (click for System)';
+    if (t === 'light') {
+      return 'Theme: Light (click for Dark)';
+    }
+    if (t === 'dark') {
+      return 'Theme: Dark (click for System)';
+    }
     return 'Theme: System (click for Light)';
   });
 }

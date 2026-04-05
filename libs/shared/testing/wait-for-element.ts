@@ -18,7 +18,9 @@ export async function waitForElement(
   while (Date.now() - start < timeout) {
     applicationRef.tick();
     const el = getElement();
-    if (el) return el;
+    if (el) {
+      return el;
+    }
     await new Promise((resolve) => setTimeout(resolve, interval));
   }
   throw new Error('Element not found in time');
