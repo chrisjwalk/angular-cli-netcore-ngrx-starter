@@ -7,6 +7,12 @@ export interface NavLink {
 
 export const NAV_LINKS: NavLink[] = [
   {
+    routerLink: '/todos',
+    icon: 'check_circle',
+    hint: 'Todos',
+    label: 'Todos',
+  },
+  {
     routerLink: '/weather-forecast',
     icon: 'get_app',
     hint: 'Get Data Feature',

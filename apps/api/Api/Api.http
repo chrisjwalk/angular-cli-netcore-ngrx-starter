@@ -30,3 +30,36 @@ Accept: application/json
 Authorization: Bearer {{access_token}}
 
 ###
+
+### List all todos
+GET {{Api_HostAddress}}/todos
+Accept: application/json
+
+###
+
+### Create a todo
+POST {{Api_HostAddress}}/todos
+Content-Type: application/json
+
+{
+  "title": "Buy groceries",
+  "description": "Milk, eggs, bread",
+  "completed": false
+}
+
+###
+
+### Update a todo (replace <id> with a real ID)
+PATCH {{Api_HostAddress}}/todos/<id>
+Content-Type: application/json
+
+{
+  "completed": true
+}
+
+###
+
+### Delete a todo (replace <id> with a real ID)
+DELETE {{Api_HostAddress}}/todos/<id>
+
+###

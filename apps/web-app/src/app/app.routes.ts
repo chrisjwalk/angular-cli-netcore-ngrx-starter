@@ -15,6 +15,10 @@ export const routes: Route[] = [
       import('@myorg/weather-forecast').then((m) => m.weatherForecastRoutes),
   },
   {
+    path: 'todos',
+    loadChildren: () => import('@myorg/todo').then((m) => m.todoRoutes),
+  },
+  {
     path: 'login',
     loadChildren: () => import('@myorg/login').then((m) => m.loginRoutes),
   },
