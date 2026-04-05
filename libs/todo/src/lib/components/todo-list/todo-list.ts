@@ -66,8 +66,20 @@ import { Todo } from '../../models/todo';
             </button>
           </li>
         } @empty {
-          <li class="py-10 text-center text-sm text-on-surface-variant">
-            No todos yet — add one above!
+          <li
+            class="flex gap-4 rounded-xl border border-outline-variant bg-surface-container-low p-4"
+          >
+            <mat-icon class="mt-0.5 shrink-0 text-on-surface-variant"
+              >inbox</mat-icon
+            >
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-medium leading-none text-on-surface">
+                No todos yet
+              </p>
+              <p class="text-sm text-on-surface-variant">
+                Add your first todo above to get started.
+              </p>
+            </div>
           </li>
         }
       </ul>
