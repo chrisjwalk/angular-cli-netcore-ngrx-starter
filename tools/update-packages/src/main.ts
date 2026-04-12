@@ -132,7 +132,9 @@ function removeDuplicateMigrations(migrations: MigrationsJsonPackage[]) {
 }
 
 async function selectOmittedPackages(packages: string[]): Promise<string[]> {
-  if (packages.length === 0) return [];
+  if (packages.length === 0) {
+    return [];
+  }
   const { omit } = await inquirer.prompt([
     {
       type: 'checkbox',
