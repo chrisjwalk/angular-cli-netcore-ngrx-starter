@@ -63,9 +63,9 @@ namespace Api.Controllers
       {
         get { return Guid.NewGuid().ToString(); }
       }
-      public string DateFormatted { get; set; }
+      public string DateFormatted { get; set; } = string.Empty;
       public int TemperatureC { get; set; }
-      public string Summary { get; set; }
+      public string Summary { get; set; } = string.Empty;
 
       public int TemperatureF
       {
