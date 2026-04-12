@@ -143,7 +143,25 @@
   },
   "pnpm": {
     "overrides": {
-      "node-forge": "^1.4.0"
+      "node-forge": "^1.4.0",
+      "axios": ">=1.15.0",
+      "brace-expansion@2": ">=2.0.3",
+      "flatted": ">=3.4.2",
+      "hono": ">=4.12.12",
+      "koa": ">=3.1.2",
+      "lodash-es": ">=4.18.0",
+      "minimatch@9": ">=9.0.7",
+      "minimatch@10": ">=10.2.3",
+      "path-to-regexp@0": ">=0.1.13",
+      "picomatch@2": ">=2.3.2",
+      "picomatch@4": ">=4.0.4",
+      "qs": ">=6.14.2",
+      "rollup": ">=4.59.0",
+      "serialize-javascript": ">=7.0.3",
+      "tar": ">=7.5.11",
+      "webpack": ">=5.104.1",
+      "yaml@2": ">=2.8.3",
+      "vite@6": ">=6.4.2"
     }
   }
 }
