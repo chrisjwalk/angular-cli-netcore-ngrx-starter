@@ -23,7 +23,8 @@
       "@myorg/login": ["libs/login/src/index.ts"],
       "@myorg/shared": ["libs/shared/src/index.ts"],
       "@myorg/shared/*": ["libs/shared/src/*"],
-      "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"]
+      "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"],
+      "@myorg/todo": ["libs/todo/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

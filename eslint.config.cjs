@@ -33,10 +33,10 @@ module.exports = [
     files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
     // Override or add rules here
     rules: {
-
       '@/semi': ['error', 'always'],
       '@/no-extra-semi': 'error',
       '@/quotes': ['error', 'single', { allowTemplateLiterals: true }],
+      curly: ['error', 'all'],
       '@angular-eslint/component-class-suffix': 'off',
     },
   },

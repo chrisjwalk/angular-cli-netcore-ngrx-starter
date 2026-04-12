@@ -83,6 +83,7 @@ builder
   .AddApiEndpoints();
 
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddSingleton<TodoRepository>();
 
 var connectionString = builder.Environment.IsDevelopment()
   ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
@@ -196,6 +197,9 @@ app.MapHealthChecks("/health/ready");
 
 // Custom JWT auth endpoints: login / refresh / logout
 app.MapAuthEndpoints(app.Environment.IsDevelopment());
+
+// Todo CRUD endpoints (in-memory store)
+app.MapTodoEndpoints();
 
 // Keep Identity account-management endpoints (password reset, email confirmation, 2FA setup, etc.)
 // Login and refresh from this group are superseded by /api/auth/* above.
