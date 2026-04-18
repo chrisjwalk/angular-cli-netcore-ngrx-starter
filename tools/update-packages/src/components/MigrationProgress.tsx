@@ -30,7 +30,14 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
             </Box>
           );
         }
-        if (task.status === 'running') return null;
+        if (task.status === 'running') {
+          return (
+            <Box key={task.id} gap={1}>
+              <Text color="yellow">›</Text>
+              <Text color="yellow">{task.displayName}</Text>
+            </Box>
+          );
+        }
         return (
           <Box key={task.id} gap={1}>
             <Text> </Text>
@@ -42,11 +49,7 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
         <Text bold>Migrating packages</Text>
         <Text dimColor>[{completedCount}/{total}]</Text>
       </Box>
-      {runningTask ? (
-        <Spinner label={runningTask.displayName} />
-      ) : (
-        <Text> </Text>
-      )}
+      {runningTask && <Spinner label={runningTask.displayName} />}
     </Box>
   );
 }

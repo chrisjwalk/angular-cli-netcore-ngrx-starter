@@ -183,6 +183,7 @@ export function App({ options, onComplete }: AppProps) {
   const { tasks, omitted, nextSteps } = phase;
   return (
     <Box flexDirection="column" gap={1} paddingY={1}>
+      <MigrationProgress tasks={tasks} />
       <NextStepsRunner
         steps={nextSteps}
         interactive={options.interactive}
