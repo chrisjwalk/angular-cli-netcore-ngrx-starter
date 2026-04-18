@@ -59,7 +59,7 @@ export function execAsync(
   );
 }
 
-function extractJsonObject(raw: string): string {
+export function extractJsonObject(raw: string): string {
   const trimmed = raw.trim();
   if (!trimmed) {
     return '{}';
