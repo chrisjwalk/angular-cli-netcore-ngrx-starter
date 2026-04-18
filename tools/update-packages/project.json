@@ -63,6 +63,13 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
     },
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{workspaceRoot}/coverage/libs/update-packages"],
+      "options": {
+        "passWithNoTests": true
+      }
+    },
     "pack": {
       "executor": "nx:run-commands",
       "dependsOn": ["build"],

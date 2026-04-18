@@ -8,6 +8,12 @@
     "jsxImportSource": "react",
     "types": ["node"]
   },
-  "exclude": ["vite.config.mts", "src/**/*.spec.ts", "src/**/*.test.ts"],
+  "exclude": [
+    "vite.config.mts",
+    "src/**/*.spec.ts",
+    "src/**/*.spec.tsx",
+    "src/**/*.test.ts",
+    "src/**/*.test.tsx"
+  ],
   "include": ["src/**/*.ts", "src/**/*.tsx"]
 }
