@@ -155,7 +155,7 @@ export function App({ options }: AppProps) {
             label: `${p.name}  ${p.current} → ${p.latest}`,
             value: p.name,
           }))}
-          onSubmit={(selected) => startMigration(packages, selected.map((s) => s.value))}
+          onSubmit={(selected) => startMigration(packages, selected)}
         />
       </Box>
     );

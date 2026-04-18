@@ -79,7 +79,7 @@ export function NextStepsRunner({ steps, interactive, onDone }: NextStepsRunnerP
             {state === 'confirming' && i === index && (
               <Box marginLeft={2}>
                 <ConfirmInput
-                  defaultChoice="yes"
+                  defaultChoice="confirm"
                   onConfirm={handleConfirm}
                   onCancel={() => advance('skipped')}
                 />
