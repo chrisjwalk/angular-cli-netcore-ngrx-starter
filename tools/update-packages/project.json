@@ -12,9 +12,9 @@
       "options": {
         "platform": "node",
         "outputPath": "dist/tools/update-packages",
-        "format": ["cjs"],
-        "bundle": false,
-        "main": "tools/update-packages/src/main.ts",
+        "format": ["esm"],
+        "bundle": true,
+        "main": "tools/update-packages/src/main.tsx",
         "tsConfig": "tools/update-packages/tsconfig.app.json",
         "assets": ["tools/update-packages/src/assets"],
         "generatePackageJson": true,
@@ -37,6 +37,13 @@
         }
       }
     },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run src/main.tsx",
+        "cwd": "tools/update-packages"
+      }
+    },
     "serve": {
       "executor": "@nx/js:node",
       "defaultConfiguration": "development",
@@ -55,6 +62,15 @@
     "lint": {
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"]
+    },
+    "pack": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["build"],
+      "outputs": ["{workspaceRoot}/dist/tools/update-packages/*.tgz"],
+      "options": {
+        "command": "node -e \"const fs=require('fs'),p=JSON.parse(fs.readFileSync('package.json','utf8'));delete p.private;delete p.scripts;delete p.pnpm;p.bin={'update-packages':'./main.js'};p.files=['main.js'];fs.writeFileSync('package.json',JSON.stringify(p,null,2));\" && npm pack --pack-destination .",
+        "cwd": "dist/tools/update-packages"
+      }
     }
   }
 }

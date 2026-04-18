@@ -69,6 +69,14 @@ jobs:
             pnpm build:prod
           fi
 
+      - name: Pack
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            pnpm nx affected --target=pack --base=$NX_BASE
+          else
+            pnpm nx run update-packages:pack
+          fi
+
       - name: Upload coverage report
         if: always()
         uses: actions/upload-artifact@v7
