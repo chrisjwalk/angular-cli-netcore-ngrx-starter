@@ -15,6 +15,9 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
 
   return (
     <>
+      {/* Completed tasks scroll into terminal history — one line committed
+          per completion, matching the one line removed from the live area,
+          so the cursor row stays fixed and the footer truly stays pinned. */}
       <Static items={completedTasks}>
         {(task) => {
           const color = task.status === 'error' ? 'red' : task.hasMigrations ? 'blue' : 'green';
@@ -31,21 +34,22 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
         }}
       </Static>
 
-      <Box flexDirection="column" paddingY={1} gap={1}>
-        <Box gap={1}>
+      {/* Live area: running + pending shrink from top as items complete.
+          Footer MUST be last so it occupies the fixed bottom cursor row. */}
+      <Box flexDirection="column">
+        {runningTask && <Spinner label={runningTask.displayName} />}
+        {pendingTasks.map((task) => (
+          <Text key={task.id} dimColor>
+            {'  '}
+            {task.displayName}
+          </Text>
+        ))}
+        <Box gap={1} marginTop={1}>
           <Text bold>Migrating packages</Text>
           <Text dimColor>[{completedTasks.length}/{total}]</Text>
-        </Box>
-        <Box flexDirection="column">
-          {runningTask && <Spinner label={runningTask.displayName} />}
-          {pendingTasks.map((task) => (
-            <Text key={task.id} dimColor>
-              {'  '}
-              {task.displayName}
-            </Text>
-          ))}
         </Box>
       </Box>
     </>
   );
 }
+
