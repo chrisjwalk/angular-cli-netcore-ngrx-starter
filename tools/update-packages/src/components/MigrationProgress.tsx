@@ -32,9 +32,8 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
         }}
       </Static>
 
-      {/* Live area: spinner for running task, then pending queue, then counter. */}
+      {/* Live area: pending queue, then counter, then spinner pinned at bottom. */}
       <Box flexDirection="column" marginTop={1}>
-        {runningTask && <Spinner label={runningTask.displayName} />}
         {pendingTasks.map((task) => (
           <Box key={task.id} gap={1}>
             <Text> </Text>
@@ -45,6 +44,11 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
           <Text bold>Migrating packages</Text>
           <Text dimColor>[{completedTasks.length}/{total}]</Text>
         </Box>
+        {runningTask ? (
+          <Spinner label={runningTask.displayName} />
+        ) : (
+          <Text> </Text>
+        )}
       </Box>
     </>
   );
