@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import { MigrationProgress } from './components/MigrationProgress.js';
 import { NextStepsRunner } from './components/NextStepsRunner.js';
 import { PackageTable } from './components/PackageTable.js';
-import { Summary } from './components/Summary.js';
 import {
   type MigrationTask,
   type PackageInfo,
@@ -184,7 +183,6 @@ export function App({ options, onComplete }: AppProps) {
   const { tasks, omitted, nextSteps } = phase;
   return (
     <Box flexDirection="column" gap={1} paddingY={1}>
-      <Summary tasks={tasks} omitted={omitted} hasMigrationFile={nextSteps.length > 1} />
       <NextStepsRunner
         steps={nextSteps}
         interactive={options.interactive}
