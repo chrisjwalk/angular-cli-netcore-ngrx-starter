@@ -1,7 +1,7 @@
 import { Command } from 'commander';
 import { render } from 'ink';
 import React from 'react';
-import { type CompletionData, App } from './App.js';
+import { App } from './App.js';
 
 const program = new Command();
 
@@ -17,7 +17,6 @@ program
     const { waitUntilExit } = render(
       React.createElement(App, {
         options: { omit: opts.omit ?? [], interactive },
-        onComplete: (_data: CompletionData) => {},
       }),
     );
 

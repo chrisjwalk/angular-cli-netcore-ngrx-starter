@@ -38,7 +38,7 @@ export interface CompletionData {
 
 interface AppProps {
   options: AppOptions;
-  onComplete: (data: CompletionData) => void;
+  onComplete?: (data: CompletionData) => void;
 }
 
 export function App({ options, onComplete }: AppProps) {
@@ -188,7 +188,7 @@ export function App({ options, onComplete }: AppProps) {
         steps={nextSteps}
         interactive={options.interactive}
         onDone={(stepResults) => {
-          onComplete({ tasks, omitted, stepResults });
+          onComplete?.({ tasks, omitted, stepResults });
           exit();
         }}
       />
