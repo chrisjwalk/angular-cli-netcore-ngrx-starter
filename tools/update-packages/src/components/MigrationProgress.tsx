@@ -1,5 +1,5 @@
 import { Spinner } from '@inkjs/ui';
-import { Box, Static, Text } from 'ink';
+import { Box, Text } from 'ink';
 import React from 'react';
 import type { MigrationTask } from '../lib.js';
 
@@ -7,43 +7,45 @@ interface MigrationProgressProps {
   tasks: MigrationTask[];
 }
 
-function CompletedTaskRow({ task }: { task: MigrationTask }) {
-  const isError = task.status === 'error';
-  const color = isError ? 'red' : task.hasMigrations ? 'blue' : 'green';
-  return (
-    <Box gap={2}>
-      <Text color={color}>{isError ? '✗' : '✓'}</Text>
+function TaskRow({ task }: { task: MigrationTask }) {
+  if (task.status === 'running') {
+    return <Spinner label={task.displayName} />;
+  }
+  if (task.status === 'done') {
+    const color = task.hasMigrations ? 'blue' : 'green';
+    return (
       <Text color={color}>
-        {task.displayName}
+        ✓ {task.displayName}
         {task.hasMigrations ? ' (migrations)' : ''}
       </Text>
-      {isError && task.error && <Text dimColor>  {task.error}</Text>}
-    </Box>
-  );
+    );
+  }
+  if (task.status === 'error') {
+    return (
+      <Box gap={2}>
+        <Text color="red">✗ {task.displayName}</Text>
+        {task.error && <Text dimColor>{task.error}</Text>}
+      </Box>
+    );
+  }
+  return <Text dimColor>  {task.displayName}</Text>;
 }
 
 export function MigrationProgress({ tasks }: MigrationProgressProps) {
-  const completedTasks = tasks.filter((t) => t.status === 'done' || t.status === 'error');
-  const runningTask = tasks.find((t) => t.status === 'running');
-  const pendingCount = tasks.filter((t) => t.status === 'pending').length;
+  const done = tasks.filter((t) => t.status === 'done' || t.status === 'error').length;
   const total = tasks.length;
 
   return (
-    <>
-      <Static items={completedTasks}>
-        {(task) => <CompletedTaskRow key={task.id} task={task} />}
-      </Static>
-      <Box flexDirection="column" paddingY={1} gap={1}>
-        <Box gap={1}>
-          <Text bold>Migrating packages</Text>
-          <Text dimColor>[{completedTasks.length}/{total}]</Text>
-        </Box>
-        {runningTask ? (
-          <Spinner label={runningTask.displayName} />
-        ) : pendingCount > 0 ? (
-          <Text dimColor>Preparing…</Text>
-        ) : null}
+    <Box flexDirection="column" paddingY={1} gap={1}>
+      <Box gap={1}>
+        <Text bold>Migrating packages</Text>
+        <Text dimColor>[{done}/{total}]</Text>
       </Box>
-    </>
+      <Box flexDirection="column">
+        {tasks.map((task) => (
+          <TaskRow key={task.id} task={task} />
+        ))}
+      </Box>
+    </Box>
   );
 }
