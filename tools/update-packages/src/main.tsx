@@ -1,4 +1,3 @@
-import chalk from 'chalk';
 import { Command } from 'commander';
 import { render } from 'ink';
 import React from 'react';
@@ -15,26 +14,14 @@ program
       ? opts.interactive !== 'false'
       : Boolean(opts.interactive);
 
-    let completionData: CompletionData | null = null;
-
     const { waitUntilExit } = render(
       React.createElement(App, {
         options: { omit: opts.omit ?? [], interactive },
-        onComplete: (data) => { completionData = data; },
+        onComplete: (_data: CompletionData) => {},
       }),
     );
 
     await waitUntilExit();
-
-    const report = completionData as CompletionData | null;
-    if (report && report.stepResults.length) {
-      console.log('');
-      for (const { step, ran } of report.stepResults) {
-        console.log(ran ? chalk.green(`  ✓ ${step}`) : chalk.dim(`  ○ ${step} (skipped)`));
-      }
-      console.log('');
-    }
-
     process.exit(0);
   });
 
