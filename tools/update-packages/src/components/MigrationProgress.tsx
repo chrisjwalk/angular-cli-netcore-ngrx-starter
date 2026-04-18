@@ -1,5 +1,5 @@
 import { Spinner } from '@inkjs/ui';
-import { Box, Static, Text } from 'ink';
+import { Box, Text } from 'ink';
 import React from 'react';
 import type { MigrationTask } from '../lib.js';
 
@@ -8,16 +8,14 @@ interface MigrationProgressProps {
 }
 
 export function MigrationProgress({ tasks }: MigrationProgressProps) {
-  const completedTasks = tasks.filter((t) => t.status === 'done' || t.status === 'error');
-  const pendingTasks = tasks.filter((t) => t.status === 'pending');
+  const completedCount = tasks.filter((t) => t.status === 'done' || t.status === 'error').length;
   const runningTask = tasks.find((t) => t.status === 'running');
   const total = tasks.length;
 
   return (
-    <>
-      {/* Completed tasks scroll up into the permanent scroll buffer. */}
-      <Static items={completedTasks}>
-        {(task) => {
+    <Box flexDirection="column" marginTop={1}>
+      {tasks.map((task) => {
+        if (task.status === 'done' || task.status === 'error') {
           const color = task.status === 'error' ? 'red' : task.hasMigrations ? 'blue' : 'green';
           return (
             <Box key={task.id} gap={1}>
@@ -26,31 +24,30 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
                 {task.displayName}
                 {task.hasMigrations ? ' (migrations)' : ''}
               </Text>
-              {task.status === 'error' && task.error && <Text dimColor>{task.error}</Text>}
+              {task.status === 'error' && task.error && (
+                <Text dimColor>{task.error}</Text>
+              )}
             </Box>
           );
-        }}
-      </Static>
-
-      {/* Live area: pending queue, then counter, then spinner pinned at bottom. */}
-      <Box flexDirection="column" marginTop={1}>
-        {pendingTasks.map((task) => (
+        }
+        if (task.status === 'running') return null;
+        return (
           <Box key={task.id} gap={1}>
             <Text> </Text>
             <Text dimColor>{task.displayName}</Text>
           </Box>
-        ))}
-        <Box gap={1} marginTop={1}>
-          <Text bold>Migrating packages</Text>
-          <Text dimColor>[{completedTasks.length}/{total}]</Text>
-        </Box>
-        {runningTask ? (
-          <Spinner label={runningTask.displayName} />
-        ) : (
-          <Text> </Text>
-        )}
+        );
+      })}
+      <Box gap={1} marginTop={1}>
+        <Text bold>Migrating packages</Text>
+        <Text dimColor>[{completedCount}/{total}]</Text>
       </Box>
-    </>
+      {runningTask ? (
+        <Spinner label={runningTask.displayName} />
+      ) : (
+        <Text> </Text>
+      )}
+    </Box>
   );
 }
 
