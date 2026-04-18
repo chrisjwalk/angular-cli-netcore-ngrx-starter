@@ -33,7 +33,7 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
         if (task.status === 'running') {
           return (
             <Box key={task.id} gap={1}>
-              <Text color="yellow">›</Text>
+              <Text color="yellow">◆</Text>
               <Text color="yellow">{task.displayName}</Text>
             </Box>
           );
