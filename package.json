@@ -51,7 +51,7 @@
     "preinstall": "pnpm dotnet:restore",
     "postinstall": "pnpm build:dotnet-builder",
     "prepare": "husky",
-    "update-packages": "ts-node ./tools/update-packages/src/main.ts"
+    "update-packages": "bun run ./tools/update-packages/src/main.tsx"
   },
   "private": true,
   "dependencies": {
