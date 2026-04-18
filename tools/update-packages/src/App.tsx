@@ -19,19 +19,30 @@ type Phase =
   | { type: 'loading' }
   | { type: 'omit-select'; packages: PackageInfo[] }
   | { type: 'migrating'; tasks: MigrationTask[]; omitted: string[] }
-  | { type: 'next-steps'; tasks: MigrationTask[]; omitted: string[]; nextSteps: string[] }
-  | { type: 'done' };
+  | { type: 'next-steps'; tasks: MigrationTask[]; omitted: string[]; nextSteps: string[] };
 
 export interface AppOptions {
   omit: string[];
   interactive: boolean;
 }
 
-interface AppProps {
-  options: AppOptions;
+export interface StepResult {
+  step: string;
+  ran: boolean;
 }
 
-export function App({ options }: AppProps) {
+export interface CompletionData {
+  tasks: MigrationTask[];
+  omitted: string[];
+  stepResults: StepResult[];
+}
+
+interface AppProps {
+  options: AppOptions;
+  onComplete: (data: CompletionData) => void;
+}
+
+export function App({ options, onComplete }: AppProps) {
   const { exit } = useApp();
   const [phase, setPhase] = useState<Phase>({ type: 'loading' });
   const [error, setError] = useState<string | null>(null);
@@ -169,20 +180,19 @@ export function App({ options }: AppProps) {
     );
   }
 
-  if (phase.type === 'next-steps') {
-    const { tasks, omitted, nextSteps } = phase;
-    return (
-      <Box flexDirection="column" gap={1} paddingY={1}>
-        <Summary tasks={tasks} omitted={omitted} hasMigrationFile={nextSteps.length > 1} />
-        <NextStepsRunner
-          steps={nextSteps}
-          interactive={options.interactive}
-          onDone={() => setPhase({ type: 'done' })}
-        />
-      </Box>
-    );
-  }
-
-  // phase === 'done'
-  return null;
+  // phase === 'next-steps'
+  const { tasks, omitted, nextSteps } = phase;
+  return (
+    <Box flexDirection="column" gap={1} paddingY={1}>
+      <Summary tasks={tasks} omitted={omitted} hasMigrationFile={nextSteps.length > 1} />
+      <NextStepsRunner
+        steps={nextSteps}
+        interactive={options.interactive}
+        onDone={(stepResults) => {
+          onComplete({ tasks, omitted, stepResults });
+          exit();
+        }}
+      />
+    </Box>
+  );
 }

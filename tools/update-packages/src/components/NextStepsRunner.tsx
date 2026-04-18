@@ -1,12 +1,13 @@
 import { ConfirmInput, Spinner } from '@inkjs/ui';
 import { Box, Text } from 'ink';
 import React, { useEffect, useState } from 'react';
+import type { StepResult } from '../App.js';
 import { execAsync } from '../lib.js';
 
 interface NextStepsRunnerProps {
   steps: string[];
   interactive: boolean;
-  onDone: () => void;
+  onDone: (results: StepResult[]) => void;
 }
 
 type StepState = 'pending' | 'confirming' | 'running' | 'done' | 'skipped';
@@ -21,7 +22,11 @@ export function NextStepsRunner({ steps, interactive, onDone }: NextStepsRunnerP
 
   useEffect(() => {
     if (index >= steps.length) {
-      onDone();
+      const results: StepResult[] = steps.map((step, i) => ({
+        step,
+        ran: stepStates[i] === 'done',
+      }));
+      onDone(results);
       return;
     }
 
