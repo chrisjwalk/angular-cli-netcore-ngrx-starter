@@ -32,8 +32,18 @@ bumps that need separate handling. Major version upgrades should be omitted by
 default unless you've verified they are safe.
 
 ```bash
-npx ts-node ./tools/update-packages/src/main.ts --omit typescript --interactive false
+bun run tools/update-packages/src/main.tsx --omit typescript --interactive false
 ```
+
+The tool is a React Ink interactive CLI. In interactive mode (default) it will:
+
+1. Show a table of all outdated packages
+2. Prompt you to select any packages to **omit** via a multi-select
+3. Show live progress as each `nx migrate` runs
+4. Prompt to run `pnpm install` and `npx nx migrate --run-migrations` on completion
+
+In non-interactive mode (`--interactive false`), it skips all prompts and runs
+through all packages automatically, still streaming live progress.
 
 The script will:
 

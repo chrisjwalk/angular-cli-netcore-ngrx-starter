@@ -12,9 +12,9 @@
       "options": {
         "platform": "node",
         "outputPath": "dist/tools/update-packages",
-        "format": ["cjs"],
-        "bundle": false,
-        "main": "tools/update-packages/src/main.ts",
+        "format": ["esm"],
+        "bundle": true,
+        "main": "tools/update-packages/src/main.tsx",
         "tsConfig": "tools/update-packages/tsconfig.app.json",
         "assets": ["tools/update-packages/src/assets"],
         "generatePackageJson": true,
@@ -35,6 +35,13 @@
             }
           }
         }
+      }
+    },
+    "dev": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "bun run src/main.tsx",
+        "cwd": "tools/update-packages"
       }
     },
     "serve": {
