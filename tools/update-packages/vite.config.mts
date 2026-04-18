@@ -1,5 +1,5 @@
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 const name = 'update-packages';
 
