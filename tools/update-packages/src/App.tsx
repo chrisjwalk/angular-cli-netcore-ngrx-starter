@@ -40,12 +40,20 @@ export interface CompletionData {
 interface AppProps {
   options: AppOptions;
   onComplete?: (data: CompletionData) => void;
+  onError?: (error: string) => void;
 }
 
-export function App({ options, onComplete }: AppProps) {
+export function App({ options, onComplete, onError }: AppProps) {
   const { exit } = useApp();
   const [phase, setPhase] = useState<Phase>({ type: 'loading' });
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (error && onError) {
+      onError(error);
+      exit();
+    }
+  }, [error]);
 
   // Phase: load outdated packages
   useEffect(() => {
@@ -53,7 +61,12 @@ export function App({ options, onComplete }: AppProps) {
     fetchOutdatedPackages()
       .then((packages) => {
         if (packages.length === 0) {
-          setError('No outdated packages found.');
+          if (onComplete) {
+            onComplete({ tasks: [], omitted: [], stepResults: [] });
+            exit();
+          } else {
+            setError('No outdated packages found.');
+          }
           return;
         }
 
