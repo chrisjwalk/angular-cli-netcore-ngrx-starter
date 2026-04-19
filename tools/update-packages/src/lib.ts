@@ -5,7 +5,16 @@ export type PackageInfo = {
   name: string;
   current: string;
   latest: string;
+  isMajor: boolean;
 };
+
+export function isMajorBump(current: string, latest: string): boolean {
+  const currentMajor = parseInt(current.split('.')[0], 10);
+  const latestMajor = parseInt(latest.split('.')[0], 10);
+  return (
+    !isNaN(currentMajor) && !isNaN(latestMajor) && latestMajor > currentMajor
+  );
+}
 
 export type MigrationTask = {
   id: string;
@@ -83,6 +92,7 @@ export async function fetchOutdatedPackages(): Promise<PackageInfo[]> {
     name,
     current: info.current,
     latest: info.latest,
+    isMajor: isMajorBump(info.current, info.latest),
   }));
 }
 

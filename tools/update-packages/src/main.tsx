@@ -9,6 +9,7 @@ program
   .option('-o, --omit [omit...]', 'Packages to omit from update', [])
   .option('-v, --verbose', 'Verbose output', false)
   .option('-i, --interactive [interactive]', 'Prompt to run next steps', true)
+  .option('-m, --minor-only', 'Skip major version bumps', false)
   .action(async (opts) => {
     const interactive = typeof opts.interactive === 'string'
       ? opts.interactive !== 'false'
@@ -16,7 +17,7 @@ program
 
     const { waitUntilExit } = render(
       React.createElement(App, {
-        options: { omit: opts.omit ?? [], interactive },
+        options: { omit: opts.omit ?? [], interactive, minorOnly: opts.minorOnly ?? false },
       }),
     );
 
