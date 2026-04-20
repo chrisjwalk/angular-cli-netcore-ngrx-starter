@@ -2,8 +2,80 @@ import { describe, expect, it } from 'vitest';
 import {
   buildMigrationQueue,
   extractJsonObject,
+  isMajorBump,
   type PackageInfo,
 } from './lib.js';
+
+// ────────────────────────────────────────────────
+// extractJsonObject
+// ────────────────────────────────────────────────
+
+describe('extractJsonObject', () => {
+  it('returns {} for empty string', () => {
+    expect(extractJsonObject('')).toBe('{}');
+  });
+
+  it('returns {} for whitespace-only string', () => {
+    expect(extractJsonObject('   \n  ')).toBe('{}');
+  });
+
+  it('extracts a plain JSON object', () => {
+    const input = '{"foo":"bar","baz":1}';
+    expect(extractJsonObject(input)).toBe(input);
+  });
+
+  it('strips leading pnpm warning text before JSON', () => {
+    const json =
+      '{"lodash":{"current":"4.17.20","wanted":"4.17.21","latest":"4.17.21","dependent":"root","location":""}}';
+    const raw = `\nWarn some pnpm warning\n${json}\n`;
+    expect(extractJsonObject(raw)).toBe(json);
+  });
+
+  it('throws when no JSON object braces found', () => {
+    expect(() => extractJsonObject('no braces here')).toThrow(
+      'Could not find JSON object',
+    );
+  });
+
+  it('handles nested objects', () => {
+    const input = '{"a":{"b":{"c":1}}}';
+    expect(extractJsonObject(input)).toBe(input);
+  });
+});
+
+// ────────────────────────────────────────────────
+// isMajorBump
+// ────────────────────────────────────────────────
+
+describe('isMajorBump', () => {
+  it('returns true when major version increases', () => {
+    expect(isMajorBump('1.2.3', '2.0.0')).toBe(true);
+    expect(isMajorBump('0.5.0', '1.0.0')).toBe(true);
+    expect(isMajorBump('14.0.0', '15.0.0')).toBe(true);
+  });
+
+  it('returns false for minor bumps', () => {
+    expect(isMajorBump('1.0.0', '1.1.0')).toBe(false);
+    expect(isMajorBump('1.2.3', '1.9.0')).toBe(false);
+  });
+
+  it('returns false for patch bumps', () => {
+    expect(isMajorBump('1.2.3', '1.2.9')).toBe(false);
+  });
+
+  it('returns false when versions are equal', () => {
+    expect(isMajorBump('1.2.3', '1.2.3')).toBe(false);
+  });
+
+  it('returns false when latest major is lower than current', () => {
+    expect(isMajorBump('2.0.0', '1.9.9')).toBe(false);
+  });
+
+  it('handles versions with pre-release labels', () => {
+    expect(isMajorBump('1.0.0-beta.1', '2.0.0')).toBe(true);
+    expect(isMajorBump('1.0.0', '1.1.0-rc.1')).toBe(false);
+  });
+});
 
 // ────────────────────────────────────────────────
 // extractJsonObject
@@ -50,6 +122,7 @@ const pkg = (name: string): PackageInfo => ({
   name,
   current: '1.0.0',
   latest: '2.0.0',
+  isMajor: true,
 });
 
 describe('buildMigrationQueue', () => {

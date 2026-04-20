@@ -75,7 +75,15 @@
       "dependsOn": ["build"],
       "outputs": ["{workspaceRoot}/dist/tools/update-packages/*.tgz"],
       "options": {
-        "command": "node -e \"const fs=require('fs'),p=JSON.parse(fs.readFileSync('package.json','utf8'));delete p.private;delete p.scripts;delete p.pnpm;p.bin={'update-packages':'./main.js'};p.files=['main.js'];fs.writeFileSync('package.json',JSON.stringify(p,null,2));\" && npm pack --pack-destination .",
+        "command": "node -e \"const fs=require('fs'),p=JSON.parse(fs.readFileSync('package.json','utf8'));delete p.private;delete p.scripts;delete p.pnpm;p.bin={'update-packages':'./main.js'};p.files=['main.js'];fs.writeFileSync('package.json',JSON.stringify(p,null,2));const m=fs.readFileSync('main.js','utf8');if(!m.startsWith('#!'))fs.writeFileSync('main.js','#!/usr/bin/env node\\n'+m);\" && npm pack --pack-destination .",
+        "cwd": "dist/tools/update-packages"
+      }
+    },
+    "install": {
+      "executor": "nx:run-commands",
+      "dependsOn": ["pack"],
+      "options": {
+        "command": "npm install -g --prefix $HOME/.local $(ls -t *.tgz | head -1)",
         "cwd": "dist/tools/update-packages"
       }
     }

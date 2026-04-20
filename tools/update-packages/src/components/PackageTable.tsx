@@ -39,7 +39,8 @@ export function PackageTable({ packages }: PackageTableProps) {
           <Text color="cyan">{pkg.name.padEnd(nameWidth + 2)}</Text>
           <Text color="red">{pkg.current.padEnd(currentWidth + 2)}</Text>
           <Text dimColor>→ </Text>
-          <Text color="green">{pkg.latest}</Text>
+          <Text color={pkg.isMajor ? 'yellow' : 'green'}>{pkg.latest}</Text>
+          {pkg.isMajor && <Text color="yellow"> MAJOR</Text>}
         </Box>
       ))}
     </Box>

@@ -16,13 +16,14 @@ import {
 
 type Phase =
   | { type: 'loading' }
-  | { type: 'omit-select'; packages: PackageInfo[] }
+  | { type: 'omit-select'; packages: PackageInfo[]; defaultOmit: string[] }
   | { type: 'migrating'; tasks: MigrationTask[]; omitted: string[] }
   | { type: 'next-steps'; tasks: MigrationTask[]; omitted: string[]; nextSteps: string[] };
 
 export interface AppOptions {
   omit: string[];
   interactive: boolean;
+  minorOnly: boolean;
 }
 
 export interface StepResult {
@@ -39,12 +40,20 @@ export interface CompletionData {
 interface AppProps {
   options: AppOptions;
   onComplete?: (data: CompletionData) => void;
+  onError?: (error: string) => void;
 }
 
-export function App({ options, onComplete }: AppProps) {
+export function App({ options, onComplete, onError }: AppProps) {
   const { exit } = useApp();
   const [phase, setPhase] = useState<Phase>({ type: 'loading' });
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (error && onError) {
+      onError(error);
+      exit();
+    }
+  }, [error]);
 
   // Phase: load outdated packages
   useEffect(() => {
@@ -52,15 +61,27 @@ export function App({ options, onComplete }: AppProps) {
     fetchOutdatedPackages()
       .then((packages) => {
         if (packages.length === 0) {
-          setError('No outdated packages found.');
+          if (onComplete) {
+            onComplete({ tasks: [], omitted: [], stepResults: [] });
+            exit();
+          } else {
+            setError('No outdated packages found.');
+          }
           return;
         }
 
-        const hasCliOmit = options.omit.length > 0;
-        if (!options.interactive || hasCliOmit) {
+        const majorOmits = packages.filter((p) => p.isMajor).map((p) => p.name);
+
+        if (!options.interactive) {
+          const combinedOmit = [
+            ...new Set([...options.omit, ...(options.minorOnly ? majorOmits : [])]),
+          ];
+          startMigration(packages, combinedOmit);
+        } else if (options.omit.length > 0) {
           startMigration(packages, options.omit);
         } else {
-          setPhase({ type: 'omit-select', packages });
+          const defaultOmit = options.minorOnly ? majorOmits : [];
+          setPhase({ type: 'omit-select', packages, defaultOmit });
         }
       })
       .catch((e) => setError(String(e)));
@@ -151,7 +172,7 @@ export function App({ options, onComplete }: AppProps) {
   }
 
   if (phase.type === 'omit-select') {
-    const { packages } = phase;
+    const { packages, defaultOmit } = phase;
     return (
       <Box flexDirection="column" gap={1} paddingY={1}>
         <Text bold>Outdated Packages</Text>
@@ -162,9 +183,12 @@ export function App({ options, onComplete }: AppProps) {
         </Box>
         <MultiSelect
           options={packages.map((p) => ({
-            label: `${p.name}  ${p.current} → ${p.latest}`,
+            label: p.isMajor
+              ? `${p.name}  ${p.current} → ${p.latest}  ⚠ MAJOR`
+              : `${p.name}  ${p.current} → ${p.latest}`,
             value: p.name,
           }))}
+          defaultValue={defaultOmit}
           onSubmit={(selected) => startMigration(packages, selected)}
         />
       </Box>
