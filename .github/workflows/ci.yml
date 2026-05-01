@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v6
         with:
           version: 10
 
@@ -126,7 +126,7 @@ jobs:
 
       - name: Add coverage PR comment
         if: always() && github.event_name == 'pull_request' && steps.coverage.outputs.exists == 'true'
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3
         with:
           recreate: true
           path: code-coverage-results.md
