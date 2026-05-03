@@ -22,9 +22,14 @@
         "production": {
           "sourcemap": false,
           "mode": "production"
+        },
+        "preview": {
+          "mode": "preview"
         }
       },
-      "outputs": ["{workspaceRoot}/dist/apps/web-app"]
+      "outputs": [
+        "{workspaceRoot}/dist/apps/web-app"
+      ]
     },
     "serve": {
       "executor": "@analogjs/platform:vite-dev-server",
@@ -35,7 +40,13 @@
         "port": 4200
       },
       "dependsOn": [
-        { "target": "serve", "projects": ["api"], "params": "forward" }
+        {
+          "target": "serve",
+          "projects": [
+            "api"
+          ],
+          "params": "forward"
+        }
       ],
       "configurations": {
         "development": {
@@ -73,11 +84,15 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": ["{options.outputFile}"]
+      "outputs": [
+        "{options.outputFile}"
+      ]
     },
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
         "reportsDirectory": "{projectRoot}/../../coverage/apps/web-app",
         "coverage": true
