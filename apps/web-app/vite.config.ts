@@ -16,6 +16,9 @@ export default defineConfig(({ mode }) => {
       reportCompressedSize: true,
       target: ['es2020'],
     },
+    optimizeDeps: {
+      include: ['front-matter'],
+    },
     plugins: [
       analog({
         ssr: false,

@@ -75,6 +75,7 @@
     "@ngrx/signals": "21.1.0",
     "@tailwindcss/postcss": "4.2.4",
     "@tailwindcss/typography": "^0.5.19",
+    "front-matter": "^4.0.2",
     "marked": "18.0.3",
     "marked-gfm-heading-id": "^4.1.1",
     "marked-highlight": "^2.2.1",
