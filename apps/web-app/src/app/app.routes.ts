@@ -27,5 +27,10 @@ export const routes: Route[] = [
     loadChildren: () =>
       import('./debug/debug.routes').then((m) => m.debugRoutes),
   },
+  {
+    path: 'about',
+    loadChildren: () =>
+      import('./about/about.routes').then((m) => m.aboutRoutes),
+  },
   { path: '**', redirectTo: '' },
 ];

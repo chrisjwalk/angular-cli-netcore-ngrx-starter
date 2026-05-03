@@ -1,3 +1,6 @@
+import './styles/styles.css';
+import './styles/material.scss';
+
 import { bootstrapApplication } from '@angular/platform-browser';
 
 import { App } from './app/app';
