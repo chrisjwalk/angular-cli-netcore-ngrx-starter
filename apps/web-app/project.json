@@ -24,7 +24,7 @@
           "mode": "production"
         },
         "preview": {
-          "mode": "preview"
+          "mode": "production"
         }
       },
       "outputs": [

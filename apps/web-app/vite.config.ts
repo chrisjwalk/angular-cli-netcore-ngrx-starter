@@ -36,7 +36,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         fileReplacements:
-          mode === 'preview'
+          process.env['NX_TASK_TARGET_CONFIGURATION'] === 'preview'
             ? [
                 {
                   replace: 'apps/web-app/src/environments/environment.ts',
