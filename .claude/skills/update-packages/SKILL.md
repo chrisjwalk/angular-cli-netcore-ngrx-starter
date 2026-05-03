@@ -27,23 +27,32 @@ git checkout -b feat/consolidate-deps-<issue-number>
 
 ### 3. Run the update-packages script
 
-Use `--omit` to skip any packages with known breaking changes or major version
-bumps that need separate handling. Major version upgrades should be omitted by
-default unless you've verified they are safe.
+Use `--minor-only` to automatically skip all major version bumps (recommended).
+Use `--omit` to additionally skip specific packages by name.
 
 ```bash
-bun run tools/update-packages/src/main.tsx --omit typescript --interactive false
+bun run tools/update-packages/src/main.tsx --minor-only --interactive false
 ```
 
 The tool is a React Ink interactive CLI. In interactive mode (default) it will:
 
 1. Show a table of all outdated packages
-2. Prompt you to select any packages to **omit** via a multi-select
+2. Prompt you to select any packages to **omit** via a multi-select (major bumps
+   are pre-selected when `--minor-only` is passed)
 3. Show live progress as each `nx migrate` runs
 4. Prompt to run `pnpm install` and `npx nx migrate --run-migrations` on completion
 
 In non-interactive mode (`--interactive false`), it skips all prompts and runs
 through all packages automatically, still streaming live progress.
+
+Key flags:
+
+| Flag                  | Description                                            |
+| --------------------- | ------------------------------------------------------ |
+| `--minor-only`        | Skip all packages with a major version bump            |
+| `--omit <pkg...>`     | Skip specific packages by name                         |
+| `--interactive false` | Run non-interactively (no prompts)                     |
+| `--json`              | Output results as JSON (implies `--interactive false`) |
 
 The script will:
 
@@ -104,8 +113,9 @@ Leave open any dependabot PRs for packages that were intentionally omitted
 
 ## Notes
 
-- Omit packages with major version bumps by default — run them separately once
-  you've confirmed they are safe (e.g. no breaking changes affecting the codebase)
+- Use `--minor-only` by default to skip major version bumps — run them separately
+  once you've confirmed they are safe (e.g. no breaking changes affecting the codebase)
+- Use `--omit <pkg>` for additional specific packages to skip beyond major bumps
 - If a package is a transitive dep not shown by `pnpm outdated`, use
   `pnpm.overrides` in `package.json` to force the version
 - After merging, watch for new dependabot PRs — dependabot may recreate stale
