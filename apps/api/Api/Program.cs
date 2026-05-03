@@ -143,29 +143,31 @@ else
 {
   app.UseExceptionHandler("/Error");
   app.UseHsts();
+  app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
-
-PhysicalFileProvider fileProvider = new PhysicalFileProvider(
-  Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app", "browser")
-);
-FileExtensionContentTypeProvider contentTypeProvider = new FileExtensionContentTypeProvider();
-contentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
-contentTypeProvider.Mappings[".md"] = "text/markdown";
-
-StaticFileOptions staticFileOptions = new StaticFileOptions()
+if (!app.Environment.IsDevelopment())
 {
-  ContentTypeProvider = contentTypeProvider,
-  OnPrepareResponse = ctx =>
-  {
-    const int durationInSeconds = 60 * 60 * 24 * 365;
-    ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
-  },
-  FileProvider = fileProvider,
-};
+  PhysicalFileProvider fileProvider = new PhysicalFileProvider(
+    Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app", "client")
+  );
+  FileExtensionContentTypeProvider contentTypeProvider = new FileExtensionContentTypeProvider();
+  contentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";
+  contentTypeProvider.Mappings[".md"] = "text/markdown";
 
-app.UseStaticFiles(staticFileOptions);
+  StaticFileOptions staticFileOptions = new StaticFileOptions()
+  {
+    ContentTypeProvider = contentTypeProvider,
+    OnPrepareResponse = ctx =>
+    {
+      const int durationInSeconds = 60 * 60 * 24 * 365;
+      ctx.Context.Response.Headers[HeaderNames.CacheControl] = "public,max-age=" + durationInSeconds;
+    },
+    FileProvider = fileProvider,
+  };
+
+  app.UseStaticFiles(staticFileOptions);
+}
 
 app.UseSwagger();
 
@@ -207,12 +209,20 @@ app.MapGroup("/api/account")
   .MapIdentityApi<AppUser>()
   .RequireRateLimiting("account");
 
-app.UseSpa(spa =>
+if (!app.Environment.IsDevelopment())
 {
-  spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions()
+  // Serve index.html for any unmatched route (client-side routing fallback).
+  // In development, Vite handles this instead.
+  PhysicalFileProvider spaFileProvider = new PhysicalFileProvider(
+    Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app", "client")
+  );
+  app.UseSpa(spa =>
   {
-    FileProvider = fileProvider,
-  };
-});
+    spa.Options.DefaultPageStaticFileOptions = new StaticFileOptions()
+    {
+      FileProvider = spaFileProvider,
+    };
+  });
+}
 
 app.Run();

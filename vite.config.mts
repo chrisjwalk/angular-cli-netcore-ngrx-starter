@@ -1,12 +1,26 @@
 /// <reference types='vitest' />
 
 import angular from '@analogjs/vite-plugin-angular';
+import { Plugin } from 'vite';
 
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
+function virtualPwaRegisterStub(): Plugin {
+  return {
+    name: 'virtual-pwa-register-stub',
+    resolveId(id) {
+      if (id === 'virtual:pwa-register') return '\0virtual:pwa-register';
+    },
+    load(id) {
+      if (id === '\0virtual:pwa-register')
+        return `export function registerSW() { return async () => {}; }`;
+    },
+  };
+}
+
 export const baseConfig = {
   root: __dirname,
-  plugins: [angular(), nxViteTsPaths()],
+  plugins: [angular(), nxViteTsPaths(), virtualPwaRegisterStub()],
   test: {
     watch: false,
     globals: true,

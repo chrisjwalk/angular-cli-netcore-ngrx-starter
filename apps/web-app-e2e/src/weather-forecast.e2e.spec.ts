@@ -28,4 +28,18 @@ test.describe('Weather Forecast page', () => {
       page.getByRole('button', { name: /get forecasts/i }),
     ).toBeVisible();
   });
+
+  test('should fetch and display forecast rows from the API', async ({
+    page,
+  }) => {
+    await page.goto('/weather-forecast');
+
+    // The store's onInit hook fetches forecasts automatically.
+    // Row visibility confirms the API responded successfully.
+    await expect(page.getByTestId('table-row').first()).toBeVisible({
+      timeout: 10000,
+    });
+    const rowCount = await page.getByTestId('table-row').count();
+    expect(rowCount).toBeGreaterThan(0);
+  });
 });

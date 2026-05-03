@@ -2,10 +2,14 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "outDir": "../../dist/out-tsc",
-    "types": [],
+    "types": ["vite/client", "vite-plugin-pwa/client"],
     "moduleResolution": "bundler"
   },
   "files": ["src/main.ts"],
-  "include": ["src/**/*.d.ts"],
+  "include": [
+    "src/**/*.d.ts",
+    "src/app/pages/**/*.page.ts",
+    "src/server/middleware/**/*.ts"
+  ],
   "exclude": ["vite.config.mts", "src/**/*.test.ts", "src/**/*.spec.ts"]
 }

@@ -4,7 +4,7 @@ import { provideLocationMocks } from '@angular/common/testing';
 import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
+import { provideContent, withMarkdownRenderer } from '@analogjs/content';
 import { waitForElement } from '@myorg/shared';
 import { fireEvent, screen } from '@testing-library/angular';
 
@@ -14,18 +14,6 @@ import { routes } from './app.routes';
 describe('App Integration', () => {
   let applicationRef: ApplicationRef;
 
-  class MockSwUpdate {
-    readonly isEnabled = false;
-    readonly versionUpdates = {
-      subscribe: () => {
-        // No-op for testing
-      },
-    };
-    activateUpdate = async () => {
-      // No-op for testing
-    };
-  }
-
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       imports: [App],
@@ -34,7 +22,7 @@ describe('App Integration', () => {
         provideHttpClientTesting(),
         provideRouter(routes),
         provideLocationMocks(),
-        { provide: SwUpdate, useClass: MockSwUpdate },
+        provideContent(withMarkdownRenderer()),
       ],
     }).compileComponents();
 
