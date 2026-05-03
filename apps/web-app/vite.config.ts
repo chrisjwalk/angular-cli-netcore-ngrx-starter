@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
       analog({
         ssr: false,
         static: true,
+        apiPrefix: '_analog',
         prerender: {
           routes: [],
         },
@@ -112,7 +113,7 @@ export default defineConfig(({ mode }) => {
     server: {
       proxy: {
         '/api': {
-          target: 'https://localhost:60254',
+          target: 'http://localhost:60253',
           secure: false,
         },
       },

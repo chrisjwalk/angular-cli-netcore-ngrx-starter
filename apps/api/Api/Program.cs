@@ -143,12 +143,11 @@ else
 {
   app.UseExceptionHandler("/Error");
   app.UseHsts();
+  app.UseHttpsRedirection();
 }
 
-app.UseHttpsRedirection();
-
 PhysicalFileProvider fileProvider = new PhysicalFileProvider(
-  Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app", "browser")
+  Path.Combine(Directory.GetCurrentDirectory(), "apps", "web-app", "client")
 );
 FileExtensionContentTypeProvider contentTypeProvider = new FileExtensionContentTypeProvider();
 contentTypeProvider.Mappings[".webmanifest"] = "application/manifest+json";

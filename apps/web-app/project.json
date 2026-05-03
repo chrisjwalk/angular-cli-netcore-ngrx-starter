@@ -47,6 +47,24 @@
         }
       }
     },
+    "serve-e2e": {
+      "executor": "@analogjs/platform:vite-dev-server",
+      "continuous": true,
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "web-app:build",
+        "port": 4200
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "web-app:build:development",
+          "hmr": true
+        },
+        "production": {
+          "buildTarget": "web-app:build:production"
+        }
+      }
+    },
     "extract-i18n": {
       "executor": "@angular/build:extract-i18n",
       "options": {

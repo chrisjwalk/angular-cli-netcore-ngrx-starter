@@ -24,12 +24,20 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
   /* Run your local dev server before starting the tests */
-  webServer: {
-    command: 'npx nx run web-app:serve',
-    url: 'http://localhost:4200',
-    reuseExistingServer: !process.env.CI,
-    cwd: workspaceRoot,
-  },
+  webServer: [
+    {
+      command: 'npx nx run api:serve',
+      url: 'http://localhost:60253/health/live',
+      reuseExistingServer: !process.env.CI,
+      cwd: workspaceRoot,
+    },
+    {
+      command: 'npx nx run web-app:serve-e2e',
+      url: 'http://localhost:4200',
+      reuseExistingServer: !process.env.CI,
+      cwd: workspaceRoot,
+    },
+  ],
   projects: [
     {
       name: 'chromium',
