@@ -90,9 +90,9 @@ Mermaid blocks in Markdown are rendered client-side as SVGs. Here's how the cont
 
 ```mermaid
 flowchart LR
-  A["about.md<br/>(src/content/)"] -->|parsed at build time| B["ContentFile<br/>{ attributes, toc, content }"]
-  B -->|injectContent()| C["Content component"]
-  C -->|analog-markdown| D["Rendered page"]
+  MD["about.md"] -->|Analog build| CF["ContentFile"]
+  CF -->|injectContent| CMP["Content component"]
+  CMP -->|analog-markdown| HTML["Rendered page"]
 ```
 
 And the two ways to load content:
@@ -100,10 +100,10 @@ And the two ways to load content:
 ```mermaid
 flowchart TD
   subgraph Fixed[Fixed filename]
-    A["injectContent({ customFilename: 'about' })"] --> B["src/content/about.md"]
+    A[injectContent] -->|customFilename| B[about.md]
   end
   subgraph Slug[Slug-based routing]
-    C["injectContent()"] --> D["src/content/post.md"]
+    C[injectContent] -->|route slug| D[post.md]
   end
 ```
 
