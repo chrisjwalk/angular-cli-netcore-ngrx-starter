@@ -79,11 +79,8 @@ interface ContentAttributes {
 
         <!-- Sticky TOC sidebar -->
         @if (content.toc && content.toc.length > 0) {
-          <aside
-            class="hidden xl:block w-52 shrink-0"
-            aria-label="On this page"
-          >
-            <nav class="sticky top-8">
+          <aside class="hidden xl:block w-52 shrink-0">
+            <nav class="sticky top-8" aria-label="On this page">
               <p
                 class="mb-3 text-xs font-semibold uppercase tracking-widest text-on-surface-variant"
               >
