@@ -1,5 +1,12 @@
 import { DOCUMENT } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
   MarkdownComponent,
@@ -86,16 +93,23 @@ interface ContentAttributes {
               >
                 On this page
               </p>
-              <ul class="space-y-1 border-l border-outline-variant/40 pl-3">
+              <ul class="border-l border-outline-variant/30">
                 @for (item of content.toc; track item.id) {
                   <li
-                    [class.pl-3]="item.level === 3"
-                    [class.pl-6]="item.level === 4"
+                    class="-ml-px border-l-2 transition-colors"
+                    [class.border-primary]="activeId() === item.id"
+                    [class.border-transparent]="activeId() !== item.id"
+                    [class.pl-3]="item.level === 2"
+                    [class.pl-6]="item.level === 3"
+                    [class.pl-9]="item.level === 4"
                   >
                     <a
                       href="javascript:void(0)"
                       (click)="scrollTo(item.id)"
-                      class="block py-0.5 text-sm text-on-surface-variant hover:text-primary transition-colors no-underline cursor-pointer"
+                      class="block py-0.5 text-sm transition-colors no-underline cursor-pointer hover:text-primary"
+                      [class.text-primary]="activeId() === item.id"
+                      [class.font-medium]="activeId() === item.id"
+                      [class.text-on-surface-variant]="activeId() !== item.id"
                       >{{ item.text }}</a
                     >
                   </li>
@@ -116,19 +130,55 @@ interface ContentAttributes {
 export class Content {
   private readonly layoutStore = inject(LayoutStore);
   private readonly document = inject(DOCUMENT);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly content = toSignal(
     injectContent<ContentAttributes>({ customFilename: 'about' }),
   );
   readonly contentFiles = injectContentFiles<ContentAttributes>();
+  readonly activeId = signal('');
+
+  private observer: IntersectionObserver | null = null;
 
   constructor() {
     this.layoutStore.setTitle('Content');
+
+    effect(() => {
+      const toc = this.content()?.toc;
+      this.observer?.disconnect();
+      if (!toc?.length) {return;}
+      setTimeout(() => this.setupObserver(toc), 0);
+    });
+
+    this.destroyRef.onDestroy(() => this.observer?.disconnect());
   }
 
   scrollTo(id: string): void {
+    this.activeId.set(id);
     this.document
       .getElementById(id)
       ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
+  private setupObserver(toc: Array<{ id: string }>): void {
+    if (typeof IntersectionObserver === 'undefined') {return;}
+
+    const root = this.document.getElementById('main-content');
+
+    this.observer = new IntersectionObserver(
+      (entries) => {
+        for (const entry of entries) {
+          if (entry.isIntersecting) {
+            this.activeId.set(entry.target.id);
+          }
+        }
+      },
+      { root, rootMargin: '0px 0px -75% 0px', threshold: 0 },
+    );
+
+    toc.forEach(({ id }) => {
+      const el = this.document.getElementById(id);
+      if (el) {this.observer!.observe(el);}
+    });
   }
 }
