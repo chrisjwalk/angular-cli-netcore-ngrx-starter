@@ -21,7 +21,7 @@ interface AboutAttributes {
       <div
         class="border-b border-outline-variant/30 bg-surface-container-low dark:bg-surface-container"
       >
-        <div class="max-w-3xl mx-auto px-8 py-10">
+        <div class="max-w-6xl mx-auto px-8 py-10">
           <p
             class="mb-3 text-xs font-semibold uppercase tracking-widest text-primary"
           >
@@ -38,65 +38,74 @@ interface AboutAttributes {
         </div>
       </div>
 
-      <div class="max-w-3xl mx-auto px-8 py-8">
-        <!-- Table of Contents from content.toc -->
-        @if (content.toc && content.toc.length > 0) {
-          <nav
-            class="mb-8 rounded-lg border border-outline-variant/40 bg-surface-container-low p-4"
-            aria-label="On this page"
-          >
-            <p class="mb-2 text-sm font-semibold text-on-surface">
-              On this page
-            </p>
-            <ul class="space-y-1">
-              @for (item of content.toc; track item.id) {
-                <li
-                  [class.pl-4]="item.level === 3"
-                  [class.pl-8]="item.level === 4"
-                >
-                  <a
-                    [href]="'#' + item.id"
-                    class="text-sm text-on-surface-variant hover:text-primary transition-colors no-underline"
-                    >{{ item.text }}</a
-                  >
-                </li>
-              }
-            </ul>
-          </nav>
-        }
+      <!-- Two-column layout: content + sticky TOC sidebar -->
+      <div class="max-w-6xl mx-auto px-8 py-8 flex items-start gap-12">
+        <!-- Main content -->
+        <div class="min-w-0 flex-1">
+          <div class="doc-prose prose max-w-none">
+            <analog-markdown [content]="content.content" />
+          </div>
 
-        <!-- Rendered markdown -->
-        <div class="doc-prose prose max-w-none">
-          <analog-markdown [content]="content.content" />
+          <!-- injectContentFiles() demo -->
+          @if (contentFiles.length > 0) {
+            <div
+              class="mt-10 rounded-lg border border-outline-variant/40 bg-surface-container-low p-4"
+            >
+              <p class="mb-1 text-sm font-semibold text-on-surface">
+                Content files in this app
+                <span class="ml-1 font-normal text-on-surface-variant"
+                  >(via <code class="text-xs">injectContentFiles()</code>)</span
+                >
+              </p>
+              <p class="mb-3 text-xs text-on-surface-variant">
+                Resolved at build time — no API call needed.
+              </p>
+              <ul class="space-y-1">
+                @for (file of contentFiles; track file.slug) {
+                  <li class="text-sm">
+                    <code class="text-primary">{{ file.filename }}</code>
+                    @if (file.attributes.title) {
+                      <span class="text-on-surface-variant">
+                        — {{ file.attributes.title }}</span
+                      >
+                    }
+                  </li>
+                }
+              </ul>
+            </div>
+          }
         </div>
 
-        <!-- injectContentFiles() demo -->
-        @if (contentFiles.length > 0) {
-          <div
-            class="mt-10 rounded-lg border border-outline-variant/40 bg-surface-container-low p-4"
+        <!-- Sticky TOC sidebar -->
+        @if (content.toc && content.toc.length > 0) {
+          <aside
+            class="hidden xl:block w-52 shrink-0"
+            aria-label="On this page"
           >
-            <p class="mb-1 text-sm font-semibold text-on-surface">
-              Content files in this app
-              <span class="ml-1 font-normal text-on-surface-variant"
-                >(via <code class="text-xs">injectContentFiles()</code>)</span
+            <nav
+              class="sticky top-[calc(var(--mat-toolbar-standard-height)+1.5rem)]"
+            >
+              <p
+                class="mb-3 text-xs font-semibold uppercase tracking-widest text-on-surface-variant"
               >
-            </p>
-            <p class="mb-3 text-xs text-on-surface-variant">
-              Resolved at build time — no API call needed.
-            </p>
-            <ul class="space-y-1">
-              @for (file of contentFiles; track file.slug) {
-                <li class="text-sm">
-                  <code class="text-primary">{{ file.filename }}</code>
-                  @if (file.attributes.title) {
-                    <span class="text-on-surface-variant">
-                      — {{ file.attributes.title }}</span
+                On this page
+              </p>
+              <ul class="space-y-1 border-l border-outline-variant/40 pl-3">
+                @for (item of content.toc; track item.id) {
+                  <li
+                    [class.pl-3]="item.level === 3"
+                    [class.pl-6]="item.level === 4"
+                  >
+                    <a
+                      [href]="'#' + item.id"
+                      class="block py-0.5 text-sm text-on-surface-variant hover:text-primary transition-colors no-underline"
+                      >{{ item.text }}</a
                     >
-                  }
-                </li>
-              }
-            </ul>
-          </div>
+                  </li>
+                }
+              </ul>
+            </nav>
+          </aside>
         }
       </div>
     }

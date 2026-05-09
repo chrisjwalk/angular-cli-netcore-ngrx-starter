@@ -13,6 +13,7 @@ import {
   provideRouter,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
+  withInMemoryScrolling,
   withPreloading,
 } from '@angular/router';
 import { provideContent, withMarkdownRenderer } from '@analogjs/content';
@@ -32,6 +33,7 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withEnabledBlockingInitialNavigation(),
+      withInMemoryScrolling({ anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
     ),
     provideAnimations(),
