@@ -40,7 +40,7 @@ interface ContentAttributes {
       </div>
 
       <!-- Two-column layout: content + sticky TOC sidebar -->
-      <div class="max-w-6xl mx-auto px-8 py-8 flex items-start gap-12">
+      <div class="max-w-6xl mx-auto px-8 py-8 flex gap-12">
         <!-- Main content -->
         <div class="min-w-0 flex-1">
           <div class="doc-prose prose max-w-none">
