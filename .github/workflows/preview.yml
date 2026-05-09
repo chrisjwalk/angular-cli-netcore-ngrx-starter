@@ -36,7 +36,7 @@ jobs:
         run: pnpm nx build web-app --configuration preview
 
       - name: Copy SWA routing config
-        run: cp apps/web-app/src/staticwebapp.config.json dist/apps/web-app/browser/
+        run: cp apps/web-app/src/staticwebapp.config.json dist/apps/web-app/client/
 
       - name: Deploy to Azure Static Web Apps
         id: deploy
@@ -45,7 +45,7 @@ jobs:
           azure_static_web_apps_api_token: ${{ secrets.AZURE_STATIC_WEB_APPS_API_TOKEN }}
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: upload
-          app_location: dist/apps/web-app/browser
+          app_location: dist/apps/web-app/client
           skip_app_build: true
           skip_deploy_on_missing_secrets: true
 

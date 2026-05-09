@@ -5,7 +5,6 @@ import {
 } from '@angular/common/http';
 import {
   ApplicationConfig,
-  isDevMode,
   provideZonelessChangeDetection,
 } from '@angular/core';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -14,9 +13,10 @@ import {
   provideRouter,
   withComponentInputBinding,
   withEnabledBlockingInitialNavigation,
+  withInMemoryScrolling,
   withPreloading,
 } from '@angular/router';
-import { provideServiceWorker } from '@angular/service-worker';
+import { provideContent, withMarkdownRenderer } from '@analogjs/content';
 import { authInterceptor } from '@myorg/auth';
 
 import { apiBaseUrlInterceptor } from './api-base-url.interceptor';
@@ -33,11 +33,14 @@ export const appConfig: ApplicationConfig = {
       routes,
       withComponentInputBinding(),
       withEnabledBlockingInitialNavigation(),
+      withInMemoryScrolling({ anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
     ),
     provideAnimations(),
-    provideServiceWorker('/ngsw-worker.js', {
-      enabled: !isDevMode(),
-    }),
+    provideContent(
+      withMarkdownRenderer({
+        loadMermaid: !import.meta.env.SSR ? () => import('mermaid') : undefined,
+      }),
+    ),
   ],
 };

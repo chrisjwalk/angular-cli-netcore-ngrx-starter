@@ -6,6 +6,7 @@
       "vitest/globals",
       "vitest/importMeta",
       "vite/client",
+      "vite-plugin-pwa/client",
       "node",
       "vitest"
     ],

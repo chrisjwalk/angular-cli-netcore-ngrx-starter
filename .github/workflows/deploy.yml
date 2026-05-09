@@ -61,11 +61,11 @@ jobs:
       - name: Build web app (production)
         run: pnpm build:web-app:prod
 
-      # The .NET app serves the Angular SPA from apps/web-app/browser/ relative
+      # The .NET app serves the Angular SPA from apps/web-app/client/ relative
       # to its working directory (see Program.cs PhysicalFileProvider). Both
       # outputs land in dist/ with the correct structure:
       #   dist/              ← .NET publish output (Api.dll etc.)
-      #   dist/apps/web-app/browser/  ← Angular SPA
+      #   dist/apps/web-app/client/  ← Angular SPA
 
       - name: Log in to Azure (OIDC)
         uses: azure/login@v2

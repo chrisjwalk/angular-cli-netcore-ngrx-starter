@@ -24,4 +24,10 @@ export const NAV_LINKS: NavLink[] = [
     hint: 'Lazy Loaded Feature',
     label: 'Counter',
   },
+  {
+    routerLink: '/content',
+    icon: 'info',
+    hint: 'Content',
+    label: 'Content',
+  },
 ];

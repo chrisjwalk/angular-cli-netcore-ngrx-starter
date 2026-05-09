@@ -1,9 +1,10 @@
+import { AsyncPipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { MarkdownComponent, injectContent } from '@analogjs/content';
 import { LayoutStore } from '@myorg/shared';
-import { MarkdownComponent } from 'ngx-markdown';
 
 @Component({
-  imports: [MarkdownComponent],
+  imports: [AsyncPipe, MarkdownComponent],
   selector: 'lib-home',
   template: `
     <!-- Hero title band -->
@@ -30,8 +31,10 @@ import { MarkdownComponent } from 'ngx-markdown';
 
     <!-- Prose body -->
     <div class="max-w-3xl mx-auto px-8 py-8">
-      <div class="doc-prose prose max-w-none">
-        <markdown data-testid="page-markdown" [src]="markdownSrc" />
+      <div class="doc-prose prose max-w-none" data-testid="page-markdown">
+        @if (content$ | async; as content) {
+          <analog-markdown [content]="content.content" />
+        }
       </div>
     </div>
   `,
@@ -43,7 +46,7 @@ import { MarkdownComponent } from 'ngx-markdown';
 })
 export class Home {
   private readonly layoutStore = inject(LayoutStore);
-  readonly markdownSrc = '/assets/home.md';
+  readonly content$ = injectContent({ customFilename: 'home' });
 
   constructor() {
     this.layoutStore.setTitle('Home');

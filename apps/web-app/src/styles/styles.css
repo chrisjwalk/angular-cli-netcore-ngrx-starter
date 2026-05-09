@@ -1,7 +1,7 @@
 @import 'tailwindcss';
+@import './_tokens.css';
 @plugin '@tailwindcss/typography';
 @source '../assets/*.md';
-@import './_tokens.css';
 
 /*
  * Override the built-in dark: variant so it respects both OS preference

@@ -9,6 +9,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 - **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
 - **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
 - **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
+- **Markdown content pages** — [Analog.js](https://analogjs.org) content feature renders pages from Markdown files with frontmatter support (see the [About](/about) page for a live demo)
 - **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
 - **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
 
@@ -19,6 +20,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 - [Angular 21](https://angular.dev) — zoneless change detection, standalone components, signals
 - [NgRx Signal Store](https://ngrx.io/guide/signals) — reactive state management
 - [Angular Material](https://material.angular.io) — UI component library
+- [Analog.js](https://analogjs.org) — Vite-native Angular meta-framework; used for file-based Markdown content pages
 - [Tailwind CSS v4](https://tailwindcss.com) — utility-first styling
 - [Angular PWA](https://angular.dev/ecosystem/service-workers) — service worker & offline support
 

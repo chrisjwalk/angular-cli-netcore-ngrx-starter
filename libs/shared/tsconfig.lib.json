@@ -5,7 +5,7 @@
     "declaration": true,
     "declarationMap": true,
     "inlineSources": true,
-    "types": []
+    "types": ["vite-plugin-pwa/client"]
   },
   "exclude": [
     "src/**/*.spec.ts",
