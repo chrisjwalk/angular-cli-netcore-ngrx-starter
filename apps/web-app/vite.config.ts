@@ -31,7 +31,8 @@ export default defineConfig(({ mode }) => {
           highlighter: 'shiki',
           shikiOptions: {
             highlighter: {
-              additionalLangs: ['bash', 'shell', 'yaml'],
+              additionalLangs: ['bash', 'shell', 'yaml', 'mermaid'],
+              skipLangs: ['mermaid'],
             },
           },
         },

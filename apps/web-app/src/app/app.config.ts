@@ -35,6 +35,10 @@ export const appConfig: ApplicationConfig = {
       withPreloading(PreloadAllModules),
     ),
     provideAnimations(),
-    provideContent(withMarkdownRenderer()),
+    provideContent(
+      withMarkdownRenderer({
+        loadMermaid: () => import('mermaid'),
+      }),
+    ),
   ],
 };

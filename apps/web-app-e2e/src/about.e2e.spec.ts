@@ -7,19 +7,25 @@ test.describe('About page', () => {
     await expect(page.getByTestId('app-about')).toBeVisible();
   });
 
-  test('should render the about heading', async ({ page }) => {
+  test('should render the page title from frontmatter', async ({ page }) => {
     await page.goto('/about');
 
     await expect(
-      page.getByRole('heading', { name: /about this starter/i }),
+      page.getByRole('heading', { name: /content pages/i }),
     ).toBeVisible();
   });
 
-  test('should display the tech stack section', async ({ page }) => {
+  test('should display the table of contents', async ({ page }) => {
     await page.goto('/about');
 
     await expect(
-      page.getByRole('heading', { name: /tech stack/i }),
+      page.getByRole('navigation', { name: /on this page/i }),
     ).toBeVisible();
+  });
+
+  test('should display the content files panel', async ({ page }) => {
+    await page.goto('/about');
+
+    await expect(page.getByText(/content files in this app/i)).toBeVisible();
   });
 });

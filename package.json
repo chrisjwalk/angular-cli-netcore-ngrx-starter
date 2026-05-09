@@ -81,6 +81,7 @@
     "marked-highlight": "^2.2.1",
     "marked-mangle": "^1.1.10",
     "marked-shiki": "^1.2.1",
+    "mermaid": "^11.14.0",
     "ngx-markdown": "21.2.0",
     "prismjs": "^1.29.0",
     "rxjs": "7.8.2",
