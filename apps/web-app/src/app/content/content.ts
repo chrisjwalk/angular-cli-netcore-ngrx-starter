@@ -121,7 +121,7 @@ export class Content {
   private readonly document = inject(DOCUMENT);
 
   readonly content = toSignal(
-    injectContent<ContentAttributes>({ customFilename: 'content' }),
+    injectContent<ContentAttributes>({ customFilename: 'about' }),
   );
   readonly contentFiles = injectContentFiles<ContentAttributes>();
 
