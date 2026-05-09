@@ -25,9 +25,9 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Counter',
   },
   {
-    routerLink: '/about',
+    routerLink: '/content',
     icon: 'info',
-    hint: 'About',
-    label: 'About',
+    hint: 'Content',
+    label: 'Content',
   },
 ];

@@ -1,3 +1,4 @@
+import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import {
@@ -7,14 +8,14 @@ import {
 } from '@analogjs/content';
 import { LayoutStore } from '@myorg/shared';
 
-interface AboutAttributes {
+interface ContentAttributes {
   title: string;
   description: string;
 }
 
 @Component({
   imports: [MarkdownComponent],
-  selector: 'app-about',
+  selector: 'app-content',
   template: `
     @if (content(); as content) {
       <!-- Hero from frontmatter -->
@@ -82,9 +83,7 @@ interface AboutAttributes {
             class="hidden xl:block w-52 shrink-0"
             aria-label="On this page"
           >
-            <nav
-              class="sticky top-[calc(var(--mat-toolbar-standard-height)+1.5rem)]"
-            >
+            <nav class="sticky top-8">
               <p
                 class="mb-3 text-xs font-semibold uppercase tracking-widest text-on-surface-variant"
               >
@@ -97,8 +96,9 @@ interface AboutAttributes {
                     [class.pl-6]="item.level === 4"
                   >
                     <a
-                      [href]="'#' + item.id"
-                      class="block py-0.5 text-sm text-on-surface-variant hover:text-primary transition-colors no-underline"
+                      href="javascript:void(0)"
+                      (click)="scrollTo(item.id)"
+                      class="block py-0.5 text-sm text-on-surface-variant hover:text-primary transition-colors no-underline cursor-pointer"
                       >{{ item.text }}</a
                     >
                   </li>
@@ -112,19 +112,26 @@ interface AboutAttributes {
   `,
   host: {
     class: 'block',
-    'data-testid': 'app-about',
+    'data-testid': 'app-content',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class About {
+export class Content {
   private readonly layoutStore = inject(LayoutStore);
+  private readonly document = inject(DOCUMENT);
 
   readonly content = toSignal(
-    injectContent<AboutAttributes>({ customFilename: 'about' }),
+    injectContent<ContentAttributes>({ customFilename: 'content' }),
   );
-  readonly contentFiles = injectContentFiles<AboutAttributes>();
+  readonly contentFiles = injectContentFiles<ContentAttributes>();
 
   constructor() {
-    this.layoutStore.setTitle('About');
+    this.layoutStore.setTitle('Content');
+  }
+
+  scrollTo(id: string): void {
+    this.document
+      .getElementById(id)
+      ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
