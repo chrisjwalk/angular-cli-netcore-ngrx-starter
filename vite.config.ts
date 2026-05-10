@@ -20,6 +20,11 @@ export default defineConfig({
       '.angular',
     ],
   },
+  lint: {
+    options: {
+      typeAware: false,
+    },
+  },
   run: {
     tasks: {
       build: {

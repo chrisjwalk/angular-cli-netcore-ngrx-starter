@@ -27,9 +27,7 @@
           "mode": "production"
         }
       },
-      "outputs": [
-        "{workspaceRoot}/dist/apps/web-app"
-      ]
+      "outputs": ["{workspaceRoot}/dist/apps/web-app"]
     },
     "serve": {
       "executor": "@analogjs/platform:vite-dev-server",
@@ -42,9 +40,7 @@
       "dependsOn": [
         {
           "target": "serve",
-          "projects": [
-            "api"
-          ],
+          "projects": ["api"],
           "params": "forward"
         }
       ],

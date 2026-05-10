@@ -198,7 +198,7 @@ describe('buildMigrationQueue', () => {
     const tasks = buildMigrationQueue(packages);
     const ids = tasks.map((t) => t.id);
 
-    expect(ids).toHaveLength([...new Set(ids)].length);
+    expect(ids).toHaveLength(new Set(ids).size);
   });
 
   it('non-@angular/ packages come after all @angular/ packages', () => {

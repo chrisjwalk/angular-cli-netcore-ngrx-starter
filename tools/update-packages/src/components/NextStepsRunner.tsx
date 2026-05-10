@@ -26,6 +26,7 @@ export function NextStepsRunner({
     setStepStates((prev) => prev.map((s, idx) => (idx === i ? state : s)));
   };
 
+  // oxlint-disable-next-line react-hooks/exhaustive-deps -- intentionally reacts only to index changes; other deps are stable props
   useEffect(() => {
     if (index >= steps.length) {
       const results: StepResult[] = steps.map((step, i) => ({

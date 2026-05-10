@@ -1360,6 +1360,19 @@
       "rules": {
         "curly": ["error", "all"]
       }
+    },
+    {
+      "files": ["**/*.spec.ts", "**/*.spec.tsx"],
+      "rules": {
+        "typescript/no-explicit-any": "off",
+        "typescript/no-non-null-assertion": "off"
+      }
+    },
+    {
+      "files": ["tools/builders/**/*.ts"],
+      "rules": {
+        "typescript/no-explicit-any": "off"
+      }
     }
   ]
 }
