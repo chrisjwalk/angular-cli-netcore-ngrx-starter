@@ -132,7 +132,6 @@ describe('buildMigrationQueue', () => {
 
     expect(tasks.map((t) => t.id)).toEqual(['prettier', 'eslint', 'chalk']);
     expect(tasks.every((t) => t.status === 'pending')).toBe(true);
-    expect(tasks.every((t) => t.hasMigrations === false)).toBe(true);
   });
 
   it('prioritises @angular/core → @angular/cli → @angular/material', () => {
@@ -151,42 +150,6 @@ describe('buildMigrationQueue', () => {
       ids.indexOf('@angular/material'),
     );
     expect(ids.indexOf('@angular/material')).toBeLessThan(ids.indexOf('chalk'));
-  });
-
-  it('creates a single __nx__ task and absorbs @nx/* packages', () => {
-    const packages = [
-      pkg('nx'),
-      pkg('@nx/vite'),
-      pkg('@nx/angular'),
-      pkg('eslint'),
-    ];
-    const tasks = buildMigrationQueue(packages);
-    const ids = tasks.map((t) => t.id);
-
-    expect(ids[0]).toBe('__nx__');
-    expect(ids).not.toContain('nx');
-    expect(ids).not.toContain('@nx/vite');
-    expect(ids).not.toContain('@nx/angular');
-    expect(ids).toContain('eslint');
-  });
-
-  it('__nx__ task has pkg="" and displayName including version', () => {
-    const nxPkg = { ...pkg('nx'), current: '20.0.0', latest: '21.0.0' };
-    const tasks = buildMigrationQueue([nxPkg, pkg('@nx/vite')]);
-
-    const nxTask = tasks.find((t) => t.id === '__nx__')!;
-    expect(nxTask.pkg).toBe('');
-    expect(nxTask.displayName).toContain('20.0.0');
-    expect(nxTask.displayName).toContain('21.0.0');
-  });
-
-  it('handles @nx/* without a bare nx package', () => {
-    const packages = [pkg('@nx/vite'), pkg('@nx/angular')];
-    const tasks = buildMigrationQueue(packages);
-    const ids = tasks.map((t) => t.id);
-
-    expect(ids[0]).toBe('__nx__');
-    expect(ids.length).toBe(1);
   });
 
   it('returns empty array for empty input', () => {

@@ -34,17 +34,14 @@ program
     }) as unknown as NodeJS.WriteStream;
 
     const buildJsonOutput = (data: CompletionData) => ({
-      updated: data.tasks
-        .filter((t) => t.status === 'done')
-        .map((t) => (t.id === '__nx__' ? 'nx' : t.id)),
+      updated: data.tasks.filter((t) => t.status === 'done').map((t) => t.id),
       omitted: data.omitted,
       failed: data.tasks
         .filter((t) => t.status === 'error')
         .map((t) => ({
-          name: t.id === '__nx__' ? 'nx' : t.id,
+          name: t.id,
           error: t.error ?? '',
         })),
-      hasMigrations: data.tasks.some((t) => t.hasMigrations),
       nextSteps: data.stepResults.map((s) => s.step),
     });
 

@@ -1,5 +1,4 @@
 import { exec, type ExecOptions } from 'child_process';
-import fs from 'fs';
 
 export type PackageInfo = {
   name: string;
@@ -21,7 +20,6 @@ export type MigrationTask = {
   pkg: string;
   displayName: string;
   status: 'pending' | 'running' | 'done' | 'error';
-  hasMigrations: boolean;
   error?: string;
 };
 
@@ -33,16 +31,6 @@ type NpmOutdated = {
     dependent: string;
     location: string;
   };
-};
-
-type MigrationsJson = {
-  migrations: MigrationsJsonPackage[];
-};
-
-type MigrationsJsonPackage = {
-  name: string;
-  package: string;
-  factory: string;
 };
 
 export function execAsync(
@@ -96,58 +84,16 @@ export async function fetchOutdatedPackages(): Promise<PackageInfo[]> {
   }));
 }
 
-export async function nxMigrate(pkg: string): Promise<boolean> {
-  const cmd = `npx nx migrate ${pkg}${pkg ? '@' : ''}latest`;
-  const stdout = await execAsync(cmd, {
-    encoding: 'utf8',
-    ignoreExitCode: true,
-  });
-  return stdout.includes('migrations.json has been generated');
-}
-
-function removeDuplicateMigrations(migrations: MigrationsJsonPackage[]) {
-  const unique = new Map<string, MigrationsJsonPackage>();
-  migrations.forEach((m) => unique.set(m.name, m));
-  return Array.from(unique.values());
-}
-
-export async function mergeMigrations(): Promise<void> {
-  const srcData = await fs.promises.readFile('migrations.json', 'utf8');
-  const src = JSON.parse(srcData) as MigrationsJson;
-
-  let dest: MigrationsJson = { migrations: [] };
-  try {
-    const destData = await fs.promises.readFile(
-      'migrations-merged.json',
-      'utf8',
-    );
-    dest = JSON.parse(destData) as MigrationsJson;
-  } catch {
-    // file doesn't exist yet
-  }
-
-  const merged = {
-    migrations: removeDuplicateMigrations([
-      ...src.migrations,
-      ...dest.migrations,
-    ]),
-  };
-  await fs.promises.writeFile(
-    'migrations-merged.json',
-    JSON.stringify(merged, null, 2),
-  );
-}
-
-export async function finalizeMigrations(): Promise<void> {
-  await fs.promises.unlink('migrations.json');
-  await fs.promises.rename('migrations-merged.json', 'migrations.json');
+export async function pnpmUpdate(pkg: string): Promise<void> {
+  const cmd = `pnpm up --latest ${pkg}`;
+  await execAsync(cmd, { encoding: 'utf8' });
 }
 
 /**
- * Builds the ordered migration queue from a list of packages to update.
- * - nx packages → single "nx migrate latest" run (pkg = '')
+ * Builds the ordered update queue from a list of packages to update.
  * - @angular/core, @angular/cli, @angular/material → first among Angular
- * - everything else alphabetically
+ * - other @angular/* packages → next
+ * - everything else in input order
  */
 export function buildMigrationQueue(packages: PackageInfo[]): MigrationTask[] {
   const tasks: MigrationTask[] = [];
@@ -164,27 +110,8 @@ export function buildMigrationQueue(packages: PackageInfo[]): MigrationTask[] {
       pkg,
       displayName,
       status: 'pending',
-      hasMigrations: false,
     });
   };
-
-  const hasNx = packages.some(
-    (p) => p.name === 'nx' || p.name.startsWith('@nx/'),
-  );
-  if (hasNx) {
-    const nxInfo = packages.find((p) => p.name === 'nx');
-    add(
-      '__nx__',
-      '',
-      nxInfo ? `nx ${nxInfo.current} → ${nxInfo.latest}` : 'nx (all)',
-    );
-    packages
-      .filter((p) => p.name.startsWith('@nx/'))
-      .forEach((p) => used.add(p.name));
-    if (nxInfo) {
-      used.add('nx');
-    }
-  }
 
   for (const priority of [
     '@angular/core',

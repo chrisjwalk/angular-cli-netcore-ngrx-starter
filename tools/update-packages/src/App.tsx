@@ -9,9 +9,7 @@ import {
   type PackageInfo,
   buildMigrationQueue,
   fetchOutdatedPackages,
-  finalizeMigrations,
-  mergeMigrations,
-  nxMigrate,
+  pnpmUpdate,
 } from './lib.js';
 
 type Phase =
@@ -97,7 +95,7 @@ export function App({ options, onComplete, onError }: AppProps) {
       .catch((e) => setError(String(e)));
   }, [phase.type]);
 
-  // Phase: run migrations sequentially
+  // Phase: run updates sequentially
   useEffect(() => {
     if (phase.type !== 'migrating') {
       return;
@@ -105,8 +103,6 @@ export function App({ options, onComplete, onError }: AppProps) {
     const { tasks, omitted } = phase;
 
     (async () => {
-      let hasMigrationFile = false;
-
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
 
@@ -123,11 +119,7 @@ export function App({ options, onComplete, onError }: AppProps) {
         });
 
         try {
-          const hasMigrations = await nxMigrate(task.pkg);
-          if (hasMigrations) {
-            await mergeMigrations();
-            hasMigrationFile = true;
-          }
+          await pnpmUpdate(task.pkg);
           setPhase((prev) => {
             if (prev.type !== 'migrating') {
               return prev;
@@ -135,7 +127,7 @@ export function App({ options, onComplete, onError }: AppProps) {
             return {
               ...prev,
               tasks: prev.tasks.map((t) =>
-                t.id === task.id ? { ...t, status: 'done', hasMigrations } : t,
+                t.id === task.id ? { ...t, status: 'done' } : t,
               ),
             };
           });
@@ -156,14 +148,7 @@ export function App({ options, onComplete, onError }: AppProps) {
         }
       }
 
-      if (hasMigrationFile) {
-        await finalizeMigrations();
-      }
-
       const nextSteps = ['pnpm install --no-frozen-lockfile'];
-      if (hasMigrationFile) {
-        nextSteps.push('npx nx migrate --run-migrations');
-      }
 
       setPhase((prev) => {
         if (prev.type !== 'migrating') {
