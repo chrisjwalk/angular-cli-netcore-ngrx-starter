@@ -61,7 +61,7 @@ describe('NotificationBell', () => {
 
   it('should open bottom sheet on handset devices', async () => {
     const { fixture } = await setup();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line @typescript-eslint/no-explicit-any
     const component = fixture.debugElement.componentInstance as any;
     const breakpointObserver = fixture.debugElement.injector.get(
       component['breakpointObserver'].constructor,
@@ -71,7 +71,7 @@ describe('NotificationBell', () => {
       component['bottomSheet'].constructor,
     );
     vi.spyOn(bottomSheet, 'open').mockImplementation(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      // oxlint-disable-next-line @typescript-eslint/no-explicit-any
       () => null as any,
     );
     fireEvent.click(screen.getByRole('button'));

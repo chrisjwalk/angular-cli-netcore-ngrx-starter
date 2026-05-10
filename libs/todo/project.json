@@ -12,9 +12,6 @@
       "options": {
         "reportsDirectory": "coverage/libs/todo"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     }
   }
 }

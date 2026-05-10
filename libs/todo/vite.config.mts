@@ -1,17 +1,13 @@
-/// <reference types='vitest' />
+/// <reference types='vite-plus/test' />
 import { defineConfig, UserConfig } from 'vite';
-import { nxCopyAssetsPlugin } from '@nx/vite/plugins/nx-copy-assets.plugin';
 
-import { baseConfig } from '../../vite.config.mjs';
+import { baseConfig } from '../../vite.base.config.mjs';
 
 export default defineConfig({
   ...baseConfig,
   root: __dirname,
   cacheDir: '../../node_modules/.vite/libs/todo',
-  plugins: [
-    ...(baseConfig.plugins ?? []),
-    nxCopyAssetsPlugin(['*.md']),
-  ],
+  plugins: [...(baseConfig.plugins ?? [])],
   test: {
     ...(baseConfig.test as UserConfig['test']),
     name: 'todo',

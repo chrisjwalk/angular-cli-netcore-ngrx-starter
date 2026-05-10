@@ -8,15 +8,15 @@ updates:
       day: monday
     groups:
       angular:
-        patterns: ["@angular/*", "@angular-devkit/*"]
+        patterns: ['@angular/*', '@angular-devkit/*']
       ngrx:
-        patterns: ["@ngrx/*"]
+        patterns: ['@ngrx/*']
       nx:
-        patterns: ["@nx/*", "nx"]
+        patterns: ['@nx/*', 'nx']
       material:
-        patterns: ["@angular/material", "@angular/cdk"]
+        patterns: ['@angular/material', '@angular/cdk']
       all-deps:
-        patterns: ["*"]
+        patterns: ['*']
 
   - package-ecosystem: github-actions
     directory: /
@@ -24,4 +24,4 @@ updates:
       interval: monthly
     groups:
       github-actions:
-        patterns: ["*"]
+        patterns: ['*']

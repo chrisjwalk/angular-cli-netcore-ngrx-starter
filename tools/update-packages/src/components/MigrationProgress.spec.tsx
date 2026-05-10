@@ -21,7 +21,9 @@ describe('MigrationProgress', () => {
       makeTask({ id: 'pkg-a', displayName: 'pkg-a' }),
       makeTask({ id: 'pkg-b', displayName: 'pkg-b' }),
     ];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
     const frame = lastFrame()!;
 
     expect(frame).toContain('pkg-a');
@@ -31,7 +33,9 @@ describe('MigrationProgress', () => {
 
   it('shows ✓ (green) for done tasks without migrations', () => {
     const tasks = [makeTask({ status: 'done', hasMigrations: false })];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
 
     expect(lastFrame()!).toContain('✓');
     expect(lastFrame()!).toContain('test-pkg');
@@ -40,7 +44,9 @@ describe('MigrationProgress', () => {
 
   it('shows ✓ with "(migrations)" for done tasks that had migrations', () => {
     const tasks = [makeTask({ status: 'done', hasMigrations: true })];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
 
     expect(lastFrame()!).toContain('✓');
     expect(lastFrame()!).toContain('(migrations)');
@@ -48,7 +54,9 @@ describe('MigrationProgress', () => {
 
   it('shows ✗ for error tasks', () => {
     const tasks = [makeTask({ status: 'error', error: 'something broke' })];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
 
     expect(lastFrame()!).toContain('✗');
     expect(lastFrame()!).toContain('something broke');
@@ -56,7 +64,9 @@ describe('MigrationProgress', () => {
 
   it('shows ◆ for running tasks', () => {
     const tasks = [makeTask({ status: 'running' })];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
 
     expect(lastFrame()!).toContain('◆');
     expect(lastFrame()!).toContain('test-pkg');
@@ -68,7 +78,9 @@ describe('MigrationProgress', () => {
       makeTask({ id: 'b', displayName: 'b', status: 'done' }),
       makeTask({ id: 'c', displayName: 'c', status: 'pending' }),
     ];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
 
     expect(lastFrame()!).toContain('[2/3]');
   });
@@ -79,7 +91,9 @@ describe('MigrationProgress', () => {
       makeTask({ id: 'b', displayName: 'pkg-b', status: 'running' }),
       makeTask({ id: 'c', displayName: 'pkg-c', status: 'pending' }),
     ];
-    const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
+    const { lastFrame } = render(
+      React.createElement(MigrationProgress, { tasks }),
+    );
     const frame = lastFrame()!;
 
     expect(frame).toContain('pkg-a');

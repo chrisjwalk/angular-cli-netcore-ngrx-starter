@@ -8,16 +8,11 @@
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": [
-        "{options.reportsDirectory}"
-      ],
+      "outputs": ["{options.reportsDirectory}"],
       "options": {
         "reportsDirectory": "{projectRoot}/../../coverage/libs/weather-forecast",
         "coverage": true
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint"
     }
   }
 }

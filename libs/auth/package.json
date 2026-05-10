@@ -1,0 +1,11 @@
+{
+  "name": "@myorg/auth",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@myorg/shared": "workspace:*"
+  }
+}

@@ -35,15 +35,6 @@
         "coverageOutputFormat": "xml",
         "coverageOutputFileName": "coverage.xml"
       }
-    },
-    "lint": {
-      "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ],
-      "options": {
-        "errorOnUnmatchedPattern": false
-      }
     }
   },
   "tags": [],

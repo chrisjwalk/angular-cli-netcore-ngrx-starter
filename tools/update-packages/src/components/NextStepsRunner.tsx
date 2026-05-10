@@ -12,9 +12,15 @@ interface NextStepsRunnerProps {
 
 type StepState = 'pending' | 'confirming' | 'running' | 'done' | 'skipped';
 
-export function NextStepsRunner({ steps, interactive, onDone }: NextStepsRunnerProps) {
+export function NextStepsRunner({
+  steps,
+  interactive,
+  onDone,
+}: NextStepsRunnerProps) {
   const [index, setIndex] = useState(0);
-  const [stepStates, setStepStates] = useState<StepState[]>(steps.map(() => 'pending'));
+  const [stepStates, setStepStates] = useState<StepState[]>(
+    steps.map(() => 'pending'),
+  );
 
   const updateState = (i: number, state: StepState) => {
     setStepStates((prev) => prev.map((s, idx) => (idx === i ? state : s)));
@@ -77,7 +83,7 @@ export function NextStepsRunner({ steps, interactive, onDone }: NextStepsRunnerP
                   <Text color="cyan">$ {step}</Text>
                 </Box>
               ) : (
-                <Text dimColor>  {step}</Text>
+                <Text dimColor> {step}</Text>
               )}
             </Box>
 

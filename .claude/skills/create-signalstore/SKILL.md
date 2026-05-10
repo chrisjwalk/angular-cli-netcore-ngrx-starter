@@ -51,7 +51,16 @@ Place the resource in `withProps` so it's accessible to downstream `withMethods`
 ```typescript
 import { computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { patchState, signalStore, signalStoreFeature, withComputed, withHooks, withMethods, withProps, withState } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  signalStoreFeature,
+  withComputed,
+  withHooks,
+  withMethods,
+  withProps,
+  withState,
+} from '@ngrx/signals';
 
 export type MyState = { query: string };
 export const myInitialState: MyState = { query: '' };
@@ -84,7 +93,10 @@ export function withMyFeature() {
   );
 }
 
-export const MyStore = signalStore(withMyFeature(), withHooks({ onInit: ({ setQuery }) => setQuery('') }));
+export const MyStore = signalStore(
+  withMyFeature(),
+  withHooks({ onInit: ({ setQuery }) => setQuery('') }),
+);
 ```
 
 **Using the resource in a template:**
@@ -138,7 +150,9 @@ it('should load results', async () => {
 
 it('should capture error', async () => {
   const appRef = TestBed.inject(ApplicationRef);
-  vi.spyOn(service, 'search').mockReturnValue(throwError(() => new Error('oops')));
+  vi.spyOn(service, 'search').mockReturnValue(
+    throwError(() => new Error('oops')),
+  );
 
   store.setQuery('hello');
   await appRef.whenStable();
@@ -156,7 +170,17 @@ Use when you have plain state + computed values + methods. No entity collection.
 
 ```typescript
 import { computed, inject } from '@angular/core';
-import { patchState, signalStore, signalStoreFeature, withComputed, withHooks, withMethods, withProps, withState, type } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  signalStoreFeature,
+  withComputed,
+  withHooks,
+  withMethods,
+  withProps,
+  withState,
+  type,
+} from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { tapResponse } from '@ngrx/operators';
 import { pipe, switchMap, tap } from 'rxjs';
@@ -241,7 +265,8 @@ withLinkedState(({ options }) => ({
   // Advanced — preserve selection if it still exists in the new list:
   selectedOption: linkedSignal<Option[], Option>({
     source: options,
-    computation: (newOptions, previous) => newOptions.find((o) => o.id === previous?.value.id) ?? newOptions[0],
+    computation: (newOptions, previous) =>
+      newOptions.find((o) => o.id === previous?.value.id) ?? newOptions[0],
   }),
 }));
 ```
@@ -254,7 +279,17 @@ Use when managing a collection of items. Provides `entityMap`, `ids`, and `entit
 
 ```typescript
 import { computed, inject } from '@angular/core';
-import { patchState, signalStore, signalStoreFeature, withComputed, withHooks, withMethods, withProps, withState, type } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  signalStoreFeature,
+  withComputed,
+  withHooks,
+  withMethods,
+  withProps,
+  withState,
+  type,
+} from '@ngrx/signals';
 import {
   addEntity,
   addEntities,
@@ -303,7 +338,8 @@ export function withTodosFeature() {
           switchMap(() =>
             todosService.getAll().pipe(
               tapResponse({
-                next: (todos) => patchState(store, setAllEntities(todos), { loading: false }),
+                next: (todos) =>
+                  patchState(store, setAllEntities(todos), { loading: false }),
                 error: (error) => patchState(store, { error, loading: false }),
               }),
             ),
@@ -323,7 +359,10 @@ export function withTodosFeature() {
         ),
       ),
       toggle(id: string) {
-        patchState(store, updateEntity({ id, changes: (t) => ({ completed: !t.completed }) }));
+        patchState(
+          store,
+          updateEntity({ id, changes: (t) => ({ completed: !t.completed }) }),
+        );
       },
       remove(id: string) {
         patchState(store, removeEntity(id));
@@ -332,7 +371,10 @@ export function withTodosFeature() {
   );
 }
 
-export const TodosStore = signalStore(withTodosFeature(), withHooks({ onInit: ({ loadAll }) => loadAll() }));
+export const TodosStore = signalStore(
+  withTodosFeature(),
+  withHooks({ onInit: ({ loadAll }) => loadAll() }),
+);
 
 export type TodosStore = InstanceType<typeof TodosStore>;
 ```
@@ -344,7 +386,10 @@ If your entity's ID field isn't named `id`:
 ```typescript
 withEntities<WeatherForecast>();
 // then pass selectId to entity updaters:
-patchState(store, setAllEntities(items, { selectId: (item) => item.dateFormatted }));
+patchState(
+  store,
+  setAllEntities(items, { selectId: (item) => item.dateFormatted }),
+);
 
 // Or use entityConfig to define it once:
 import { entityConfig } from '@ngrx/signals/entities';
@@ -388,7 +433,14 @@ withEntities({ entity: type<Post>(), collection: 'posts' });
 Use when you want explicit Redux-style events with a reducer (e.g. a counter, form steps, wizard).
 
 ```typescript
-import { patchState, signalStore, signalStoreFeature, withMethods, withState, type } from '@ngrx/signals';
+import {
+  patchState,
+  signalStore,
+  signalStoreFeature,
+  withMethods,
+  withState,
+  type,
+} from '@ngrx/signals';
 import { signalMethod } from '@ngrx/signals';
 import { eventGroup, on, withReducer } from '@ngrx/signals/events';
 
@@ -427,7 +479,10 @@ export function withCounterReducer() {
   );
 }
 
-export const CounterStore = signalStore(withCounterFeature(), withCounterReducer());
+export const CounterStore = signalStore(
+  withCounterFeature(),
+  withCounterReducer(),
+);
 
 export type CounterStore = InstanceType<typeof CounterStore>;
 ```
@@ -479,7 +534,9 @@ describe('MyStore', () => {
   });
 
   it('should handle an event via reducer', () => {
-    const dispatch = TestBed.runInInjectionContext(() => injectDispatch(myEvents));
+    const dispatch = TestBed.runInInjectionContext(() =>
+      injectDispatch(myEvents),
+    );
     dispatch.someEvent(42);
     TestBed.flushEffects();
     expect(store.someValue()).toBe(42);
