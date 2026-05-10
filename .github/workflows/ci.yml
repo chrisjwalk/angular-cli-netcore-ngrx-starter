@@ -24,7 +24,7 @@ jobs:
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 11
 
       - uses: actions/setup-node@v6
         with:
@@ -46,20 +46,10 @@ jobs:
         run: echo "NX_BASE=origin/${{ github.base_ref }}" >> $GITHUB_ENV
 
       - name: Lint
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm nx affected --target=lint --base=$NX_BASE
-          else
-            pnpm lint:all
-          fi
+        run: pnpm lint
 
       - name: Test
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm nx affected --target=test --base=$NX_BASE
-          else
-            pnpm test:all
-          fi
+        run: pnpm test:all
 
       - name: Build
         run: |
