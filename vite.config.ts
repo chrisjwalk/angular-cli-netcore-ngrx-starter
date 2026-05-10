@@ -25,6 +25,13 @@ export default defineConfig({
       typeAware: false,
     },
   },
+  test: {
+    projects: [
+      'libs/*/vite.config.mts',
+      'apps/web-app/vite.config.ts',
+      'tools/update-packages/vite.config.mts',
+    ],
+  },
   run: {
     tasks: {
       build: {
