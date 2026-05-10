@@ -18,7 +18,7 @@ function virtualPwaRegisterStub(): Plugin {
 
 export const baseConfig = {
   root: __dirname,
-  plugins: [angular(), virtualPwaRegisterStub()],
+  plugins: [angular({ tsconfig: './tsconfig.spec.json' }), virtualPwaRegisterStub()],
   resolve: {
     tsconfigPaths: true,
   },

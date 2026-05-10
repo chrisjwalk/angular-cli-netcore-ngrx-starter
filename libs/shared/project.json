@@ -4,15 +4,5 @@
   "sourceRoot": "libs/shared/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
-  "targets": {
-    "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/libs/shared",
-        "coverage": true
-      }
-    }
-  }
+  "tags": []
 }

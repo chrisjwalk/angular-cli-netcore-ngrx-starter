@@ -1,3 +1,10 @@
 {
-  "type": "module"
+  "type": "module",
+  "name": "@myorg/web-app",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run"
+  }
 }

@@ -4,15 +4,5 @@
   "sourceRoot": "libs/weather-forecast/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
-  "targets": {
-    "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/libs/weather-forecast",
-        "coverage": true
-      }
-    }
-  }
+  "tags": []
 }

@@ -4,15 +4,5 @@
   "sourceRoot": "libs/counter/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
-  "targets": {
-    "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/libs/counter",
-        "coverage": true
-      }
-    }
-  }
+  "tags": []
 }

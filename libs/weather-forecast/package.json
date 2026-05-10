@@ -4,5 +4,8 @@
   "private": true,
   "exports": {
     ".": "./src/index.ts"
+  },
+  "scripts": {
+    "test": "vitest run"
   }
 }

@@ -27,7 +27,9 @@
           "mode": "production"
         }
       },
-      "outputs": ["{workspaceRoot}/dist/apps/web-app"]
+      "outputs": [
+        "{workspaceRoot}/dist/apps/web-app"
+      ]
     },
     "serve": {
       "executor": "@analogjs/platform:vite-dev-server",
@@ -40,7 +42,9 @@
       "dependsOn": [
         {
           "target": "serve",
-          "projects": ["api"],
+          "projects": [
+            "api"
+          ],
           "params": "forward"
         }
       ],
@@ -76,14 +80,6 @@
       "executor": "@angular/build:extract-i18n",
       "options": {
         "buildTarget": "web-app:build"
-      }
-    },
-    "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
-      "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/apps/web-app",
-        "coverage": true
       }
     },
     "serve-static": {
