@@ -1,22 +1,18 @@
-import { defineConfig, devices } from '@playwright/test';
-import { nxE2EPreset } from '@nx/playwright/preset';
+import path from 'path';
 
-import { workspaceRoot } from '@nx/devkit';
+import { defineConfig, devices } from '@playwright/test';
+
+const workspaceRoot = path.resolve(__dirname, '../..');
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
-
-/**
- * Read environment variables from file.
- * https://github.com/motdotla/dotenv
- */
-// require('dotenv').config();
+const baseURL = process.env['BASE_URL'] || 'http://localhost:5173';
 
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
 export default defineConfig({
-  ...nxE2EPreset(__filename, { testDir: './src' }),
+  testDir: './src',
+  outputDir: path.join(workspaceRoot, 'dist/apps/web-app-e2e/test-output'),
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,
@@ -26,14 +22,14 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'npx nx run api:serve',
+      command: 'dotnet run --project apps/api/Api --launch-profile Api',
       url: 'http://localhost:60253/health/live',
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,
     },
     {
-      command: 'npx nx run web-app:serve-e2e',
-      url: 'http://localhost:4200',
+      command: 'pnpm vp dev',
+      url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,
     },
