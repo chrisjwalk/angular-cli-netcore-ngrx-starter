@@ -1,8 +1,0 @@
-{
-  "name": "counter",
-  "$schema": "../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/counter/src",
-  "prefix": "lib",
-  "projectType": "library",
-  "tags": []
-}

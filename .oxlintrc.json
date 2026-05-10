@@ -8,7 +8,6 @@
     "builtin": true
   },
   "ignorePatterns": [
-    ".nx",
     "**/dist",
     "**/vite.config.*.timestamp*",
     "**/vitest.config.*.timestamp*"

@@ -124,13 +124,7 @@ export default defineConfig({
     importOrderSortSpecifiers: true,
     printWidth: 80,
     sortPackageJson: false,
-    ignorePatterns: [
-      '/dist',
-      '/coverage',
-      '/.nx/cache',
-      '/.nx/workspace-data',
-      '.angular',
-    ],
+    ignorePatterns: ['/dist', '/coverage', '.angular'],
   },
   lint: {
     options: {
