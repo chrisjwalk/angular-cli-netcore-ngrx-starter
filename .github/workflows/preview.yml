@@ -31,7 +31,9 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Build web app (preview)
-        run: pnpm nx build web-app --configuration preview
+        run: pnpm build:prod
+        env:
+          NX_TASK_TARGET_CONFIGURATION: preview
 
       - name: Copy SWA routing config
         run: cp apps/web-app/src/staticwebapp.config.json dist/apps/web-app/client/

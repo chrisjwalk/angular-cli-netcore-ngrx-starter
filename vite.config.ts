@@ -31,6 +31,15 @@ export default defineConfig({
       static: true,
       apiPrefix: '_analog',
       prerender: { routes: [] },
+      fileReplacements:
+        process.env['NX_TASK_TARGET_CONFIGURATION'] === 'preview'
+          ? [
+              {
+                replace: 'apps/web-app/src/environments/environment.ts',
+                with: 'apps/web-app/src/environments/environment.preview.ts',
+              },
+            ]
+          : [],
       content: {
         highlighter: 'shiki',
         shikiOptions: {
