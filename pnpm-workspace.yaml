@@ -4,16 +4,11 @@ packages:
   - tools/*
 
 allowBuilds:
-  esbuild: set this to true or false
-  lmdb: set this to true or false
-
-onlyBuiltDependencies:
-  - '@parcel/watcher'
-  - '@swc/core'
-  - '@tailwindcss/oxide'
-  - esbuild
-  - lmdb
-  - msgpackr-extract
-  - nx
-  - oxc-resolver
-  - unrs-resolver
+  '@parcel/watcher': true
+  '@swc/core': true
+  esbuild: true
+  lmdb: true
+  msgpackr-extract: true
+  nx: true
+  oxc-resolver: true
+  unrs-resolver: true
