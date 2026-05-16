@@ -39,10 +39,6 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Set Nx base for affected commands (PR only)
-        if: github.event_name == 'pull_request'
-        run: echo "NX_BASE=origin/${{ github.base_ref }}" >> $GITHUB_ENV
-
       - name: Lint
         run: pnpm lint
 
@@ -50,20 +46,7 @@ jobs:
         run: pnpm test:all
 
       - name: Build
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm nx affected --target=build --base=$NX_BASE
-          else
-            pnpm build:prod
-          fi
-
-      - name: Pack
-        run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            pnpm nx affected --target=pack --base=$NX_BASE
-          else
-            pnpm nx run update-packages:pack
-          fi
+        run: pnpm build:prod
 
       - name: Upload coverage report
         if: always()
