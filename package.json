@@ -4,8 +4,6 @@
   "license": "MIT",
   "scripts": {
     "start": "concurrently -n api,web -c blue,green \"dotnet run --project apps/api/Api --launch-profile Api\" \"vp dev\"",
-    "dev": "vp dev",
-    "build": "vp build",
     "build:prod": "vp build",
     "build:dotnet-builder": "rimraf ./tools/builders/dotnet-builder/dist && tsc -p ./tools/builders/dotnet-builder",
     "clean": "rimraf ./dist ./junit ./coverage ./.angular",

@@ -135,6 +135,7 @@ export default defineConfig({
     projects: [
       `${workspaceRoot}/libs/*/vite.config.mts`,
       `${workspaceRoot}/apps/web-app/vite.config.ts`,
+      `${workspaceRoot}/apps/api/Api.Test/vitest.config.ts`,
       `${workspaceRoot}/tools/update-packages/vite.config.mts`,
     ],
   },
