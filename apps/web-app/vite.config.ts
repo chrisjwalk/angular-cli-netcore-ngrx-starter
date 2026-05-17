@@ -4,8 +4,6 @@ import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { VitePWA } from 'vite-plugin-pwa';
 
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
   return {
@@ -18,6 +16,9 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: ['front-matter'],
+    },
+    resolve: {
+      tsconfigPaths: true,
     },
     plugins: [
       analog({
@@ -46,8 +47,6 @@ export default defineConfig(({ mode }) => {
               ]
             : [],
       }),
-
-      nxViteTsPaths(),
 
       VitePWA({
         registerType: 'prompt',

@@ -2,97 +2,36 @@
 
 A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://angular.dev) (zoneless, signals) and a .NET 10.0 Web API backend. Deployed to Azure App Service with automated PR preview deployments via Azure Static Web Apps.
 
+## What's Here
+
+This demo app is a working full-stack starter. Everything you see is connected to a real .NET 10.0 backend — sign up for an account and explore the features below.
+
 ## Features
 
-- **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
-- **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
-- **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
-- **Markdown content pages** — [Analog.js](https://analogjs.org) content feature renders pages from Markdown files with frontmatter support (see the [About](/about) page for a live demo)
-- **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
-- **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
+### [To-do list](/todos)
 
-## Tech stack
+Create, complete, and delete to-dos backed by Entity Framework Core and Azure SQL. Demonstrates CRUD operations with optimistic UI updates via NgRx Signal Store.
 
-**Frontend**
+### [Weather forecast](/weather-forecast)
 
-- [Angular 21](https://angular.dev) — zoneless change detection, standalone components, signals
-- [NgRx Signal Store](https://ngrx.io/guide/signals) — reactive state management
-- [Angular Material](https://material.angular.io) — UI component library
-- [Analog.js](https://analogjs.org) — Vite-native Angular meta-framework; used for file-based Markdown content pages
-- [Tailwind CSS v4](https://tailwindcss.com) — utility-first styling
-- [Angular PWA](https://angular.dev/ecosystem/service-workers) — service worker & offline support
+Fetches live data from the .NET API and displays a 5-day weather forecast. A simple example of an Angular service calling a protected API endpoint.
 
-**Backend**
+### [Counter](/feature)
 
-- [.NET 10.0](https://dotnet.microsoft.com) Web API
-- [ASP.NET Core Identity](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/identity) — bearer token authentication
-- [Entity Framework Core](https://learn.microsoft.com/en-us/ef/core/) with Azure SQL
+A minimal NgRx Signal Store example — increment, decrement, and reset a counter with undo/redo support. A good starting point for understanding the signal store pattern used throughout this app.
 
-**Tooling**
+### [Content pages](/about)
 
-- [Nx](https://nx.dev) — monorepo build system with affected commands
-- [Vitest](https://vitest.dev) — unit tests with ~93% line coverage
-- [Playwright](https://playwright.dev) — end-to-end tests
-- [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) — pre-commit hooks for linting, formatting, and keeping `home.md` in sync
-- [pnpm](https://pnpm.io) — package manager
+This page and the [About](/about) page are rendered from Markdown files using [Analog.js](https://analogjs.org). Frontmatter, syntax highlighting via Shiki, Mermaid diagrams, and a generated table of contents — all resolved at build time.
 
-## Demo
+## Notifications
 
-Live demo: [https://angularclinetcorengrxstarter.azurewebsites.net/](https://angularclinetcorengrxstarter.azurewebsites.net/)
+Click the bell icon in the top-right corner to open the notification center. Notifications persist across sessions, support mark-as-read, dismiss, and action buttons. The service worker update prompt also surfaces here when a new version of the app is deployed.
 
-## Getting started
+## PWA
 
-**Prerequisites**
+This app is a Progressive Web App. On supported browsers you can install it to your home screen. If you're offline, previously visited pages continue to work from the service worker cache.
 
-- Node 24.x+ with pnpm 10+
-- .NET SDK 10.0.x — [download](https://dotnet.microsoft.com/download)
+## Source
 
-**Install dependencies**
-
-```bash
-pnpm install
-```
-
-## Serve development app
-
-```bash
-pnpm start
-```
-
-Starts both the .NET API and Angular app in dev mode. Open [http://localhost:4200](http://localhost:4200) for the app, or [https://localhost:60254/swagger](https://localhost:60254/swagger) for the API docs.
-
-## Lint
-
-```bash
-pnpm lint
-```
-
-## Unit tests
-
-```bash
-pnpm test
-```
-
-Coverage requires `dotnet-coverage`:
-
-```bash
-dotnet tool install --global dotnet-coverage
-```
-
-## End-to-end tests
-
-```bash
-pnpm e2e
-```
-
-## Build for production
-
-```bash
-pnpm build:prod
-```
-
-Builds the Angular app and publishes the .NET project to `/dist`, ready to deploy to Azure App Service.
-
-## Contributing
-
-`apps/web-app/src/assets/home.md` is auto-generated from this file — **edit `README.md` only**. The lint-staged hook regenerates `home.md` automatically whenever `README.md` is committed.
+The source is on [GitHub](https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter). The stack is Angular 21 (zoneless, signals), NgRx Signal Store, Angular Material, Tailwind CSS v4, and .NET 10.0 — built and tested with [Vite+](https://viteplus.dev).

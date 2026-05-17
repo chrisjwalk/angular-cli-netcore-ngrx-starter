@@ -168,7 +168,7 @@ describe('AuthStore', () => {
       });
 
       expect(store.expiresAt()).toEqual(
-        new Date(store.response().accessTokenIssued.getTime() + 0 * 1000),
+        new Date(store.response().accessTokenIssued.getTime() + 0),
       );
       expect(store.expired()).toBe(true);
     }));

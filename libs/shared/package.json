@@ -1,0 +1,12 @@
+{
+  "name": "@myorg/shared",
+  "version": "0.0.0",
+  "private": true,
+  "exports": {
+    ".": "./src/index.ts",
+    "./*": "./src/*"
+  },
+  "scripts": {
+    "test": "vitest run"
+  }
+}

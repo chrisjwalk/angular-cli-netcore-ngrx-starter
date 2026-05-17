@@ -9,16 +9,19 @@ import {
   type PackageInfo,
   buildMigrationQueue,
   fetchOutdatedPackages,
-  finalizeMigrations,
-  mergeMigrations,
-  nxMigrate,
+  pnpmUpdate,
 } from './lib.js';
 
 type Phase =
   | { type: 'loading' }
   | { type: 'omit-select'; packages: PackageInfo[]; defaultOmit: string[] }
   | { type: 'migrating'; tasks: MigrationTask[]; omitted: string[] }
-  | { type: 'next-steps'; tasks: MigrationTask[]; omitted: string[]; nextSteps: string[] };
+  | {
+      type: 'next-steps';
+      tasks: MigrationTask[];
+      omitted: string[];
+      nextSteps: string[];
+    };
 
 export interface AppOptions {
   omit: string[];
@@ -57,7 +60,9 @@ export function App({ options, onComplete, onError }: AppProps) {
 
   // Phase: load outdated packages
   useEffect(() => {
-    if (phase.type !== 'loading') {return;}
+    if (phase.type !== 'loading') {
+      return;
+    }
     fetchOutdatedPackages()
       .then((packages) => {
         if (packages.length === 0) {
@@ -74,7 +79,10 @@ export function App({ options, onComplete, onError }: AppProps) {
 
         if (!options.interactive) {
           const combinedOmit = [
-            ...new Set([...options.omit, ...(options.minorOnly ? majorOmits : [])]),
+            ...new Set([
+              ...options.omit,
+              ...(options.minorOnly ? majorOmits : []),
+            ]),
           ];
           startMigration(packages, combinedOmit);
         } else if (options.omit.length > 0) {
@@ -87,62 +95,65 @@ export function App({ options, onComplete, onError }: AppProps) {
       .catch((e) => setError(String(e)));
   }, [phase.type]);
 
-  // Phase: run migrations sequentially
+  // Phase: run updates sequentially
   useEffect(() => {
-    if (phase.type !== 'migrating') {return;}
+    if (phase.type !== 'migrating') {
+      return;
+    }
     const { tasks, omitted } = phase;
 
     (async () => {
-      let hasMigrationFile = false;
-
       for (let i = 0; i < tasks.length; i++) {
         const task = tasks[i];
 
         setPhase((prev) => {
-          if (prev.type !== 'migrating') {return prev;}
+          if (prev.type !== 'migrating') {
+            return prev;
+          }
           return {
             ...prev,
-            tasks: prev.tasks.map((t) => (t.id === task.id ? { ...t, status: 'running' } : t)),
+            tasks: prev.tasks.map((t) =>
+              t.id === task.id ? { ...t, status: 'running' } : t,
+            ),
           };
         });
 
         try {
-          const hasMigrations = await nxMigrate(task.pkg);
-          if (hasMigrations) {
-            await mergeMigrations();
-            hasMigrationFile = true;
-          }
+          await pnpmUpdate(task.pkg);
           setPhase((prev) => {
-            if (prev.type !== 'migrating') {return prev;}
+            if (prev.type !== 'migrating') {
+              return prev;
+            }
             return {
               ...prev,
               tasks: prev.tasks.map((t) =>
-                t.id === task.id ? { ...t, status: 'done', hasMigrations } : t,
+                t.id === task.id ? { ...t, status: 'done' } : t,
               ),
             };
           });
         } catch (e) {
           setPhase((prev) => {
-            if (prev.type !== 'migrating') {return prev;}
+            if (prev.type !== 'migrating') {
+              return prev;
+            }
             return {
               ...prev,
               tasks: prev.tasks.map((t) =>
-                t.id === task.id ? { ...t, status: 'error', error: String(e) } : t,
+                t.id === task.id
+                  ? { ...t, status: 'error', error: String(e) }
+                  : t,
               ),
             };
           });
         }
       }
 
-      if (hasMigrationFile) {
-        await finalizeMigrations();
-      }
-
       const nextSteps = ['pnpm install --no-frozen-lockfile'];
-      if (hasMigrationFile) {nextSteps.push('npx nx migrate --run-migrations');}
 
       setPhase((prev) => {
-        if (prev.type !== 'migrating') {return prev;}
+        if (prev.type !== 'migrating') {
+          return prev;
+        }
         return { type: 'next-steps', tasks: prev.tasks, omitted, nextSteps };
       });
     })();

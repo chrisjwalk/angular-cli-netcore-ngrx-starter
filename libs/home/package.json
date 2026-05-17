@@ -1,10 +1,11 @@
 {
-  "type": "module",
-  "name": "@myorg/web-app",
+  "name": "@myorg/home",
   "version": "0.0.0",
   "private": true,
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
-    "build": "vite build",
     "test": "vitest run"
   }
 }

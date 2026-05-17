@@ -8,7 +8,9 @@ interface MigrationProgressProps {
 }
 
 export function MigrationProgress({ tasks }: MigrationProgressProps) {
-  const completedCount = tasks.filter((t) => t.status === 'done' || t.status === 'error').length;
+  const completedCount = tasks.filter(
+    (t) => t.status === 'done' || t.status === 'error',
+  ).length;
   const runningTask = tasks.find((t) => t.status === 'running');
   const total = tasks.length;
 
@@ -16,7 +18,12 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
     <Box flexDirection="column" marginTop={1}>
       {tasks.map((task) => {
         if (task.status === 'done' || task.status === 'error') {
-          const color = task.status === 'error' ? 'red' : task.hasMigrations ? 'blue' : 'green';
+          const color =
+            task.status === 'error'
+              ? 'red'
+              : task.hasMigrations
+                ? 'blue'
+                : 'green';
           return (
             <Box key={task.id} gap={1}>
               <Text color={color}>{task.status === 'error' ? '✗' : '✓'}</Text>
@@ -47,10 +54,11 @@ export function MigrationProgress({ tasks }: MigrationProgressProps) {
       })}
       <Box gap={1} marginTop={1}>
         <Text bold>Migrating packages</Text>
-        <Text dimColor>[{completedCount}/{total}]</Text>
+        <Text dimColor>
+          [{completedCount}/{total}]
+        </Text>
       </Box>
       {runningTask && <Spinner label={runningTask.displayName} />}
     </Box>
   );
 }
-
