@@ -1,8 +1,8 @@
 [![CI](https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter/actions/workflows/ci.yml/badge.svg)](https://github.com/chrisjwalk/angular-cli-netcore-ngrx-starter/actions/workflows/ci.yml)
 
-# Nx + Angular + .NET 10.0
+# Angular + .NET 10.0 Starter
 
-A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://angular.dev) (zoneless, signals) and a .NET 10.0 Web API backend. Deployed to Azure App Service with automated PR preview deployments via Azure Static Web Apps.
+A full-stack starter using [Angular](https://angular.dev) (zoneless, signals) and a .NET 10.0 Web API backend. Deployed to Azure App Service with automated PR preview deployments via Azure Static Web Apps.
 
 ## Features
 
@@ -32,10 +32,10 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 **Tooling**
 
-- [Nx](https://nx.dev) — monorepo build system with affected commands
+- [Vite+](https://viteplus.dev) — unified toolchain for build, dev, test, lint, and format
 - [Vitest](https://vitest.dev) — unit tests with ~93% line coverage
 - [Playwright](https://playwright.dev) — end-to-end tests
-- [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) — pre-commit hooks for linting, formatting, and keeping `home.md` in sync
+- [Husky](https://typicode.github.io/husky/) + [lint-staged](https://github.com/lint-staged/lint-staged) — pre-commit hooks for linting and formatting
 - [pnpm](https://pnpm.io) — package manager
 
 ## Demo
@@ -46,7 +46,7 @@ Live demo: [https://angularclinetcorengrxstarter.azurewebsites.net/](https://ang
 
 **Prerequisites**
 
-- Node 24.x+ with pnpm 10+
+- Node 24.x+ with pnpm 11+
 - .NET SDK 10.0.x — [download](https://dotnet.microsoft.com/download)
 
 **Install dependencies**
@@ -72,7 +72,7 @@ pnpm lint
 ## Unit tests
 
 ```bash
-pnpm test
+pnpm test:all
 ```
 
 Coverage requires `dotnet-coverage`:
@@ -94,7 +94,3 @@ pnpm build:prod
 ```
 
 Builds the Angular app and publishes the .NET project to `/dist`, ready to deploy to Azure App Service.
-
-## Contributing
-
-`apps/web-app/src/assets/home.md` is auto-generated from this file — **edit `README.md` only**. The lint-staged hook regenerates `home.md` automatically whenever `README.md` is committed.
