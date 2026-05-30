@@ -37,6 +37,13 @@ export default defineConfig(({ mode }) => {
       include: ['front-matter'],
     },
     plugins: [
+      // @module-federation/vite crashes when server.watch is boolean false (Vite 8 + Nx default).
+      // This pre-enforce plugin ensures server.watch is an object before federation's config hook.
+      {
+        name: 'normalize-server-watch',
+        enforce: 'pre' as const,
+        config: () => ({ server: { watch: {} } }),
+      },
       mode !== 'test' &&
         federation({
           name: 'host',
