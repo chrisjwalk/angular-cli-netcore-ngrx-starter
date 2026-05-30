@@ -36,6 +36,17 @@ export default defineConfig(({ mode }) => ({
       enforce: 'pre' as const,
       config: () => ({ server: { watch: {} } }),
     },
+    // virtual:pwa-register is provided by vite-plugin-pwa in the host.
+    // Stub it out in the remote so shared libs resolve cleanly during dev-server pre-transform.
+    {
+      name: 'virtual-pwa-register-stub',
+      resolveId: (id: string) =>
+        id === 'virtual:pwa-register' ? '\0virtual:pwa-register' : undefined,
+      load: (id: string) =>
+        id === '\0virtual:pwa-register'
+          ? 'export const registerSW = () => () => {};'
+          : undefined,
+    },
     mode !== 'test' &&
       federation({
         name: 'counter-remote',
