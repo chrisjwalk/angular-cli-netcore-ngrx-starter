@@ -19,6 +19,8 @@ const mfeSharedDeps = {
     requiredVersion: '~21.2.15',
   },
   '@angular/router': { singleton: true, requiredVersion: '~21.2.15' },
+  '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
+  '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
 };
