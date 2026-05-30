@@ -8,9 +8,11 @@
   "targets": {
     "test": {
       "executor": "@nx/vitest:test",
-      "outputs": ["{options.reportsDirectory}"],
+      "outputs": [
+        "{options.reportsDirectory}"
+      ],
       "options": {
-        "reportsDirectory": "coverage/libs/todo"
+        "reportsDirectory": "{projectRoot}/coverage/libs/todo"
       }
     },
     "lint": {

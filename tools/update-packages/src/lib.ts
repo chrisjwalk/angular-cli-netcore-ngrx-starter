@@ -9,6 +9,7 @@ export type PackageInfo = {
 };
 
 export function isMajorBump(current: string, latest: string): boolean {
+  if (!current || !latest) {return false;}
   const currentMajor = parseInt(current.split('.')[0], 10);
   const latestMajor = parseInt(latest.split('.')[0], 10);
   return (
@@ -27,11 +28,11 @@ export type MigrationTask = {
 
 type NpmOutdated = {
   [key: string]: {
-    current: string;
+    current?: string;
     wanted: string;
     latest: string;
-    dependent: string;
-    location: string;
+    dependent?: string;
+    location?: string;
   };
 };
 
@@ -88,12 +89,14 @@ export async function fetchOutdatedPackages(): Promise<PackageInfo[]> {
   });
   const json = extractJsonObject(stdout.trim());
   const parsed = JSON.parse(json) as NpmOutdated;
-  return Object.entries(parsed).map(([name, info]) => ({
-    name,
-    current: info.current,
-    latest: info.latest,
-    isMajor: isMajorBump(info.current, info.latest),
-  }));
+  return Object.entries(parsed)
+    .filter(([, info]) => info.current != null)
+    .map(([name, info]) => ({
+      name,
+      current: info.current!,
+      latest: info.latest,
+      isMajor: isMajorBump(info.current!, info.latest),
+    }));
 }
 
 export async function nxMigrate(pkg: string): Promise<boolean> {
