@@ -30,6 +30,12 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
+    // @module-federation/vite crashes when server.watch is boolean false (Vite 8 + Nx default).
+    {
+      name: 'normalize-server-watch',
+      enforce: 'pre' as const,
+      config: () => ({ server: { watch: {} } }),
+    },
     mode !== 'test' &&
       federation({
         name: 'counter-remote',
