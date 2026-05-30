@@ -1,10 +1,27 @@
 /// <reference types="vitest" />
 
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
+import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+
+const mfeSharedDeps = {
+  '@angular/animations': { singleton: true, requiredVersion: '~21.2.15' },
+  '@angular/common': { singleton: true, requiredVersion: '~21.2.15' },
+  '@angular/compiler': { singleton: true, requiredVersion: '~21.2.15' },
+  '@angular/core': { singleton: true, requiredVersion: '~21.2.15' },
+  '@angular/platform-browser': { singleton: true, requiredVersion: '~21.2.15' },
+  '@angular/platform-browser-dynamic': {
+    singleton: true,
+    requiredVersion: '~21.2.15',
+  },
+  '@angular/router': { singleton: true, requiredVersion: '~21.2.15' },
+  rxjs: { singleton: true, requiredVersion: '~7.8.2' },
+  tslib: { singleton: true, requiredVersion: '~2.8.1' },
+};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -14,12 +31,30 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: '../../dist/apps/web-app/client',
       reportCompressedSize: true,
-      target: ['es2020'],
+      target: ['chrome89'],
     },
     optimizeDeps: {
       include: ['front-matter'],
     },
     plugins: [
+      mode !== 'test' &&
+        federation({
+          name: 'host',
+          filename: 'remoteEntry.js',
+          dts: false,
+          remotes: {
+            'counter-remote': {
+              type: 'module',
+              name: 'counter-remote',
+              entry: 'http://localhost:4201/remoteEntry.js',
+              entryGlobalName: 'counter-remote',
+              shareScope: 'default',
+            },
+          },
+          exposes: {},
+          shared: mfeSharedDeps,
+        }),
+
       analog({
         ssr: false,
         static: true,
@@ -121,6 +156,17 @@ export default defineConfig(({ mode }) => {
       fs: {
         allow: ['../../'],
       },
+    },
+    resolve: {
+      alias:
+        mode === 'test'
+          ? {
+              'counter-remote/Routes': resolve(
+                __dirname,
+                '../../libs/counter/src/lib/lib.routes.ts',
+              ),
+            }
+          : {},
     },
     test: {
       globals: true,

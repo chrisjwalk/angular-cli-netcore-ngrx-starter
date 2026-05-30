@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/out-tsc",
+    "types": ["vite/client", "vite-plugin-pwa/client"],
+    "moduleResolution": "bundler"
+  },
+  "files": ["src/main.ts", "src/remote-routes.ts"],
+  "include": ["src/**/*.d.ts"],
+  "exclude": ["vite.config.ts", "src/**/*.test.ts", "src/**/*.spec.ts"]
+}

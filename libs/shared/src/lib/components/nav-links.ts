@@ -25,6 +25,12 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Counter',
   },
   {
+    routerLink: '/mfe-counter',
+    icon: 'hub',
+    hint: 'MFE Counter (requires counter-remote on :4201)',
+    label: 'MFE Counter',
+  },
+  {
     routerLink: '/content',
     icon: 'info',
     hint: 'Content',
