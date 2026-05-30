@@ -159,7 +159,7 @@
       "@hono/node-server": ">=1.19.13",
       "ajv@8": ">=8.18.0",
       "brace-expansion@2": ">=2.0.3",
-      "brace-expansion@5": ">=5.0.5",
+      "brace-expansion@5": ">=5.0.6",
       "flatted": ">=3.4.2",
       "follow-redirects": ">=1.16.0",
       "hono": ">=4.12.18",
@@ -171,7 +171,7 @@
       "path-to-regexp@8": ">=8.4.0",
       "picomatch@2": ">=2.3.2",
       "picomatch@4": ">=4.0.4",
-      "qs": ">=6.14.2",
+      "qs": ">=6.15.2",
       "rollup": ">=4.59.0",
       "serialize-javascript": ">=7.0.5",
       "tar": ">=7.5.11",
@@ -181,7 +181,10 @@
       "fast-uri": ">=3.1.2",
       "uuid@11": ">=11.1.1 <12",
       "ip-address": ">=10.1.1",
-      "@babel/plugin-transform-modules-systemjs": ">=7.29.4"
+      "@babel/plugin-transform-modules-systemjs": ">=7.29.4",
+      "ws": ">=8.20.1",
+      "webpack-dev-server": ">=5.2.4",
+      "uuid@8": ">=12.0.1"
     }
   }
 }
