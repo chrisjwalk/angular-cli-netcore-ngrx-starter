@@ -75,6 +75,10 @@ describe('isMajorBump', () => {
     expect(isMajorBump('1.0.0-beta.1', '2.0.0')).toBe(true);
     expect(isMajorBump('1.0.0', '1.1.0-rc.1')).toBe(false);
   });
+
+  it('returns false when current is undefined (missing package guard)', () => {
+    expect(isMajorBump(undefined as unknown as string, '2.0.0')).toBe(false);
+  });
 });
 
 // ────────────────────────────────────────────────
