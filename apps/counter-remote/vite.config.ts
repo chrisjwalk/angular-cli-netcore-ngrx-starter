@@ -64,9 +64,8 @@ const sharedDeps = {
   // NgRx
   '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
   '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
-  // Workspace libs
-  '@myorg/counter': { singleton: true, requiredVersion: false },
-  '@myorg/shared': { singleton: true, requiredVersion: false },
+  // Workspace libs — omitted: MF virtual modules can't enumerate
+  // export * chains from TypeScript path aliases (build breaks).
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
