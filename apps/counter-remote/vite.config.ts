@@ -3,19 +3,71 @@ import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
+const angVer = '~21.2.15';
+const cdkMatVer = '~21.2.13';
+
 const sharedDeps = {
-  '@angular/animations': { singleton: true, requiredVersion: '~21.2.15' },
-  '@angular/common': { singleton: true, requiredVersion: '~21.2.15' },
-  '@angular/compiler': { singleton: true, requiredVersion: '~21.2.15' },
-  '@angular/core': { singleton: true, requiredVersion: '~21.2.15' },
-  '@angular/platform-browser': { singleton: true, requiredVersion: '~21.2.15' },
+  // Angular core
+  '@angular/animations': { singleton: true, requiredVersion: angVer },
+  '@angular/common': { singleton: true, requiredVersion: angVer },
+  '@angular/common/http': { singleton: true, requiredVersion: angVer },
+  '@angular/compiler': { singleton: true, requiredVersion: angVer },
+  '@angular/core': { singleton: true, requiredVersion: angVer },
+  '@angular/forms': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser/animations': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
   '@angular/platform-browser-dynamic': {
     singleton: true,
-    requiredVersion: '~21.2.15',
+    requiredVersion: angVer,
   },
-  '@angular/router': { singleton: true, requiredVersion: '~21.2.15' },
+  '@angular/router': { singleton: true, requiredVersion: angVer },
+  // Angular CDK sub-paths
+  '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/layout': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/overlay': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/portal': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/scrolling': { singleton: true, requiredVersion: cdkMatVer },
+  // Angular Material sub-paths
+  '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/bottom-sheet': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/button': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/checkbox': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/core': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/form-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/paginator': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/progress-spinner': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/snack-bar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/table': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/toolbar': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer },
+  // NgRx
   '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
   '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
+  // Workspace libs
+  '@myorg/counter': { singleton: true, requiredVersion: false },
+  '@myorg/shared': { singleton: true, requiredVersion: false },
+  // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
 };
