@@ -43,6 +43,7 @@ const sharedDeps = {
     singleton: true,
     requiredVersion: cdkMatVer,
   },
+  '@angular/material/divider': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer },
@@ -54,6 +55,7 @@ const sharedDeps = {
     singleton: true,
     requiredVersion: cdkMatVer,
   },
+  '@angular/material/sidenav': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/snack-bar': {
     singleton: true,
     requiredVersion: cdkMatVer,
