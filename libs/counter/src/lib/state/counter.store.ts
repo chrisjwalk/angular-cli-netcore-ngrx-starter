@@ -67,6 +67,7 @@ export function withCounterReducer() {
 }
 
 export const CounterStore = signalStore(
+  { providedIn: 'root' },
   withCounterFeature(),
   withCounterReducer(),
 );

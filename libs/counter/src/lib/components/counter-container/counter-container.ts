@@ -12,7 +12,6 @@ import { injectDispatch } from '@ngrx/signals/events';
 @Component({
   imports: [Counter],
   selector: 'lib-counter-container',
-  providers: [CounterStore],
   template: `
     @let count = store.count();
     <lib-counter
