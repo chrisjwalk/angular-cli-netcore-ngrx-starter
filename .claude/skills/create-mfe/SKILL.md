@@ -4,7 +4,7 @@ description: >
   Add a new micro-frontend (MFE) to this workspace. Use when asked to create a
   new remote app, expose a feature as a micro-frontend, or wire up a new remote
   to the host. Covers vite.config setup, shared singletons, NG0912 prevention,
-  test stubs, and CI/deployment.
+  test stubs, CI/deployment, and E2E.
 ---
 
 # Create a Micro-Frontend (MFE)
@@ -34,30 +34,89 @@ MF singletons so only one copy of each runs in the browser.
 ## Step 0 – Generate the remote app
 
 ```bash
-# Generate a new Analog app in the workspace (adjust name/port as needed)
 pnpm nx generate @analogjs/platform:app my-remote --directory=apps/my-remote
 ```
 
-Then delete the generated `vite.config.ts` and replace it with the template in
-Step 2. Delete generated routes/pages you don't need — the remote only needs a
-`remote-routes.ts` entry point.
+Replace the generated `vite.config.ts` with the template in Step 3. **Keep** the
+generated app shell files (`src/main.ts`, `src/app/app.ts`,
+`src/app/app.config.ts`, `src/app/app.routes.ts`) — the remote needs these to
+run as a standalone app via `nx serve` and in Playwright. Wire `app.routes.ts`
+to spread the feature routes and add a wildcard fallback:
 
----
+```typescript
+// apps/my-remote/src/app/app.routes.ts
+import { Route } from '@angular/router';
+import { myFeatureRoutes } from '@myorg/my-feature';
 
-## Step 1 – Install the MF package (if not already present)
-
-```bash
-pnpm add @module-federation/vite
+export const routes: Route[] = [...myFeatureRoutes, { path: '**', redirectTo: '' }];
 ```
 
-Verify it appears in `package.json` dependencies (not devDependencies — it's a
-runtime bundler plugin).
+Delete generated pages/routes you don't need — the remote exposes its feature
+via `remote-routes.ts`, not via Analog file-based routing.
 
 ---
 
-## Step 2 – Configure the remote's `vite.config.ts`
+## Step 1 – Create the workspace lib
 
-Copy `apps/counter-remote/vite.config.ts` as your starting point. Key rules:
+Generate the feature lib if it doesn't exist:
+
+```bash
+pnpm nx generate @nx/angular:library my-feature --directory=libs/my-feature --standalone
+```
+
+Create `libs/my-feature/src/lib/lib.routes.ts`. Use `loadComponent` so the
+component is still lazy-loaded by Angular's router:
+
+```typescript
+// libs/my-feature/src/lib/lib.routes.ts
+import { Route } from '@angular/router';
+
+export const myFeatureRoutes: Route[] = [
+  {
+    path: '',
+    title: 'My Feature',
+    loadComponent: () => import('./my-feature/my-feature').then((m) => m.MyFeature),
+    providers: [MyFeatureStore],
+  },
+];
+```
+
+**Export the routes from the lib's barrel** (`libs/my-feature/src/index.ts`):
+
+```typescript
+export * from './lib/lib.routes';
+// export * from './lib/my-feature.store';  // export the store too if needed
+```
+
+> Components do **not** need to be in the barrel unless something outside the lib
+> imports them directly. The routes are all that the remote entry point and the
+> test stub need.
+
+---
+
+## Step 2 – Install the MF package (if not already present)
+
+```bash
+pnpm add -D @module-federation/vite
+```
+
+`@module-federation/vite` is a build-time bundler plugin — it belongs in
+`devDependencies`.
+
+---
+
+## Step 3 – Configure the remote's `vite.config.ts`
+
+Copy `apps/counter-remote/vite.config.ts` as your starting point. After copying,
+update these remote-specific values:
+
+| Field                           | Example                                |
+| ------------------------------- | -------------------------------------- |
+| `cacheDir`                      | `../../node_modules/.vite/my-remote`   |
+| `build.outDir`                  | `../../dist/apps/my-remote`            |
+| `server.port` / `server.origin` | next available port, e.g. `4202`       |
+| `federation({ name: ... })`     | `'my-remote'`                          |
+| `federation({ exposes: ... })`  | `'./Routes': './src/remote-routes.ts'` |
 
 ### Two required workaround plugins (always include both)
 
@@ -124,11 +183,12 @@ With `import: false`, MF generates a deferred-export module that reads Material
 from the host's shared scope (`__mfModuleCache`) instead of loading its own copy.
 
 ```typescript
-const angVer = '~21.x.x'; // match your @angular/core version
-const cdkMatVer = '~21.x.x'; // match your @angular/cdk version
+// Use the exact versions from package.json (pnpm outdated to check)
+const angVer = '~21.2.15';
+const cdkMatVer = '~21.2.13';
 
 const sharedDeps = {
-  // Angular core — no import:false needed (no component registrations that collide)
+  // Angular core — no import:false needed
   '@angular/animations': { singleton: true, requiredVersion: angVer },
   '@angular/common': { singleton: true, requiredVersion: angVer },
   '@angular/common/http': { singleton: true, requiredVersion: angVer },
@@ -170,10 +230,10 @@ const sharedDeps = {
   '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer, import: false },
 
   // NgRx + utilities
-  '@ngrx/signals': { singleton: true, requiredVersion: '~21.x.x' },
-  '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.x.x' },
-  rxjs: { singleton: true, requiredVersion: '~7.x.x' },
-  tslib: { singleton: true, requiredVersion: '~2.x.x' },
+  '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
+  '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
+  rxjs: { singleton: true, requiredVersion: '~7.8.2' },
+  tslib: { singleton: true, requiredVersion: '~2.8.1' },
 };
 ```
 
@@ -191,7 +251,7 @@ const sharedDeps = {
 
 ---
 
-## Step 3 – Configure the host's `vite.config.ts`
+## Step 4 – Configure the host's `vite.config.ts`
 
 Add the remote to the host's federation config. The host's `sharedDeps` does
 **not** need `import: false` — the host is the provider of these modules.
@@ -205,57 +265,37 @@ mode !== 'test' &&
     filename: 'remoteEntry.js',
     dts: false,
     remotes: {
+      'counter-remote': { /* existing */ },
       'my-remote': {
         type: 'module',
         name: 'my-remote',
         entry:
           process.env['MY_REMOTE_ENTRY'] ??
-          'http://localhost:4202/remoteEntry.js',  // remote's dev port
+          'http://localhost:4202/remoteEntry.js',
         entryGlobalName: 'my-remote',
         shareScope: 'default',
       },
-      // keep existing remotes:
-      'counter-remote': { ... },
     },
     exposes: {},
     shared: mfeSharedDeps,  // same shape as remote but WITHOUT import:false
   }),
 ```
 
-The `MY_REMOTE_ENTRY` env var lets CI inject the production URL (see Step 7).
+The `MY_REMOTE_ENTRY` env var lets CI inject the production URL (see Step 8).
 
 ---
 
-## Step 4 – Create the remote's entry point
+## Step 5 – Create the remote's entry point
 
 ```typescript
 // apps/my-remote/src/remote-routes.ts
+// Re-export from the lib barrel — this is what the host's loadChildren resolves.
 export { myFeatureRoutes } from '@myorg/my-feature';
-```
-
-This is the file exposed as `'./Routes'` in the federation config. It simply
-re-exports the routes from a workspace lib (or defines them inline).
-
-The workspace lib's route file should use `loadComponent` (not `component`) so
-the component itself is still lazy-loaded by Angular's router:
-
-```typescript
-// libs/my-feature/src/lib/lib.routes.ts
-import { Route } from '@angular/router';
-
-export const myFeatureRoutes: Route[] = [
-  {
-    path: '',
-    title: 'My Feature',
-    loadComponent: () => import('./components/my-feature/my-feature').then((m) => m.MyFeature),
-    providers: [MyFeatureStore],
-  },
-];
 ```
 
 ---
 
-## Step 5 – Add the route to the host app
+## Step 6 – Add the route to the host app
 
 ```typescript
 // apps/web-app/src/app/app.routes.ts
@@ -266,9 +306,19 @@ export const myFeatureRoutes: Route[] = [
 },
 ```
 
+Add a TypeScript module declaration so the import type-checks:
+
+```typescript
+// apps/web-app/src/types/remotes.d.ts  (add to existing file)
+declare module 'my-remote/Routes' {
+  import type { Route } from '@angular/router';
+  export const myFeatureRoutes: Route[];
+}
+```
+
 ---
 
-## Step 6 – Add a navigation link
+## Step 7 – Add a navigation link
 
 ```typescript
 // libs/shared/src/lib/components/nav-links.ts
@@ -278,60 +328,53 @@ export const myFeatureRoutes: Route[] = [
 
 ---
 
-## Step 7 – Integration tests: fastCompile + test stub
+## Step 8 – Integration tests: fastCompile + test stub
 
 ### Enable `fastCompile` on the host for test mode
 
-MFE remote files (routes, stores, components) loaded through `import('my-remote/Routes')`
-are **not in `tsconfig.spec.json`'s TypeScript program**. The standard Angular
-Vite plugin cannot compile them, causing `@analogjs/vitest-angular-sourcemap-plugin`
-to fall through to OXC in **JS mode** — which fails on TypeScript syntax like
-`readonly`, type generics, or `export type`.
+MFE remote files loaded through `import('my-remote/Routes')` are **not in
+`tsconfig.spec.json`'s TypeScript program**. The standard Angular Vite plugin
+cannot compile them, causing `@analogjs/vitest-angular-sourcemap-plugin` to fall
+through to OXC in **JS mode** — which fails on TypeScript syntax like `readonly`,
+type generics, or `export type`.
 
 Fix: enable `fastCompile: mode === 'test'` in the host's `analog()` call.
-The fast-compile plugin has its own single-pass AOT compiler that works on Angular
-files _outside_ the TypeScript program, and it strips TypeScript from non-Angular
-files using OXC in `lang: 'ts'` mode — so both are handled correctly.
 
 ```typescript
 // apps/web-app/vite.config.ts
 analog({
   ssr: false,
   static: true,
-  // Use the fast-compile path in tests: compiles Angular components outside
-  // tsconfig.spec.json (e.g. MFE stubs) and strips TS from plain .ts files.
   fastCompile: mode === 'test',
   prerender: { routes: [] },
-  // ... rest of analog() options
 }),
 ```
 
-> `fastCompile` skips Angular's full template type-checking. This is fine for
-> tests — template type errors show up in the IDE and in `tsc`, not at test run time.
+> `fastCompile` skips Angular's full template type-checking. Template errors
+> still appear in the IDE and `tsc` — just not at vitest run time.
 
 ### Create a test stub for the MFE route
 
-The MFE's `remoteEntry.js` isn't available in vitest — it's a network resource.
-Replace it with a local stub via a Vite alias:
+The MFE's `remoteEntry.js` isn't available in vitest. Replace it with a local
+stub via a Vite alias.
+
+**Preferred approach — re-export the lib's real routes:**
 
 ```typescript
 // apps/web-app/src/test-stubs/my-remote-routes.ts
-// Stub for 'my-remote/Routes' used in tests.
-// Imports the real component from the workspace lib directly so integration
-// tests navigate and render the actual component, not a fake.
-import { MyFeature } from '../../../../libs/my-feature/src/lib/components/my-feature/my-feature';
-
-export const myFeatureRoutes = [
-  {
-    path: '',
-    title: 'My Feature',
-    component: MyFeature,
-    providers: [],
-  },
-];
+export { myFeatureRoutes } from '@myorg/my-feature';
 ```
 
-### Wire the stub in the host's vite.config (test mode only)
+This is the simplest and most correct stub. It uses the same routes the remote
+uses, so integration tests exercise the real component without duplicating route
+definitions.
+
+> **Do NOT import the component directly unless it is in the lib's barrel
+> (`index.ts`).** An `undefined` component causes `NG04014: Invalid configuration
+of route` at test runtime. Always check what `libs/my-feature/src/index.ts`
+> exports before importing from it.
+
+### Wire the alias in the host's vite.config (test mode only)
 
 ```typescript
 // apps/web-app/vite.config.ts
@@ -341,15 +384,8 @@ resolve: {
   alias:
     mode === 'test'
       ? {
-          'my-remote/Routes': resolve(
-            __dirname,
-            'src/test-stubs/my-remote-routes.ts',
-          ),
-          // keep existing stubs:
-          'counter-remote/Routes': resolve(
-            __dirname,
-            'src/test-stubs/counter-remote-routes.ts',
-          ),
+          'counter-remote/Routes': resolve(__dirname, 'src/test-stubs/counter-remote-routes.ts'),
+          'my-remote/Routes': resolve(__dirname, 'src/test-stubs/my-remote-routes.ts'),
         }
       : {},
 },
@@ -357,49 +393,97 @@ resolve: {
 
 ---
 
-## Step 8 – CI/preview deployment
+## Step 9 – CI/preview and production deployment
 
-### Build order in CI
+### Build order: both apps first, then copy
 
-The remote must be built **before** the host, and its output must be nested
-inside the host's output directory:
+The remote's output must be nested inside the host's output directory so it's
+served from the same origin. **Always copy after both builds are done** — the
+host build wipes and recreates its entire output directory, so any files copied
+in before that step will be lost.
 
 ```yaml
-# .github/workflows/preview.yml (excerpt)
+# .github/workflows/preview.yml (and deploy.yml — same pattern)
 
 - name: Build my-remote (production)
   run: pnpm nx build my-remote --configuration production
 
+# Build the host AFTER the remote, setting env vars for all remotes
+- name: Build web app
+  env:
+    COUNTER_REMOTE_ENTRY: /counter-remote/remoteEntry.js
+    MY_REMOTE_ENTRY: /my-remote/remoteEntry.js
+  run: pnpm nx build web-app --configuration production # or preview
+
+# Copy AFTER both builds — never before
 - name: Copy my-remote output into web-app output
   run: |
     mkdir -p dist/apps/web-app/client/my-remote
     cp -r dist/apps/my-remote/* dist/apps/web-app/client/my-remote/
-
-- name: Build web app (preview)
-  env:
-    COUNTER_REMOTE_ENTRY: /counter-remote/remoteEntry.js
-    MY_REMOTE_ENTRY: /my-remote/remoteEntry.js
-  run: pnpm nx build web-app --configuration preview
 ```
 
 ### SWA routing config
 
-Azure Static Web Apps rewrites all unknown paths to `index.html` by default.
-This breaks the remote's JS/asset requests. Exclude the remote's directory:
+Azure Static Web Apps rewrites unknown paths to `index.html` by default, which
+breaks remote asset requests. Add the remote's directory to `navigationFallback.exclude`.
+
+**Important:** Azure SWA allows at most **one `*`** per path segment. Using `**`
+is invalid and causes deployment to fail with a validation error. Use two
+separate entries per remote:
 
 ```json
 // apps/web-app/src/staticwebapp.config.json
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/*.{css,js,png,gif,ico,jpg,svg,webmanifest,woff,woff2,txt}", "/counter-remote/**", "/my-remote/**"]
+    "exclude": ["/*.{css,js,png,gif,ico,jpg,svg,webmanifest,woff,woff2,txt}", "/counter-remote/*", "/counter-remote/assets/*", "/my-remote/*", "/my-remote/assets/*"]
   }
 }
 ```
 
 ---
 
-## Step 9 – Dev workflow
+## Step 10 – E2E tests
+
+Add the remote's dev server to Playwright's `webServer` list. Remotes must
+appear **before** the host entry. Keep the existing API and counter-remote
+entries.
+
+```typescript
+// apps/web-app-e2e/playwright.config.ts
+webServer: [
+  {
+    command: 'npx nx run api:serve',
+    url: 'http://localhost:60253/health/live',
+    reuseExistingServer: !process.env.CI,
+    cwd: workspaceRoot,
+  },
+  {
+    command: 'npx nx run counter-remote:serve',
+    url: 'http://localhost:4201/remoteEntry.js',
+    reuseExistingServer: !process.env.CI,
+    cwd: workspaceRoot,
+  },
+  {
+    command: 'npx nx run my-remote:serve',
+    url: 'http://localhost:4202/remoteEntry.js',
+    reuseExistingServer: !process.env.CI,
+    cwd: workspaceRoot,
+  },
+  {
+    command: 'npx nx run web-app:serve-e2e',
+    url: 'http://localhost:4200',
+    reuseExistingServer: !process.env.CI,
+    cwd: workspaceRoot,
+  },
+],
+```
+
+In E2E specs, navigate to the route path defined in the **host** (e.g. `/my-feature`).
+
+---
+
+## Step 11 – Dev workflow
 
 Start both apps in separate terminals:
 
@@ -411,20 +495,17 @@ pnpm nx serve my-remote
 pnpm nx serve web-app
 ```
 
-The host references the remote at `http://localhost:4202/remoteEntry.js` (the
-port set in `server.origin` of the remote's vite.config). If the remote isn't
-running, the host still loads — the MFE route just fails to activate.
+The host references the remote at `http://localhost:4202/remoteEntry.js`. If the
+remote isn't running the host still loads — the MFE route just fails to activate.
 
 ---
 
-## Step 10 – Verify
+## Step 12 – Verify
 
 ```bash
-# Build everything
 pnpm nx run-many -t build
-
-# Run all tests
 pnpm nx run-many -t test
+pnpm e2e
 ```
 
 Open `http://localhost:4200/my-feature` — the MFE should load with zero NG0912
@@ -434,12 +515,14 @@ warnings in the browser console.
 
 ## Pitfall reference
 
-| Symptom                                                                              | Root cause                                                                                                                                                                                                                       | Fix                                                                                               |
-| ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
-| `NG0912` for Material/CDK components                                                 | Remote's loadShare virtual module has a top-level `import` that double-evaluates modules                                                                                                                                         | Add `import: false` to all CDK/Material entries in the **remote's** `sharedDeps`                  |
-| `NG0912` for workspace lib components                                                | Workspace lib bundled into both host and remote                                                                                                                                                                                  | Remove the workspace lib from MF shared config; keep it as a direct dependency of the remote only |
-| `[MISSING_EXPORT] "SomeExport"` build error                                          | `@myorg/*` workspace lib added to MF shared config; Rolldown can't enumerate `export *` from TS path aliases                                                                                                                     | Never put `@myorg/*` libs in MF shared config                                                     |
-| `SyntaxError: Unexpected identifier` / `[PARSE_ERROR] Missing initializer` in vitest | Files reachable only via dynamic MFE import are not in `tsconfig.spec.json`'s program; `@analogjs/vitest-angular-sourcemap-plugin` falls through to OXC **JS mode** which fails on `readonly`, type generics, `export type` etc. | Add `fastCompile: mode === 'test'` to `analog()` in the host's `vite.config.ts`                   |
-| Remote assets return `index.html` in Azure SWA preview                               | SWA's `navigationFallback` rewrites all unknown paths                                                                                                                                                                            | Add `/my-remote/**` to `navigationFallback.exclude` in `staticwebapp.config.json`                 |
-| `Cannot read properties of undefined (reading 'watch')` on `pnpm nx serve`           | `@module-federation/vite` crashes when `server.watch` is `false` (Vite 8 + Nx default)                                                                                                                                           | Add the `normalize-server-watch` pre-enforce plugin to both host and remote                       |
-| Remote's workspace lib styles missing                                                | `virtual:pwa-register` not resolved in remote                                                                                                                                                                                    | Add the `virtual-pwa-register-stub` plugin to the remote                                          |
+| Symptom                                                                              | Root cause                                                                                                                                          | Fix                                                                                                                        |
+| ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
+| `NG0912` for Material/CDK components                                                 | Remote's loadShare virtual module has a top-level `import` that double-evaluates modules                                                            | Add `import: false` to all CDK/Material entries in the **remote's** `sharedDeps`                                           |
+| `NG0912` for workspace lib components                                                | Workspace lib bundled into both host and remote                                                                                                     | Remove the workspace lib from MF shared config; bundle it into the remote directly                                         |
+| `[MISSING_EXPORT] "SomeExport"` build error                                          | `@myorg/*` workspace lib added to MF shared config; Rolldown can't enumerate `export *` from TS path aliases                                        | Never put `@myorg/*` libs in MF shared config                                                                              |
+| `SyntaxError: Unexpected identifier` / `[PARSE_ERROR] Missing initializer` in vitest | Files reachable only via dynamic MFE import are not in `tsconfig.spec.json`'s program; OXC falls through to JS mode and chokes on TypeScript syntax | Add `fastCompile: mode === 'test'` to `analog()` in the host's `vite.config.ts`                                            |
+| `NG04014: Invalid configuration of route` in vitest                                  | Test stub imports a component not exported from the lib's barrel → `undefined` in route `component` field                                           | Re-export the lib's real routes: `export { myFeatureRoutes } from '@myorg/my-feature'`                                     |
+| Remote files missing from preview / production deploy                                | Copy step ran before host build; host build wiped the output directory                                                                              | Build both apps first, then copy the remote output into the host's dist folder                                             |
+| Remote assets return `index.html` in Azure SWA                                       | `navigationFallback` rewrites all unknown paths                                                                                                     | Add `/my-remote/*` AND `/my-remote/assets/*` (two separate entries); never use `/**` — SWA only allows one `*` per segment |
+| `Cannot read properties of undefined (reading 'watch')` on `nx serve`                | `@module-federation/vite` crashes when `server.watch` is `false` (Vite 8 + Nx default)                                                              | Add the `normalize-server-watch` pre-enforce plugin to both host and remote                                                |
+| `virtual:pwa-register` import error in remote                                        | VitePWA only runs in the host, not the remote                                                                                                       | Add the `virtual-pwa-register-stub` plugin to the remote's vite.config                                                     |
