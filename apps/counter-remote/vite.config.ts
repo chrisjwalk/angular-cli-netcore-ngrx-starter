@@ -24,50 +24,140 @@ const sharedDeps = {
     requiredVersion: angVer,
   },
   '@angular/router': { singleton: true, requiredVersion: angVer },
-  // Angular CDK sub-paths
-  '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/cdk/layout': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/cdk/overlay': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/cdk/portal': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/cdk/scrolling': { singleton: true, requiredVersion: cdkMatVer },
-  // Angular Material sub-paths
-  '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer },
+  // Angular CDK/Material sub-paths — import:false so the remote uses the host's
+  // already-evaluated module instance rather than loading a second copy from its
+  // own dev server. A top-level `import * as __mfLocalShare` in the generated
+  // loadShare virtual module would otherwise cause Angular to register the same
+  // component class twice, triggering NG0912 collisions at runtime.
+  '@angular/cdk/a11y': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/bidi': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/layout': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/observers': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/overlay': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/portal': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/scrolling': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/text-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  // Angular Material sub-paths — same import:false reason as CDK above
+  '@angular/material/badge': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
   '@angular/material/bottom-sheet': {
     singleton: true,
     requiredVersion: cdkMatVer,
+    import: false,
   },
-  '@angular/material/button': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/checkbox': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/core': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/button': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/checkbox': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/core': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
   '@angular/material/form-field': {
     singleton: true,
     requiredVersion: cdkMatVer,
+    import: false,
   },
-  '@angular/material/divider': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/divider': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/icon': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/input': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/list': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
   '@angular/material/paginator': {
     singleton: true,
     requiredVersion: cdkMatVer,
+    import: false,
   },
   '@angular/material/progress-spinner': {
     singleton: true,
     requiredVersion: cdkMatVer,
+    import: false,
   },
-  '@angular/material/sidenav': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/sidenav': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
   '@angular/material/snack-bar': {
     singleton: true,
     requiredVersion: cdkMatVer,
+    import: false,
   },
-  '@angular/material/table': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/toolbar': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/table': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/toolbar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/tooltip': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
   // NgRx
   '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
   '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
-  // Workspace libs — omitted: MF virtual modules can't enumerate
-  // export * chains from TypeScript path aliases (build breaks).
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },

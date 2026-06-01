@@ -29,12 +29,15 @@ const mfeSharedDeps = {
     requiredVersion: angVer,
   },
   '@angular/router': { singleton: true, requiredVersion: angVer },
-  // Angular CDK sub-paths
+  // Angular CDK sub-paths (all declaration-bearing sub-paths used by CDK/Material)
   '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/bidi': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/cdk/layout': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/observers': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/cdk/overlay': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/cdk/portal': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/cdk/scrolling': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/text-field': { singleton: true, requiredVersion: cdkMatVer },
   // Angular Material sub-paths
   '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/bottom-sheet': {
@@ -71,8 +74,6 @@ const mfeSharedDeps = {
   // NgRx
   '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
   '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
-  // Workspace libs — omitted: MF virtual modules can't enumerate
-  // export * chains from TypeScript path aliases (build breaks).
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
@@ -108,7 +109,9 @@ export default defineConfig(({ mode }) => {
             'counter-remote': {
               type: 'module',
               name: 'counter-remote',
-              entry: 'http://localhost:4201/remoteEntry.js',
+              entry:
+                process.env['COUNTER_REMOTE_ENTRY'] ??
+                'http://localhost:4201/remoteEntry.js',
               entryGlobalName: 'counter-remote',
               shareScope: 'default',
             },
@@ -121,6 +124,11 @@ export default defineConfig(({ mode }) => {
         ssr: false,
         static: true,
         apiPrefix: '_analog',
+        // In test mode, use the fast-compile path so Angular components loaded
+        // via MFE aliases (not in tsconfig.spec.json) are compiled with the
+        // local single-pass AOT compiler, and non-Angular TS files are stripped
+        // with OXC lang:'ts' — avoiding the NG0912/OXC JS-mode parse failures.
+        fastCompile: mode === 'test',
         prerender: {
           routes: [],
         },
@@ -223,9 +231,10 @@ export default defineConfig(({ mode }) => {
       alias:
         mode === 'test'
           ? {
+              // In tests, stub the MFE remote with the real counter routes from the workspace lib.
               'counter-remote/Routes': resolve(
                 __dirname,
-                '../../libs/counter/src/lib/lib.routes.ts',
+                'src/test-stubs/counter-remote-routes.ts',
               ),
             }
           : {},

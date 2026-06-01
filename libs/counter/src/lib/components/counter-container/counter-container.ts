@@ -4,42 +4,38 @@ import {
   inject,
   input,
 } from '@angular/core';
-import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
 
 import { counterEvents, CounterStore } from '../../state';
 import { Counter } from '../counter/counter';
 import { injectDispatch } from '@ngrx/signals/events';
 
 @Component({
-  imports: [PageContainer, PageToolbar, Counter],
+  imports: [Counter],
   selector: 'lib-counter-container',
+  providers: [CounterStore],
   template: `
     @let count = store.count();
-    <lib-page-toolbar [title]="layoutStore.title()" />
-    <lib-page-container>
-      <lib-counter
-        #counter
-        [count]="count"
-        (increment)="dispatcher.incrementCount()"
-        (decrement)="dispatcher.decrementCount()"
-        (setCount)="dispatcher.setCount($event)"
-      />
-    </lib-page-container>
+    <lib-counter
+      #counter
+      [count]="count"
+      (increment)="dispatcher.incrementCount()"
+      (decrement)="dispatcher.decrementCount()"
+      (setCount)="dispatcher.setCount($event)"
+    />
   `,
   host: {
+    class: 'block p-4',
     'data-testid': 'lib-counter-container',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CounterContainer {
-  readonly layoutStore = inject(LayoutStore);
   readonly store = inject(CounterStore);
   readonly dispatcher = injectDispatch(counterEvents);
 
   count = input<number | string>(null);
 
   constructor() {
-    this.layoutStore.setTitle('Lazy Loaded Feature');
     this.store.inputCount(this.count);
   }
 }

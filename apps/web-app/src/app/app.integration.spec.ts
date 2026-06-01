@@ -81,11 +81,11 @@ describe('App Integration', () => {
     expect(loginComponent).toBeTruthy();
   });
 
-  it('should navigate to /feature and load the counter feature', async () => {
+  it('should navigate to /mfe-counter and load the counter feature', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const router = TestBed.inject(Router);
-    await router.navigateByUrl('/feature');
+    await router.navigateByUrl('/mfe-counter');
     const compiled = fixture.nativeElement as HTMLElement;
     // Wait for the counter container to appear
     const counterContainer = await waitForElement(
@@ -98,17 +98,13 @@ describe('App Integration', () => {
       '[data-testid="lib-counter"]',
     );
     expect(counterComponent).toBeTruthy();
-    const pageContainer = compiled.querySelector(
-      '[data-testid="lib-page-container"]',
-    );
-    expect(pageContainer).toBeTruthy();
   });
 
   it('should increment and decrement the counter value when buttons are clicked', async () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const router = TestBed.inject(Router);
-    await router.navigateByUrl('/feature');
+    await router.navigateByUrl('/mfe-counter');
     const compiled = fixture.nativeElement as HTMLElement;
     // Wait for the counter container to appear
     await waitForElement(

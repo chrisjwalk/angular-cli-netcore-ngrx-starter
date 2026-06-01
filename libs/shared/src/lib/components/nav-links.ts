@@ -19,16 +19,10 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Weather Forecasts',
   },
   {
-    routerLink: '/feature',
-    icon: 'hotel',
-    hint: 'Lazy Loaded Feature',
-    label: 'Counter',
-  },
-  {
     routerLink: '/mfe-counter',
     icon: 'hub',
-    hint: 'MFE Counter (requires counter-remote on :4201)',
-    label: 'MFE Counter',
+    hint: 'Counter (Micro Frontend)',
+    label: 'Counter',
   },
   {
     routerLink: '/content',

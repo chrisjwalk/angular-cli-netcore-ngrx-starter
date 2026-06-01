@@ -32,7 +32,17 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build counter-remote (production)
+        run: pnpm nx build counter-remote --configuration production
+
+      - name: Copy counter-remote output into web-app output
+        run: |
+          mkdir -p dist/apps/web-app/client/counter-remote
+          cp -r dist/apps/counter-remote/* dist/apps/web-app/client/counter-remote/
+
       - name: Build web app (preview)
+        env:
+          COUNTER_REMOTE_ENTRY: /counter-remote/remoteEntry.js
         run: pnpm nx build web-app --configuration preview
 
       - name: Copy SWA routing config
