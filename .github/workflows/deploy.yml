@@ -58,8 +58,18 @@ jobs:
       - name: Build API (Release)
         run: pnpm build:api:prod
 
+      - name: Build counter-remote (production)
+        run: pnpm nx build counter-remote --configuration production
+
       - name: Build web app (production)
+        env:
+          COUNTER_REMOTE_ENTRY: /counter-remote/remoteEntry.js
         run: pnpm build:web-app:prod
+
+      - name: Copy counter-remote output into web-app output
+        run: |
+          mkdir -p dist/apps/web-app/client/counter-remote
+          cp -r dist/apps/counter-remote/* dist/apps/web-app/client/counter-remote/
 
       # The .NET app serves the Angular SPA from apps/web-app/client/ relative
       # to its working directory (see Program.cs PhysicalFileProvider). Both
