@@ -22,12 +22,12 @@ test.describe('Navigation', () => {
 
       await page.getByRole('link', { name: 'Counter' }).click();
 
-      await expect(page).toHaveURL(/\/feature/);
+      await expect(page).toHaveURL(/\/mfe-counter/);
       await expect(page.getByTestId('lib-counter-container')).toBeVisible();
     });
 
     test('should navigate home via logo link', async ({ page }) => {
-      await page.goto('/feature');
+      await page.goto('/mfe-counter');
 
       await page.getByRole('link', { name: 'Home Page' }).click();
 
@@ -62,7 +62,7 @@ test.describe('Navigation', () => {
 
       await page.getByRole('link', { name: /counter/i }).click();
 
-      await expect(page).toHaveURL(/\/feature/);
+      await expect(page).toHaveURL(/\/mfe-counter/);
     });
   });
 });

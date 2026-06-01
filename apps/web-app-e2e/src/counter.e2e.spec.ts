@@ -1,12 +1,12 @@
 import { test, expect } from '@playwright/test';
 
-// E2E test for the counter feature ("feature" route)
+// E2E test for the counter MFE route
 test.describe('Counter Feature E2E', () => {
   test('should increment and decrement the counter value when buttons are clicked', async ({
     page,
   }) => {
-    // Go to the counter feature route
-    await page.goto('/feature');
+    // Go to the MFE counter route
+    await page.goto('/mfe-counter');
 
     // Get the count element and initial value
     const countLocator = page.locator('[data-testid="count"]');
