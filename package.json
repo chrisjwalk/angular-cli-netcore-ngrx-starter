@@ -26,7 +26,7 @@
     "lint:all": "nx run-many --target=lint --all",
     "lint:workspace": "nx workspace-lint && ng lint",
     "e2e": "nx e2e web-app-e2e",
-    "e2e:ci": "pnpm e2e -- --configuration production",
+    "e2e:ci": "CI=true pnpm e2e",
     "e2e:watch": "pnpm e2e -- --configuration watch",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
