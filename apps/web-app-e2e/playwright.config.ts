@@ -32,13 +32,17 @@ export default defineConfig({
       cwd: workspaceRoot,
     },
     {
-      command: 'npx nx run counter-remote:serve',
+      command: process.env.CI
+        ? 'npx nx run counter-remote:serve:production'
+        : 'npx nx run counter-remote:serve',
       url: 'http://localhost:4201/remoteEntry.js',
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,
     },
     {
-      command: 'npx nx run web-app:serve-e2e',
+      command: process.env.CI
+        ? 'npx nx run web-app:serve-e2e:production'
+        : 'npx nx run web-app:serve-e2e',
       url: 'http://localhost:4200',
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,
