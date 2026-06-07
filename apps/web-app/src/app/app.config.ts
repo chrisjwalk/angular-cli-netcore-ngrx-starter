@@ -7,7 +7,6 @@ import {
   ApplicationConfig,
   provideZonelessChangeDetection,
 } from '@angular/core';
-import { provideAnimations } from '@angular/platform-browser/animations';
 import {
   PreloadAllModules,
   provideRouter,
@@ -36,7 +35,6 @@ export const appConfig: ApplicationConfig = {
       withInMemoryScrolling({ anchorScrolling: 'enabled' }),
       withPreloading(PreloadAllModules),
     ),
-    provideAnimations(),
     provideContent(
       withMarkdownRenderer({
         loadMermaid: !import.meta.env.SSR ? () => import('mermaid') : undefined,
