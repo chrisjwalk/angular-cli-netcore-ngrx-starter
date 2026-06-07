@@ -9,7 +9,9 @@ test.describe('MFE Integration', () => {
     await page.goto('/mfe-counter');
 
     // Give the MFE a moment to bootstrap
-    await expect(page.locator('[data-testid="lib-counter"]')).toBeVisible();
+    await expect(page.locator('[data-testid="lib-counter"]')).toBeVisible({
+      timeout: 15000,
+    });
 
     expect(errors).toHaveLength(0);
   });

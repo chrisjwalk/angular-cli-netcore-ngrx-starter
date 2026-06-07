@@ -8,11 +8,18 @@ const cdkMatVer = '~21.2.13';
 
 const sharedDeps = {
   // Angular core
-  '@angular/animations': { singleton: true, requiredVersion: angVer },
+  // Note: @angular/animations is not shared — counter-remote doesn't use
+  // Angular animations. Removing it prevents the federation plugin from
+  // bundling @angular/core internals into a loadShare that has its own
+  // _injectImplementation (causing NG0203).
+  // import:false — prevents a loadShare that bundles @angular/core internals
+  // (assertInInjectionContext with its own _injectImplementation), causing NG0203
   '@angular/common': { singleton: true, requiredVersion: angVer },
+  // import:false — prevents a loadShare that bundles @angular/core internals
+  // (assertInInjectionContext), causing NG0203
   '@angular/common/http': { singleton: true, requiredVersion: angVer },
   '@angular/compiler': { singleton: true, requiredVersion: angVer },
-  '@angular/core': { singleton: true, requiredVersion: angVer },
+  '@angular/core': { singleton: true, requiredVersion: angVer, import: false },
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser/animations': {
@@ -155,9 +162,14 @@ const sharedDeps = {
     requiredVersion: cdkMatVer,
     import: false,
   },
-  // NgRx
-  '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
-  '@ngrx/signals/events': { singleton: true, requiredVersion: '~21.1.0' },
+  // NgRx - base signals shared (host provides, remote uses import:false).
+  // @ngrx/signals/events is NOT shared - the federation plugin generates
+  // buggy loadShare imports for sub-path modules. It's bundled directly.
+  '@ngrx/signals': {
+    singleton: true,
+    requiredVersion: '~20.2.0',
+    import: false,
+  },
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },

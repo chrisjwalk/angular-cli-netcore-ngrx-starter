@@ -5,9 +5,8 @@ import {
   input,
 } from '@angular/core';
 
-import { counterEvents, CounterStore } from '../../state';
+import { CounterStore } from '../../state';
 import { Counter } from '../counter/counter';
-import { injectDispatch } from '@ngrx/signals/events';
 
 @Component({
   imports: [Counter],
@@ -17,9 +16,9 @@ import { injectDispatch } from '@ngrx/signals/events';
     <lib-counter
       #counter
       [count]="count"
-      (increment)="dispatcher.incrementCount()"
-      (decrement)="dispatcher.decrementCount()"
-      (setCount)="dispatcher.setCount($event)"
+      (increment)="store.incrementCount()"
+      (decrement)="store.decrementCount()"
+      (setCount)="store.setCount($event)"
     />
   `,
   host: {
@@ -30,7 +29,6 @@ import { injectDispatch } from '@ngrx/signals/events';
 })
 export class CounterContainer {
   readonly store = inject(CounterStore);
-  readonly dispatcher = injectDispatch(counterEvents);
 
   count = input<number | string>(null);
 
