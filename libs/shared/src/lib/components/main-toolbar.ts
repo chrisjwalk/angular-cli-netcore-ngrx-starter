@@ -149,6 +149,7 @@ import { ThemeService } from './theme.service';
     `,
   ],
   host: {
+    class: 'block',
     'data-testid': 'lib-main-toolbar',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
