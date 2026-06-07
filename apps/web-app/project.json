@@ -109,7 +109,7 @@
       "options": {
         "buildTarget": "web-app:build",
         "port": 4200,
-        "staticFilePath": "dist/apps/web-app/browser",
+        "staticFilePath": "dist/apps/web-app/client",
         "spa": true
       }
     },

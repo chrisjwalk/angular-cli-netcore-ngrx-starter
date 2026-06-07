@@ -4,7 +4,8 @@ import { nxE2EPreset } from '@nx/playwright/preset';
 import { workspaceRoot } from '@nx/devkit';
 
 // For CI, you may want to set BASE_URL to the deployed application.
-const baseURL = process.env['BASE_URL'] || 'http://localhost:4200';
+const baseURL =
+  (process.env['BASE_URL'] as string | undefined) || 'http://localhost:4200';
 
 /**
  * Read environment variables from file.
@@ -28,23 +29,23 @@ export default defineConfig({
     {
       command: 'npx nx run api:serve',
       url: 'http://localhost:60253/health/live',
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,
     },
     {
-      command: process.env.CI
+      command: process.env['CI']
         ? 'npx nx run counter-remote:serve:production'
         : 'npx nx run counter-remote:serve',
       url: 'http://localhost:4201/remoteEntry.js',
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,
     },
     {
-      command: process.env.CI
+      command: process.env['CI']
         ? 'npx nx run web-app:serve-e2e:production'
         : 'npx nx run web-app:serve-e2e',
       url: 'http://localhost:4200',
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,
     },
   ],

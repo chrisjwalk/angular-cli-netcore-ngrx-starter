@@ -1,4 +1,21 @@
+import { readFileSync } from 'fs';
+import { resolve } from 'path';
+
 import { test, expect } from '@playwright/test';
+
+// The Vite dev server returns HTML (SPA fallback) for /sw.js so the browser
+// can't register it.  Read the real sw.js from the production build on disk
+// and serve it via route interception.
+const SW_JS = (() => {
+  try {
+    return readFileSync(
+      resolve(process.cwd(), 'dist/apps/web-app/client/sw.js'),
+      'utf-8',
+    );
+  } catch {
+    return null;
+  }
+})();
 
 test.describe('PWA update notification', () => {
   test('should show the notification bell in the toolbar', async ({ page }) => {
@@ -36,9 +53,17 @@ test.describe('PWA update notification', () => {
     // webServer uses production builds (serve-e2e:production) which
     // generates sw.js via vite-plugin-pwa.
     test.skip(
-      !process.env['CI'],
-      'PWA disabled in dev mode; run in CI or against production build',
+      !process.env['CI'] || !SW_JS,
+      'PWA disabled in dev mode or sw.js not found; run in CI or against production build',
     );
+
+    // Vite dev server returns HTML for /sw.js.  Serve the real SW file.
+    await page.route('**/sw.js', async (route) => {
+      await route.fulfill({
+        body: SW_JS!,
+        headers: { 'Content-Type': 'application/javascript' },
+      });
+    });
 
     await page.goto('/');
 
@@ -64,24 +89,25 @@ test.describe('PWA update notification', () => {
     // webServer uses production builds (serve-e2e:production) which
     // generates sw.js via vite-plugin-pwa.
     test.skip(
-      !process.env['CI'],
-      'PWA disabled in dev mode; run in CI or against production build',
+      !process.env['CI'] || !SW_JS,
+      'PWA disabled in dev mode or sw.js not found; run in CI or against production build',
     );
 
-    // Intercept sw.js BEFORE navigation — serve normal content on first
+    // Intercept sw.js BEFORE navigation — serve the real SW file on first
     // fetch (registration), modified content on second fetch (update check).
     let swFetches = 0;
     await page.route('**/sw.js', async (route) => {
       swFetches++;
-      const response = await route.fetch();
       if (swFetches === 2) {
-        const body = await response.text();
         await route.fulfill({
-          body: body + `\n// force-update-${Date.now()}`,
-          headers: response.headers(),
+          body: SW_JS! + `\n// force-update-${Date.now()}`,
+          headers: { 'Content-Type': 'application/javascript' },
         });
       } else {
-        await route.fulfill({ response });
+        await route.fulfill({
+          body: SW_JS!,
+          headers: { 'Content-Type': 'application/javascript' },
+        });
       }
     });
 
