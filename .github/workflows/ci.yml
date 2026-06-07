@@ -78,7 +78,7 @@ jobs:
           fi
 
       - name: Install Playwright browsers
-        run: npx playwright install chromium --with-deps
+        run: npx playwright install chromium firefox --with-deps
 
       - name: E2E tests
         run: pnpm e2e:ci
