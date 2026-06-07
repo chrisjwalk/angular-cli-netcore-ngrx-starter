@@ -3,6 +3,27 @@ packages:
   - libs/*
   - tools/*
 
+peerDependencyRules:
+  allowedVersions:
+    '@angular/core': '22'
+    '@angular/common': '22'
+    '@angular/compiler': '22'
+    '@angular/compiler-cli': '22'
+    '@angular/forms': '22'
+    '@angular/platform-browser': '22'
+    '@angular/platform-browser-dynamic': '22'
+    '@angular/platform-server': '22'
+    '@angular/router': '22'
+    '@angular/animations': '22'
+    '@angular/cdk': '22'
+    '@angular/material': '22'
+    '@angular/build': '22'
+    '@angular-devkit/build-angular': '22'
+    '@angular-devkit/core': '22'
+    '@angular-devkit/schematics': '22'
+    '@schematics/angular': '22'
+    ng-packagr: '22'
+
 overrides:
   node-forge: '^1.4.0'
   axios: '>=1.15.2'
@@ -56,3 +77,13 @@ onlyBuiltDependencies:
   - nx
   - oxc-resolver
   - unrs-resolver
+
+minimumReleaseAgeExclude:
+  - '@angular-eslint/builder@22.0.0'
+  - '@angular-eslint/bundled-angular-compiler@22.0.0'
+  - '@angular-eslint/eslint-plugin-template@22.0.0'
+  - '@angular-eslint/eslint-plugin@22.0.0'
+  - '@angular-eslint/schematics@22.0.0'
+  - '@angular-eslint/template-parser@22.0.0'
+  - '@angular-eslint/utils@22.0.0'
+  - angular-eslint@22.0.0
