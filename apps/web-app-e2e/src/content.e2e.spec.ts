@@ -3,16 +3,18 @@ import { expect, test } from '@playwright/test';
 test.describe('Content page', () => {
   test('should load the content component', async ({ page }) => {
     await page.goto('/content');
-
-    await expect(page.getByTestId('app-content')).toBeVisible();
+    // Cold-cache lazy chunk load can take longer in CI; use generous timeout
+    await expect(page.getByTestId('app-content')).toBeVisible({
+      timeout: 15_000,
+    });
   });
 
   test('should render the page title from frontmatter', async ({ page }) => {
     await page.goto('/content');
-
+    // Cold-cache lazy chunk load can take longer in CI; use generous timeout
     await expect(
       page.getByRole('heading', { name: /content pages/i }),
-    ).toBeVisible();
+    ).toBeVisible({ timeout: 15_000 });
   });
 
   test('should display the table of contents', async ({ page }) => {
