@@ -3,6 +3,39 @@ packages:
   - libs/*
   - tools/*
 
+overrides:
+  node-forge: '^1.4.0'
+  axios: '>=1.15.2'
+  '@hono/node-server': '>=1.19.13'
+  ajv@8: '>=8.18.0'
+  brace-expansion@2: '>=2.0.3'
+  brace-expansion@5: '>=5.0.6'
+  flatted: '>=3.4.2'
+  follow-redirects: '>=1.16.0'
+  hono: '>=4.12.18'
+  koa: '>=3.1.2'
+  lodash-es: '>=4.18.0'
+  minimatch@9: '>=9.0.7'
+  minimatch@10: '>=10.2.3'
+  path-to-regexp@0: '~0.1.13'
+  path-to-regexp@8: '>=8.4.0'
+  picomatch@2: '>=2.3.2'
+  picomatch@4: '>=4.0.4'
+  qs: '>=6.15.2'
+  rollup: '>=4.59.0'
+  serialize-javascript: '>=7.0.5'
+  tar: '>=7.5.11'
+  webpack: '>=5.104.1'
+  yaml@2: '>=2.8.3'
+  vite@6: '>=6.4.2'
+  fast-uri: '>=3.1.2'
+  uuid@11: '>=11.1.1 <12'
+  ip-address: '>=10.1.1'
+  '@babel/plugin-transform-modules-systemjs': '>=7.29.4'
+  ws: '>=8.20.1'
+  webpack-dev-server: '>=5.2.4'
+  uuid@8: '>=12.0.1'
+
 allowBuilds:
   '@parcel/watcher': true
   '@swc/core': true
