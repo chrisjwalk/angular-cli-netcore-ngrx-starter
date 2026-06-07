@@ -19,9 +19,9 @@ export const NAV_LINKS: NavLink[] = [
     label: 'Weather Forecasts',
   },
   {
-    routerLink: '/feature',
-    icon: 'hotel',
-    hint: 'Lazy Loaded Feature',
+    routerLink: '/mfe-counter',
+    icon: 'hub',
+    hint: 'Counter (Micro Frontend)',
     label: 'Counter',
   },
   {

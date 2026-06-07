@@ -18,13 +18,13 @@ jobs:
       contents: read
       pull-requests: write # SWA deploy posts preview URL comment
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - uses: pnpm/action-setup@v4
         with:
-          version: 10
+          version: 11
 
-      - uses: actions/setup-node@v4
+      - uses: actions/setup-node@v6
         with:
           node-version: 24
           cache: pnpm
@@ -32,8 +32,18 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Build counter-remote (production)
+        run: pnpm nx build counter-remote --configuration production
+
       - name: Build web app (preview)
+        env:
+          COUNTER_REMOTE_ENTRY: /counter-remote/remoteEntry.js
         run: pnpm nx build web-app --configuration preview
+
+      - name: Copy counter-remote output into web-app output
+        run: |
+          mkdir -p dist/apps/web-app/client/counter-remote
+          cp -r dist/apps/counter-remote/* dist/apps/web-app/client/counter-remote/
 
       - name: Copy SWA routing config
         run: cp apps/web-app/src/staticwebapp.config.json dist/apps/web-app/client/

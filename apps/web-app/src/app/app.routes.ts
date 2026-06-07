@@ -6,8 +6,9 @@ export const routes: Route[] = [
     loadChildren: () => import('@myorg/home').then((m) => m.homeRoutes),
   },
   {
-    path: 'feature',
-    loadChildren: () => import('@myorg/counter').then((m) => m.counterRoutes),
+    path: 'mfe-counter',
+    loadChildren: () =>
+      import('counter-remote/Routes').then((m) => m.counterRoutes),
   },
   {
     path: 'weather-forecast',

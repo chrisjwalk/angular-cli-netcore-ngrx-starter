@@ -1,10 +1,84 @@
 /// <reference types="vitest" />
 
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
+import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
+
+const angVer = '~21.2.15';
+const cdkMatVer = '~21.2.13';
+
+const mfeSharedDeps = {
+  // Angular core
+  '@angular/animations': { singleton: true, requiredVersion: angVer },
+  '@angular/common': { singleton: true, requiredVersion: angVer },
+  '@angular/common/http': { singleton: true, requiredVersion: angVer },
+  '@angular/compiler': { singleton: true, requiredVersion: angVer },
+  '@angular/core': { singleton: true, requiredVersion: angVer },
+  '@angular/forms': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser/animations': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
+  '@angular/platform-browser-dynamic': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
+  '@angular/router': { singleton: true, requiredVersion: angVer },
+  // Angular CDK sub-paths (all declaration-bearing sub-paths used by CDK/Material)
+  '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/bidi': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/layout': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/observers': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/overlay': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/portal': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/scrolling': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/text-field': { singleton: true, requiredVersion: cdkMatVer },
+  // Angular Material sub-paths
+  '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/bottom-sheet': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/button': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/checkbox': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/core': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/form-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/divider': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/paginator': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/progress-spinner': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/sidenav': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/snack-bar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/table': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/toolbar': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer },
+  // NgRx - base signals shared (host provides, remote uses import:false).
+  // @ngrx/signals/events is NOT shared - the federation plugin generates
+  // buggy loadShare imports for sub-path modules. It's bundled directly.
+  '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
+  // Utilities
+  rxjs: { singleton: true, requiredVersion: '~7.8.2' },
+  tslib: { singleton: true, requiredVersion: '~2.8.1' },
+};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -14,16 +88,48 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: '../../dist/apps/web-app/client',
       reportCompressedSize: true,
-      target: ['es2020'],
+      target: ['chrome89'],
     },
     optimizeDeps: {
       include: ['front-matter'],
     },
     plugins: [
+      // @module-federation/vite crashes when server.watch is boolean false (Vite 8 + Nx default).
+      // This pre-enforce plugin ensures server.watch is an object before federation's config hook.
+      {
+        name: 'normalize-server-watch',
+        enforce: 'pre' as const,
+        config: () => ({ server: { watch: {} } }),
+      },
+      mode !== 'test' &&
+        federation({
+          name: 'host',
+          filename: 'remoteEntry.js',
+          dts: false,
+          remotes: {
+            'counter-remote': {
+              type: 'module',
+              name: 'counter-remote',
+              entry:
+                process.env['COUNTER_REMOTE_ENTRY'] ??
+                'http://localhost:4201/remoteEntry.js',
+              entryGlobalName: 'counter-remote',
+              shareScope: 'default',
+            },
+          },
+          exposes: {},
+          shared: mfeSharedDeps,
+        }),
+
       analog({
         ssr: false,
         static: true,
         apiPrefix: '_analog',
+        // In test mode, use the fast-compile path so Angular components loaded
+        // via MFE aliases (not in tsconfig.spec.json) are compiled with the
+        // local single-pass AOT compiler, and non-Angular TS files are stripped
+        // with OXC lang:'ts' — avoiding the NG0912/OXC JS-mode parse failures.
+        fastCompile: mode === 'test',
         prerender: {
           routes: [],
         },
@@ -121,6 +227,18 @@ export default defineConfig(({ mode }) => {
       fs: {
         allow: ['../../'],
       },
+    },
+    resolve: {
+      alias:
+        mode === 'test'
+          ? {
+              // In tests, stub the MFE remote with the real counter routes from the workspace lib.
+              'counter-remote/Routes': resolve(
+                __dirname,
+                'src/test-stubs/counter-remote-routes.ts',
+              ),
+            }
+          : {},
     },
     test: {
       globals: true,

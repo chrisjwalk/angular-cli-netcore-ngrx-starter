@@ -46,6 +46,12 @@
             "api"
           ],
           "params": "forward"
+        },
+        {
+          "target": "serve",
+          "projects": [
+            "counter-remote"
+          ]
         }
       ],
       "configurations": {
