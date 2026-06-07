@@ -167,7 +167,7 @@ const sharedDeps = {
   // buggy loadShare imports for sub-path modules. It's bundled directly.
   '@ngrx/signals': {
     singleton: true,
-    requiredVersion: '~20.2.0',
+    requiredVersion: '~21.1.0',
     import: false,
   },
   // Utilities
