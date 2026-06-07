@@ -74,7 +74,7 @@ const mfeSharedDeps = {
   // NgRx - base signals shared (host provides, remote uses import:false).
   // @ngrx/signals/events is NOT shared - the federation plugin generates
   // buggy loadShare imports for sub-path modules. It's bundled directly.
-  '@ngrx/signals': { singleton: true, requiredVersion: '~20.2.0' },
+  '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
