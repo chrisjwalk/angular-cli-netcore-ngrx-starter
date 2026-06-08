@@ -8,7 +8,9 @@ export type PackageInfo = {
 };
 
 export function isMajorBump(current: string, latest: string): boolean {
-  if (!current || !latest) {return false;}
+  if (!current || !latest) {
+    return false;
+  }
   const currentMajor = parseInt(current.split('.')[0], 10);
   const latestMajor = parseInt(latest.split('.')[0], 10);
   return (

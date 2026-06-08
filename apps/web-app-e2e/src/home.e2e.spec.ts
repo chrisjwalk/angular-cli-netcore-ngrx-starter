@@ -19,7 +19,7 @@ test.describe('Home page', () => {
     await page.goto('/');
 
     await expect(
-      page.getByRole('heading', { name: /nx · angular · \.net/i }),
+      page.getByRole('heading', { name: /nx \+ angular \+ \.net/i }),
     ).toBeVisible();
   });
 });

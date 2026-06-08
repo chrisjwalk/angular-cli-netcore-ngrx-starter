@@ -48,7 +48,10 @@ to spread the feature routes and add a wildcard fallback:
 import { Route } from '@angular/router';
 import { myFeatureRoutes } from '@myorg/my-feature';
 
-export const routes: Route[] = [...myFeatureRoutes, { path: '**', redirectTo: '' }];
+export const routes: Route[] = [
+  ...myFeatureRoutes,
+  { path: '**', redirectTo: '' },
+];
 ```
 
 Delete generated pages/routes you don't need — the remote exposes its feature
@@ -75,7 +78,8 @@ export const myFeatureRoutes: Route[] = [
   {
     path: '',
     title: 'My Feature',
-    loadComponent: () => import('./my-feature/my-feature').then((m) => m.MyFeature),
+    loadComponent: () =>
+      import('./my-feature/my-feature').then((m) => m.MyFeature),
     providers: [MyFeatureStore],
   },
 ];
@@ -196,38 +200,144 @@ const sharedDeps = {
   '@angular/core': { singleton: true, requiredVersion: angVer },
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
-  '@angular/platform-browser/animations': { singleton: true, requiredVersion: angVer },
-  '@angular/platform-browser-dynamic': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser/animations': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
+  '@angular/platform-browser-dynamic': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
   '@angular/router': { singleton: true, requiredVersion: angVer },
 
   // CDK sub-paths — import:false prevents NG0912 (see note above)
-  '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/bidi': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/layout': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/observers': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/overlay': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/portal': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/scrolling': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/cdk/text-field': { singleton: true, requiredVersion: cdkMatVer, import: false },
+  '@angular/cdk/a11y': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/bidi': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/layout': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/observers': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/overlay': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/portal': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/scrolling': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/cdk/text-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
 
   // Material sub-paths — import:false for same reason
-  '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/bottom-sheet': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/button': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/checkbox': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/core': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/divider': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/form-field': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/paginator': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/progress-spinner': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/sidenav': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/snack-bar': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/table': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/toolbar': { singleton: true, requiredVersion: cdkMatVer, import: false },
-  '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer, import: false },
+  '@angular/material/badge': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/bottom-sheet': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/button': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/checkbox': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/core': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/divider': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/form-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/icon': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/input': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/list': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/paginator': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/progress-spinner': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/sidenav': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/snack-bar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/table': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/toolbar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
+  '@angular/material/tooltip': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+    import: false,
+  },
 
   // NgRx + utilities
   '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
@@ -436,7 +546,13 @@ separate entries per remote:
 {
   "navigationFallback": {
     "rewrite": "/index.html",
-    "exclude": ["/*.{css,js,png,gif,ico,jpg,svg,webmanifest,woff,woff2,txt}", "/counter-remote/*", "/counter-remote/assets/*", "/my-remote/*", "/my-remote/assets/*"]
+    "exclude": [
+      "/*.{css,js,png,gif,ico,jpg,svg,webmanifest,woff,woff2,txt}",
+      "/counter-remote/*",
+      "/counter-remote/assets/*",
+      "/my-remote/*",
+      "/my-remote/assets/*"
+    ]
   }
 }
 ```

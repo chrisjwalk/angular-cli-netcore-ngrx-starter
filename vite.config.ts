@@ -1,6 +1,7 @@
 import path from 'path';
 
 import analog from '@analogjs/platform';
+import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 import { defineConfig, lazyPlugins } from 'vite-plus';
 
@@ -10,6 +11,76 @@ import { defineConfig, lazyPlugins } from 'vite-plus';
 // Angular-specific plugins that expect tsconfigs relative to the app root.
 const workspaceRoot = import.meta.dirname;
 const webAppRoot = path.resolve(workspaceRoot, 'apps/web-app');
+
+const angVer = '~22.0.0';
+const cdkMatVer = '~22.0.0';
+
+const mfeSharedDeps = {
+  '@angular/animations': { singleton: true, requiredVersion: angVer },
+  '@angular/common': { singleton: true, requiredVersion: angVer },
+  '@angular/common/http': { singleton: true, requiredVersion: angVer },
+  '@angular/compiler': { singleton: true, requiredVersion: angVer },
+  '@angular/core': { singleton: true, requiredVersion: angVer },
+  '@angular/forms': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser/animations': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
+  '@angular/platform-browser-dynamic': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
+  '@angular/router': { singleton: true, requiredVersion: angVer },
+  '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/bidi': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/layout': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/observers': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/overlay': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/portal': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/scrolling': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/cdk/text-field': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/bottom-sheet': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/button': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/checkbox': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/core': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/form-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/divider': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/paginator': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/progress-spinner': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/sidenav': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/snack-bar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/table': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/toolbar': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer },
+  '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
+  rxjs: { singleton: true, requiredVersion: '~7.8.2' },
+  tslib: { singleton: true, requiredVersion: '~2.8.1' },
+};
+
+// When STUB_MFE_REMOTES is set (E2E, CI) or in test mode, redirect
+// federation virtual modules to local stubs so the host can load without
+// the counter-remote dev server running.
+const stubMfeRemotes = process.env['STUB_MFE_REMOTES'];
 
 export default defineConfig({
   root: webAppRoot,
@@ -24,13 +95,42 @@ export default defineConfig({
   },
   resolve: {
     tsconfigPaths: true,
+    alias: stubMfeRemotes
+      ? {
+          'counter-remote/Routes': path.resolve(
+            webAppRoot,
+            'src/test-stubs/counter-remote-routes.ts',
+          ),
+        }
+      : {},
   },
   plugins: lazyPlugins(() => [
+    federation({
+      name: 'host',
+      filename: 'remoteEntry.js',
+      dts: false,
+      remotes: {
+        'counter-remote': {
+          type: 'module',
+          name: 'counter-remote',
+          entry:
+            process.env['COUNTER_REMOTE_ENTRY'] ??
+            'http://localhost:4201/remoteEntry.js',
+          entryGlobalName: 'counter-remote',
+          shareScope: 'default',
+        },
+      },
+      exposes: {},
+      shared: mfeSharedDeps,
+    }),
     analog({
       ssr: false,
       static: true,
       apiPrefix: '_analog',
       prerender: { routes: [] },
+      // In test mode, use fast-compile so Angular components loaded via
+      // MFE stubs are compiled with the local single-pass AOT compiler.
+      fastCompile: !!stubMfeRemotes,
       fileReplacements:
         process.env['NX_TASK_TARGET_CONFIGURATION'] === 'preview'
           ? [
@@ -147,6 +247,9 @@ export default defineConfig({
       `${workspaceRoot}/apps/api/Api.Test/vitest.config.ts`,
       `${workspaceRoot}/tools/update-packages/vite.config.mts`,
     ],
+  },
+  staged: {
+    '*': 'vp check --fix',
   },
   run: {
     tasks: {

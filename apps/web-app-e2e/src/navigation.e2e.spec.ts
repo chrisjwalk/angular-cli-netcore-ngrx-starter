@@ -20,7 +20,10 @@ test.describe('Navigation', () => {
     }) => {
       await page.goto('/');
 
-      await page.getByRole('link', { name: 'Counter' }).click();
+      await page
+        .getByTestId('lib-main-toolbar')
+        .getByRole('link', { name: 'Counter' })
+        .click();
 
       await expect(page).toHaveURL(/\/mfe-counter/);
       await expect(page.getByTestId('lib-counter-container')).toBeVisible();
@@ -60,7 +63,10 @@ test.describe('Navigation', () => {
 
       await expect(page.getByTestId('lib-sidenav')).toBeVisible();
 
-      await page.getByRole('link', { name: /counter/i }).click();
+      await page
+        .getByTestId('lib-sidenav')
+        .getByRole('link', { name: /counter/i })
+        .click();
 
       await expect(page).toHaveURL(/\/mfe-counter/);
     });

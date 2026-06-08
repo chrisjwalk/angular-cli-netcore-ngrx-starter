@@ -19,8 +19,14 @@ const mfeSharedDeps = {
   '@angular/core': { singleton: true, requiredVersion: angVer },
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
-  '@angular/platform-browser/animations': { singleton: true, requiredVersion: angVer },
-  '@angular/platform-browser-dynamic': { singleton: true, requiredVersion: angVer },
+  '@angular/platform-browser/animations': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
+  '@angular/platform-browser-dynamic': {
+    singleton: true,
+    requiredVersion: angVer,
+  },
   '@angular/router': { singleton: true, requiredVersion: angVer },
   // Angular CDK sub-paths
   '@angular/cdk/a11y': { singleton: true, requiredVersion: cdkMatVer },
@@ -33,19 +39,34 @@ const mfeSharedDeps = {
   '@angular/cdk/text-field': { singleton: true, requiredVersion: cdkMatVer },
   // Angular Material sub-paths
   '@angular/material/badge': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/bottom-sheet': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/bottom-sheet': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
   '@angular/material/button': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/checkbox': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/core': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/form-field': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/form-field': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
   '@angular/material/divider': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/icon': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/input': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/list': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/paginator': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/progress-spinner': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/paginator': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
+  '@angular/material/progress-spinner': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
   '@angular/material/sidenav': { singleton: true, requiredVersion: cdkMatVer },
-  '@angular/material/snack-bar': { singleton: true, requiredVersion: cdkMatVer },
+  '@angular/material/snack-bar': {
+    singleton: true,
+    requiredVersion: cdkMatVer,
+  },
   '@angular/material/table': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/toolbar': { singleton: true, requiredVersion: cdkMatVer },
   '@angular/material/tooltip': { singleton: true, requiredVersion: cdkMatVer },
