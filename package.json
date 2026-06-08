@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "concurrently -n api,web -c blue,green \"dotnet run --project apps/api/Api --launch-profile Api\" \"vp dev\"",
+    "start": "concurrently -n api,web,counter -c blue,green,yellow \"dotnet run --project apps/api/Api --launch-profile Api\" \"vp dev\" \"vp dev apps/counter-remote\"",
     "build:prod": "vp build",
     "build:dotnet-builder": "rimraf ./tools/builders/dotnet-builder/dist && tsc -p ./tools/builders/dotnet-builder",
     "clean": "rimraf ./dist ./junit ./coverage ./.angular",

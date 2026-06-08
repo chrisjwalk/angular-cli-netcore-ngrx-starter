@@ -32,6 +32,9 @@ export default defineConfig({
       url: 'http://localhost:5173',
       reuseExistingServer: !process.env.CI,
       cwd: workspaceRoot,
+      env: {
+        STUB_MFE_REMOTES: 'true',
+      },
     },
   ],
   projects: [

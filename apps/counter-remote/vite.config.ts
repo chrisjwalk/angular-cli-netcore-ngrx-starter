@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 const angVer = '~21.2.15';
 const cdkMatVer = '~21.2.13';
@@ -215,8 +214,10 @@ export default defineConfig(({ mode }) => ({
         shared: sharedDeps,
       }),
     analog({ ssr: false }),
-    nxViteTsPaths(),
   ].filter(Boolean),
+  resolve: {
+    tsconfigPaths: true,
+  },
   server: {
     port: 4201,
     origin: 'http://localhost:4201',
