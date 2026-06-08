@@ -1,5 +1,7 @@
 /// <reference types="vitest" />
 
+import { resolve } from 'path';
+
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
@@ -69,6 +71,16 @@ export default defineConfig(({ mode }) => {
     },
     resolve: {
       tsconfigPaths: true,
+      alias:
+        mode === 'test'
+          ? {
+              // In test mode, resolve federation remotes to local stubs
+              'counter-remote/Routes': resolve(
+                __dirname,
+                'src/test-stubs/counter-remote-routes.ts',
+              ),
+            }
+          : {},
     },
     plugins: [
       federation({
@@ -94,6 +106,11 @@ export default defineConfig(({ mode }) => {
         ssr: false,
         static: true,
         apiPrefix: '_analog',
+        // In test mode, use the fast-compile path so Angular components loaded
+        // via MFE aliases (not in tsconfig.spec.json) are compiled with the
+        // local single-pass AOT compiler, and non-Angular TS files are stripped
+        // with OXC lang:'ts' — avoiding the NG0912/OXC JS-mode parse failures.
+        fastCompile: mode === 'test',
         prerender: {
           routes: [],
         },
