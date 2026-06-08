@@ -104,6 +104,9 @@ const KIND_ICON: Record<NotificationKind, string> = {
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'data-testid': 'lib-notification-list',
+  },
 })
 export class NotificationList {
   readonly store = inject(NotificationStore);

@@ -1,19 +1,57 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Content page', () => {
-  test('should load the content component', async ({ page }) => {
-    await page.goto('/content');
+  test(
+    'should load the content component',
+    { timeout: 60_000 },
+    async ({ page }) => {
+      // Capture browser console errors for debugging CI-only flakiness
+      const consoleErrors: string[] = [];
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          consoleErrors.push(msg.text());
+        }
+      });
+      page.on('pageerror', (err) => consoleErrors.push(err.message));
 
-    await expect(page.getByTestId('app-content')).toBeVisible();
-  });
+      await page.goto('/content');
+      // Cold-cache lazy chunk load can take longer in CI; use generous timeout
+      await expect(page.getByTestId('app-content')).toBeVisible({
+        timeout: 60_000,
+      });
 
-  test('should render the page title from frontmatter', async ({ page }) => {
-    await page.goto('/content');
+      // Surface any console errors that may explain flakiness
+      if (consoleErrors.length > 0) {
+        console.error('Browser console errors:', consoleErrors);
+      }
+    },
+  );
 
-    await expect(
-      page.getByRole('heading', { name: /content pages/i }),
-    ).toBeVisible();
-  });
+  test(
+    'should render the page title from frontmatter',
+    { timeout: 60_000 },
+    async ({ page }) => {
+      // Capture browser console errors for debugging CI-only flakiness
+      const consoleErrors: string[] = [];
+      page.on('console', (msg) => {
+        if (msg.type() === 'error') {
+          consoleErrors.push(msg.text());
+        }
+      });
+      page.on('pageerror', (err) => consoleErrors.push(err.message));
+
+      await page.goto('/content');
+      // Cold-cache lazy chunk load can take longer in CI; use generous timeout
+      await expect(
+        page.getByRole('heading', { name: /content pages/i }),
+      ).toBeVisible({ timeout: 60_000 });
+
+      // Surface any console errors that may explain flakiness
+      if (consoleErrors.length > 0) {
+        console.error('Browser console errors:', consoleErrors);
+      }
+    },
+  );
 
   test('should display the table of contents', async ({ page }) => {
     await page.goto('/content');

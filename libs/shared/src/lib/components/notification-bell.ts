@@ -34,6 +34,9 @@ import { NotificationList } from './notification-list';
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: {
+    'data-testid': 'lib-notification-bell',
+  },
 })
 export class NotificationBell {
   readonly store = inject(NotificationStore);
