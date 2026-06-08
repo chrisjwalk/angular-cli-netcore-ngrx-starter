@@ -1,9 +1,7 @@
-/// <reference types='vitest' />
+/// <reference types='vite-plus/test' />
 
 import angular from '@analogjs/vite-plugin-angular';
 import { Plugin } from 'vite';
-
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 function virtualPwaRegisterStub(): Plugin {
   return {
@@ -20,7 +18,13 @@ function virtualPwaRegisterStub(): Plugin {
 
 export const baseConfig = {
   root: __dirname,
-  plugins: [angular(), nxViteTsPaths(), virtualPwaRegisterStub()],
+  plugins: [
+    angular({ tsconfig: './tsconfig.spec.json' }),
+    virtualPwaRegisterStub(),
+  ],
+  resolve: {
+    tsconfigPaths: true,
+  },
   test: {
     watch: false,
     globals: true,

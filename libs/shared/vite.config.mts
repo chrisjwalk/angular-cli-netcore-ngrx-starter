@@ -1,6 +1,6 @@
 import { defineConfig, UserConfig } from 'vite';
 
-import { baseConfig } from '../../vite.config.mjs';
+import { baseConfig } from '../../vite.base.config.mjs';
 
 const name = 'shared';
 

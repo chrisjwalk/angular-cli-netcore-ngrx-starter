@@ -146,7 +146,9 @@ export class Content {
     effect(() => {
       const toc = this.content()?.toc;
       this.observer?.disconnect();
-      if (!toc?.length) {return;}
+      if (!toc?.length) {
+        return;
+      }
       setTimeout(() => this.setupObserver(toc), 0);
     });
 
@@ -161,7 +163,9 @@ export class Content {
   }
 
   private setupObserver(toc: Array<{ id: string }>): void {
-    if (typeof IntersectionObserver === 'undefined') {return;}
+    if (typeof IntersectionObserver === 'undefined') {
+      return;
+    }
 
     const root = this.document.getElementById('main-content');
 
@@ -178,7 +182,9 @@ export class Content {
 
     toc.forEach(({ id }) => {
       const el = this.document.getElementById(id);
-      if (el) {this.observer!.observe(el);}
+      if (el) {
+        this.observer!.observe(el);
+      }
     });
   }
 }

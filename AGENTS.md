@@ -80,7 +80,9 @@ Prefer Tailwind utility classes over component or global CSS whenever possible.
 
 ```html
 <!-- ✅ preferred -->
-<a class="absolute -left-[9999px] top-0 focus:left-0 bg-black text-white">...</a>
+<a class="absolute -left-[9999px] top-0 focus:left-0 bg-black text-white"
+  >...</a
+>
 
 <!-- ❌ avoid -->
 <a class="skip-link">...</a>

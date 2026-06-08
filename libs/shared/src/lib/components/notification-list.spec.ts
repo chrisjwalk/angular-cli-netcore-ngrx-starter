@@ -111,7 +111,7 @@ describe('NotificationList', () => {
     const { fixture } = await setup();
     const component = fixture.debugElement
       .componentInstance as NotificationList;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    // oxlint-disable-next-line @typescript-eslint/no-explicit-any
     expect(component.iconFor('unknown' as any)).toBe('notifications');
   });
 });

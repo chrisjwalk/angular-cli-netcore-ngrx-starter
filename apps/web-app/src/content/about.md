@@ -12,7 +12,9 @@ import { MarkdownComponent, injectContent } from '@analogjs/content';
 import { toSignal } from '@angular/core/rxjs-interop';
 
 export class About {
-  readonly content = toSignal(injectContent<AboutAttributes>({ customFilename: 'about' }));
+  readonly content = toSignal(
+    injectContent<AboutAttributes>({ customFilename: 'about' }),
+  );
 }
 ```
 

@@ -7,7 +7,10 @@ import { NextStepsRunner } from './NextStepsRunner.js';
 describe('NextStepsRunner — non-interactive mode', () => {
   it('marks all steps as skipped and calls onDone immediately', async () => {
     const onDone = vi.fn<(results: StepResult[]) => void>();
-    const steps = ['pnpm install --no-frozen-lockfile', 'npx nx migrate --run-migrations'];
+    const steps = [
+      'pnpm install --no-frozen-lockfile',
+      'npx nx migrate --run-migrations',
+    ];
 
     render(
       React.createElement(NextStepsRunner, {

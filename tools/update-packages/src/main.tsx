@@ -12,7 +12,11 @@ program
   .option('-v, --verbose', 'Verbose output', false)
   .option('-i, --interactive [interactive]', 'Prompt to run next steps', true)
   .option('-m, --minor-only', 'Skip major version bumps', false)
-  .option('-j, --json', 'Output results as JSON (implies --interactive=false)', false)
+  .option(
+    '-j, --json',
+    'Output results as JSON (implies --interactive=false)',
+    false,
+  )
   .action(async (opts) => {
     const isJson: boolean = opts.json ?? false;
     const interactive = isJson
@@ -30,23 +34,29 @@ program
     }) as unknown as NodeJS.WriteStream;
 
     const buildJsonOutput = (data: CompletionData) => ({
-      updated: data.tasks
-        .filter((t) => t.status === 'done')
-        .map((t) => (t.id === '__nx__' ? 'nx' : t.id)),
+      updated: data.tasks.filter((t) => t.status === 'done').map((t) => t.id),
       omitted: data.omitted,
       failed: data.tasks
         .filter((t) => t.status === 'error')
-        .map((t) => ({ name: t.id === '__nx__' ? 'nx' : t.id, error: t.error ?? '' })),
-      hasMigrations: data.tasks.some((t) => t.hasMigrations),
+        .map((t) => ({
+          name: t.id,
+          error: t.error ?? '',
+        })),
       nextSteps: data.stepResults.map((s) => s.step),
     });
 
     const { waitUntilExit } = render(
       React.createElement(App, {
-        options: { omit: opts.omit ?? [], interactive, minorOnly: opts.minorOnly ?? false },
+        options: {
+          omit: opts.omit ?? [],
+          interactive,
+          minorOnly: opts.minorOnly ?? false,
+        },
         onComplete: isJson
           ? (data) => {
-              process.stdout.write(JSON.stringify(buildJsonOutput(data), null, 2) + '\n');
+              process.stdout.write(
+                JSON.stringify(buildJsonOutput(data), null, 2) + '\n',
+              );
             }
           : undefined,
         onError: isJson

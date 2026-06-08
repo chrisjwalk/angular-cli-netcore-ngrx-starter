@@ -39,8 +39,8 @@ The tool is a React Ink interactive CLI. In interactive mode (default) it will:
 1. Show a table of all outdated packages
 2. Prompt you to select any packages to **omit** via a multi-select (major bumps
    are pre-selected when `--minor-only` is passed)
-3. Show live progress as each `nx migrate` runs
-4. Prompt to run `pnpm install` and `npx nx migrate --run-migrations` on completion
+3. Show live progress as each `pnpm up --latest` runs
+4. Prompt to run `pnpm install` on completion
 
 In non-interactive mode (`--interactive false`), it skips all prompts and runs
 through all packages automatically, still streaming live progress.
@@ -57,9 +57,8 @@ Key flags:
 The script will:
 
 - Detect all outdated packages via `pnpm outdated`
-- Run `nx migrate <pkg>@latest` for each one
-- Merge any generated migrations into `migrations.json`
-- Print next steps (install + run migrations if needed)
+- Run `pnpm up --latest <pkg>` for each one
+- Print next steps (install if needed)
 
 ### 4. Install updated packages
 
@@ -67,39 +66,32 @@ The script will:
 pnpm install --no-frozen-lockfile
 ```
 
-If the install fails, check for postinstall build errors (e.g. tsconfig
-issues in `tools/builders/dotnet-builder`).
+If the install fails, check for postinstall build errors.
 
-### 5. Run migrations (only if migrations.json was updated)
-
-```bash
-npx nx migrate --run-migrations
-```
-
-### 6. Run all tests
+### 5. Run all tests
 
 ```bash
-nx reset
-nx run-many -t build,test
+vp test
+vp check
 ```
 
-All 9 projects must pass before committing.
+All tests must pass before committing.
 
-### 7. Commit
+### 6. Commit
 
 ```bash
 git add -A
 git commit -m "chore: update all packages to latest (closes #<issue-number>)"
 ```
 
-### 8. Push and open PR
+### 7. Push and open PR
 
 ```bash
 git push origin feat/consolidate-deps-<issue-number>
 gh pr create --title "chore: update all packages to latest" --body "Closes #<issue-number> ..."
 ```
 
-### 9. Close stale dependabot PRs
+### 8. Close stale dependabot PRs
 
 Close any open dependabot PRs that are now covered by this update:
 

@@ -13,7 +13,9 @@ function TagList({ items, color }: { items: string[]; color: string }) {
     <Box gap={1} flexWrap="wrap">
       {items.map((item, i) => (
         <React.Fragment key={item}>
-          <Text color={color as Parameters<typeof Text>[0]['color']}>{item}</Text>
+          <Text color={color as Parameters<typeof Text>[0]['color']}>
+            {item}
+          </Text>
           {i < items.length - 1 && <Text dimColor>·</Text>}
         </React.Fragment>
       ))}
@@ -22,9 +24,15 @@ function TagList({ items, color }: { items: string[]; color: string }) {
 }
 
 export function Summary({ tasks, omitted, hasMigrationFile }: SummaryProps) {
-  const updated = tasks.filter((t) => t.status === 'done').map((t) => t.displayName);
-  const failed = tasks.filter((t) => t.status === 'error').map((t) => t.displayName);
-  const withMigrations = tasks.filter((t) => t.status === 'done' && t.hasMigrations).map((t) => t.displayName);
+  const updated = tasks
+    .filter((t) => t.status === 'done')
+    .map((t) => t.displayName);
+  const failed = tasks
+    .filter((t) => t.status === 'error')
+    .map((t) => t.displayName);
+  const withMigrations = tasks
+    .filter((t) => t.status === 'done' && t.hasMigrations)
+    .map((t) => t.displayName);
 
   return (
     <Box flexDirection="column" gap={1}>
@@ -58,7 +66,10 @@ export function Summary({ tasks, omitted, hasMigrationFile }: SummaryProps) {
 
       {withMigrations.length > 0 ? (
         <Box gap={1}>
-          <Text color="blue" bold>{`⬡ Migrations (${withMigrations.length}):`}</Text>
+          <Text
+            color="blue"
+            bold
+          >{`⬡ Migrations (${withMigrations.length}):`}</Text>
           <TagList items={withMigrations} color="blue" />
         </Box>
       ) : (
