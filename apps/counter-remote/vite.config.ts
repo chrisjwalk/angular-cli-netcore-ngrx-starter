@@ -18,7 +18,8 @@ const sharedDeps = {
   // import:false — prevents a loadShare that bundles @angular/core internals
   // (assertInInjectionContext), causing NG0203
   '@angular/common/http': { singleton: true, requiredVersion: angVer },
-  '@angular/compiler': { singleton: true, requiredVersion: angVer },
+  // '@angular/compiler' intentionally NOT shared — the JIT compiler is
+  // never needed at runtime in AOT production builds.
   '@angular/core': { singleton: true, requiredVersion: angVer, import: false },
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },

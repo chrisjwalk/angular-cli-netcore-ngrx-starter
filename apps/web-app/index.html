@@ -48,13 +48,21 @@
     <!-- Preconnect to speed up Google Fonts loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <!-- Load fonts asynchronously (media="print" onload pattern) to avoid
+         render-blocking. The onload swaps media to "all" so fonts apply
+         once downloaded. display=swap ensures fallback fonts are used
+         until the web font arrives (no invisible text). -->
     <link
       href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
     <link
       href="https://fonts.googleapis.com/icon?family=Material+Icons&display=swap"
       rel="stylesheet"
+      media="print"
+      onload="this.media='all'"
     />
   </head>
 

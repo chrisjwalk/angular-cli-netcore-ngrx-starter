@@ -16,7 +16,9 @@ const mfeSharedDeps = {
   '@angular/animations': { singleton: true, requiredVersion: angVer },
   '@angular/common': { singleton: true, requiredVersion: angVer },
   '@angular/common/http': { singleton: true, requiredVersion: angVer },
-  '@angular/compiler': { singleton: true, requiredVersion: angVer },
+  // '@angular/compiler' intentionally NOT shared — the JIT compiler is
+  // never needed at runtime in AOT production builds. Sharing it would
+  // load ~216 KB (80 % unused) on every page view.
   '@angular/core': { singleton: true, requiredVersion: angVer },
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
