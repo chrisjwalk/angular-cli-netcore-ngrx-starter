@@ -40,8 +40,8 @@ describe('NextStepsRunner — non-interactive mode', () => {
 
     await vi.waitFor(() => expect(onDone).toHaveBeenCalled());
 
-    expect(lastFrame()!).toContain('○');
-    expect(lastFrame()!).toContain('pnpm install --no-frozen-lockfile');
+    expect((lastFrame() ?? '')).toContain('○');
+    expect((lastFrame() ?? '')).toContain('pnpm install --no-frozen-lockfile');
   });
 
   it('works with a single step', async () => {

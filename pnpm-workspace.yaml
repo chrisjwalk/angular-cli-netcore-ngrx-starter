@@ -88,3 +88,4 @@ minimumReleaseAgeExclude:
   - '@angular-eslint/template-parser@22.0.0'
   - '@angular-eslint/utils@22.0.0'
   - angular-eslint@22.0.0
+  - '@module-federation/vite@1.16.7'
