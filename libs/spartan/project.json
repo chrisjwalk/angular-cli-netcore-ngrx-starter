@@ -1,0 +1,21 @@
+{
+  "name": "spartan",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/spartan/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["ui", "shared"],
+  "targets": {
+    "test": {
+      "executor": "@nx/vitest:test",
+      "outputs": ["{options.reportsDirectory}"],
+      "options": {
+        "reportsDirectory": "{projectRoot}/../../coverage/libs/spartan",
+        "coverage": true
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

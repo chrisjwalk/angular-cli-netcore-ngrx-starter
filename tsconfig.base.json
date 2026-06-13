@@ -24,6 +24,7 @@
       "@myorg/shared": ["libs/shared/src/index.ts"],
       "@myorg/shared/*": ["libs/shared/src/*"],
       "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"],
+      "@myorg/spartan": ["libs/spartan/src/index.ts"],
       "@myorg/todo": ["libs/todo/src/index.ts"]
     }
   },

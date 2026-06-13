@@ -89,3 +89,4 @@ minimumReleaseAgeExclude:
   - '@angular-eslint/utils@22.0.0'
   - angular-eslint@22.0.0
   - '@module-federation/vite@1.16.7'
+  - '@spartan-ng/brain@0.0.1-alpha.712'

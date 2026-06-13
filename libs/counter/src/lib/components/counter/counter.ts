@@ -4,21 +4,24 @@ import {
   input,
   output,
 } from '@angular/core';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
-import { MatTooltip } from '@angular/material/tooltip';
+import { Minus, Plus, LucideAngularModule } from 'lucide-angular';
+
+import {
+  HlmButton,
+  HlmField,
+  HlmInput,
+  HlmLabel,
+  HlmTooltip,
+} from '@myorg/spartan';
 
 @Component({
   imports: [
-    MatButton,
-    MatIconButton,
-    MatIcon,
-    MatFormField,
-    MatInput,
-    MatTooltip,
-    MatLabel,
+    HlmButton,
+    HlmField,
+    HlmInput,
+    HlmLabel,
+    HlmTooltip,
+    LucideAngularModule,
   ],
   selector: 'lib-counter',
   template: `
@@ -29,16 +32,18 @@ import { MatTooltip } from '@angular/material/tooltip';
       <div class="flex flex-col items-center gap-8 px-4 py-8 sm:px-8 sm:py-12">
         <div class="flex items-center gap-4 sm:gap-8">
           <button
-            class="!h-[48px] !w-[48px] sm:!h-[72px] sm:!w-[72px]"
-            mat-icon-button
+            hlmButton
+            variant="ghost"
+            size="icon-lg"
             (click)="decrement.emit()"
-            matTooltip="Decrement"
+            [hlmTooltip]="'Decrement'"
             aria-label="Decrement"
           >
-            <mat-icon
-              class="!h-[36px] !w-[36px] !text-[40px] sm:!h-[56px] sm:!w-[56px] sm:!text-[60px]"
-              >remove</mat-icon
-            >
+            <lucide-icon
+              [name]="minusIcon"
+              [size]="40"
+              class="sm:!h-[56px] sm:!w-[56px]"
+            />
           </button>
           <div
             class="min-w-[100px] text-center font-display text-[72px] font-black leading-none tracking-tight text-on-surface sm:min-w-[200px] sm:text-[120px]"
@@ -47,34 +52,37 @@ import { MatTooltip } from '@angular/material/tooltip';
             {{ count() }}
           </div>
           <button
-            class="!h-[48px] !w-[48px] sm:!h-[72px] sm:!w-[72px]"
-            mat-icon-button
+            hlmButton
+            variant="ghost"
+            size="icon-lg"
             (click)="increment.emit()"
-            matTooltip="Increment"
+            [hlmTooltip]="'Increment'"
             aria-label="Increment"
           >
-            <mat-icon
-              class="!h-[36px] !w-[36px] !text-[40px] sm:!h-[56px] sm:!w-[56px] sm:!text-[60px]"
-              >add</mat-icon
-            >
+            <lucide-icon
+              [name]="plusIcon"
+              [size]="40"
+              class="sm:!h-[56px] sm:!w-[56px]"
+            />
           </button>
         </div>
 
         <!-- Set value -->
-        <div class="flex items-center gap-3">
-          <mat-form-field appearance="outline">
-            <mat-label>Set Count</mat-label>
+        <div class="flex items-end gap-3">
+          <hlm-field>
+            <label hlmLabel for="set-count">Set Count</label>
             <input
-              matInput
+              hlmInput
+              id="set-count"
               #setvalue
               type="number"
               (keyup.enter)="setCount.emit(+setvalue.value)"
               [value]="count()"
             />
-          </mat-form-field>
+          </hlm-field>
           <button
-            mat-flat-button
-            color="primary"
+            hlmButton
+            variant="default"
             (click)="setCount.emit(+setvalue.value)"
           >
             Submit
@@ -83,14 +91,6 @@ import { MatTooltip } from '@angular/material/tooltip';
       </div>
     </div>
   `,
-
-  styles: [
-    `
-      :host ::ng-deep .mat-mdc-form-field-subscript-wrapper {
-        display: none;
-      }
-    `,
-  ],
   host: {
     class: 'flex w-full',
     'data-testid': 'lib-counter',
@@ -99,6 +99,9 @@ import { MatTooltip } from '@angular/material/tooltip';
 })
 export class Counter {
   count = input<number>(null);
+
+  readonly plusIcon = Plus;
+  readonly minusIcon = Minus;
 
   increment = output();
   decrement = output();
