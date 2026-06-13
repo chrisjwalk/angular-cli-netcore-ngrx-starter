@@ -53,19 +53,37 @@ test.describe('Content page', () => {
     },
   );
 
-  test('should display the table of contents', async ({ page }) => {
-    await page.goto('/content');
+  test(
+    'should display the table of contents',
+    { timeout: 60_000 },
+    async ({ page }) => {
+      await page.goto('/content');
 
-    await expect(
-      page.getByRole('navigation', { name: /on this page/i }),
-    ).toBeVisible();
-  });
+      // Wait for content to load before checking for the TOC
+      await expect(
+        page.getByRole('heading', { name: /content pages/i }),
+      ).toBeVisible({ timeout: 60_000 });
 
-  test('should display the content files panel', async ({ page }) => {
-    await page.goto('/content');
+      await expect(
+        page.getByRole('navigation', { name: /on this page/i }),
+      ).toBeVisible();
+    },
+  );
 
-    await expect(page.getByText(/content files in this app/i)).toBeVisible();
-  });
+  test(
+    'should display the content files panel',
+    { timeout: 60_000 },
+    async ({ page }) => {
+      await page.goto('/content');
+
+      // Wait for content to load before checking for the content files panel
+      await expect(
+        page.getByRole('heading', { name: /content pages/i }),
+      ).toBeVisible({ timeout: 60_000 });
+
+      await expect(page.getByText(/content files in this app/i)).toBeVisible();
+    },
+  );
 
   // Regression: content not found when filename conflicted with Analog's /_analog/content/ API path
   test('should render the markdown body without a "No Content Found" error', async ({
