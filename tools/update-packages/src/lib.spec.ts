@@ -178,7 +178,10 @@ describe('buildMigrationQueue', () => {
     const nxPkg = { ...pkg('nx'), current: '20.0.0', latest: '21.0.0' };
     const tasks = buildMigrationQueue([nxPkg, pkg('@nx/vite')]);
 
-    const nxTask = tasks.find((t) => t.id === '__nx__')!;
+    const nxTask = tasks.find((t) => t.id === '__nx__');
+    if (!nxTask) {
+      throw new Error('__nx__ task not found');
+    }
     expect(nxTask.pkg).toBe('');
     expect(nxTask.displayName).toContain('20.0.0');
     expect(nxTask.displayName).toContain('21.0.0');

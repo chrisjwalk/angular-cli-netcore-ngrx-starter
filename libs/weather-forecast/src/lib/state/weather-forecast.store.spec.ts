@@ -167,13 +167,13 @@ describe('WeatherForecastStore', () => {
       store.getForecasts({ count: weatherForecasts.length, plus: false });
       await appRef.whenStable();
       store.setFilter({
-        minTemperatureC: undefined as any,
-        maxTemperatureC: undefined as any,
+        minTemperatureC: undefined as unknown as number,
+        maxTemperatureC: undefined as unknown as number,
       });
       expect(store.filteredForecasts().length).toBe(weatherForecasts.length);
       store.setFilter({
-        minTemperatureC: null as any,
-        maxTemperatureC: null as any,
+        minTemperatureC: null as unknown as number,
+        maxTemperatureC: null as unknown as number,
       });
       expect(store.filteredForecasts().length).toBe(weatherForecasts.length);
     });

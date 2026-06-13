@@ -24,7 +24,7 @@ describe('Counter', () => {
 
     await render(Counter, {
       componentInputs: { count },
-      componentOutputs: { increment: { emit: increment } as any },
+      componentOutputs: { increment: { emit: increment } },
     });
 
     fireEvent.click(screen.getByLabelText('Increment'));

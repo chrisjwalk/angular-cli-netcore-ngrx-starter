@@ -38,7 +38,7 @@ import { RouterLink } from '@angular/router';
 export class SidenavListItem {
   icon = input<string>('');
   hint = input<string>('');
-  routerLink = input<string | any[]>('/');
+  routerLink = input<string | unknown[]>('/');
 
   navigate = output();
 }

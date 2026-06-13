@@ -21,9 +21,7 @@ test.describe('Content page', () => {
       });
 
       // Surface any console errors that may explain flakiness
-      if (consoleErrors.length > 0) {
-        console.error('Browser console errors:', consoleErrors);
-      }
+      expect(consoleErrors, 'Browser console errors').toEqual([]);
     },
   );
 
@@ -47,9 +45,7 @@ test.describe('Content page', () => {
       ).toBeVisible({ timeout: 60_000 });
 
       // Surface any console errors that may explain flakiness
-      if (consoleErrors.length > 0) {
-        console.error('Browser console errors:', consoleErrors);
-      }
+      expect(consoleErrors, 'Browser console errors').toEqual([]);
     },
   );
 

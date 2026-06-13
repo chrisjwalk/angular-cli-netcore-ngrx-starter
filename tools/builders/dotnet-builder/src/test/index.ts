@@ -110,7 +110,7 @@ export default createBuilder<Options>((options, context) => {
       }
     });
   });
-}) as any;
+});
 
 //dotnet test --configuration Release --no-restore --no-build --logger trx --collect "Code Coverage" --results-directory .
 //dotnet coverage merge -o coverage.xml -f xml -r *.coverage

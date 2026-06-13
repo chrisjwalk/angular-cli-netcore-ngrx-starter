@@ -22,7 +22,7 @@ describe('MigrationProgress', () => {
       makeTask({ id: 'pkg-b', displayName: 'pkg-b' }),
     ];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
-    const frame = lastFrame()!;
+    const frame = lastFrame() ?? '';
 
     expect(frame).toContain('pkg-a');
     expect(frame).toContain('pkg-b');
@@ -33,33 +33,34 @@ describe('MigrationProgress', () => {
     const tasks = [makeTask({ status: 'done', hasMigrations: false })];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
 
-    expect(lastFrame()!).toContain('✓');
-    expect(lastFrame()!).toContain('test-pkg');
-    expect(lastFrame()!).not.toContain('(migrations)');
+    const frame1 = lastFrame() ?? '';
+    expect(frame1).toContain('✓');
+    expect(frame1).toContain('test-pkg');
+    expect(frame1).not.toContain('(migrations)');
   });
 
   it('shows ✓ with "(migrations)" for done tasks that had migrations', () => {
     const tasks = [makeTask({ status: 'done', hasMigrations: true })];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
 
-    expect(lastFrame()!).toContain('✓');
-    expect(lastFrame()!).toContain('(migrations)');
+    expect((lastFrame() ?? '')).toContain('✓');
+    expect((lastFrame() ?? '')).toContain('(migrations)');
   });
 
   it('shows ✗ for error tasks', () => {
     const tasks = [makeTask({ status: 'error', error: 'something broke' })];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
 
-    expect(lastFrame()!).toContain('✗');
-    expect(lastFrame()!).toContain('something broke');
+    expect((lastFrame() ?? '')).toContain('✗');
+    expect((lastFrame() ?? '')).toContain('something broke');
   });
 
   it('shows ◆ for running tasks', () => {
     const tasks = [makeTask({ status: 'running' })];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
 
-    expect(lastFrame()!).toContain('◆');
-    expect(lastFrame()!).toContain('test-pkg');
+    expect((lastFrame() ?? '')).toContain('◆');
+    expect((lastFrame() ?? '')).toContain('test-pkg');
   });
 
   it('updates counter as tasks complete', () => {
@@ -70,7 +71,7 @@ describe('MigrationProgress', () => {
     ];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
 
-    expect(lastFrame()!).toContain('[2/3]');
+    expect((lastFrame() ?? '')).toContain('[2/3]');
   });
 
   it('shows all tasks regardless of status (no items hidden)', () => {
@@ -80,7 +81,7 @@ describe('MigrationProgress', () => {
       makeTask({ id: 'c', displayName: 'pkg-c', status: 'pending' }),
     ];
     const { lastFrame } = render(React.createElement(MigrationProgress, { tasks }));
-    const frame = lastFrame()!;
+    const frame = (lastFrame() ?? '');
 
     expect(frame).toContain('pkg-a');
     expect(frame).toContain('pkg-b');
