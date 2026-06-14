@@ -5,14 +5,17 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
-import { MatIconButton, MatButton } from '@angular/material/button';
-import { MatFormField, MatSuffix } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
-import { MatProgressSpinner } from '@angular/material/progress-spinner';
+import { ReactiveFormsModule, FormBuilder } from '@angular/forms';
 import { AuthStore } from '@myorg/auth';
 import { LayoutStore } from '@myorg/shared';
+import {
+  HlmButton,
+  HlmField,
+  HlmInput,
+  HlmLabel,
+  HlmSpinner,
+} from '@myorg/spartan';
+import { Eye, EyeOff, LucideAngularModule } from 'lucide-angular';
 
 import { LoginStore, getLoginFormGroup } from '../state/login.store';
 
@@ -20,13 +23,12 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
   selector: 'lib-login',
   imports: [
     ReactiveFormsModule,
-    MatButton,
-    MatIconButton,
-    MatIcon,
-    MatFormField,
-    MatInput,
-    MatSuffix,
-    MatProgressSpinner,
+    HlmButton,
+    HlmField,
+    HlmInput,
+    HlmLabel,
+    HlmSpinner,
+    LucideAngularModule,
   ],
   template: `
     <div class="h-full flex items-center justify-center p-6 bg-background">
@@ -49,83 +51,59 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
               Two-factor authentication is required. Enter the code from your
               authenticator app.
             </p>
-            <div class="flex flex-col gap-1.5">
-              <label
-                class="text-on-surface-variant text-xs font-semibold"
-                for="login-2fa"
-                >Authenticator code</label
-              >
-              <mat-form-field
-                appearance="outline"
-                subscriptSizing="dynamic"
-                class="w-full"
-              >
-                <input
-                  matInput
-                  id="login-2fa"
-                  formControlName="twoFactorCode"
-                  type="text"
-                  inputmode="numeric"
-                  autocomplete="one-time-code"
-                />
-              </mat-form-field>
-            </div>
+            <hlm-field>
+              <label hlmLabel for="login-2fa">Authenticator code</label>
+              <input
+                hlmInput
+                id="login-2fa"
+                formControlName="twoFactorCode"
+                type="text"
+                inputmode="numeric"
+                autocomplete="one-time-code"
+              />
+            </hlm-field>
           } @else {
-            <div class="flex flex-col gap-1.5">
-              <label
-                class="text-on-surface-variant text-xs font-semibold"
-                for="login-email"
-                >Email</label
-              >
-              <mat-form-field
-                appearance="outline"
-                subscriptSizing="dynamic"
-                class="w-full"
-              >
+            <hlm-field>
+              <label hlmLabel for="login-email">Email</label>
+              <input
+                hlmInput
+                id="login-email"
+                formControlName="email"
+                type="email"
+                autocomplete="email"
+                placeholder="you@example.com"
+              />
+            </hlm-field>
+            <hlm-field>
+              <label hlmLabel for="login-password">Password</label>
+              <div class="relative">
                 <input
-                  matInput
-                  id="login-email"
-                  formControlName="email"
-                  type="email"
-                  autocomplete="email"
-                  placeholder="you@example.com"
-                />
-              </mat-form-field>
-            </div>
-            <div class="flex flex-col gap-1.5">
-              <label
-                class="text-on-surface-variant text-xs font-semibold"
-                for="login-password"
-                >Password</label
-              >
-              <mat-form-field
-                appearance="outline"
-                subscriptSizing="dynamic"
-                class="w-full"
-              >
-                <input
-                  matInput
+                  hlmInput
                   id="login-password"
+                  class="pr-10"
                   formControlName="password"
                   [type]="showPassword() ? 'text' : 'password'"
                   autocomplete="current-password"
                   placeholder="••••••••"
                 />
                 <button
-                  matSuffix
-                  mat-icon-button
+                  hlmButton
+                  variant="ghost"
+                  size="icon"
                   type="button"
+                  class="absolute right-1 top-1/2 -translate-y-1/2"
                   [attr.aria-label]="
                     showPassword() ? 'Hide password' : 'Show password'
                   "
                   (click)="showPassword.set(!showPassword())"
                 >
-                  <mat-icon>{{
-                    showPassword() ? 'visibility_off' : 'visibility'
-                  }}</mat-icon>
+                  <lucide-icon
+                    [name]="showPassword() ? eyeOffIcon : eyeIcon"
+                    class="h-4 w-4"
+                  />
                 </button>
-              </mat-form-field>
-            </div>
+              </div>
+            </hlm-field>
           }
         } @else {
           <div class="flex flex-col gap-1.5">
@@ -146,14 +124,15 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
           </div>
         }
         <button
-          mat-flat-button
+          hlmButton
+          variant="default"
           class="w-full mt-1"
           [disabled]="!store.valid() || authStore.loginLoading()"
           (click)="authStore.login(store.request())"
         >
           <span class="flex gap-2 items-center justify-center">
             @if (authStore.loginLoading()) {
-              <mat-spinner [diameter]="20" [strokeWidth]="2" color="accent" />
+              <hlm-spinner [diameter]="20" [strokeWidth]="2" />
             }
             <span>{{
               authStore.requiresTwoFactor() ? 'Verify' : 'Sign in'
@@ -177,6 +156,9 @@ export class Login {
   readonly authStore = inject(AuthStore);
   readonly store = inject(LoginStore);
   readonly showPassword = signal(false);
+
+  readonly eyeIcon = Eye;
+  readonly eyeOffIcon = EyeOff;
 
   readonly formGroup = getLoginFormGroup(this.formBuilder, this.store);
 

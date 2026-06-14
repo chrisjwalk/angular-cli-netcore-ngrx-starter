@@ -1,10 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButton } from '@angular/material/button';
-import { MatDivider } from '@angular/material/divider';
 import { NotificationStore } from '@myorg/shared';
+import { HlmButton, HlmSeparator } from '@myorg/spartan';
 
 @Component({
-  imports: [MatButton, MatDivider],
+  imports: [HlmButton, HlmSeparator],
   template: `
     <div class="p-8 max-w-lg flex flex-col gap-4">
       <h1 class="text-2xl font-bold m-0">🛠 Debug Tools</h1>
@@ -12,30 +11,30 @@ import { NotificationStore } from '@myorg/shared';
         Not linked from the nav. Use to test features during development.
       </p>
 
-      <mat-divider />
+      <hr hlmSeparator />
 
       <h2 class="text-base font-semibold m-0">Notifications</h2>
 
       <div class="flex flex-wrap gap-2">
-        <button mat-stroked-button (click)="addInfo()">Add info</button>
-        <button mat-stroked-button (click)="addError()">Add error</button>
-        <button mat-stroked-button (click)="addAuth()">Add auth</button>
-        <button mat-stroked-button (click)="addSwUpdate()">
+        <button hlmButton variant="outline" (click)="addInfo()">Add info</button>
+        <button hlmButton variant="outline" (click)="addError()">Add error</button>
+        <button hlmButton variant="outline" (click)="addAuth()">Add auth</button>
+        <button hlmButton variant="outline" (click)="addSwUpdate()">
           Add sw-update
         </button>
-        <button mat-stroked-button (click)="addWithAction()">
+        <button hlmButton variant="outline" (click)="addWithAction()">
           Add with action
         </button>
-        <button mat-stroked-button (click)="addAutoDismiss()">
+        <button hlmButton variant="outline" (click)="addAutoDismiss()">
           Add auto-dismiss (3s)
         </button>
       </div>
 
       <div class="flex gap-2">
-        <button mat-stroked-button color="warn" (click)="store.markAllRead()">
+        <button hlmButton variant="outline" (click)="store.markAllRead()">
           Mark all read
         </button>
-        <button mat-flat-button color="warn" (click)="clearAll()">
+        <button hlmButton variant="destructive" (click)="clearAll()">
           Clear all
         </button>
       </div>

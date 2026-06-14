@@ -1,6 +1,5 @@
 import { DOCUMENT } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatSidenav, MatSidenavContainer } from '@angular/material/sidenav';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { AuthStore } from '@myorg/auth';
 import {
@@ -14,13 +13,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { filter, pipe, tap } from 'rxjs';
 
 @Component({
-  imports: [
-    RouterOutlet,
-    MatSidenav,
-    MatSidenavContainer,
-    Sidenav,
-    MainToolbar,
-  ],
+  imports: [RouterOutlet, Sidenav, MainToolbar],
   selector: 'app-root',
   template: `
     <a
@@ -35,40 +28,36 @@ import { filter, pipe, tap } from 'rxjs';
         [loggedIn]="authStore.loggedIn()"
       />
     }
-    <mat-sidenav-container
-      fullscreen
-      [class.has-toolbar]="!store.hideToolbar()"
-    >
-      <mat-sidenav
-        mode="over"
-        [opened]="store.showSidenav()"
-        (openedChange)="store.setShowSidenav($event)"
+    <div class="flex h-full" [class.pt-14]="!store.hideToolbar()">
+      <!-- Sidenav overlay -->
+      @if (store.showSidenav()) {
+        <div
+          class="fixed inset-0 z-40 bg-black/30"
+          role="presentation"
+          (click)="store.closeSidenav()"
+          (keydown.escape)="store.closeSidenav()"
+          tabindex="0"
+        ></div>
+      }
+      <aside
+        class="fixed top-0 left-0 z-50 h-full w-64 bg-surface-container-lowest border-r border-outline-variant shadow-lg transform transition-transform duration-200 ease-in-out"
+        [class.-translate-x-full]="!store.showSidenav()"
+        [class.pt-14]="!store.hideToolbar()"
       >
         <lib-sidenav
           (toggleSidenav)="store.toggleSidenav()"
           (closeSidenav)="store.closeSidenav()"
         />
-      </mat-sidenav>
+      </aside>
       <main
         id="main-content"
         tabindex="-1"
-        class="outline-none h-full overflow-auto"
+        class="outline-none h-full overflow-auto flex-1"
       >
         <router-outlet />
       </main>
-    </mat-sidenav-container>
+    </div>
   `,
-  styles: [
-    `
-      .mat-drawer-container {
-        height: 100%;
-      }
-      .mat-drawer-container.has-toolbar {
-        margin-top: var(--mat-toolbar-standard-height);
-        height: calc(100% - var(--mat-toolbar-standard-height));
-      }
-    `,
-  ],
   host: {
     'data-testid': 'app-root',
   },

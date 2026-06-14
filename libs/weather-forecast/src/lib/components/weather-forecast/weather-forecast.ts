@@ -1,8 +1,4 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInput } from '@angular/material/input';
 import { AuthStore } from '@myorg/auth';
 import {
   BreakpointStore,
@@ -10,6 +6,8 @@ import {
   PageContainer,
   PageToolbar,
 } from '@myorg/shared';
+import { HlmButton, HlmField, HlmInput, HlmLabel } from '@myorg/spartan';
+import { RefreshCw, LucideAngularModule } from 'lucide-angular';
 
 import { WeatherForecastStore } from '../../state/weather-forecast.store';
 import { ForecastTable } from '../forecast-table/forecast-table';
@@ -17,13 +15,12 @@ import { ForecastTable } from '../forecast-table/forecast-table';
 @Component({
   imports: [
     PageContainer,
-    MatButton,
-    MatIconButton,
-    MatFormField,
-    MatLabel,
-    MatInput,
+    HlmButton,
+    HlmField,
+    HlmLabel,
+    HlmInput,
     PageToolbar,
-    MatIcon,
+    LucideAngularModule,
     ForecastTable,
   ],
   providers: [WeatherForecastStore, BreakpointStore],
@@ -35,10 +32,11 @@ import { ForecastTable } from '../forecast-table/forecast-table';
         class="forecast-filter-bar mb-6 flex flex-wrap items-center gap-4 rounded-2xl bg-surface-container p-4 shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
       >
         <div class="flex items-center gap-3">
-          <mat-form-field appearance="outline">
-            <mat-label>Forecast Days</mat-label>
+          <hlm-field>
+            <label hlmLabel for="forecast-days">Forecast Days</label>
             <input
-              matInput
+              hlmInput
+              id="forecast-days"
               #count
               type="number"
               [attr.aria-label]="'Number of forecast days'"
@@ -50,11 +48,12 @@ import { ForecastTable } from '../forecast-table/forecast-table';
               "
               [value]="store.count()"
             />
-          </mat-form-field>
+          </hlm-field>
           @if (breakpointStore.handset()) {
             <button
-              mat-icon-button
-              color="primary"
+              hlmButton
+              variant="default"
+              size="icon"
               (click)="
                 store.getForecasts({
                   count: +count.value,
@@ -63,12 +62,12 @@ import { ForecastTable } from '../forecast-table/forecast-table';
               "
               aria-label="Get Forecasts"
             >
-              <mat-icon>refresh</mat-icon>
+              <lucide-icon [name]="refreshIcon" class="h-4 w-4" />
             </button>
           } @else {
             <button
-              mat-flat-button
-              color="primary"
+              hlmButton
+              variant="default"
               (click)="
                 store.getForecasts({
                   count: +count.value,
@@ -77,7 +76,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
               "
               aria-label="Get Forecasts"
             >
-              <mat-icon>refresh</mat-icon>
+              <lucide-icon [name]="refreshIcon" class="h-4 w-4" />
               Get Forecasts
             </button>
           }
@@ -101,6 +100,7 @@ export class WeatherForecast {
   readonly authStore = inject(AuthStore);
   readonly store = inject(WeatherForecastStore);
   readonly breakpointStore = inject(BreakpointStore);
+  readonly refreshIcon = RefreshCw;
 
   constructor() {
     this.layoutStore.setTitle('Weather Forecasts');

@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { computed, inject } from '@angular/core';
 import { toObservable } from '@angular/core/rxjs-interop';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { ToastService } from '@myorg/shared';
 import {
   ActivatedRouteSnapshot,
   RedirectCommand,
@@ -93,7 +93,7 @@ export function withAuthFeature() {
     withProps(({ loginStatus }) => ({
       router: inject(Router),
       authService: inject(AuthService),
-      snackBar: inject(MatSnackBar),
+      toastService: inject(ToastService),
       loginStatus$: toObservable(loginStatus).pipe(startWith(null)),
     })),
     withComputed((state) => ({
@@ -173,7 +173,7 @@ export function withAuthFeature() {
         }
       },
     })),
-    withMethods(({ router, authService, snackBar, ...store }) => ({
+    withMethods(({ router, authService, toastService, ...store }) => ({
       login: rxMethod<Login>(
         pipe(
           tap(() => store.loginStart()),
@@ -188,14 +188,14 @@ export function withAuthFeature() {
                     patchState(store, { loginStatus: 'requires-2fa' });
                     return;
                   }
-                  snackBar.open('Login Successful', 'Close', {
+                  toastService.open('Login Successful', 'Close', {
                     duration: 5000,
                   });
                   store.redirectAfterLogin();
                   store.loginSuccessful(response as AuthResponse);
                 },
                 error: (error) => {
-                  snackBar.open('Login failed', 'Close', {
+                  toastService.open('Login failed', 'Close', {
                     duration: 5000,
                   });
                   store.loginFailure(error);
@@ -229,7 +229,7 @@ export function withAuthFeature() {
         if (redirectToLogin) {
           router.navigate(loginRouterLink);
         } else {
-          snackBar.open('Logout Successful', 'Close', {
+          toastService.open('Logout Successful', 'Close', {
             duration: 5000,
           });
         }

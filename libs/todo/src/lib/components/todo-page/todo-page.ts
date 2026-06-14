@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
+import { HlmButton } from '@myorg/spartan';
+import { AlertCircle, CloudOff, RefreshCw, X, LucideAngularModule } from 'lucide-angular';
 import { TodoStore } from '../../state/todo.store';
 import { TodoForm } from '../todo-form/todo-form';
 import { TodoList } from '../todo-list/todo-list';
@@ -13,8 +13,8 @@ import { TodoList } from '../todo-list/todo-list';
     PageContainer,
     TodoForm,
     TodoList,
-    MatIcon,
-    MatIconButton,
+    HlmButton,
+    LucideAngularModule,
   ],
   template: `
     <lib-page-toolbar [title]="layoutStore.title()" />
@@ -26,19 +26,22 @@ import { TodoList } from '../todo-list/todo-list';
           class="mb-4 flex items-start gap-3 rounded-xl border border-error bg-error-container p-4"
           role="alert"
         >
-          <mat-icon class="mt-0.5 shrink-0 text-on-error-container"
-            >error</mat-icon
-          >
+          <lucide-icon
+            [name]="alertCircleIcon"
+            class="h-5 w-5 mt-0.5 shrink-0 text-on-error-container"
+          />
           <p class="flex-1 text-sm text-on-error-container">
             {{ store.mutationError() }}
           </p>
           <button
-            mat-icon-button
+            hlmButton
+            variant="ghost"
+            size="icon"
             class="!-m-2 shrink-0 !text-on-error-container"
             aria-label="Dismiss error"
             (click)="store.clearMutationError()"
           >
-            <mat-icon>close</mat-icon>
+            <lucide-icon [name]="closeIcon" class="h-4 w-4" />
           </button>
         </div>
       }
@@ -48,9 +51,10 @@ import { TodoList } from '../todo-list/todo-list';
           class="mx-auto flex w-full max-w-md items-start gap-4 rounded-xl border border-error bg-error-container p-4"
           role="alert"
         >
-          <mat-icon class="mt-0.5 shrink-0 text-on-error-container"
-            >cloud_off</mat-icon
-          >
+          <lucide-icon
+            [name]="cloudOffIcon"
+            class="h-5 w-5 mt-0.5 shrink-0 text-on-error-container"
+          />
           <div class="flex flex-1 flex-col gap-1">
             <p class="text-sm font-medium leading-none text-on-error-container">
               Could not load todos
@@ -60,12 +64,14 @@ import { TodoList } from '../todo-list/todo-list';
             </p>
           </div>
           <button
-            mat-icon-button
+            hlmButton
+            variant="ghost"
+            size="icon"
             class="!-m-2 shrink-0 !text-on-error-container"
             aria-label="Retry"
             (click)="store.reload()"
           >
-            <mat-icon>refresh</mat-icon>
+            <lucide-icon [name]="refreshIcon" class="h-4 w-4" />
           </button>
         </div>
       } @else {
@@ -87,6 +93,11 @@ import { TodoList } from '../todo-list/todo-list';
 export class TodoPage {
   readonly layoutStore = inject(LayoutStore);
   readonly store = inject(TodoStore);
+
+  readonly alertCircleIcon = AlertCircle;
+  readonly cloudOffIcon = CloudOff;
+  readonly refreshIcon = RefreshCw;
+  readonly closeIcon = X;
 
   constructor() {
     this.layoutStore.setTitle('Todos');

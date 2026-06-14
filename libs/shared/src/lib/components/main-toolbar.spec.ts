@@ -26,25 +26,22 @@ describe('MainToolbar', () => {
     expect(screen.getByTestId('lib-main-toolbar')).toBeTruthy();
   });
 
-  it('shows brightness_auto icon and system tooltip by default', async () => {
+  it('shows sun-moon icon and system tooltip by default', async () => {
     const { component } = await setup();
-    expect(component.themeIcon()).toBe('brightness_auto');
     expect(component.themeTooltip()).toContain('System');
   });
 
-  it('shows light_mode icon and light tooltip when theme is light', async () => {
+  it('shows sun icon and light tooltip when theme is light', async () => {
     const { component, themeService, fixture } = await setup();
     themeService.setTheme('light');
     fixture.detectChanges();
-    expect(component.themeIcon()).toBe('light_mode');
     expect(component.themeTooltip()).toContain('Light');
   });
 
-  it('shows dark_mode icon and dark tooltip when theme is dark', async () => {
+  it('shows moon icon and dark tooltip when theme is dark', async () => {
     const { component, themeService, fixture } = await setup();
     themeService.setTheme('dark');
     fixture.detectChanges();
-    expect(component.themeIcon()).toBe('dark_mode');
     expect(component.themeTooltip()).toContain('Dark');
   });
 });

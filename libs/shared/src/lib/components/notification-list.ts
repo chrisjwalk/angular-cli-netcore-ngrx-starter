@@ -1,23 +1,22 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatButton, MatIconButton } from '@angular/material/button';
-import { MAT_BOTTOM_SHEET_DATA } from '@angular/material/bottom-sheet';
-import { MatIcon } from '@angular/material/icon';
+import { X, Bell, AlertCircle, UserCircle, ArrowUpCircle, LucideAngularModule } from 'lucide-angular';
+import { HlmButton } from '@myorg/spartan';
 import {
   AppNotification,
   NotificationKind,
   NotificationStore,
 } from '../state/notification.store';
 
-const KIND_ICON: Record<NotificationKind, string> = {
-  'sw-update': 'system_update',
-  auth: 'account_circle',
-  error: 'error_outline',
-  info: 'notifications',
+const KIND_ICON: Record<NotificationKind, unknown> = {
+  'sw-update': ArrowUpCircle,
+  auth: UserCircle,
+  error: AlertCircle,
+  info: Bell,
 };
 
 @Component({
-  imports: [DatePipe, MatButton, MatIcon, MatIconButton],
+  imports: [DatePipe, HlmButton, LucideAngularModule],
   selector: 'lib-notification-list',
   template: `
     <div
@@ -28,7 +27,7 @@ const KIND_ICON: Record<NotificationKind, string> = {
       >
         <h2 class="text-base font-medium m-0">Notifications</h2>
         @if (store.unreadCount() > 0) {
-          <button mat-button (click)="store.markAllRead()">
+          <button hlmButton variant="ghost" (click)="store.markAllRead()">
             Mark all read
           </button>
         }
@@ -41,9 +40,10 @@ const KIND_ICON: Record<NotificationKind, string> = {
             [class.border-l-4]="!n.read"
             [class.border-l-primary]="!n.read"
           >
-            <mat-icon class="shrink-0 mt-0.5 text-on-surface-variant">
-              {{ iconFor(n.kind) }}
-            </mat-icon>
+            <lucide-icon
+              [name]="iconFor(n.kind)"
+              class="h-5 w-5 shrink-0 mt-0.5 text-on-surface-variant"
+            />
 
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-1.5">
@@ -72,16 +72,23 @@ const KIND_ICON: Record<NotificationKind, string> = {
 
             <div class="flex flex-col gap-1 shrink-0 items-end">
               @if (n.action) {
-                <button mat-button color="primary" (click)="runAction(n)">
+                <button
+                  hlmButton
+                  variant="ghost"
+                  size="sm"
+                  (click)="runAction(n)"
+                >
                   {{ n.action.label }}
                 </button>
               }
               <button
-                mat-icon-button
+                hlmButton
+                variant="ghost"
+                size="icon"
                 (click)="store.dismiss(n.id)"
                 [attr.aria-label]="'Dismiss: ' + n.title"
               >
-                <mat-icon>close</mat-icon>
+                <lucide-icon [name]="closeIcon" class="h-4 w-4" />
               </button>
             </div>
           </div>
@@ -110,12 +117,10 @@ const KIND_ICON: Record<NotificationKind, string> = {
 })
 export class NotificationList {
   readonly store = inject(NotificationStore);
+  readonly closeIcon = X;
 
-  // MAT_BOTTOM_SHEET_DATA is optional — component works both in overlay and bottom sheet
-  readonly bottomSheetData = inject(MAT_BOTTOM_SHEET_DATA, { optional: true });
-
-  iconFor(kind: NotificationKind): string {
-    return KIND_ICON[kind] ?? 'notifications';
+  iconFor(kind: NotificationKind): unknown {
+    return KIND_ICON[kind] ?? Bell;
   }
 
   runAction(n: AppNotification): void {

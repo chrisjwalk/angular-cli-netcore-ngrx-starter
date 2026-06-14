@@ -6,11 +6,16 @@ import {
   input,
   output,
 } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-import { MatToolbar } from '@angular/material/toolbar';
-import { MatTooltip } from '@angular/material/tooltip';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import {
+  LucideAngularModule,
+  LogOut,
+  Menu,
+  Moon,
+  Sun,
+  SunMoon,
+} from 'lucide-angular';
+import { HlmButton, HlmTooltip } from '@myorg/spartan';
 
 import { NAV_LINKS } from './nav-links';
 import { NotificationBell } from './notification-bell';
@@ -18,24 +23,27 @@ import { ThemeService } from './theme.service';
 
 @Component({
   imports: [
-    MatIcon,
-    MatToolbar,
-    MatTooltip,
     RouterLink,
     RouterLinkActive,
-    MatIconButton,
+    HlmButton,
+    HlmTooltip,
+    LucideAngularModule,
     NotificationBell,
   ],
   selector: 'lib-main-toolbar',
   template: `
-    <mat-toolbar class="app-main-toolbar fixed top-0 w-full z-50 flex gap-2">
+    <header
+      class="fixed top-0 w-full z-50 flex items-center gap-2 h-14 px-2 bg-surface text-on-surface border-b border-outline-variant"
+    >
       <span class="md:hidden flex gap-2 items-center justify-center">
         <button
-          mat-icon-button
+          hlmButton
+          variant="ghost"
+          size="icon"
           aria-label="Toggle side menu"
           (click)="toggleSidenav.emit()"
         >
-          <mat-icon>menu</mat-icon>
+          <lucide-icon [name]="menuIcon" class="h-5 w-5" />
         </button>
       </span>
       <a
@@ -111,37 +119,33 @@ import { ThemeService } from './theme.service';
       </nav>
       <span class="flex-1"></span>
       <button
-        mat-icon-button
+        hlmButton
+        variant="ghost"
+        size="icon"
         (click)="themeService.toggle()"
-        [matTooltip]="themeTooltip()"
+        [hlmTooltip]="themeTooltip()"
         aria-label="Toggle color theme"
       >
-        <mat-icon>{{ themeIcon() }}</mat-icon>
+        <lucide-icon [name]="themeIcon()" class="h-5 w-5" />
       </button>
       <lib-notification-bell />
       @if (loggedIn()) {
         <button
-          mat-icon-button
+          hlmButton
+          variant="ghost"
+          size="icon"
           class="hidden md:inline-flex"
           (click)="logout.emit()"
-          matTooltip="Log out"
+          [hlmTooltip]="'Log out'"
           aria-label="Log out"
         >
-          <mat-icon>logout</mat-icon>
+          <lucide-icon [name]="logOutIcon" class="h-5 w-5" />
         </button>
       }
-    </mat-toolbar>
+    </header>
   `,
   styles: [
     `
-      .app-main-toolbar {
-        height: var(--mat-toolbar-standard-height);
-
-        .logo {
-          height: var(--mat-toolbar-standard-height);
-        }
-      }
-
       a.nav-active span {
         border-bottom: 2px solid var(--md-sys-color-primary);
         padding-bottom: 1px;
@@ -158,6 +162,9 @@ export class MainToolbar {
   readonly themeService = inject(ThemeService);
   readonly navLinks = NAV_LINKS;
 
+  readonly menuIcon = Menu;
+  readonly logOutIcon = LogOut;
+
   loggedIn = input<boolean>(null);
 
   toggleSidenav = output<void>();
@@ -165,23 +172,15 @@ export class MainToolbar {
 
   readonly themeIcon = computed(() => {
     const t = this.themeService.theme();
-    if (t === 'light') {
-      return 'light_mode';
-    }
-    if (t === 'dark') {
-      return 'dark_mode';
-    }
-    return 'brightness_auto';
+    if (t === 'light') return Sun;
+    if (t === 'dark') return Moon;
+    return SunMoon;
   });
 
   readonly themeTooltip = computed(() => {
     const t = this.themeService.theme();
-    if (t === 'light') {
-      return 'Theme: Light (click for Dark)';
-    }
-    if (t === 'dark') {
-      return 'Theme: Dark (click for System)';
-    }
+    if (t === 'light') return 'Theme: Light (click for Dark)';
+    if (t === 'dark') return 'Theme: Dark (click for System)';
     return 'Theme: System (click for Light)';
   });
 }

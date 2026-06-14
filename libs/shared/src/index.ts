@@ -8,6 +8,7 @@ export * from './lib/components/page-toolbar';
 export * from './lib/components/sidenav-list-item';
 export * from './lib/components/sidenav';
 export * from './lib/components/theme.service';
+export * from './lib/services/toast.service';
 export * from './lib/state/layout.store';
 export * from './lib/state/loading.feature';
 export * from './lib/state/notification.store';

@@ -1,17 +1,16 @@
 import { ChangeDetectionStrategy, Component, input } from '@angular/core';
-import { MatIconButton } from '@angular/material/button';
-import { MatTooltip } from '@angular/material/tooltip';
+import { HlmButton, HlmTooltip } from '@myorg/spartan';
 
 @Component({
-  imports: [MatTooltip, MatIconButton],
+  imports: [HlmTooltip, HlmButton],
   selector: 'lib-page-toolbar-button',
   template: `
     <button
-      class="flex"
-      mat-icon-button
+      hlmButton
+      variant="ghost"
+      size="icon"
       [attr.aria-label]="tooltip()"
-      [matTooltip]="tooltip()"
-      [matTooltipDisabled]="!tooltip()"
+      [hlmTooltip]="tooltip()"
     >
       <ng-content />
     </button>

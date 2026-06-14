@@ -10,27 +10,34 @@ import {
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal } from '@angular/cdk/portal';
 import { Breakpoints, BreakpointObserver } from '@angular/cdk/layout';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatBadgeModule } from '@angular/material/badge';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+import {
+  LucideAngularModule,
+  Bell,
+} from 'lucide-angular';
+import { HlmButton } from '@myorg/spartan';
 import { NotificationStore } from '../state/notification.store';
 import { NotificationList } from './notification-list';
 
 @Component({
-  imports: [MatBadgeModule, MatIcon, MatIconButton],
+  imports: [LucideAngularModule, HlmButton],
   selector: 'lib-notification-bell',
   template: `
     <button
-      mat-icon-button
-      [matBadge]="store.unreadCount()"
-      [matBadgeHidden]="store.unreadCount() === 0"
-      matBadgeColor="warn"
-      matBadgeSize="small"
+      hlmButton
+      variant="ghost"
+      size="icon"
+      class="relative"
       [attr.aria-label]="ariaLabel()"
       (click)="open()"
     >
-      <mat-icon>notifications</mat-icon>
+      <lucide-icon [name]="bellIcon" class="h-5 w-5" />
+      @if (store.unreadCount() > 0) {
+        <span
+          class="absolute -top-0.5 -right-0.5 flex items-center justify-center min-w-[18px] h-[18px] px-1 text-[10px] font-bold leading-none text-on-error bg-error rounded-full"
+        >
+          {{ store.unreadCount() }}
+        </span>
+      }
     </button>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -40,10 +47,10 @@ import { NotificationList } from './notification-list';
 })
 export class NotificationBell {
   readonly store = inject(NotificationStore);
+  readonly bellIcon = Bell;
 
   private readonly injector = inject(Injector);
   private readonly overlay = inject(Overlay);
-  private readonly bottomSheet = inject(MatBottomSheet);
   private readonly breakpointObserver = inject(BreakpointObserver);
   private readonly destroyRef = inject(DestroyRef);
 
@@ -63,13 +70,14 @@ export class NotificationBell {
 
   open(): void {
     if (this.breakpointObserver.isMatched(Breakpoints.Handset)) {
-      this.bottomSheet.open(NotificationList, { injector: this.injector });
+      // On mobile, use a simple overlay anchored to the bottom
+      this.toggleOverlay(true);
     } else {
-      this.toggleOverlay();
+      this.toggleOverlay(false);
     }
   }
 
-  private toggleOverlay(): void {
+  private toggleOverlay(isMobile: boolean): void {
     if (this.overlayRef?.hasAttached()) {
       this.store.markAllRead();
       this.overlayRef.detach();
@@ -80,12 +88,10 @@ export class NotificationBell {
       this.overlayRef = this.overlay.create({
         hasBackdrop: true,
         backdropClass: 'cdk-overlay-transparent-backdrop',
-        width: '380px',
-        positionStrategy: this.overlay
-          .position()
-          .global()
-          .right('16px')
-          .top('56px'),
+        width: isMobile ? '100%' : '380px',
+        positionStrategy: isMobile
+          ? this.overlay.position().global().bottom('0').centerHorizontally()
+          : this.overlay.position().global().right('16px').top('56px'),
         scrollStrategy: this.overlay.scrollStrategies.reposition(),
       });
 

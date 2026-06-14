@@ -4,15 +4,14 @@ import {
   input,
   output,
 } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
-import { MatIconButton } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
+import { HlmButton, HlmCheckbox } from '@myorg/spartan';
+import { Inbox, Trash2, LucideAngularModule } from 'lucide-angular';
 
 import { Todo } from '../../models/todo';
 
 @Component({
   selector: 'lib-todo-list',
-  imports: [MatCheckbox, MatIconButton, MatIcon],
+  imports: [HlmCheckbox, HlmButton, LucideAngularModule],
   template: `
     @if (loading()) {
       <div class="flex flex-col gap-3">
@@ -28,7 +27,7 @@ import { Todo } from '../../models/todo';
           <li
             class="flex items-start gap-3 rounded-xl border border-outline-variant bg-surface-container px-4 py-3 transition-colors hover:bg-surface-container-high"
           >
-            <mat-checkbox
+            <hlm-checkbox
               class="mt-0.5 shrink-0"
               [checked]="todo.completed"
               [attr.aria-label]="
@@ -37,7 +36,7 @@ import { Todo } from '../../models/todo';
                 ' as ' +
                 (todo.completed ? 'incomplete' : 'complete')
               "
-              (change)="toggled.emit(todo)"
+              (checkedChange)="toggled.emit(todo)"
             />
             <div class="flex flex-1 flex-col gap-0.5 overflow-hidden">
               <span
@@ -57,12 +56,14 @@ import { Todo } from '../../models/todo';
               }
             </div>
             <button
-              mat-icon-button
+              hlmButton
+              variant="ghost"
+              size="icon"
               class="shrink-0 !text-error"
               [attr.aria-label]="'Delete ' + todo.title"
               (click)="removed.emit(todo.id)"
             >
-              <mat-icon>delete</mat-icon>
+              <lucide-icon [name]="trashIcon" class="h-4 w-4" />
             </button>
           </li>
         } @empty {
@@ -70,9 +71,10 @@ import { Todo } from '../../models/todo';
             <div
               class="flex gap-4 rounded-xl border border-outline-variant bg-surface-container-low p-4"
             >
-              <mat-icon class="mt-0.5 shrink-0 text-on-surface-variant"
-                >inbox</mat-icon
-              >
+              <lucide-icon
+                [name]="inboxIcon"
+                class="h-5 w-5 mt-0.5 shrink-0 text-on-surface-variant"
+              />
               <div class="flex flex-col gap-1">
                 <p class="text-sm font-medium leading-none text-on-surface">
                   No todos yet
@@ -98,4 +100,7 @@ export class TodoList {
   loading = input<boolean>(false);
   toggled = output<Todo>();
   removed = output<string>();
+
+  readonly trashIcon = Trash2;
+  readonly inboxIcon = Inbox;
 }

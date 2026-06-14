@@ -4,41 +4,16 @@ import {
   computed,
   inject,
   input,
-  viewChild,
+  signal,
 } from '@angular/core';
-import {
-  MatCell,
-  MatHeaderCell,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow,
-  MatRowDef,
-  MatTable,
-  MatCellDef,
-  MatHeaderCellDef,
-  MatColumnDef,
-  MatTableDataSource,
-} from '@angular/material/table';
-import { MatPaginator } from '@angular/material/paginator';
-import { patchState, signalMethod, signalState } from '@ngrx/signals';
-
+import { patchState, signalState } from '@ngrx/signals';
 import { BreakpointStore } from '@myorg/shared';
+import { HlmButton } from '@myorg/spartan';
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight, LucideAngularModule } from 'lucide-angular';
 import { WeatherForecast } from '../../models/weather-forecast';
 
 @Component({
-  imports: [
-    MatTable,
-    MatHeaderCell,
-    MatCell,
-    MatHeaderRow,
-    MatRowDef,
-    MatRow,
-    MatHeaderRowDef,
-    MatCellDef,
-    MatHeaderCellDef,
-    MatColumnDef,
-    MatPaginator,
-  ],
+  imports: [HlmButton, LucideAngularModule],
   selector: 'lib-forecast-table',
   template: `
     @if (loading()) {
@@ -52,48 +27,99 @@ import { WeatherForecast } from '../../models/weather-forecast';
       </div>
     } @else {
       <div
-        class="flex flex-col flex-1 overflow-hidden rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
+        class="flex flex-col flex-1 overflow-hidden rounded-2xl bg-surface-container-low shadow-[0_4px_16px_rgba(0,0,0,0.06)] dark:shadow-[0_24px_48px_rgba(0,0,0,0.4)]"
       >
-        <mat-table #table [dataSource]="dataSource">
-          <ng-container matColumnDef="dateFormatted">
-            <mat-header-cell *matHeaderCellDef> Date </mat-header-cell>
-            <mat-cell *matCellDef="let forecast">
-              {{ forecast.dateFormatted }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="temperatureC">
-            <mat-header-cell *matHeaderCellDef> Temp. (C) </mat-header-cell>
-            <mat-cell *matCellDef="let forecast">
-              {{ forecast.temperatureC }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="temperatureF">
-            <mat-header-cell *matHeaderCellDef> Temp. (F) </mat-header-cell>
-            <mat-cell *matCellDef="let forecast">
-              {{ forecast.temperatureF }}
-            </mat-cell>
-          </ng-container>
-          <ng-container matColumnDef="summary">
-            <mat-header-cell *matHeaderCellDef> Summary </mat-header-cell>
-            <mat-cell *matCellDef="let forecast">
-              {{ forecast.summary }}
-            </mat-cell>
-          </ng-container>
-          <mat-header-row
-            *matHeaderRowDef="displayedColumns()"
-          ></mat-header-row>
-          <mat-row
-            *matRowDef="let row; columns: displayedColumns()"
-            data-testid="table-row"
-          ></mat-row>
-        </mat-table>
-        <div class="flex-1"></div>
-        <mat-paginator
-          [pageSizeOptions]="[5, 10, 25]"
-          [pageSize]="5"
-          showFirstLastButtons
-          aria-label="Select page of forecasts"
-        ></mat-paginator>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="bg-surface-container border-b border-outline-variant">
+                @for (col of displayColumnDetails(); track col.name) {
+                  <th
+                    class="px-4 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
+                  >
+                    {{ col.label }}
+                  </th>
+                }
+              </tr>
+            </thead>
+            <tbody>
+              @for (row of pagedData(); track $index) {
+                <tr
+                  class="border-b border-outline-variant/30 hover:bg-surface-container transition-colors"
+                  data-testid="table-row"
+                >
+                  @for (col of displayedColumns(); track col) {
+                    <td class="px-4 py-3 text-on-surface">
+                      {{ cellValue(row, col) }}
+                    </td>
+                  }
+                </tr>
+              } @empty {
+                <tr>
+                  <td
+                    [attr.colspan]="displayedColumns().length"
+                    class="px-4 py-12 text-center text-on-surface-variant"
+                  >
+                    No forecasts available.
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+        <!-- Paginator -->
+        <div
+          class="flex items-center justify-between px-4 py-3 border-t border-outline-variant bg-surface-container-low"
+        >
+          <span class="text-xs text-on-surface-variant">
+            {{ firstItem() }}-{{ lastItem() }} of {{ data().length }}
+          </span>
+          <div class="flex items-center gap-1">
+            <button
+              hlmButton
+              variant="ghost"
+              size="icon"
+              [disabled]="currentPage() === 0"
+              (click)="goToPage(0)"
+              aria-label="First page"
+            >
+              <lucide-icon [name]="chevronsLeftIcon" class="h-4 w-4" />
+            </button>
+            <button
+              hlmButton
+              variant="ghost"
+              size="icon"
+              [disabled]="currentPage() === 0"
+              (click)="goToPage(currentPage() - 1)"
+              aria-label="Previous page"
+            >
+              <lucide-icon [name]="chevronLeftIcon" class="h-4 w-4" />
+            </button>
+            <span class="text-xs text-on-surface-variant px-2 min-w-[60px] text-center">
+              {{ currentPage() + 1 }} / {{ totalPages() || 1 }}
+            </span>
+            <button
+              hlmButton
+              variant="ghost"
+              size="icon"
+              [disabled]="currentPage() >= totalPages() - 1"
+              (click)="goToPage(currentPage() + 1)"
+              aria-label="Next page"
+            >
+              <lucide-icon [name]="chevronRightIcon" class="h-4 w-4" />
+            </button>
+            <button
+              hlmButton
+              variant="ghost"
+              size="icon"
+              [disabled]="currentPage() >= totalPages() - 1"
+              (click)="goToPage(totalPages() - 1)"
+              aria-label="Last page"
+            >
+              <lucide-icon [name]="chevronsRightIcon" class="h-4 w-4" />
+            </button>
+          </div>
+        </div>
       </div>
     }
   `,
@@ -105,49 +131,29 @@ import { WeatherForecast } from '../../models/weather-forecast';
   providers: [BreakpointStore],
 })
 export class ForecastTable {
-  breakpointStore = inject(BreakpointStore);
+  readonly breakpointStore = inject(BreakpointStore);
+
+  readonly chevronsLeftIcon = ChevronsLeft;
+  readonly chevronLeftIcon = ChevronLeft;
+  readonly chevronRightIcon = ChevronRight;
+  readonly chevronsRightIcon = ChevronsRight;
 
   loading = input<boolean>(null);
-  data = input<WeatherForecast[]>(null);
+  data = input<WeatherForecast[]>([]);
 
-  readonly dataSource = new MatTableDataSource<WeatherForecast>([]);
-  readonly paginator = viewChild(MatPaginator);
+  readonly currentPage = signal(0);
+  readonly pageSize = signal(5);
 
-  private readonly syncData = signalMethod<WeatherForecast[]>((data) => {
-    this.dataSource.data = data ?? [];
-  });
-
-  // signalMethod reacts whenever this.paginator() changes — correctly
-  // connects the paginator after the @if(loading()) branch resolves.
-  private readonly connectPaginator = signalMethod<MatPaginator | undefined>(
-    (paginator) => {
-      this.dataSource.paginator = paginator ?? null;
-    },
-  );
-
-  constructor() {
-    this.syncData(this.data);
-    this.connectPaginator(this.paginator);
-  }
-
-  state = signalState({
+  readonly state = signalState({
     columns: [
-      { name: 'dateFormatted', visible: true, displayHandsetPortrait: true },
-      {
-        name: 'temperatureC',
-        visible: true,
-        displayHandsetPortrait: false,
-      },
-      {
-        name: 'temperatureF',
-        visible: true,
-        displayHandsetPortrait: true,
-      },
-      { name: 'summary', visible: true, displayHandsetPortrait: false },
+      { name: 'dateFormatted', label: 'Date', visible: true, displayHandsetPortrait: true },
+      { name: 'temperatureC', label: 'Temp. (C)', visible: true, displayHandsetPortrait: false },
+      { name: 'temperatureF', label: 'Temp. (F)', visible: true, displayHandsetPortrait: true },
+      { name: 'summary', label: 'Summary', visible: true, displayHandsetPortrait: false },
     ],
   });
 
-  displayedColumns = computed(() =>
+  readonly displayedColumns = computed(() =>
     this.state
       .columns()
       .filter(
@@ -160,7 +166,44 @@ export class ForecastTable {
       .map((c) => c.name),
   );
 
-  toggleColumnVisible(name: string) {
+  readonly displayColumnDetails = computed(() =>
+    this.state.columns().filter(
+      (c) =>
+        c.visible &&
+        (this.breakpointStore.handsetPortrait()
+          ? c.displayHandsetPortrait
+          : true),
+    ),
+  );
+
+  readonly totalPages = computed(() =>
+    Math.max(1, Math.ceil(this.data().length / this.pageSize())),
+  );
+
+  readonly pagedData = computed(() => {
+    const start = this.currentPage() * this.pageSize();
+    const validPage = Math.min(this.currentPage(), this.totalPages() - 1);
+    if (validPage !== this.currentPage()) {
+      this.currentPage.set(validPage);
+      return this.data().slice(0, this.pageSize());
+    }
+    return this.data().slice(start, start + this.pageSize());
+  });
+
+  readonly firstItem = computed(() =>
+    this.data().length === 0 ? 0 : this.currentPage() * this.pageSize() + 1,
+  );
+
+  readonly lastItem = computed(() => {
+    const end = (this.currentPage() + 1) * this.pageSize();
+    return Math.min(end, this.data().length);
+  });
+
+  cellValue(row: WeatherForecast, col: string): string | number {
+    return (row as Record<string, unknown>)[col] as string | number;
+  }
+
+  toggleColumnVisible(name: string): void {
     patchState(this.state, {
       columns: this.state
         .columns()
@@ -168,7 +211,11 @@ export class ForecastTable {
     });
   }
 
-  toggleSummary() {
+  toggleSummary(): void {
     this.toggleColumnVisible('summary');
+  }
+
+  goToPage(page: number): void {
+    this.currentPage.set(Math.max(0, Math.min(page, this.totalPages() - 1)));
   }
 }

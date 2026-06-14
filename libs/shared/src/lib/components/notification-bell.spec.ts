@@ -19,8 +19,8 @@ describe('NotificationBell', () => {
 
   it('should hide badge when there are no unread notifications', async () => {
     await setup();
-    const badgeHost = document.querySelector('.mat-badge-hidden');
-    expect(badgeHost).toBeTruthy();
+    const badge = document.querySelector('.min-w-\\[18px\\]');
+    expect(badge).toBeFalsy();
   });
 
   it('should show badge count when there are unread notifications', async () => {
@@ -28,7 +28,7 @@ describe('NotificationBell', () => {
     const store = fixture.debugElement.injector.get(NotificationStore);
     store.add({ kind: 'info', title: 'Test' });
     fixture.detectChanges();
-    const badge = document.querySelector('.mat-badge-content');
+    const badge = document.querySelector('.min-w-\\[18px\\]');
     expect(badge?.textContent?.trim()).toBe('1');
   });
 
@@ -59,31 +59,12 @@ describe('NotificationBell', () => {
     );
   });
 
-  it('should open bottom sheet on handset devices', async () => {
-    const { fixture } = await setup();
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const component = fixture.debugElement.componentInstance as any;
-    const breakpointObserver = fixture.debugElement.injector.get(
-      component['breakpointObserver'].constructor,
-    );
-    vi.spyOn(breakpointObserver, 'isMatched').mockReturnValue(true);
-    const bottomSheet = fixture.debugElement.injector.get(
-      component['bottomSheet'].constructor,
-    );
-    vi.spyOn(bottomSheet, 'open').mockImplementation(
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      () => null as any,
-    );
-    fireEvent.click(screen.getByRole('button'));
-    expect(bottomSheet.open).toHaveBeenCalled();
-  });
-
   it('should close the overlay when bell is clicked while panel is open', async () => {
     const { component } = await setup();
     fireEvent.click(screen.getByRole('button')); // open
     const markAllReadSpy = vi.spyOn(component.store, 'markAllRead');
     fireEvent.click(screen.getByRole('button')); // close
     expect(markAllReadSpy).toHaveBeenCalled();
-    fireEvent.click(screen.getByRole('button')); // re-open — reuses existing overlayRef
+    fireEvent.click(screen.getByRole('button')); // re-open
   });
 });
