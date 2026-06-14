@@ -63,6 +63,6 @@ describe('HlmButton', () => {
     await render(HlmButtonHost);
     const link = screen.getByTestId('link-btn');
     expect(link.tagName).toBe('A');
-    expect(link.className).toContain('inline-flex');
+    expect(link.className).toContain('cursor-pointer');
   });
 });
