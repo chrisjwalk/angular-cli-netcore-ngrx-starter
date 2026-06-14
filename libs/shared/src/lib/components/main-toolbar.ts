@@ -33,7 +33,7 @@ import { ThemeService } from './theme.service';
   selector: 'lib-main-toolbar',
   template: `
     <header
-      class="fixed top-0 w-full z-50 flex items-center gap-2 h-14 px-2 bg-surface text-on-surface border-b border-outline-variant"
+      class="fixed top-0 w-full z-50 flex items-center gap-2 h-14 px-2 bg-surface text-on-surface"
     >
       <span class="md:hidden flex gap-2 items-center justify-center">
         <button
