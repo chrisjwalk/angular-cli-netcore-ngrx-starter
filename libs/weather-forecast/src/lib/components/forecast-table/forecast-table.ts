@@ -35,7 +35,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
               <tr class="bg-surface-container">
                 @for (col of displayColumnDetails(); track col.name) {
                   <th
-                    class="px-4 py-3.5 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
+                    class="px-4 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
                   >
                     {{ col.label }}
                   </th>
@@ -49,7 +49,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
                   data-testid="table-row"
                 >
                   @for (col of displayedColumns(); track col) {
-                    <td class="px-4 py-3.5 text-on-surface">
+                    <td class="px-4 py-3.5 text-sm text-on-surface">
                       {{ cellValue(row, col) }}
                     </td>
                   }
@@ -71,9 +71,21 @@ import { WeatherForecast } from '../../models/weather-forecast';
         <div
           class="flex items-center justify-between px-4 py-2.5 bg-surface-container-low"
         >
-          <span class="text-xs text-on-surface-variant">
-            {{ firstItem() }}-{{ lastItem() }} of {{ data().length }}
-          </span>
+          <div class="flex items-center gap-3">
+            <span class="text-xs text-on-surface-variant">
+              {{ firstItem() }}-{{ lastItem() }} of {{ data().length }}
+            </span>
+            <select
+              class="text-xs bg-transparent border border-outline-variant rounded px-1.5 py-0.5 text-on-surface-variant cursor-pointer"
+              [value]="pageSize()"
+              (change)="setPageSize(+$any($event.target).value)"
+              aria-label="Items per page"
+            >
+              <option [value]="5">5</option>
+              <option [value]="10">10</option>
+              <option [value]="25">25</option>
+            </select>
+          </div>
           <div class="flex items-center gap-1">
             <button
               hlmButton
@@ -217,5 +229,10 @@ export class ForecastTable {
 
   goToPage(page: number): void {
     this.currentPage.set(Math.max(0, Math.min(page, this.totalPages() - 1)));
+  }
+
+  setPageSize(size: number): void {
+    this.pageSize.set(size);
+    this.currentPage.set(0);
   }
 }
