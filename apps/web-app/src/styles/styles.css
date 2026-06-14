@@ -247,10 +247,9 @@
 }
 
 /* ─── Spartan tooltip ──────────────────────────────────────────────────────── */
-/* CDK overlays render outside the app root, so we target the BrnTooltipContent  */
-/* host element both by class (spartan-tooltip) AND by attribute selectors.      */
-.spartan-tooltip,
-[data-state][data-side][role='tooltip'] {
+/* CDK overlays render outside the app root. BrnTooltipContent host element has  */
+/* role="tooltip" set as a static host attribute — guaranteed to be present.     */
+[role='tooltip'] {
   background-color: var(--md-sys-color-inverse-surface) !important;
   color: var(--md-sys-color-inverse-on-surface) !important;
   font-size: 0.75rem;
