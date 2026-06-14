@@ -24,8 +24,8 @@ describe('HlmInput', () => {
     await render(HlmInputHost);
     const input = screen.getByTestId('test-input');
     expect(input.className).toContain('flex');
-    expect(input.className).toContain('h-9');
-    expect(input.className).toContain('rounded-md');
+    expect(input.className).toContain('h-11');
+    expect(input.className).toContain('rounded-lg');
     expect(input.className).toContain('border-outline-variant');
     expect(input.className).toContain('bg-background');
   });
@@ -41,6 +41,6 @@ describe('HlmInput', () => {
     const textarea = screen.getByTestId('test-textarea');
     expect(textarea.tagName).toBe('TEXTAREA');
     expect(textarea.id).toBe('my-textarea');
-    expect(textarea.className).toContain('rounded-md');
+    expect(textarea.className).toContain('rounded-lg');
   });
 });

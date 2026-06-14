@@ -6,3 +6,4 @@ export { HlmTooltip } from './lib/hlm-tooltip.directive';
 export { HlmCheckbox } from './lib/hlm-checkbox.component';
 export { HlmSeparator } from './lib/hlm-separator.directive';
 export { HlmSpinner } from './lib/hlm-spinner.component';
+export { provideSpartanConfig } from './lib/spartan-config';

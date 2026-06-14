@@ -24,9 +24,9 @@ describe('HlmLabel', () => {
   test('should apply base label styling classes', async () => {
     await render(HlmLabelHost);
     const label = screen.getByTestId('test-label');
-    expect(label.className).toContain('text-sm');
-    expect(label.className).toContain('font-medium');
-    expect(label.className).toContain('mb-1.5');
+    expect(label.className).toContain('text-xs');
+    expect(label.className).toContain('font-semibold');
+    expect(label.className).toContain('mb-1');
   });
 
   test('should set the for attribute correctly', async () => {

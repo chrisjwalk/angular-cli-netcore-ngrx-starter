@@ -32,10 +32,10 @@ import { WeatherForecast } from '../../models/weather-forecast';
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="bg-surface-container border-b border-outline-variant">
+              <tr class="bg-surface-container">
                 @for (col of displayColumnDetails(); track col.name) {
                   <th
-                    class="px-4 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
+                    class="px-4 py-3.5 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
                   >
                     {{ col.label }}
                   </th>
@@ -45,11 +45,11 @@ import { WeatherForecast } from '../../models/weather-forecast';
             <tbody>
               @for (row of pagedData(); track $index) {
                 <tr
-                  class="border-b border-outline-variant/30 hover:bg-surface-container transition-colors"
+                  class="hover:bg-surface-container-high transition-colors"
                   data-testid="table-row"
                 >
                   @for (col of displayedColumns(); track col) {
-                    <td class="px-4 py-3 text-on-surface">
+                    <td class="px-4 py-3.5 text-on-surface">
                       {{ cellValue(row, col) }}
                     </td>
                   }
@@ -69,7 +69,7 @@ import { WeatherForecast } from '../../models/weather-forecast';
         </div>
         <!-- Paginator -->
         <div
-          class="flex items-center justify-between px-4 py-3 border-t border-outline-variant bg-surface-container-low"
+          class="flex items-center justify-between px-4 py-2.5 bg-surface-container-low"
         >
           <span class="text-xs text-on-surface-variant">
             {{ firstItem() }}-{{ lastItem() }} of {{ data().length }}

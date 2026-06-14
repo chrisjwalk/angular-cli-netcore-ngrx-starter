@@ -7,7 +7,7 @@ import { BrnLabel } from '@spartan-ng/brain/label';
   hostDirectives: [{ directive: BrnLabel, inputs: ['id', 'for'] }],
   host: {
     class:
-      'text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1.5',
+      'text-xs font-semibold text-on-surface-variant peer-disabled:cursor-not-allowed peer-disabled:opacity-70 mb-1',
   },
 })
 export class HlmLabel {}

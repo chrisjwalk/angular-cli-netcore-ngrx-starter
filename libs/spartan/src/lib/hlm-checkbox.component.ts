@@ -22,18 +22,35 @@ import { BrnCheckboxImports } from '@spartan-ng/brain/checkbox';
   `,
   styles: [
     `
-      /* Style the internal BrnCheckbox button */
       :host ::ng-deep [role='checkbox'] {
-        height: 1rem;
-        width: 1rem;
+        height: 1.125rem;
+        width: 1.125rem;
         flex-shrink: 0;
         border-radius: 0.125rem;
-        border: 1px solid var(--md-sys-color-outline-variant);
+        border: 2px solid var(--md-sys-color-on-surface-variant);
+        background: transparent;
+        cursor: pointer;
+        transition:
+          background-color 0.15s,
+          border-color 0.15s;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0;
       }
       :host ::ng-deep [role='checkbox'][data-state='checked'] {
         background-color: var(--md-sys-color-primary);
         border-color: var(--md-sys-color-primary);
-        color: var(--md-sys-color-on-primary);
+      }
+      :host ::ng-deep [role='checkbox'][data-state='checked']::after {
+        content: '';
+        display: block;
+        width: 5px;
+        height: 9px;
+        border: solid var(--md-sys-color-on-primary);
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        margin-top: -2px;
       }
     `,
   ],

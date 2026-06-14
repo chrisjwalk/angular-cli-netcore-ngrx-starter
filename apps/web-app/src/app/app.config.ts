@@ -17,6 +17,7 @@ import {
 } from '@angular/router';
 import { provideContent, withMarkdownRenderer } from '@analogjs/content';
 import { authInterceptor } from '@myorg/auth';
+import { provideSpartanConfig } from '@myorg/spartan';
 
 import { apiBaseUrlInterceptor } from './api-base-url.interceptor';
 import { routes } from './app.routes';
@@ -24,6 +25,7 @@ import { routes } from './app.routes';
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZonelessChangeDetection(),
+    provideSpartanConfig(),
     provideHttpClient(
       withFetch(),
       withInterceptors([apiBaseUrlInterceptor, authInterceptor]),
