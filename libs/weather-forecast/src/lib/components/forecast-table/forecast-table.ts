@@ -71,20 +71,23 @@ import { WeatherForecast } from '../../models/weather-forecast';
         <div
           class="flex items-center justify-between px-4 py-2 border-t border-outline-variant bg-surface-container-low"
         >
-          <div class="flex items-center gap-3">
+          <div class="flex items-center gap-4">
             <span class="text-xs text-on-surface-variant">
-              {{ firstItem() }}-{{ lastItem() }} of {{ data().length }}
+              {{ firstItem() }}–{{ lastItem() }} of {{ data().length }}
             </span>
-            <select
-              class="text-xs bg-surface-container border border-outline-variant rounded-md px-2 py-1 text-on-surface-variant cursor-pointer hover:border-on-surface-variant/30 focus-visible:outline-none focus-visible:border-primary transition-colors appearance-none pr-6 bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22><path d=%22M6 9l6 6 6-6%22/></svg>')] bg-no-repeat bg-[right_4px_center]"
-              [value]="pageSize()"
-              (change)="setPageSize(+$any($event.target).value)"
-              aria-label="Items per page"
-            >
-              <option [value]="5">5</option>
-              <option [value]="10">10</option>
-              <option [value]="25">25</option>
-            </select>
+            <label class="flex items-center gap-1.5 text-xs text-on-surface-variant">
+              Rows per page:
+              <select
+                class="text-xs bg-surface-container border border-outline-variant rounded-md px-2 py-1 text-on-surface-variant cursor-pointer hover:border-on-surface-variant/30 focus-visible:outline-none focus-visible:border-primary transition-colors appearance-none pr-6 bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22><path d=%22M6 9l6 6 6-6%22/></svg>')] bg-no-repeat bg-[right_4px_center]"
+                [value]="pageSize()"
+                (change)="setPageSize(+$any($event.target).value)"
+                aria-label="Items per page"
+              >
+                <option [value]="5">5</option>
+                <option [value]="10">10</option>
+                <option [value]="25">25</option>
+              </select>
+            </label>
           </div>
           <div class="flex items-center gap-1">
             <button
