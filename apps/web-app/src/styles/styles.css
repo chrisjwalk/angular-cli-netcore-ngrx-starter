@@ -247,12 +247,13 @@
 }
 
 /* ─── Spartan tooltip ──────────────────────────────────────────────────────── */
-/* Uses a dedicated class (not Tailwind utilities) so styles apply reliably */
-/* inside CDK overlay containers that render outside the app root.            */
-.spartan-tooltip {
-  background-color: var(--md-sys-color-inverse-surface);
-  color: var(--md-sys-color-inverse-on-surface);
-  font-size: 0.625rem;
+/* CDK overlays render outside the app root, so we target the BrnTooltipContent  */
+/* host element both by class (spartan-tooltip) AND by attribute selectors.      */
+.spartan-tooltip,
+[data-state][data-side][role='tooltip'] {
+  background-color: var(--md-sys-color-inverse-surface) !important;
+  color: var(--md-sys-color-inverse-on-surface) !important;
+  font-size: 0.75rem;
   font-weight: 500;
   line-height: 1.4;
   padding: 0.25rem 0.5rem;
