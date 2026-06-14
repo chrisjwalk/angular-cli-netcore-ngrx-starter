@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { X, Bell, AlertCircle, UserCircle, ArrowUpCircle, LucideAngularModule } from 'lucide-angular';
+import { X, Bell, AlertCircle, UserCircle, ArrowUpCircle, LucideAngularModule, type LucideIconData } from 'lucide-angular';
 import { HlmButton } from '@myorg/spartan';
 import {
   AppNotification,
@@ -8,7 +8,7 @@ import {
   NotificationStore,
 } from '../state/notification.store';
 
-const KIND_ICON: Record<NotificationKind, unknown> = {
+const KIND_ICON: Record<NotificationKind, LucideIconData> = {
   'sw-update': ArrowUpCircle,
   auth: UserCircle,
   error: AlertCircle,
@@ -119,7 +119,7 @@ export class NotificationList {
   readonly store = inject(NotificationStore);
   readonly closeIcon = X;
 
-  iconFor(kind: NotificationKind): unknown {
+  iconFor(kind: NotificationKind): LucideIconData {
     return KIND_ICON[kind] ?? Bell;
   }
 

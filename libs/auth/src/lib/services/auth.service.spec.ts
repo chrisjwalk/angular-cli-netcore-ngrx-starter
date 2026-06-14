@@ -4,7 +4,6 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { authResponseInitialState } from '../state/auth.store';
 import { AuthService } from './auth.service';
@@ -15,7 +14,6 @@ describe('AuthService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatSnackBarModule],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

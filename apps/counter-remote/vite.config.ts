@@ -32,7 +32,7 @@ const sharedDeps = {
     requiredVersion: angVer,
   },
   '@angular/router': { singleton: true, requiredVersion: angVer },
-  // Angular CDK/Material sub-paths — import:false so the remote uses the host's
+  // Angular CDK sub-paths — import:false so the remote uses the host's
   // already-evaluated module instance rather than loading a second copy from its
   // own dev server. A top-level `import * as __mfLocalShare` in the generated
   // loadShare virtual module would otherwise cause Angular to register the same
@@ -73,92 +73,6 @@ const sharedDeps = {
     import: false,
   },
   '@angular/cdk/text-field': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  // Angular Material sub-paths — same import:false reason as CDK above
-  '@angular/material/badge': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/bottom-sheet': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/button': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/checkbox': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/core': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/form-field': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/divider': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/icon': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/input': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/list': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/paginator': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/progress-spinner': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/sidenav': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/snack-bar': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/table': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/toolbar': {
-    singleton: true,
-    requiredVersion: cdkMatVer,
-    import: false,
-  },
-  '@angular/material/tooltip': {
     singleton: true,
     requiredVersion: cdkMatVer,
     import: false,

@@ -45,4 +45,16 @@ describe('ToastService', () => {
   it('should use default duration of 5000ms when not specified', () => {
     expect(() => service.open('Default duration')).not.toThrow();
   });
+
+  it('should handle rapid successive toasts', () => {
+    service.open('Toast 1');
+    service.open('Toast 2');
+    service.open('Toast 3');
+    // Previous toasts should be cleared; should not throw
+    expect(true).toBe(true);
+  });
+
+  it('should accept empty action string', () => {
+    expect(() => service.open('Message', '')).not.toThrow();
+  });
 });

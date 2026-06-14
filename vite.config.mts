@@ -49,7 +49,7 @@ export const baseConfig = {
     },
     server: {
       deps: {
-        inline: ['@angular/material'],
+        inline: [],
       },
     },
   },

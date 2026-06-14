@@ -12,9 +12,10 @@ import {
   Info,
   Network,
   LucideAngularModule,
+  type LucideIconData,
 } from 'lucide-angular';
 
-const ICON_MAP: Record<string, unknown> = {
+const ICON_MAP: Record<string, LucideIconData> = {
   check_circle: CheckCircle,
   get_app: Download,
   hub: Network,

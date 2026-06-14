@@ -65,7 +65,6 @@
     "@angular/compiler": "22.0.2",
     "@angular/core": "22.0.2",
     "@angular/forms": "22.0.2",
-    "@angular/material": "22.0.2",
     "@angular/platform-browser": "22.0.2",
     "@angular/platform-browser-dynamic": "22.0.2",
     "@angular/platform-server": "22.0.2",

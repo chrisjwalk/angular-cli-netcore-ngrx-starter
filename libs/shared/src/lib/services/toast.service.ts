@@ -32,7 +32,7 @@ export interface ToastConfig {
 export class ToastComponent {
   message = '';
   action = '';
-  private onDismiss: (() => void) | null = null;
+  onDismiss: (() => void) | null = null;
 
   dismiss(): void {
     this.onDismiss?.();

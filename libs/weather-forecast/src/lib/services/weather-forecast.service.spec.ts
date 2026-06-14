@@ -4,7 +4,6 @@ import {
   provideHttpClientTesting,
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 import { ApplicationRef, signal } from '@angular/core';
 import { WeatherForecast } from '../models/weather-forecast';
@@ -90,7 +89,6 @@ describe('WeatherForecastService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [MatSnackBarModule],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),

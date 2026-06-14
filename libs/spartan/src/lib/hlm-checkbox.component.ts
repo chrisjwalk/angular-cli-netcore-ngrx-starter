@@ -43,9 +43,9 @@ import { BrnCheckboxImports } from '@spartan-ng/brain/checkbox';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HlmCheckbox {
-  readonly checked = input<unknown>();
-  readonly disabled = input<unknown>();
-  readonly required = input<unknown>();
+  readonly checked = input<boolean | string>();
+  readonly disabled = input<boolean | string>();
+  readonly required = input<boolean | string>();
   readonly id = input<string>();
   readonly name = input<string>();
   readonly ariaLabel = input<string>();

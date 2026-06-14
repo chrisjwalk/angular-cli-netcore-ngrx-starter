@@ -16,7 +16,6 @@ peerDependencyRules:
     '@angular/router': '22'
     '@angular/animations': '22'
     '@angular/cdk': '22'
-    '@angular/material': '22'
     '@angular/build': '22'
     '@angular-devkit/build-angular': '22'
     '@angular-devkit/core': '22'
