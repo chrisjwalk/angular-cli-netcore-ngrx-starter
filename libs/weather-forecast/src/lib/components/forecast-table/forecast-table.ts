@@ -32,10 +32,10 @@ import { WeatherForecast } from '../../models/weather-forecast';
         <div class="overflow-x-auto">
           <table class="w-full text-sm">
             <thead>
-              <tr class="bg-surface-container">
+              <tr class="bg-surface-container h-12">
                 @for (col of displayColumnDetails(); track col.name) {
                   <th
-                    class="px-4 py-3 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
+                    class="px-4 text-left text-xs font-medium text-on-surface-variant uppercase tracking-wide"
                   >
                     {{ col.label }}
                   </th>
@@ -45,11 +45,11 @@ import { WeatherForecast } from '../../models/weather-forecast';
             <tbody>
               @for (row of pagedData(); track $index) {
                 <tr
-                  class="hover:bg-surface-container-high transition-colors"
+                  class="h-14 hover:bg-surface-container-high transition-colors"
                   data-testid="table-row"
                 >
                   @for (col of displayedColumns(); track col) {
-                    <td class="px-4 py-3.5 text-sm text-on-surface">
+                    <td class="px-4 text-sm text-on-surface">
                       {{ cellValue(row, col) }}
                     </td>
                   }
@@ -69,14 +69,14 @@ import { WeatherForecast } from '../../models/weather-forecast';
         </div>
         <!-- Paginator -->
         <div
-          class="flex items-center justify-between px-4 py-2.5 bg-surface-container-low"
+          class="flex items-center justify-between px-4 py-2 border-t border-outline-variant bg-surface-container-low"
         >
           <div class="flex items-center gap-3">
             <span class="text-xs text-on-surface-variant">
               {{ firstItem() }}-{{ lastItem() }} of {{ data().length }}
             </span>
             <select
-              class="text-xs bg-transparent border border-outline-variant rounded px-1.5 py-0.5 text-on-surface-variant cursor-pointer"
+              class="text-xs bg-surface-container border border-outline-variant rounded-md px-2 py-1 text-on-surface-variant cursor-pointer hover:border-on-surface-variant/30 focus-visible:outline-none focus-visible:border-primary transition-colors appearance-none pr-6 bg-[url('data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%2212%22 height=%2212%22 viewBox=%220 0 24 24%22 fill=%22none%22 stroke=%22currentColor%22 stroke-width=%222%22><path d=%22M6 9l6 6 6-6%22/></svg>')] bg-no-repeat bg-[right_4px_center]"
               [value]="pageSize()"
               (change)="setPageSize(+$any($event.target).value)"
               aria-label="Items per page"
