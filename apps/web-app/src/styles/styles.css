@@ -245,3 +245,21 @@
     @apply hidden;
   }
 }
+
+/* ─── Spartan tooltip ──────────────────────────────────────────────────────── */
+/* Uses a dedicated class (not Tailwind utilities) so styles apply reliably */
+/* inside CDK overlay containers that render outside the app root.            */
+.spartan-tooltip {
+  background-color: var(--md-sys-color-inverse-surface);
+  color: var(--md-sys-color-inverse-on-surface);
+  font-size: 0.625rem;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.15);
+  max-width: 200px;
+  word-wrap: break-word;
+}
