@@ -41,4 +41,10 @@ test.describe('Login page', () => {
 
     await expect(page.getByRole('button', { name: /sign in/i })).toBeEnabled();
   });
+
+  test('visual snapshot', { tag: '@visual' }, async ({ page }) => {
+    await page.goto('/login');
+    await expect(page.getByTestId('lib-login')).toBeVisible();
+    await expect(page).toHaveScreenshot('login.png', { fullPage: true });
+  });
 });

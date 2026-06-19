@@ -27,6 +27,7 @@
     "lint:workspace": "nx workspace-lint && ng lint",
     "e2e": "nx e2e web-app-e2e",
     "e2e:ci": "CI=true pnpm e2e",
+    "e2e:remote": "npx playwright test --config apps/web-app-e2e/playwright.remote.config.ts",
     "e2e:watch": "pnpm e2e -- --configuration watch",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",

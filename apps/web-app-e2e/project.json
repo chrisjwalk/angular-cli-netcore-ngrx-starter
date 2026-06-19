@@ -5,5 +5,13 @@
   "sourceRoot": "apps/web-app-e2e/src",
   "implicitDependencies": ["web-app"],
   "// targets": "to see all targets run: nx show project web-app-e2e --web",
-  "targets": {}
+  "targets": {
+    "e2e-remote": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "apps/web-app-e2e",
+        "command": "npx playwright test --config playwright.remote.config.ts"
+      }
+    }
+  }
 }

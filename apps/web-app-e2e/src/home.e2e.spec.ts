@@ -22,4 +22,10 @@ test.describe('Home page', () => {
       page.getByRole('heading', { name: /nx · angular · \.net/i }),
     ).toBeVisible();
   });
+
+  test('visual snapshot', { tag: '@visual' }, async ({ page }) => {
+    await page.goto('/');
+    await expect(page.getByTestId('lib-home')).toBeVisible();
+    await expect(page).toHaveScreenshot('home.png', { fullPage: true });
+  });
 });

@@ -20,9 +20,12 @@
 }
 
 @theme {
-  /* Fonts */
-  --font-sans: 'Inter', sans-serif;
-  --font-display: 'Manrope', sans-serif;
+  /* Fonts — Roboto matches Angular Material's default typography */
+  --font-sans: 'Roboto', sans-serif;
+  --font-display: 'Roboto', sans-serif;
+
+  /* Match Material's compact typography scale */
+  --leading-normal: 1.42857; /* 20px / 14px — Material body line-height */
 
   /* Primary */
   --color-primary: var(--md-sys-color-primary);
@@ -88,9 +91,17 @@
 
   html {
     font-display: swap;
+    font-size: 14px; /* Material base: 1rem = 14px */
+    /* Match Material's font smoothing */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     /* Ensure body text/background follows the active token set in all modes */
     background-color: var(--md-sys-color-background);
     color: var(--md-sys-color-on-background);
+  }
+
+  body {
+    line-height: var(--leading-normal);
   }
 
   @media (prefers-color-scheme: dark) {

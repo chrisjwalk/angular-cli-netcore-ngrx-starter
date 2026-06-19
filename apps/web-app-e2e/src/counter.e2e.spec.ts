@@ -22,4 +22,10 @@ test.describe('Counter Feature E2E', () => {
     await decrementButton.click();
     await expect(countLocator).toHaveText(String(initial));
   });
+
+  test('visual snapshot', { tag: '@visual' }, async ({ page }) => {
+    await page.goto('/mfe-counter');
+    await expect(page.locator('[data-testid="lib-counter"]')).toBeVisible();
+    await expect(page).toHaveScreenshot('counter.png', { fullPage: true });
+  });
 });

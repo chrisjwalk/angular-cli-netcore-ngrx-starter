@@ -158,4 +158,18 @@ test.describe('Content page', () => {
     const mermaidLink = toc.getByRole('link', { name: /mermaid diagrams/i });
     await expect(mermaidLink).toHaveClass(/font-medium/, { timeout: 3_000 });
   });
+
+  test(
+    'visual snapshot',
+    { tag: '@visual', timeout: 60_000 },
+    async ({ page }) => {
+      await page.goto('/content');
+      await expect(page.getByTestId('app-content')).toBeVisible({
+        timeout: 60_000,
+      });
+      // Wait for mermaid SVGs to render
+      await page.locator('.mermaid svg').first().waitFor({ timeout: 10_000 });
+      await expect(page).toHaveScreenshot('content.png', { fullPage: true });
+    },
+  );
 });

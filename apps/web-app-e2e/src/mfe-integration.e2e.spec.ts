@@ -15,4 +15,12 @@ test.describe('MFE Integration', () => {
 
     expect(errors).toHaveLength(0);
   });
+
+  test('visual snapshot', { tag: '@visual' }, async ({ page }) => {
+    await page.goto('/mfe-counter');
+    await expect(page.locator('[data-testid="lib-counter"]')).toBeVisible({
+      timeout: 15000,
+    });
+    await expect(page).toHaveScreenshot('mfe-counter.png', { fullPage: true });
+  });
 });

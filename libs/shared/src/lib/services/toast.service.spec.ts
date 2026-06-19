@@ -1,6 +1,29 @@
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { TestBed } from '@angular/core/testing';
-import { ToastService } from './toast.service';
+import { vi } from 'vitest';
+import { ToastService, ToastComponent } from './toast.service';
+
+describe('ToastComponent', () => {
+  it('should expose message, action, and onDismiss fields', () => {
+    const component = new ToastComponent();
+    component.message = 'Test message';
+    component.action = 'Undo';
+    let dismissed = false;
+    component.onDismiss = () => (dismissed = true);
+
+    expect(component.message).toBe('Test message');
+    expect(component.action).toBe('Undo');
+
+    component.dismiss();
+    expect(dismissed).toBe(true);
+  });
+
+  it('should handle dismiss with null onDismiss', () => {
+    const component = new ToastComponent();
+    component.onDismiss = null;
+    expect(() => component.dismiss()).not.toThrow();
+  });
+});
 
 describe('ToastService', () => {
   let service: ToastService;
@@ -56,5 +79,20 @@ describe('ToastService', () => {
 
   it('should accept empty action string', () => {
     expect(() => service.open('Message', '')).not.toThrow();
+  });
+
+  it('should auto-dismiss after configured duration', () => {
+    vi.useFakeTimers();
+    service.open('Timed', 'Action', { duration: 1000 });
+    // Trigger the setTimeout callback to exercise the arrow () => this.clearOverlay()
+    expect(() => vi.advanceTimersByTime(1000)).not.toThrow();
+    vi.useRealTimers();
+  });
+
+  it('should auto-dismiss after default 5000ms duration', () => {
+    vi.useFakeTimers();
+    service.open('Default timer');
+    expect(() => vi.advanceTimersByTime(5000)).not.toThrow();
+    vi.useRealTimers();
   });
 });

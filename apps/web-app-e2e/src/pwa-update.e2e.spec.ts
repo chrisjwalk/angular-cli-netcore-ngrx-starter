@@ -31,7 +31,7 @@ test.describe('PWA update notification', () => {
   test('should show the notification bell in the toolbar', async ({ page }) => {
     await page.goto('/');
 
-    // The bell is inside a fixed mat-toolbar so visible in the viewport
+    // The bell is inside a fixed toolbar so visible in the viewport
     const bell = page.locator('[data-testid="lib-notification-bell"]');
     await expect(bell).toBeVisible();
     await expect(
@@ -57,6 +57,19 @@ test.describe('PWA update notification', () => {
     // Should show the empty state
     await expect(panel.locator('text=No notifications')).toBeVisible();
   });
+
+  test(
+    'visual snapshot (notification bell)',
+    { tag: '@visual' },
+    async ({ page }) => {
+      await page.goto('/');
+      const bell = page.locator('[data-testid="lib-notification-bell"]');
+      await expect(bell).toBeVisible();
+      await expect(page).toHaveScreenshot('pwa-notification-bell.png', {
+        fullPage: true,
+      });
+    },
+  );
 
   if (runPwaTests) {
     test('should register a service worker', async ({ page }) => {

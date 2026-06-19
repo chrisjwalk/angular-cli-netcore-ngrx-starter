@@ -42,4 +42,16 @@ test.describe('Weather Forecast page', () => {
     const rowCount = await page.getByTestId('table-row').count();
     expect(rowCount).toBeGreaterThan(0);
   });
+
+  test('visual snapshot', { tag: '@visual' }, async ({ page }) => {
+    await page.goto('/weather-forecast');
+    await expect(page.getByTestId('lib-weather-forecast')).toBeVisible();
+    // Wait for table rows to render (API fetch completes)
+    await expect(page.getByTestId('table-row').first()).toBeVisible({
+      timeout: 10000,
+    });
+    await expect(page).toHaveScreenshot('weather-forecast.png', {
+      fullPage: true,
+    });
+  });
 });

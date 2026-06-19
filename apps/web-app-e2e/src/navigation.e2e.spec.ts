@@ -34,6 +34,14 @@ test.describe('Navigation', () => {
       await expect(page).toHaveURL(/\/$/);
       await expect(page.getByTestId('lib-home')).toBeVisible();
     });
+
+    test('visual snapshot (desktop)', { tag: '@visual' }, async ({ page }) => {
+      await page.goto('/');
+      await expect(page.getByTestId('lib-home')).toBeVisible();
+      await expect(page).toHaveScreenshot('navigation-desktop.png', {
+        fullPage: true,
+      });
+    });
   });
 
   test.describe('sidenav (mobile)', () => {
@@ -63,6 +71,14 @@ test.describe('Navigation', () => {
       await page.getByRole('link', { name: /counter/i }).click();
 
       await expect(page).toHaveURL(/\/mfe-counter/);
+    });
+
+    test('visual snapshot (mobile)', { tag: '@visual' }, async ({ page }) => {
+      await page.goto('/');
+      await expect(page.getByTestId('lib-home')).toBeVisible();
+      await expect(page).toHaveScreenshot('navigation-mobile.png', {
+        fullPage: true,
+      });
     });
   });
 });
