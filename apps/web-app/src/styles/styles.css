@@ -96,7 +96,6 @@
 
   html {
     font-display: swap;
-    font-size: 14px; /* Material base: 1rem = 14px */
     /* Match Material's font smoothing */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -106,6 +105,7 @@
   }
 
   body {
+    font-size: 0.875rem; /* 14px — Material body font-size */
     line-height: var(--leading-normal);
   }
 
