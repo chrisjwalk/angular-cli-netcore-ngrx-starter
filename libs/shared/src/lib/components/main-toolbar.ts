@@ -103,7 +103,10 @@ import { ThemeService } from './theme.service';
           </defs>
         </svg>
       </a>
-      <a class="no-underline text-on-surface font-medium" [routerLink]="['/']">
+      <a
+        class="no-underline text-on-surface font-medium !text-xl tracking-normal"
+        [routerLink]="['/']"
+      >
         Demo App
       </a>
       <nav class="hidden md:flex items-stretch h-full ml-2">

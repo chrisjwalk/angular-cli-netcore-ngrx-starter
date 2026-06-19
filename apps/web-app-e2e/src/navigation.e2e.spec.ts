@@ -80,5 +80,21 @@ test.describe('Navigation', () => {
         fullPage: true,
       });
     });
+
+    test(
+      'visual snapshot (mobile sidenav open)',
+      { tag: '@visual' },
+      async ({ page }) => {
+        await page.goto('/');
+        await page.getByRole('button', { name: 'Toggle side menu' }).click();
+        await expect(page.getByTestId('lib-sidenav')).toBeVisible();
+        await expect(page).toHaveScreenshot(
+          'navigation-mobile-sidenav-open.png',
+          {
+            fullPage: true,
+          },
+        );
+      },
+    );
   });
 });

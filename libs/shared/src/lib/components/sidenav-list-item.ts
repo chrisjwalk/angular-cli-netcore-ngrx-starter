@@ -33,10 +33,10 @@ const ICON_MAP: Record<string, LucideIconData> = {
     >
       <lucide-icon [name]="resolvedIcon()" class="h-5 w-5 shrink-0" />
       <div class="flex flex-col overflow-hidden">
-        <span class="text-sm font-medium leading-snug text-on-surface">
+        <span class="text-base font-medium leading-snug text-on-surface">
           <ng-content />
         </span>
-        <span class="truncate text-xs text-on-surface-variant">
+        <span class="truncate text-sm text-on-surface-variant">
           {{ hint() }}
         </span>
       </div>
