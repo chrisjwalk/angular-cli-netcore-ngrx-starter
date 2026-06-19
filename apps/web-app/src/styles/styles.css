@@ -89,6 +89,11 @@
     border-color: var(--color-gray-200, currentColor);
   }
 
+  html,
+  body {
+    height: 100%;
+  }
+
   html {
     font-display: swap;
     font-size: 14px; /* Material base: 1rem = 14px */
