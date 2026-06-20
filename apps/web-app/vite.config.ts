@@ -68,16 +68,26 @@ export default defineConfig(({ mode }) => {
     },
     customLogger: {
       info(msg) {
-        if (String(msg).includes('NG0912')) {return;}
+        if (String(msg).includes('NG0912')) {
+          return;
+        }
         console.log(msg);
       },
       warn(msg) {
-        if (String(msg).includes('NG0912')) {return;}
+        if (String(msg).includes('NG0912')) {
+          return;
+        }
         console.warn(msg);
       },
       error(msg) {
         console.error(msg);
       },
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      clearScreen() {},
+      hasErrorLogged() {
+        return false;
+      },
+      hasWarned: false,
     },
     optimizeDeps: {
       include: ['front-matter'],
