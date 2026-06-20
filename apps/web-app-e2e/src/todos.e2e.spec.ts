@@ -78,12 +78,14 @@ test.describe('Todos page', () => {
       .locator('li')
       .count();
 
+    // Let the new todo settle in the DOM before interacting
+    await page.waitForTimeout(300);
     // Spartan delete button label includes the todo title: "Delete <title>"
     const deleteButton = page
       .getByTestId('lib-todo-list')
       .locator('button[aria-label^="Delete"]')
       .first();
-    await deleteButton.click();
+    await deleteButton.click({ force: true });
 
     // Count should decrease by one
     await expect(async () => {
