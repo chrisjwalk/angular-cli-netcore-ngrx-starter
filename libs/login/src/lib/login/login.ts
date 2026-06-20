@@ -128,6 +128,9 @@ import { LoginStore, getLoginFormGroup } from '../state/login.store';
           variant="default"
           class="w-full mt-1"
           [disabled]="!store.valid() || authStore.loginLoading()"
+          [attr.disabled]="
+            !store.valid() || authStore.loginLoading() ? true : null
+          "
           (click)="authStore.login(store.request())"
         >
           <span class="flex gap-2 items-center justify-center">

@@ -70,6 +70,20 @@ export default defineConfig(({ mode }) => {
       include: ['front-matter'],
     },
     plugins: [
+      // Suppress NG0912 console spam in dev mode. Workspace libraries (e.g.
+      // @myorg/spartan) are bundled into both host and remote, causing Angular
+      // to emit duplicate component ID warnings. These are cosmetic — the AOT
+      // compiler and federation runtime handle deduplication at build time.
+      {
+        name: 'suppress-ng0912',
+        transformIndexHtml: () => [
+          {
+            tag: 'script',
+            children: `window.addEventListener('error',e=>{if(e.message?.includes?.('NG0912'))e.stopImmediatePropagation?.()});const orig=console.warn;console.warn=(...a)=>{if(!a.some?.(m=>String(m).includes('NG0912')))orig(...a)}`,
+            injectTo: 'head',
+          },
+        ],
+      },
       // @module-federation/vite crashes when server.watch is boolean false (Vite 8 + Nx default).
       // This pre-enforce plugin ensures server.watch is an object before federation's config hook.
       {

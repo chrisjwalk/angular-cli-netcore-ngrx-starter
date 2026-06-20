@@ -74,7 +74,7 @@ import { ForecastTable } from '../forecast-table/forecast-table';
                   plus: authStore.pageRequiresLogin(),
                 })
               "
-              aria-label="Get Forecasts"
+              aria-label="Fetch weather forecasts"
             >
               <lucide-icon [name]="refreshIcon" class="h-4 w-4" />
               Get Forecasts

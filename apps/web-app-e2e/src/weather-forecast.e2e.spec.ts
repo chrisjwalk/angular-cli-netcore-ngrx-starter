@@ -25,7 +25,7 @@ test.describe('Weather Forecast page', () => {
     await page.goto('/weather-forecast');
 
     await expect(
-      page.getByRole('button', { name: /get forecasts/i }),
+      page.getByRole('button', { name: /fetch weather forecasts/i }),
     ).toBeVisible();
   });
 

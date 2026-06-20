@@ -29,6 +29,7 @@
     "e2e:ci": "CI=true pnpm e2e -- --grep-invert @visual",
     "e2e:remote": "npx playwright test --config apps/web-app-e2e/playwright.remote.config.ts",
     "e2e:watch": "pnpm e2e -- --configuration watch",
+    "e2e:visual": "CI=true pnpm e2e -- --grep @visual",
     "affected:apps": "nx affected:apps",
     "affected:libs": "nx affected:libs",
     "affected:build": "nx affected:build",
