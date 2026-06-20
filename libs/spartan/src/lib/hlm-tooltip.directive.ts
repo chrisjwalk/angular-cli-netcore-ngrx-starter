@@ -10,5 +10,8 @@ import { BrnTooltip } from '@spartan-ng/brain/tooltip';
       inputs: ['brnTooltip: hlmTooltip', 'position', 'showDelay', 'hideDelay'],
     },
   ],
+  host: {
+    'data-spartan': 'hlm-tooltip',
+  },
 })
 export class HlmTooltip {}

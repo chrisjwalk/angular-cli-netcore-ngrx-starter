@@ -10,6 +10,7 @@ import { BrnField } from '@spartan-ng/brain/field';
   template: `<ng-content />`,
   host: {
     class: 'block',
+    'data-spartan': 'hlm-field',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

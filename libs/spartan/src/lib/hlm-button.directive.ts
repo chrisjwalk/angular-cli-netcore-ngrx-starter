@@ -39,6 +39,7 @@ const sizeClasses: Record<ButtonSize, string> = {
   hostDirectives: [BrnButton],
   host: {
     '[class]': 'computedClass()',
+    'data-spartan': 'hlm-button',
   },
 })
 export class HlmButton {

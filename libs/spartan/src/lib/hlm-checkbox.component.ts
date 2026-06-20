@@ -1,4 +1,9 @@
-import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
 import { BrnCheckboxImports } from '@spartan-ng/brain/checkbox';
 
 @Component({
@@ -56,6 +61,7 @@ import { BrnCheckboxImports } from '@spartan-ng/brain/checkbox';
   ],
   host: {
     'data-testid': 'hlm-checkbox',
+    'data-spartan': 'hlm-checkbox',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

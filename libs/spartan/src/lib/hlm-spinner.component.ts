@@ -32,6 +32,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
   host: {
     class: 'inline-flex items-center justify-center',
     'data-testid': 'hlm-spinner',
+    'data-spartan': 'hlm-spinner',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
