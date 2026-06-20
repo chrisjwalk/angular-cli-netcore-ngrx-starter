@@ -143,7 +143,8 @@ test.describe('PWA update notification', () => {
 
       // onNeedRefresh → NotificationStore → badge appears
       const bell = page.locator('[data-testid="lib-notification-bell"]');
-      await expect(bell.locator('.mat-badge-content')).toBeVisible({
+      // Spartan badge is an inline <span> with the unread count number
+      await expect(bell.locator('button span.absolute')).toBeVisible({
         timeout: 15000,
       });
       await expect(bell.locator('button')).toHaveAttribute(
