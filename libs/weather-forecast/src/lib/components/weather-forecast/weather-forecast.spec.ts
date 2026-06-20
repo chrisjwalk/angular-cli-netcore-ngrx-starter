@@ -63,7 +63,7 @@ describe('WeatherForecast', () => {
     const getForecasts = vi.spyOn(store, 'getForecasts');
 
     const refreshButton = screen.getByRole('button', {
-      name: /Get Forecasts/i,
+      name: /fetch weather forecasts/i,
     });
     await fireEvent.click(refreshButton);
 

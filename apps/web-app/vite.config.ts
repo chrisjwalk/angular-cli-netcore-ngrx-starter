@@ -67,13 +67,16 @@ export default defineConfig(({ mode }) => {
       target: ['chrome89'],
     },
     customLogger: {
-      warn(msg, options) {
+      info(msg) {
+        if (String(msg).includes('NG0912')) {return;}
+        console.log(msg);
+      },
+      warn(msg) {
         if (String(msg).includes('NG0912')) {return;}
         console.warn(msg);
       },
-      info(msg, options) {
-        if (String(msg).includes('NG0912')) {return;}
-        console.log(msg);
+      error(msg) {
+        console.error(msg);
       },
     },
     optimizeDeps: {
