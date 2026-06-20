@@ -25,11 +25,10 @@ test.describe('Login page', () => {
   }) => {
     await page.goto('/login');
 
-    // Clear the pre-filled email so the form becomes invalid
+    // Clear both fields so the form becomes invalid
     await page.getByLabel('Email').fill('');
+    await page.getByLabel('Password', { exact: true }).fill('');
 
-    // Spartan hlmButton uses [attr.disabled] for the native attribute rather
-    // than relying on the host directive's internal disabled signal.
     await expect(
       page.getByRole('button', { name: /sign in/i }),
     ).toHaveAttribute('disabled');

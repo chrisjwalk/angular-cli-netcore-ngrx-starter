@@ -34,7 +34,7 @@ test.describe('Todos page', () => {
 
     // Fill in the todo form and submit
     const form = page.getByTestId('lib-todo-form');
-    await form.getByPlaceholder(/add a task/i).fill('E2E test todo');
+    await form.getByPlaceholder(/what needs to be done/i).fill('E2E test todo');
     await form.getByRole('button', { name: /add/i }).click();
 
     // The new todo should appear in the list
@@ -46,49 +46,44 @@ test.describe('Todos page', () => {
   test('should toggle a todo item', async ({ page }) => {
     await page.goto('/todos');
 
-    // Wait for todos to load
-    await expect(page.getByTestId('lib-todo-list')).toBeVisible({
-      timeout: 10000,
-    });
+    // Add a todo first so there is something to toggle
+    const form = page.getByTestId('lib-todo-form');
+    await form.getByPlaceholder(/what needs to be done/i).fill('Toggle me');
+    await form.getByRole('button', { name: /add/i }).click();
+    await expect(page.getByText('Toggle me')).toBeVisible({ timeout: 5000 });
 
-    // Click the first todo's checkbox (Spartan uses [role="checkbox"], not <input>)
-    const firstCheckbox = page
+    // Click the checkbox (Spartan uses [role='checkbox'], not <input>)
+    const checkbox = page
       .getByTestId('lib-todo-list')
       .locator('[role="checkbox"]')
       .first();
-
-    const wasChecked =
-      (await firstCheckbox.getAttribute('aria-checked')) === 'true';
-    await firstCheckbox.click();
+    await checkbox.click();
 
     // The Spartan checkbox toggles aria-checked
-    await expect(firstCheckbox).toHaveAttribute(
-      'aria-checked',
-      wasChecked ? 'false' : 'true',
-    );
+    await expect(checkbox).toHaveAttribute('aria-checked', 'true');
   });
 
   test('should remove a todo item', async ({ page }) => {
     await page.goto('/todos');
 
-    // Wait for todos to load
-    await expect(page.getByTestId('lib-todo-list')).toBeVisible({
-      timeout: 10000,
-    });
+    // Add a todo first so there is something to remove
+    const form = page.getByTestId('lib-todo-form');
+    await form.getByPlaceholder(/what needs to be done/i).fill('Delete me');
+    await form.getByRole('button', { name: /add/i }).click();
+    await expect(page.getByText('Delete me')).toBeVisible({ timeout: 5000 });
 
-    // Count initial todos
+    // Count before
     const initialCount = await page
       .getByTestId('lib-todo-list')
       .locator('li')
       .count();
 
-    // Click the first delete button
     // Spartan delete button label includes the todo title: "Delete <title>"
-    const firstDeleteButton = page
+    const deleteButton = page
       .getByTestId('lib-todo-list')
       .locator('button[aria-label^="Delete"]')
       .first();
-    await firstDeleteButton.click();
+    await deleteButton.click();
 
     // Count should decrease by one
     await expect(async () => {
