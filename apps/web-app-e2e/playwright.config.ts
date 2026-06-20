@@ -18,6 +18,8 @@ const baseURL =
  */
 export default defineConfig({
   ...nxE2EPreset(__filename, { testDir: './src' }),
+  /* CI mode defaults to 1 worker. Override to use available cores. */
+  workers: process.env['CI'] ? 4 : undefined,
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
     baseURL,

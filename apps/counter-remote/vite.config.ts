@@ -110,6 +110,25 @@ const sharedDeps = {
 export default defineConfig(({ mode }) => ({
   root: __dirname,
   cacheDir: '../../node_modules/.vite/counter-remote',
+  customLogger: {
+    info(msg) {
+      if (String(msg).includes('NG0912')) {return;}
+      console.log(msg);
+    },
+    warn(msg) {
+      if (String(msg).includes('NG0912')) {return;}
+      console.warn(msg);
+    },
+    error(msg) {
+      console.error(msg);
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    clearScreen() {},
+    hasErrorLogged() {
+      return false;
+    },
+    hasWarned: false,
+  },
   build: {
     target: ['chrome89'],
     outDir: '../../dist/apps/counter-remote',
