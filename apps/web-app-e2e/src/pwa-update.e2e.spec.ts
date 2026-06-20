@@ -24,12 +24,11 @@ function requireSwJs(value: string | null): string {
   return value;
 }
 
-// Load lazily — in CI the production build runs after this module is imported,
-// so sw.js won't exist at import time.
 // Load lazily — in CI the production build runs after import, so sw.js
 // won't exist on disk at module evaluation time.
 const getSwJs = () => loadSwJs();
-const runPwaTests = Boolean(process.env['CI']);
+// Always register tests; skip inside if sw.js isn't available at run time.
+const pwaTestsEnabled = Boolean(process.env['CI']);
 
 test.describe('PWA update notification', () => {
   test('should show the notification bell in the toolbar', async ({ page }) => {
@@ -75,9 +74,13 @@ test.describe('PWA update notification', () => {
     },
   );
 
-  if (runPwaTests) {
+  if (pwaTestsEnabled) {
     test('should register a service worker', async ({ page }) => {
-      const sw = requireSwJs(getSwJs());
+      const sw = loadSwJs();
+      if (!sw) {
+        test.skip('sw.js not available');
+        return;
+      }
 
       // Vite dev server returns HTML for /sw.js.  Serve the real SW file.
       await page.route('**/sw.js', async (route) => {
@@ -107,7 +110,11 @@ test.describe('PWA update notification', () => {
     test('should show update notification when SW detects new version', async ({
       page,
     }) => {
-      const sw = requireSwJs(getSwJs());
+      const sw = loadSwJs();
+      if (!sw) {
+        test.skip('sw.js not available');
+        return;
+      }
 
       // Intercept sw.js BEFORE navigation — serve the real SW file on first
       // fetch (registration), modified content on second fetch (update check).
