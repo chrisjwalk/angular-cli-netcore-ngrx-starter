@@ -49,7 +49,6 @@ const mfeSharedDeps = {
   'lucide-angular': { singleton: true, requiredVersion: '^1.0.0' },
   '@spartan-ng/brain/tooltip': { singleton: true, requiredVersion: '^0.0.1' },
   '@spartan-ng/brain/checkbox': { singleton: true, requiredVersion: '^0.0.1' },
-  '@myorg/spartan': { singleton: true },
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },

@@ -102,7 +102,6 @@ const sharedDeps = {
     requiredVersion: '^0.0.1',
     import: false,
   },
-  '@myorg/spartan': { singleton: true, import: false },
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
