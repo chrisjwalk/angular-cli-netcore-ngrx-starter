@@ -17,24 +17,12 @@ function loadSwJs(): string | null {
   }
 }
 
-function requireSwJs(value: string | null): string {
-  if (!value) {
-    throw new Error('sw.js not found');
-  }
-  return value;
-}
-
-// Load lazily — in CI the production build runs after import, so sw.js
-// won't exist on disk at module evaluation time.
-const getSwJs = () => loadSwJs();
-// Always register tests; skip inside if sw.js isn't available at run time.
 const pwaTestsEnabled = Boolean(process.env['CI']);
 
 test.describe('PWA update notification', () => {
   test('should show the notification bell in the toolbar', async ({ page }) => {
     await page.goto('/');
 
-    // The bell is inside a fixed toolbar so visible in the viewport
     const bell = page.locator('[data-testid="lib-notification-bell"]');
     await expect(bell).toBeVisible();
     await expect(
@@ -50,14 +38,11 @@ test.describe('PWA update notification', () => {
     const bell = page.locator('[data-testid="lib-notification-bell"]');
     await expect(bell).toBeVisible();
 
-    // Click the bell to open the overlay
     await bell.locator('button').click();
 
-    // The notification list panel should appear
     const panel = page.locator('[data-testid="lib-notification-list"]');
     await expect(panel).toBeVisible({ timeout: 5000 });
 
-    // Should show the empty state
     await expect(panel.locator('text=No notifications')).toBeVisible();
   });
 
@@ -77,22 +62,18 @@ test.describe('PWA update notification', () => {
   if (pwaTestsEnabled) {
     test('should register a service worker', async ({ page }) => {
       const sw = loadSwJs();
-      if (!sw) {
-        test.skip('sw.js not available');
-        return;
-      }
+      test.skip(!sw, 'sw.js not available');
 
-      // Vite dev server returns HTML for /sw.js.  Serve the real SW file.
       await page.route('**/sw.js', async (route) => {
         await route.fulfill({
-          body: sw,
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          body: sw!,
           headers: { 'Content-Type': 'application/javascript' },
         });
       });
 
       await page.goto('/');
 
-      // Wait for the service worker to be activated
       await page.waitForFunction(
         () => navigator.serviceWorker.controller !== null,
         null,
@@ -111,24 +92,21 @@ test.describe('PWA update notification', () => {
       page,
     }) => {
       const sw = loadSwJs();
-      if (!sw) {
-        test.skip('sw.js not available');
-        return;
-      }
+      test.skip(!sw, 'sw.js not available');
 
-      // Intercept sw.js BEFORE navigation — serve the real SW file on first
-      // fetch (registration), modified content on second fetch (update check).
       let swFetches = 0;
       await page.route('**/sw.js', async (route) => {
         swFetches++;
         if (swFetches === 2) {
           await route.fulfill({
-            body: sw + `\n// force-update-${Date.now()}`,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            body: sw! + `\n// force-update-${Date.now()}`,
             headers: { 'Content-Type': 'application/javascript' },
           });
         } else {
           await route.fulfill({
-            body: sw,
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            body: sw!,
             headers: { 'Content-Type': 'application/javascript' },
           });
         }
@@ -136,14 +114,12 @@ test.describe('PWA update notification', () => {
 
       await page.goto('/');
 
-      // Wait for the SW to take control
       await page.waitForFunction(
         () => navigator.serviceWorker.controller !== null,
         null,
         { timeout: 15000 },
       );
 
-      // Trigger the SW update check
       await page.evaluate(async () => {
         const regs = await navigator.serviceWorker.getRegistrations();
         if (regs.length === 0) {
@@ -152,9 +128,7 @@ test.describe('PWA update notification', () => {
         await regs[0].update();
       });
 
-      // onNeedRefresh → NotificationStore → badge appears
       const bell = page.locator('[data-testid="lib-notification-bell"]');
-      // Spartan badge is an inline <span> with the unread count number
       await expect(bell.locator('button span.absolute')).toBeVisible({
         timeout: 15000,
       });
@@ -163,10 +137,8 @@ test.describe('PWA update notification', () => {
         '1 unread notification',
       );
 
-      // Click the bell to open the notification overlay
       await bell.locator('button').click();
 
-      // Verify the notification list panel and content
       const panel = page.locator('[data-testid="lib-notification-list"]');
       await expect(panel).toBeVisible({ timeout: 5000 });
       await expect(panel.locator('text=App update available')).toBeVisible();
