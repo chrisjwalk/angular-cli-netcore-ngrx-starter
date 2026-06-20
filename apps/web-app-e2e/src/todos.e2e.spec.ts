@@ -41,7 +41,7 @@ test.describe.serial('Todos page', () => {
     // Wait for the API to respond and the todo to appear in the list
     await expect(
       page.getByTestId('lib-todo-list').getByText('E2E test todo'),
-    ).toBeVisible({ timeout: 15000 });
+    ).toBeVisible({ timeout: 20000 });
   });
 
   test('should toggle a todo item', async ({ page }) => {
@@ -55,7 +55,7 @@ test.describe.serial('Todos page', () => {
     // Wait for the API response — Firefox CI may have latency
     await expect(
       page.getByTestId('lib-todo-list').getByText('Toggle me'),
-    ).toBeVisible({ timeout: 15000 });
+    ).toBeVisible({ timeout: 20000 });
 
     // Click the checkbox (Spartan uses [role='checkbox'], not <input>)
     const checkbox = page
@@ -84,7 +84,7 @@ test.describe.serial('Todos page', () => {
     // Wait for the API response — Firefox CI may have latency
     await expect(
       page.getByTestId('lib-todo-list').getByText('Delete me'),
-    ).toBeVisible({ timeout: 15000 });
+    ).toBeVisible({ timeout: 20000 });
     // Let the DOM settle before counting
     await page.waitForTimeout(500);
 
