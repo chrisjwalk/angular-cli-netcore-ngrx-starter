@@ -28,7 +28,11 @@ test.describe('Login page', () => {
     // Clear the pre-filled email so the form becomes invalid
     await page.getByLabel('Email').fill('');
 
-    await expect(page.getByRole('button', { name: /sign in/i })).toBeDisabled();
+    // Spartan hlmButton uses [attr.disabled] for the native attribute rather
+    // than relying on the host directive's internal disabled signal.
+    await expect(
+      page.getByRole('button', { name: /sign in/i }),
+    ).toHaveAttribute('disabled');
   });
 
   test('login button should be enabled when form is valid', async ({

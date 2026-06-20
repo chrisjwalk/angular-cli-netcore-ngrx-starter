@@ -9,7 +9,11 @@ test.describe('Navigation', () => {
     }) => {
       await page.goto('/');
 
-      await page.getByRole('link', { name: 'Weather Forecasts' }).click();
+      // Scope to toolbar only — the sidenav also has a "Weather Forecasts" link
+      await page
+        .getByTestId('lib-main-toolbar')
+        .getByRole('link', { name: /weather forecasts/i })
+        .click();
 
       await expect(page).toHaveURL(/\/weather-forecast/);
       await expect(page.getByTestId('lib-weather-forecast')).toBeVisible();
@@ -20,7 +24,11 @@ test.describe('Navigation', () => {
     }) => {
       await page.goto('/');
 
-      await page.getByRole('link', { name: 'Counter' }).click();
+      // Scope to toolbar only — the sidenav also has a "Counter" link
+      await page
+        .getByTestId('lib-main-toolbar')
+        .getByRole('link', { name: /counter/i })
+        .click();
 
       await expect(page).toHaveURL(/\/mfe-counter/);
       await expect(page.getByTestId('lib-counter-container')).toBeVisible();
