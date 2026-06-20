@@ -85,6 +85,24 @@ const sharedDeps = {
     requiredVersion: '~21.1.0',
     import: false,
   },
+  // Spartan / Lucide — use host's instances (import: false) to prevent NG0912
+  // collisions when both the host and remote import the same component classes.
+  'lucide-angular': {
+    singleton: true,
+    requiredVersion: '^1.0.0',
+    import: false,
+  },
+  '@spartan-ng/brain/tooltip': {
+    singleton: true,
+    requiredVersion: '^0.0.1',
+    import: false,
+  },
+  '@spartan-ng/brain/checkbox': {
+    singleton: true,
+    requiredVersion: '^0.0.1',
+    import: false,
+  },
+  '@myorg/spartan': { singleton: true, import: false },
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },

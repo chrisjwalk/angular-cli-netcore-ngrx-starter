@@ -44,6 +44,12 @@ const mfeSharedDeps = {
   // @ngrx/signals/events is NOT shared - the federation plugin generates
   // buggy loadShare imports for sub-path modules. It's bundled directly.
   '@ngrx/signals': { singleton: true, requiredVersion: '~21.1.0' },
+  // Spartan / Lucide — shared singletons to prevent NG0912 collisions
+  // when the host and MFE remote both import the same component classes.
+  'lucide-angular': { singleton: true, requiredVersion: '^1.0.0' },
+  '@spartan-ng/brain/tooltip': { singleton: true, requiredVersion: '^0.0.1' },
+  '@spartan-ng/brain/checkbox': { singleton: true, requiredVersion: '^0.0.1' },
+  '@myorg/spartan': { singleton: true },
   // Utilities
   rxjs: { singleton: true, requiredVersion: '~7.8.2' },
   tslib: { singleton: true, requiredVersion: '~2.8.1' },
