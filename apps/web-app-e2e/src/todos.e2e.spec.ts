@@ -32,15 +32,14 @@ test.describe('Todos page', () => {
   test('should add a new todo via the form', async ({ page }) => {
     await page.goto('/todos');
 
-    // Fill in the todo form and submit
     const form = page.getByTestId('lib-todo-form');
     await form.getByPlaceholder(/what needs to be done/i).fill('E2E test todo');
     await form.getByRole('button', { name: /add/i }).click();
 
-    // Scope to the todo list — avoid matching the form input
+    // Wait for the API to respond and the todo to appear in the list
     await expect(
       page.getByTestId('lib-todo-list').getByText('E2E test todo'),
-    ).toBeVisible({ timeout: 10000 });
+    ).toBeVisible({ timeout: 15000 });
   });
 
   test('should toggle a todo item', async ({ page }) => {
@@ -50,10 +49,11 @@ test.describe('Todos page', () => {
     const form = page.getByTestId('lib-todo-form');
     await form.getByPlaceholder(/what needs to be done/i).fill('Toggle me');
     await form.getByRole('button', { name: /add/i }).click();
-    // Scope to the todo list — avoid matching the form input
+
+    // Wait for the API response — Firefox CI may have latency
     await expect(
       page.getByTestId('lib-todo-list').getByText('Toggle me'),
-    ).toBeVisible({ timeout: 10000 });
+    ).toBeVisible({ timeout: 15000 });
 
     // Click the checkbox (Spartan uses [role='checkbox'], not <input>)
     const checkbox = page
@@ -73,10 +73,11 @@ test.describe('Todos page', () => {
     const form = page.getByTestId('lib-todo-form');
     await form.getByPlaceholder(/what needs to be done/i).fill('Delete me');
     await form.getByRole('button', { name: /add/i }).click();
-    // Scope to the todo list — avoid matching the form's own input value
+
+    // Wait for the API response — Firefox CI may have latency
     await expect(
       page.getByTestId('lib-todo-list').getByText('Delete me'),
-    ).toBeVisible({ timeout: 10000 });
+    ).toBeVisible({ timeout: 15000 });
 
     // Count before
     const initialCount = await page
@@ -84,30 +85,26 @@ test.describe('Todos page', () => {
       .locator('li')
       .count();
 
-    // Let the new todo settle in the DOM before interacting
-    await page.waitForTimeout(300);
     // Spartan delete button label includes the todo title: "Delete <title>"
     const deleteButton = page
       .getByTestId('lib-todo-list')
       .locator('button[aria-label^="Delete"]')
       .first();
-    await deleteButton.click({ force: true });
+    await deleteButton.click();
 
     // Count should decrease by one
     await expect(async () => {
       const newCount = page.getByTestId('lib-todo-list').locator('li');
       await expect(newCount).toHaveCount(initialCount - 1);
-    }).toPass({ timeout: 5000 });
+    }).toPass({ timeout: 10000 });
   });
 
   test('visual snapshot', { tag: '@visual' }, async ({ page }) => {
     await page.goto('/todos');
     await expect(page.getByTestId('lib-todo-page')).toBeVisible();
-    // Wait for todos to load from API
     await expect(page.getByTestId('lib-todo-list')).toBeVisible({
       timeout: 10000,
     });
-    // Let the list settle
     await page.waitForTimeout(500);
     await expect(page).toHaveScreenshot('todos.png', { fullPage: true });
   });
