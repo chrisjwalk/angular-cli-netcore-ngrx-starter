@@ -37,10 +37,10 @@ test.describe('Todos page', () => {
     await form.getByPlaceholder(/what needs to be done/i).fill('E2E test todo');
     await form.getByRole('button', { name: /add/i }).click();
 
-    // The new todo should appear in the list
-    await expect(page.getByText('E2E test todo')).toBeVisible({
-      timeout: 5000,
-    });
+    // Scope to the todo list — avoid matching the form input
+    await expect(
+      page.getByTestId('lib-todo-list').getByText('E2E test todo'),
+    ).toBeVisible({ timeout: 10000 });
   });
 
   test('should toggle a todo item', async ({ page }) => {
@@ -50,7 +50,10 @@ test.describe('Todos page', () => {
     const form = page.getByTestId('lib-todo-form');
     await form.getByPlaceholder(/what needs to be done/i).fill('Toggle me');
     await form.getByRole('button', { name: /add/i }).click();
-    await expect(page.getByText('Toggle me')).toBeVisible({ timeout: 5000 });
+    // Scope to the todo list — avoid matching the form input
+    await expect(
+      page.getByTestId('lib-todo-list').getByText('Toggle me'),
+    ).toBeVisible({ timeout: 10000 });
 
     // Click the checkbox (Spartan uses [role='checkbox'], not <input>)
     const checkbox = page
@@ -70,7 +73,10 @@ test.describe('Todos page', () => {
     const form = page.getByTestId('lib-todo-form');
     await form.getByPlaceholder(/what needs to be done/i).fill('Delete me');
     await form.getByRole('button', { name: /add/i }).click();
-    await expect(page.getByText('Delete me')).toBeVisible({ timeout: 5000 });
+    // Scope to the todo list — avoid matching the form's own input value
+    await expect(
+      page.getByTestId('lib-todo-list').getByText('Delete me'),
+    ).toBeVisible({ timeout: 10000 });
 
     // Count before
     const initialCount = await page
