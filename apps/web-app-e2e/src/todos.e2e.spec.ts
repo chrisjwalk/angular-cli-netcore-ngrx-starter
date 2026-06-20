@@ -62,10 +62,15 @@ test.describe.serial('Todos page', () => {
       .getByTestId('lib-todo-list')
       .locator('[role="checkbox"]')
       .first();
+
+    const wasChecked = (await checkbox.getAttribute('aria-checked')) === 'true';
     await checkbox.click();
 
     // The Spartan checkbox toggles aria-checked
-    await expect(checkbox).toHaveAttribute('aria-checked', 'true');
+    await expect(checkbox).toHaveAttribute(
+      'aria-checked',
+      wasChecked ? 'false' : 'true',
+    );
   });
 
   test('should remove a todo item', async ({ page }) => {
