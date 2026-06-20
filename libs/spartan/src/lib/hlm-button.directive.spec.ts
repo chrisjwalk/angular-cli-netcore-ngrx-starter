@@ -20,6 +20,13 @@ import { HlmButton } from './hlm-button.directive';
       Delete
     </button>
     <a hlmButton data-testid="link-btn" href="#">Link</a>
+    <button hlmButton disabled data-testid="disabled-btn">Disabled</button>
+    <button hlmButton [disabled]="true" data-testid="bound-disabled-btn">
+      Bound Disabled
+    </button>
+    <button hlmButton [disabled]="false" data-testid="bound-enabled-btn">
+      Bound Enabled
+    </button>
   `,
   host: { 'data-testid': 'hlm-button-host' },
 })
@@ -64,5 +71,30 @@ describe('HlmButton', () => {
     const link = screen.getByTestId('link-btn');
     expect(link.tagName).toBe('A');
     expect(link.className).toContain('cursor-pointer');
+  });
+
+  test('should set native disabled attribute when disabled', async () => {
+    await render(HlmButtonHost);
+    const btn = screen.getByTestId('disabled-btn');
+    expect(btn.hasAttribute('disabled')).toBe(true);
+  });
+
+  test('should apply disabled Tailwind classes when disabled', async () => {
+    await render(HlmButtonHost);
+    const btn = screen.getByTestId('disabled-btn');
+    expect(btn.className).toContain('disabled:cursor-default');
+    expect(btn.className).toContain('disabled:opacity-50');
+  });
+
+  test('should set native disabled attribute with bound true', async () => {
+    await render(HlmButtonHost);
+    const btn = screen.getByTestId('bound-disabled-btn');
+    expect(btn.hasAttribute('disabled')).toBe(true);
+  });
+
+  test('should not set native disabled attribute with bound false', async () => {
+    await render(HlmButtonHost);
+    const btn = screen.getByTestId('bound-enabled-btn');
+    expect(btn.hasAttribute('disabled')).toBe(false);
   });
 });
