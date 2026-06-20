@@ -1,6 +1,8 @@
 import { expect, test } from '@playwright/test';
 
-test.describe('Todos page', () => {
+// Serial mode — tests add/remove items via the shared API so they
+// must not run concurrently across workers.
+test.describe.serial('Todos page', () => {
   test('should load the todo page', async ({ page }) => {
     await page.goto('/todos');
 
