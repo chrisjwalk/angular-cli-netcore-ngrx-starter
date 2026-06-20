@@ -51,15 +51,21 @@ test.describe('Todos page', () => {
       timeout: 10000,
     });
 
-    // Click the first todo's checkbox
+    // Click the first todo's checkbox (Spartan uses [role="checkbox"], not <input>)
     const firstCheckbox = page
       .getByTestId('lib-todo-list')
-      .locator('input[type="checkbox"]')
+      .locator('[role="checkbox"]')
       .first();
+
+    const wasChecked =
+      (await firstCheckbox.getAttribute('aria-checked')) === 'true';
     await firstCheckbox.click();
 
-    // The todo text should get a line-through style (completed)
-    await expect(firstCheckbox).toBeChecked();
+    // The Spartan checkbox toggles aria-checked
+    await expect(firstCheckbox).toHaveAttribute(
+      'aria-checked',
+      wasChecked ? 'false' : 'true',
+    );
   });
 
   test('should remove a todo item', async ({ page }) => {
@@ -77,18 +83,16 @@ test.describe('Todos page', () => {
       .count();
 
     // Click the first delete button
+    // Spartan delete button label includes the todo title: "Delete <title>"
     const firstDeleteButton = page
       .getByTestId('lib-todo-list')
-      .locator('button[aria-label="Delete todo"]')
+      .locator('button[aria-label^="Delete"]')
       .first();
     await firstDeleteButton.click();
 
     // Count should decrease by one
     await expect(async () => {
-      const newCount = page
-        .getByTestId('lib-todo-list')
-        .locator('li')
-        ;
+      const newCount = page.getByTestId('lib-todo-list').locator('li');
       await expect(newCount).toHaveCount(initialCount - 1);
     }).toPass({ timeout: 5000 });
   });
