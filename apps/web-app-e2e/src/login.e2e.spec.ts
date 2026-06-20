@@ -20,21 +20,16 @@ test.describe('Login page', () => {
     await expect(page.getByRole('button', { name: /sign in/i })).toBeVisible();
   });
 
-  // Skipped: Spartan's hlmButton/BrnButton manages disabled state via an
-  // internal signal that doesn't set the native HTML disabled attribute.
-  // The form's submit handler already guards against invalid submissions,
-  // so this is a cosmetic difference from Material.
-  test.skip('login button should be disabled when form is invalid', async ({
+  test('login button should be disabled when form is invalid', async ({
     page,
   }) => {
     await page.goto('/login');
 
+    // Clear both fields so the form becomes invalid
     await page.getByLabel('Email').fill('');
     await page.getByLabel('Password', { exact: true }).fill('');
 
-    await expect(
-      page.getByRole('button', { name: /sign in/i }),
-    ).toHaveAttribute('disabled');
+    await expect(page.getByRole('button', { name: /sign in/i })).toBeDisabled();
   });
 
   test('login button should be enabled when form is valid', async ({

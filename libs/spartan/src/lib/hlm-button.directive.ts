@@ -39,12 +39,19 @@ const sizeClasses: Record<ButtonSize, string> = {
   hostDirectives: [BrnButton],
   host: {
     '[class]': 'computedClass()',
+    '[attr.disabled]': 'disabled() ? "" : null',
     'data-spartan': 'hlm-button',
   },
 })
 export class HlmButton {
   readonly variant = input<ButtonVariant>('default');
   readonly size = input<ButtonSize>('default');
+  // BrnButton receives [disabled] as a host directive input. We mirror it
+  // as an attr binding so the native HTML disabled attribute is set,
+  // which activates Tailwind's disabled: variant classes.
+  readonly disabled = input<boolean | string>(false, {
+    transform: (v: boolean | string) => v === '' || v === true || v === 'true',
+  });
 
   readonly computedClass = computed(
     () =>
