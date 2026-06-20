@@ -80,6 +80,8 @@ test.describe.serial('Todos page', () => {
     await expect(
       page.getByTestId('lib-todo-list').getByText('Delete me'),
     ).toBeVisible({ timeout: 15000 });
+    // Let the DOM settle before counting
+    await page.waitForTimeout(500);
 
     // Count before
     const initialCount = await page
@@ -93,6 +95,8 @@ test.describe.serial('Todos page', () => {
       .locator('button[aria-label^="Delete"]')
       .first();
     await deleteButton.click();
+    // Let the DOM update after deletion
+    await page.waitForTimeout(500);
 
     // Count should decrease by one
     await expect(async () => {
