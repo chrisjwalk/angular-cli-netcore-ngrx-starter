@@ -316,7 +316,7 @@ test(
   () => {
     /* ... */
   },
-  { retry: 3 }
+  { retry: 3 },
 );
 
 // ✅ AFTER (Vitest 3.0)
@@ -422,15 +422,7 @@ vi.isMockFunction(fooService.foo);
 export default defineConfig({
   test: {
     fakeTimers: {
-      toFake: [
-        'setTimeout',
-        'clearTimeout',
-        'setInterval',
-        'clearInterval',
-        'setImmediate',
-        'clearImmediate',
-        'Date',
-      ],
+      toFake: ['setTimeout', 'clearTimeout', 'setInterval', 'clearInterval', 'setImmediate', 'clearImmediate', 'Date'],
     },
   },
 });
