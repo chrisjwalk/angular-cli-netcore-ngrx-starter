@@ -1,6 +1,18 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Content page', () => {
+  // Pre-warm the lazy chunk on CI — cold-cache loads often exceed 60 s.
+  test.beforeAll(
+    'pre-warm content chunk',
+    { timeout: 90_000 },
+    async ({ browser }) => {
+      const page = await browser.newPage();
+      await page.goto('/content');
+      await page.waitForTimeout(2000);
+      await page.close();
+    },
+  );
+
   test(
     'should load the content component',
     { timeout: 60_000 },
