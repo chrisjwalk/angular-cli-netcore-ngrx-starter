@@ -1,21 +1,9 @@
 import { expect, test } from '@playwright/test';
 
 test.describe('Content page', () => {
-  // Pre-warm the lazy chunk on CI — cold-cache loads often exceed 60 s.
-  test.beforeAll(
-    'pre-warm content chunk',
-    { timeout: 90_000 },
-    async ({ browser }) => {
-      const page = await browser.newPage();
-      await page.goto('/content');
-      await page.waitForTimeout(2000);
-      await page.close();
-    },
-  );
-
   test(
     'should load the content component',
-    { timeout: 60_000 },
+    { timeout: 90_000 },
     async ({ page }) => {
       // Capture browser console errors for debugging CI-only flakiness
       const consoleErrors: string[] = [];
@@ -29,7 +17,7 @@ test.describe('Content page', () => {
       await page.goto('/content');
       // Cold-cache lazy chunk load can take longer in CI; use generous timeout
       await expect(page.getByTestId('app-content')).toBeVisible({
-        timeout: 60_000,
+        timeout: 90_000,
       });
 
       // Surface any console errors that may explain flakiness
@@ -39,7 +27,7 @@ test.describe('Content page', () => {
 
   test(
     'should render the page title from frontmatter',
-    { timeout: 60_000 },
+    { timeout: 90_000 },
     async ({ page }) => {
       // Capture browser console errors for debugging CI-only flakiness
       const consoleErrors: string[] = [];
@@ -54,7 +42,7 @@ test.describe('Content page', () => {
       // Cold-cache lazy chunk load can take longer in CI; use generous timeout
       await expect(
         page.getByRole('heading', { name: /content pages/i }),
-      ).toBeVisible({ timeout: 60_000 });
+      ).toBeVisible({ timeout: 90_000 });
 
       // Surface any console errors that may explain flakiness
       expect(consoleErrors, 'Browser console errors').toEqual([]);
@@ -63,14 +51,14 @@ test.describe('Content page', () => {
 
   test(
     'should display the table of contents',
-    { timeout: 60_000 },
+    { timeout: 90_000 },
     async ({ page }) => {
       await page.goto('/content');
 
       // Wait for content to load before checking for the TOC
       await expect(
         page.getByRole('heading', { name: /content pages/i }),
-      ).toBeVisible({ timeout: 60_000 });
+      ).toBeVisible({ timeout: 90_000 });
 
       await expect(
         page.getByRole('navigation', { name: /on this page/i }),
@@ -80,14 +68,14 @@ test.describe('Content page', () => {
 
   test(
     'should display the content files panel',
-    { timeout: 60_000 },
+    { timeout: 90_000 },
     async ({ page }) => {
       await page.goto('/content');
 
       // Wait for content to load before checking for the content files panel
       await expect(
         page.getByRole('heading', { name: /content pages/i }),
-      ).toBeVisible({ timeout: 60_000 });
+      ).toBeVisible({ timeout: 90_000 });
 
       await expect(page.getByText(/content files in this app/i)).toBeVisible();
     },
@@ -173,11 +161,11 @@ test.describe('Content page', () => {
 
   test(
     'visual snapshot',
-    { tag: '@visual', timeout: 60_000 },
+    { tag: '@visual', timeout: 90_000 },
     async ({ page }) => {
       await page.goto('/content');
       await expect(page.getByTestId('app-content')).toBeVisible({
-        timeout: 60_000,
+        timeout: 90_000,
       });
       // Wait for mermaid SVGs to render
       await page.locator('.mermaid svg').first().waitFor({ timeout: 10_000 });
