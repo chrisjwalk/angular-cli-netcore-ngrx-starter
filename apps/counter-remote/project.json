@@ -1,15 +1,17 @@
 {
   "name": "counter-remote",
-  "$schema": "../../node_modules/nx/schemas/project.schema.json",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "apps/counter-remote/src",
   "projectType": "application",
   "tags": ["type:app"],
   "targets": {
     "build": {
-      "executor": "@nx/vite:build",
-      "outputs": ["{options.outputPath}"],
+      "outputs": [
+        "{projectRoot}/{options.outDir}",
+        "{workspaceRoot}/dist/apps/counter-remote"
+      ],
       "options": {
-        "outputPath": "dist/apps/counter-remote"
+        "outDir": "../../dist/apps/counter-remote"
       },
       "configurations": {
         "development": {
@@ -21,21 +23,13 @@
       }
     },
     "serve": {
-      "executor": "@nx/vite:dev-server",
-      "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "counter-remote:build",
         "port": 4201
       },
       "configurations": {
-        "development": {
-          "buildTarget": "counter-remote:build:development"
-        },
-        "production": {
-          "buildTarget": "counter-remote:build:production",
-          "hmr": false
-        }
+        "development": {},
+        "production": {}
       }
     },
     "test": {
