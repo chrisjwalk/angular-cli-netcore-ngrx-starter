@@ -1,10 +1,20 @@
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
-const angVer = '~21.2.15';
-const cdkMatVer = '~21.2.13';
+// These options were migrated by @nx/vite:convert-to-inferred from the project.json file.
+const configValues = { default: {}, development: {}, production: {} };
+
+// Determine the correct configValue to use based on the configuration
+const nxConfiguration = process.env.NX_TASK_TARGET_CONFIGURATION ?? 'default';
+
+const options = {
+  ...configValues.default,
+  ...(configValues[nxConfiguration] ?? {}),
+};
+
+const angVer = '~22.0.5';
+const cdkMatVer = '~22.0.3';
 
 const sharedDeps = {
   // Angular core
@@ -216,8 +226,10 @@ export default defineConfig(({ mode }) => ({
         shared: sharedDeps,
       }),
     analog({ ssr: false }),
-    nxViteTsPaths(),
   ].filter(Boolean),
+  resolve: {
+    tsconfigPaths: true,
+  },
   server: {
     port: 4201,
     origin: 'http://localhost:4201',

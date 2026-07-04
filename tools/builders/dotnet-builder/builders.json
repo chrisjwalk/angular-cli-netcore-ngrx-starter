@@ -1,27 +1,27 @@
 {
   "builders": {
     "build": {
-      "implementation": "./dist/build",
+      "implementation": "./dist/build/index.js",
       "schema": "./src/build/schema.json",
       "description": "Builds dotnet project."
     },
     "test": {
-      "implementation": "./dist/test",
+      "implementation": "./dist/test/index.js",
       "schema": "./src/test/schema.json",
       "description": "Runs dotnet tests."
     },
     "publish": {
-      "implementation": "./dist/publish",
+      "implementation": "./dist/publish/index.js",
       "schema": "./src/publish/schema.json",
       "description": "Publishes dotnet project."
     },
     "run": {
-      "implementation": "./dist/run",
+      "implementation": "./dist/run/index.js",
       "schema": "./src/run/schema.json",
       "description": "Runs dotnet project."
     },
     "watch": {
-      "implementation": "./dist/watch",
+      "implementation": "./dist/watch/index.js",
       "schema": "./src/watch/schema.json",
       "description": "Watches dotnet project."
     }

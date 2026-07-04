@@ -50,7 +50,7 @@
       "options": {
         "targetName": "lint"
       }
-    }
+    },
   ],
   "generators": {
     "@nx/angular:application": {
