@@ -6,8 +6,8 @@ import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-const angVer = '~21.2.15';
-const cdkMatVer = '~21.2.13';
+const angVer = '~22.0.5';
+const cdkMatVer = '~22.0.3';
 
 const mfeSharedDeps = {
   // Angular core

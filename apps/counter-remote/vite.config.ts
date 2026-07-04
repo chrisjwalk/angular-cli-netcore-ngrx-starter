@@ -13,8 +13,8 @@ const options = {
   ...(configValues[nxConfiguration] ?? {}),
 };
 
-const angVer = '~21.2.15';
-const cdkMatVer = '~21.2.13';
+const angVer = '~22.0.5';
+const cdkMatVer = '~22.0.3';
 
 const sharedDeps = {
   // Angular core
