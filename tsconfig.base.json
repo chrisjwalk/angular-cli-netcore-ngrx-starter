@@ -25,7 +25,10 @@
       "@myorg/shared/*": ["libs/shared/src/*"],
       "@myorg/weather-forecast": ["libs/weather-forecast/src/index.ts"],
       "@myorg/todo": ["libs/todo/src/index.ts"]
-    }
+    },
+    "noUncheckedSideEffectImports": false,
+    "types": ["*"],
+    "esModuleInterop": false
   },
   "exclude": ["node_modules", "tmp"]
 }
