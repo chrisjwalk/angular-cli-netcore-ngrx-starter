@@ -17,6 +17,9 @@
     "skipLibCheck": true,
     "sourceMap": true,
     "strictNullChecks": true,
-    "types": ["node"]
+    "types": ["node"],
+    "strict": false,
+    "noUncheckedSideEffectImports": false,
+    "esModuleInterop": false
   }
 }
