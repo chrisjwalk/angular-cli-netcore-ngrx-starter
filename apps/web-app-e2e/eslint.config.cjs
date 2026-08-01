@@ -8,6 +8,9 @@ module.exports = [
   {
     files: ['**/*.ts', '**/*.js'],
     // Override or add rules here
-    rules: {},
+    rules: {
+      // Newly enabled by eslint-plugin-playwright v2.11.0; was not enforced before the upgrade.
+      'playwright/no-unnecessary-assertions': 'off',
+    },
   },
 ];
