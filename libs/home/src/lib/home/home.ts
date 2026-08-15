@@ -23,7 +23,7 @@ import { LayoutStore } from '@myorg/shared';
           Nx · Angular · .NET 10.0
         </h1>
         <p class="max-w-xl text-base leading-relaxed text-on-surface-variant">
-          Zoneless Angular 21, NgRx Signal Store, and .NET 10.0 Web API —
+          Zoneless Angular 22, NgRx Signal Store, and .NET 10.0 Web API —
           deployable to Azure as a production-ready Nx monorepo.
         </p>
       </div>
