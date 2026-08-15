@@ -83,7 +83,7 @@ builder
   .AddApiEndpoints();
 
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddSingleton<TodoRepository>();
+builder.Services.AddScoped<TodoRepository>();
 
 var connectionString = builder.Environment.IsDevelopment()
   ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
@@ -134,6 +134,29 @@ builder.Services.AddCors(options =>
 );
 
 var app = builder.Build();
+
+// Apply EF migrations at startup:
+// - Development: always (plus seed demo todos) — the dev DB already exists for Identity.
+// - Production: opt in via the RUN_EF_MIGRATIONS=true app setting; deploy.yml has no
+//   post-deploy execution context. Safe only for single-instance deployments —
+//   use a migration job instead if the app ever scales out.
+var runMigrations = app.Environment.IsDevelopment()
+  || string.Equals(
+    Environment.GetEnvironmentVariable("RUN_EF_MIGRATIONS"),
+    "true",
+    StringComparison.OrdinalIgnoreCase
+  );
+if (runMigrations)
+{
+  using var scope = app.Services.CreateScope();
+  var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+  db.Database.Migrate();
+  if (app.Environment.IsDevelopment() && !db.Todos.Any())
+  {
+    db.Todos.AddRange(TodoSeeder.DemoTodos);
+    db.SaveChanges();
+  }
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -200,7 +223,7 @@ app.MapHealthChecks("/health/ready");
 // Custom JWT auth endpoints: login / refresh / logout
 app.MapAuthEndpoints(app.Environment.IsDevelopment());
 
-// Todo CRUD endpoints (in-memory store)
+// Todo CRUD endpoints (EF Core-backed, paged/sorted/filtered)
 app.MapTodoEndpoints();
 
 // Keep Identity account-management endpoints (password reset, email confirmation, 2FA setup, etc.)
