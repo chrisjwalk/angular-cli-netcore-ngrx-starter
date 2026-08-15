@@ -17,6 +17,7 @@ import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 import {
   CreateTodoRequest,
   Todo,
+  TodoPageDto,
   TodoQuery,
   TodoSortBy,
   UpdateTodoRequest,
@@ -65,14 +66,28 @@ export function withTodoFeature() {
         stream: ({ params }) => todoService.getAll(params),
       }),
     })),
-    withComputed(({ todos, editingId }) => ({
-      totalCount: computed(() => todos.value()?.totalCount ?? 0),
-      items: computed(() => todos.value()?.items ?? []),
-      editing: computed(
-        () =>
-          todos.value()?.items.find((todo) => todo.id === editingId()) ?? null,
-      ),
-    })),
+    withComputed(({ todos, editingId }) => {
+      // Keep the last loaded envelope while rxResource reloads: value() drops
+      // to undefined during refetches, and a totalCount that dips to 0 makes
+      // the paginator clamp its pageIndex and emit a page event that reverts
+      // the page change (Material 22 + rxResource feedback loop).
+      let lastPage: TodoPageDto | undefined;
+      const page = computed(() => {
+        const value = todos.value();
+        if (value) {
+          lastPage = value;
+        }
+        return lastPage;
+      });
+
+      return {
+        totalCount: computed(() => page()?.totalCount ?? 0),
+        items: computed(() => page()?.items ?? []),
+        editing: computed(
+          () => page()?.items.find((todo) => todo.id === editingId()) ?? null,
+        ),
+      };
+    }),
     withMethods(({ todoService, todos, totalCount, ...store }) => ({
       setPage(page: number) {
         patchState(store, { page });

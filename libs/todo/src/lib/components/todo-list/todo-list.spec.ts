@@ -37,11 +37,19 @@ describe('TodoList', () => {
     expect(screen.getByText('Buy milk')).toBeTruthy();
   });
 
-  it('should show skeleton when loading', async () => {
+  it('should show skeleton when loading with no rows yet', async () => {
     const { container } = await render(TodoList, {
       inputs: { todos: [], loading: true },
     });
     expect(container.querySelectorAll('.animate-pulse').length).toBe(3);
+  });
+
+  it('should keep rows mounted while reloading', async () => {
+    const { container } = await render(TodoList, {
+      inputs: { todos: mockTodos, loading: true },
+    });
+    expect(screen.getAllByTestId('todo-row')).toHaveLength(2);
+    expect(container.querySelectorAll('.animate-pulse')).toHaveLength(0);
   });
 
   it('should emit toggled, removed, and edited for row actions', async () => {

@@ -47,7 +47,7 @@ import { Todo } from '../../models/todo';
     MatRowDef,
   ],
   template: `
-    @if (loading()) {
+    @if (loading() && todos().length === 0) {
       <div class="flex flex-col gap-3">
         @for (_ of [1, 2, 3]; track $index) {
           <div
@@ -56,8 +56,12 @@ import { Todo } from '../../models/todo';
         }
       </div>
     } @else {
+      <!-- Keep the table mounted during reloads: swapping it out for the
+           skeleton destroys MatSort, and the re-created instance re-fires the
+           sort-sync effect, which resets the page via setSort. -->
       <mat-table
         [dataSource]="todos()"
+        [class.opacity-60]="loading()"
         matSort
         (matSortChange)="sorted.emit($event)"
       >
@@ -189,10 +193,15 @@ export class TodoList {
   private readonly sort = viewChild(MatSort);
 
   constructor() {
+    // Sync the server-side sort into MatSort so the header arrows reflect the
+    // initial state. Material 22's sort() TOGGLES direction when the id matches
+    // the active header and ALWAYS emits sortChange, so this only runs while no
+    // header is active (initial load and after a cleared sort) — afterwards the
+    // store is driven solely by the user's header clicks.
     effect(() => {
       const sort = this.sort();
       const active = this.activeSort();
-      if (sort && active) {
+      if (sort && active && !sort.active) {
         sort.sort({
           id: active.sortBy,
           start: active.sortDir,
