@@ -6,7 +6,6 @@ import { AuthStore } from '@myorg/auth';
 import {
   LayoutStore,
   MainToolbar,
-  NotificationStore,
   Sidenav,
   SwUpdateStore,
 } from '@myorg/shared';
@@ -73,7 +72,6 @@ import { filter, pipe, tap } from 'rxjs';
     'data-testid': 'app-root',
   },
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [NotificationStore, SwUpdateStore],
 })
 export class App {
   readonly swUpdateStore = inject(SwUpdateStore);

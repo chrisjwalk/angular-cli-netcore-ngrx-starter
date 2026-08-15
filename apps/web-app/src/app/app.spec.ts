@@ -3,6 +3,7 @@ import { provideLocationMocks } from '@angular/common/testing';
 import { provideNoopAnimations } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { provideContent, withMarkdownRenderer } from '@analogjs/content';
+import { NotificationStore, SwUpdateStore } from '@myorg/shared';
 import { render, screen } from '@testing-library/angular';
 
 import { App } from './app';
@@ -16,6 +17,8 @@ describe('App', () => {
         provideLocationMocks(),
         provideNoopAnimations(),
         provideContent(withMarkdownRenderer()),
+        NotificationStore,
+        SwUpdateStore,
       ],
     });
 
