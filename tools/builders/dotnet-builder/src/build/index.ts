@@ -12,7 +12,7 @@ interface Options extends JsonObject {
 }
 
 export default createBuilder<Options>((options, context) => {
-  return new Promise<BuilderOutput>((resolve, reject) => {
+  return new Promise<BuilderOutput>((resolve) => {
     const dotnetArgs = ['build'];
     dotnetArgs.push('--nologo');
     if (options.outputPath) {
@@ -41,8 +41,7 @@ export default createBuilder<Options>((options, context) => {
       context.logger.info(data.toString());
     });
     child.stderr.on('data', (data) => {
-      context.logger.error(data.toString());
-      reject();
+      context.logger.warn(data.toString());
     });
 
     context.reportStatus(`Done.`);

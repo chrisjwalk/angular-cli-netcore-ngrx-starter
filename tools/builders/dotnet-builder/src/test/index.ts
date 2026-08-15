@@ -17,7 +17,7 @@ interface Options extends JsonObject {
 }
 
 export default createBuilder<Options>((options, context) => {
-  return new Promise<BuilderOutput>((resolve, reject) => {
+  return new Promise<BuilderOutput>((resolve) => {
     const dotnetTestArgs = ['test'];
     dotnetTestArgs.push('--nologo');
     if (options.verbosityLevel) {
@@ -54,14 +54,18 @@ export default createBuilder<Options>((options, context) => {
     const tests = childProcess.spawn('dotnet', dotnetTestArgs, {
       stdio: 'pipe',
       cwd: options.solutionFolder,
+      env: {
+        ...process.env,
+        DOTNET_COVERAGE_TELEMETRY_OPTOUT: '1',
+        DOTNET_COVERAGE_NOLOGO: '1',
+      },
     });
 
     tests.stdout.on('data', (data) => {
       context.logger.info(data.toString());
     });
     tests.stderr.on('data', (data) => {
-      context.logger.error(data.toString());
-      reject();
+      context.logger.warn(data.toString());
     });
 
     tests.on('close', (testsCode) => {
@@ -91,14 +95,18 @@ export default createBuilder<Options>((options, context) => {
         const coverage = childProcess.spawn('dotnet', dotnetCoverageArgs, {
           stdio: 'pipe',
           cwd: options.solutionFolder,
+          env: {
+            ...process.env,
+            DOTNET_COVERAGE_TELEMETRY_OPTOUT: '1',
+            DOTNET_COVERAGE_NOLOGO: '1',
+          },
         });
 
         coverage.stdout.on('data', (data) => {
           context.logger.info(data.toString());
         });
         coverage.stderr.on('data', (data) => {
-          context.logger.error(data.toString());
-          reject();
+          context.logger.warn(data.toString());
         });
 
         coverage.on('close', (coverageCode) => {
