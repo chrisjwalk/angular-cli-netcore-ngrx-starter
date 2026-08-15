@@ -5,7 +5,11 @@ import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { provideContent, withMarkdownRenderer } from '@analogjs/content';
-import { waitForElement } from '@myorg/shared';
+import {
+  NotificationStore,
+  SwUpdateStore,
+  waitForElement,
+} from '@myorg/shared';
 import { fireEvent, screen } from '@testing-library/angular';
 
 import { App } from './app';
@@ -23,6 +27,8 @@ describe('App Integration', () => {
         provideRouter(routes),
         provideLocationMocks(),
         provideContent(withMarkdownRenderer()),
+        NotificationStore,
+        SwUpdateStore,
       ],
     }).compileComponents();
 
@@ -79,6 +85,22 @@ describe('App Integration', () => {
       applicationRef,
     );
     expect(loginComponent).toBeTruthy();
+  });
+
+  it('should navigate to /todos and load the todo feature', async () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/todos');
+    const compiled = fixture.nativeElement as HTMLElement;
+    const todoPage = await waitForElement(
+      () => compiled.querySelector('[data-testid="lib-todo-page"]'),
+      applicationRef,
+    );
+    expect(todoPage).toBeTruthy();
+    expect(
+      compiled.querySelector('[data-testid="lib-todo-form"]'),
+    ).toBeTruthy();
   });
 
   it('should navigate to /mfe-counter and load the counter feature', async () => {

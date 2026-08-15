@@ -1,29 +1,46 @@
 import { computed, inject } from '@angular/core';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { Sort } from '@angular/material/sort';
 import { tapResponse } from '@ngrx/operators';
 import {
   patchState,
   signalStore,
   signalStoreFeature,
   withComputed,
-  withHooks,
   withMethods,
   withProps,
   withState,
 } from '@ngrx/signals';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
-import { of, pipe, switchMap } from 'rxjs';
+import { debounceTime, pipe, switchMap, tap } from 'rxjs';
 
-import { CreateTodoRequest, Todo, UpdateTodoRequest } from '../models/todo';
+import {
+  CreateTodoRequest,
+  Todo,
+  TodoPageDto,
+  TodoQuery,
+  TodoSortBy,
+  UpdateTodoRequest,
+} from '../models/todo';
 import { TodoService } from '../services/todo.service';
 
 export type TodoState = {
-  syncEnabled: boolean;
+  page: number;
+  pageSize: number;
+  sortBy: TodoSortBy;
+  sortDir: 'asc' | 'desc';
+  filter: string;
+  editingId: string | null;
   mutationError: string | null;
 };
 
 export const todoInitialState: TodoState = {
-  syncEnabled: false,
+  page: 1,
+  pageSize: 10,
+  sortBy: 'createdAt',
+  sortDir: 'desc',
+  filter: '',
+  editingId: null,
   mutationError: null,
 };
 
@@ -33,23 +50,70 @@ export function withTodoFeature() {
     withProps(() => ({
       todoService: inject(TodoService),
     })),
-    withComputed(({ syncEnabled }) => ({
-      params: computed(() => ({ syncEnabled: syncEnabled() })),
+    withComputed(({ page, pageSize, sortBy, sortDir, filter }) => ({
+      // The rxResource params signal — any change re-runs the stream.
+      params: computed<TodoQuery>(() => ({
+        page: page(),
+        pageSize: pageSize(),
+        sortBy: sortBy(),
+        sortDir: sortDir(),
+        filter: filter(),
+      })),
     })),
     withProps(({ todoService, params }) => ({
       todos: rxResource({
         params,
-        stream: ({ params: { syncEnabled } }) =>
-          syncEnabled ? todoService.getAll() : of([] as Todo[]),
+        stream: ({ params }) => todoService.getAll(params),
       }),
     })),
-    withMethods(({ todoService, todos, ...store }) => ({
-      enableSync() {
-        patchState(store, { syncEnabled: true });
+    withComputed(({ todos, editingId }) => {
+      // Keep the last loaded envelope while rxResource reloads: value() drops
+      // to undefined during refetches, and a totalCount that dips to 0 makes
+      // the paginator clamp its pageIndex and emit a page event that reverts
+      // the page change (Material 22 + rxResource feedback loop).
+      let lastPage: TodoPageDto | undefined;
+      const page = computed(() => {
+        const value = todos.value();
+        if (value) {
+          lastPage = value;
+        }
+        return lastPage;
+      });
+
+      return {
+        totalCount: computed(() => page()?.totalCount ?? 0),
+        items: computed(() => page()?.items ?? []),
+        editing: computed(
+          () => page()?.items.find((todo) => todo.id === editingId()) ?? null,
+        ),
+      };
+    }),
+    withMethods(({ todoService, todos, totalCount, ...store }) => ({
+      setPage(page: number) {
+        patchState(store, { page });
       },
 
-      disableSync() {
-        patchState(store, { syncEnabled: false });
+      setPageSize(pageSize: number) {
+        patchState(store, { pageSize, page: 1 });
+      },
+
+      setSort(sort: Sort) {
+        // MatSortChange emits { active: '', direction: '' } when a sort is
+        // cleared — reset to the default (newest first).
+        const sortBy = (sort.active || 'createdAt') as TodoSortBy;
+        const sortDir = sort.direction === 'asc' ? 'asc' : 'desc';
+        patchState(store, { sortBy, sortDir, page: 1 });
+      },
+
+      updateFilter: rxMethod<string>((source$) =>
+        source$.pipe(
+          debounceTime(300),
+          tap((filter: string) => patchState(store, { filter, page: 1 })),
+        ),
+      ),
+
+      setEditing(id: string | null) {
+        patchState(store, { editingId: id });
       },
 
       reload() {
@@ -85,7 +149,7 @@ export function withTodoFeature() {
             todoService.update(id, changes).pipe(
               tapResponse({
                 next: () => {
-                  patchState(store, { mutationError: null });
+                  patchState(store, { mutationError: null, editingId: null });
                   todos.reload();
                 },
                 error: () =>
@@ -105,7 +169,17 @@ export function withTodoFeature() {
               tapResponse({
                 next: () => {
                   patchState(store, { mutationError: null });
-                  todos.reload();
+                  // Removing the last item on a page > 1: step back a page
+                  // (the params change re-runs the rxResource instead of a
+                  // manual reload).
+                  const wasLastItemOnPage =
+                    store.page() > 1 &&
+                    totalCount() === (store.page() - 1) * store.pageSize() + 1;
+                  if (wasLastItemOnPage) {
+                    patchState(store, { page: store.page() - 1 });
+                  } else {
+                    todos.reload();
+                  }
                 },
                 error: () =>
                   patchState(store, {
@@ -139,13 +213,6 @@ export function withTodoFeature() {
   );
 }
 
-export const TodoStore = signalStore(
-  withTodoFeature(),
-  withHooks({
-    onInit({ enableSync }) {
-      enableSync();
-    },
-  }),
-);
+export const TodoStore = signalStore(withTodoFeature());
 
 export type TodoStore = InstanceType<typeof TodoStore>;

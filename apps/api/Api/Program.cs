@@ -16,6 +16,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi;
@@ -67,14 +68,30 @@ builder.Services
 
 builder.Services.AddAuthorizationBuilder();
 
-builder.Services.AddDbContext<AppDbContext>(
-  options =>
+// USE_SQLITE=true runs the API against a local SQLite database instead of Azure
+// SQL — used by the Playwright e2e suite and offline development. SQL Server
+// migrations are provider-specific, so this path uses EnsureCreated (see below).
+var useSqlite = string.Equals(
+  Environment.GetEnvironmentVariable("USE_SQLITE"),
+  "true",
+  StringComparison.OrdinalIgnoreCase
+);
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+  if (useSqlite)
+  {
+    options.UseSqlite($"DataSource={Path.Combine(Path.GetTempPath(), "nx-ng-net-core.sqlite.db")}");
+  }
+  else
+  {
     options.UseSqlServer(
       builder.Environment.IsDevelopment()
         ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
         : Environment.GetEnvironmentVariable("AZURE_SQL_CONNECTIONSTRING")
-    )
-);
+    );
+  }
+});
 
 builder
   .Services.AddIdentityCore<AppUser>()
@@ -83,7 +100,7 @@ builder
   .AddApiEndpoints();
 
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddSingleton<TodoRepository>();
+builder.Services.AddScoped<TodoRepository>();
 
 var connectionString = builder.Environment.IsDevelopment()
   ? builder.Configuration.GetConnectionString("AZURE_SQL_CONNECTIONSTRING")
@@ -134,6 +151,50 @@ builder.Services.AddCors(options =>
 );
 
 var app = builder.Build();
+
+// Database setup at startup:
+// - USE_SQLITE=true: create the schema with EnsureCreated (SQL Server migrations
+//   are provider-specific) — used by the e2e suite and offline development.
+// - Otherwise: apply EF migrations — always in Development (plus seed demo
+//   todos), opt in elsewhere via the RUN_EF_MIGRATIONS=true app setting
+//   (deploy.yml has no post-deploy execution context). Safe only for
+//   single-instance deployments — use a migration job instead if scaling out.
+//   In Development a migration failure is logged (not fatal) so the dev loop
+//   survives an unreachable database; production fails fast.
+var runMigrations = app.Environment.IsDevelopment()
+  || string.Equals(
+    Environment.GetEnvironmentVariable("RUN_EF_MIGRATIONS"),
+    "true",
+    StringComparison.OrdinalIgnoreCase
+  );
+if (useSqlite || runMigrations)
+{
+  using var scope = app.Services.CreateScope();
+  var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+  try
+  {
+    if (useSqlite)
+    {
+      db.Database.EnsureCreated();
+    }
+    else
+    {
+      db.Database.Migrate();
+    }
+    if (app.Environment.IsDevelopment() && !db.Todos.Any())
+    {
+      db.Todos.AddRange(TodoSeeder.DemoTodos);
+      db.SaveChanges();
+    }
+  }
+  catch (Exception ex) when (app.Environment.IsDevelopment())
+  {
+    app.Logger.LogWarning(
+      ex,
+      "Database setup failed — API features will be unavailable until the database is reachable."
+    );
+  }
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -200,7 +261,7 @@ app.MapHealthChecks("/health/ready");
 // Custom JWT auth endpoints: login / refresh / logout
 app.MapAuthEndpoints(app.Environment.IsDevelopment());
 
-// Todo CRUD endpoints (in-memory store)
+// Todo CRUD endpoints (EF Core-backed, paged/sorted/filtered)
 app.MapTodoEndpoints();
 
 // Keep Identity account-management endpoints (password reset, email confirmation, 2FA setup, etc.)

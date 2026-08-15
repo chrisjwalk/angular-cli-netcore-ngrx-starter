@@ -106,7 +106,7 @@ jobs:
           echo "Smoke test failed — last status was $status"
           exit 1
 
-      # NOTE: Database migrations are not run automatically here.
-      # If you use EF Core migrations, consider adding a step like:
-      #   dotnet ef database update --project apps/api/Api
-      # or use a startup migration strategy in Program.cs.
+      # NOTE: EF migrations are applied at app startup (Program.cs), gated by the
+      # RUN_EF_MIGRATIONS app setting — development migrates unconditionally and
+      # seeds demo todos. Safe only for single-instance deployments; use a
+      # migration job instead if the app ever scales out.

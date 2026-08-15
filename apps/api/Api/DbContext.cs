@@ -14,12 +14,27 @@ public class RefreshToken
   public AppUser User { get; set; } = null!;
 }
 
+public class TodoItem
+{
+  public string Id { get; set; } = Guid.NewGuid().ToString();
+  public string Title { get; set; } = null!;
+  public string Description { get; set; } = "";
+  public bool Completed { get; set; }
+
+  // UTC DateTime rather than DateTimeOffset: the todos query sorts by this column,
+  // and SQLite (used by the xUnit tests) cannot ORDER BY DateTimeOffset. A UTC
+  // DateTime is unambiguous and sortable on both providers.
+  public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+}
+
 public class AppDbContext : IdentityDbContext<AppUser>
 {
   public AppDbContext(DbContextOptions<AppDbContext> options)
     : base(options) { }
 
   public DbSet<RefreshToken> RefreshTokens { get; set; } = null!;
+
+  public DbSet<TodoItem> Todos { get; set; } = null!;
 
   protected override void OnModelCreating(ModelBuilder builder)
   {
@@ -32,6 +47,13 @@ public class AppDbContext : IdentityDbContext<AppUser>
             .WithMany()
             .HasForeignKey(t => t.UserId)
             .OnDelete(DeleteBehavior.Cascade);
+    });
+
+    builder.Entity<TodoItem>(entity =>
+    {
+      entity.Property(t => t.Title).HasMaxLength(200).IsRequired();
+      entity.Property(t => t.Description).HasMaxLength(1000);
+      entity.HasIndex(t => t.CreatedAt);
     });
   }
 }

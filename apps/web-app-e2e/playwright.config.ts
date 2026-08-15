@@ -27,7 +27,10 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'npx nx run api:serve',
+      // USE_SQLITE=true makes the e2e API deterministic and self-contained —
+      // no dependency on the Azure SQL dev database. Program.cs creates the
+      // schema via EnsureCreated and seeds demo todos on startup.
+      command: 'USE_SQLITE=true npx nx run api:serve',
       url: 'http://localhost:60253/health/live',
       reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,

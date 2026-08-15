@@ -1,7 +1,11 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { MatIconButton } from '@angular/material/button';
+import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatIcon } from '@angular/material/icon';
+import { MatInput } from '@angular/material/input';
+import { MatPaginator } from '@angular/material/paginator';
 import { LayoutStore, PageContainer, PageToolbar } from '@myorg/shared';
+
 import { TodoStore } from '../../state/todo.store';
 import { TodoForm } from '../todo-form/todo-form';
 import { TodoList } from '../todo-list/todo-list';
@@ -15,11 +19,21 @@ import { TodoList } from '../todo-list/todo-list';
     TodoList,
     MatIcon,
     MatIconButton,
+    MatFormField,
+    MatLabel,
+    MatInput,
+    MatPaginator,
   ],
   template: `
     <lib-page-toolbar [title]="layoutStore.title()" />
     <lib-page-container>
-      <lib-todo-form class="mb-6" (create)="store.create($event)" />
+      <lib-todo-form
+        class="mb-6"
+        [edit]="store.editing()"
+        (create)="store.create($event)"
+        (update)="store.update($event)"
+        (cancelEdit)="store.setEditing(null)"
+      />
 
       @if (store.mutationError()) {
         <div
@@ -42,6 +56,40 @@ import { TodoList } from '../todo-list/todo-list';
           </button>
         </div>
       }
+
+      <div class="mb-4 flex flex-wrap items-center gap-3">
+        <mat-form-field
+          appearance="outline"
+          subscriptSizing="dynamic"
+          class="w-full sm:w-72"
+        >
+          <mat-label>Filter</mat-label>
+          <mat-icon matPrefix class="mr-2 text-on-surface-variant"
+            >search</mat-icon
+          >
+          <input
+            matInput
+            data-testid="todo-filter"
+            [value]="store.filter()"
+            placeholder="Filter todos…"
+            autocomplete="off"
+            (input)="store.updateFilter($any($event.target).value)"
+          />
+          @if (store.filter()) {
+            <button
+              matSuffix
+              mat-icon-button
+              aria-label="Clear filter"
+              (click)="store.updateFilter('')"
+            >
+              <mat-icon>close</mat-icon>
+            </button>
+          }
+        </mat-form-field>
+        <p class="text-sm text-on-surface-variant" data-testid="todo-count">
+          {{ store.totalCount() }} todo{{ store.totalCount() === 1 ? '' : 's' }}
+        </p>
+      </div>
 
       @if (store.todos.error()) {
         <div
@@ -70,11 +118,29 @@ import { TodoList } from '../todo-list/todo-list';
         </div>
       } @else {
         <lib-todo-list
-          [todos]="store.todos.value() ?? []"
+          [todos]="store.items()"
           [loading]="store.todos.isLoading()"
+          [activeSort]="{
+            sortBy: store.sortBy(),
+            sortDir: store.sortDir(),
+          }"
           (toggled)="store.toggle($event)"
           (removed)="store.remove($event)"
+          (edited)="store.setEditing($event.id)"
+          (sorted)="store.setSort($event)"
         />
+        @if (store.totalCount() > 0) {
+          <mat-paginator
+            class="mt-4 rounded-2xl bg-surface-container"
+            [length]="store.totalCount()"
+            [pageIndex]="store.page() - 1"
+            [pageSize]="store.pageSize()"
+            [pageSizeOptions]="[5, 10, 25]"
+            showFirstLastButtons
+            aria-label="Select page of todos"
+            (page)="store.setPage($event.pageIndex + 1)"
+          />
+        }
       }
     </lib-page-container>
   `,

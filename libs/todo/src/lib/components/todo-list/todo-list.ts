@@ -1,20 +1,53 @@
+import { DatePipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  effect,
   input,
   output,
+  viewChild,
 } from '@angular/core';
-import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIconButton } from '@angular/material/button';
+import { MatCheckbox } from '@angular/material/checkbox';
 import { MatIcon } from '@angular/material/icon';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
+import {
+  MatCell,
+  MatCellDef,
+  MatColumnDef,
+  MatHeaderCell,
+  MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef,
+  MatTable,
+} from '@angular/material/table';
 
 import { Todo } from '../../models/todo';
 
 @Component({
   selector: 'lib-todo-list',
-  imports: [MatCheckbox, MatIconButton, MatIcon],
+  imports: [
+    DatePipe,
+    MatCheckbox,
+    MatIconButton,
+    MatIcon,
+    MatSort,
+    MatSortHeader,
+    MatTable,
+    MatCell,
+    MatCellDef,
+    MatColumnDef,
+    MatHeaderCell,
+    MatHeaderCellDef,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+  ],
   template: `
-    @if (loading()) {
+    @if (loading() && todos().length === 0) {
       <div class="flex flex-col gap-3">
         @for (_ of [1, 2, 3]; track $index) {
           <div
@@ -23,68 +56,114 @@ import { Todo } from '../../models/todo';
         }
       </div>
     } @else {
-      <ul class="flex flex-col gap-2">
-        @for (todo of todos(); track todo.id) {
-          <li
-            class="flex items-start gap-3 rounded-xl border border-outline-variant bg-surface-container px-4 py-3 transition-colors hover:bg-surface-container-high"
+      <!-- Keep the table mounted during reloads: swapping it out for the
+           skeleton destroys MatSort, and the re-created instance re-fires the
+           sort-sync effect, which resets the page via setSort. -->
+      <mat-table
+        [dataSource]="todos()"
+        [class.opacity-60]="loading()"
+        matSort
+        (matSortChange)="sorted.emit($event)"
+      >
+        <ng-container matColumnDef="title">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by title"
           >
+            Title
+          </mat-header-cell>
+          <mat-cell *matCellDef="let todo" data-testid="todo-title">
+            <span [class.line-through]="todo.completed">{{ todo.title }}</span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="description">
+          <mat-header-cell *matHeaderCellDef> Description </mat-header-cell>
+          <mat-cell *matCellDef="let todo" data-testid="todo-description">
+            <span class="text-on-surface-variant">{{ todo.description }}</span>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="completed">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by completion status"
+          >
+            Completed
+          </mat-header-cell>
+          <mat-cell *matCellDef="let todo" class="!pr-0">
+            <!-- The projected sr-only label names the checkbox's native input via
+                 the label[for] association (the ariaLabel input doesn't render
+                 in Material 22.1.x — see the todo e2e spec for regression). -->
             <mat-checkbox
-              class="mt-0.5 shrink-0"
+              class="!-ml-3"
               [checked]="todo.completed"
-              [attr.aria-label]="
-                'Mark ' +
-                todo.title +
-                ' as ' +
-                (todo.completed ? 'incomplete' : 'complete')
-              "
               (change)="toggled.emit(todo)"
-            />
-            <div class="flex flex-1 flex-col gap-0.5 overflow-hidden">
-              <span
-                class="text-sm font-medium leading-snug transition-colors"
-                [class.line-through]="todo.completed"
-                [class.text-on-surface-variant]="todo.completed"
-              >
-                {{ todo.title }}
+            >
+              <span class="sr-only">
+                Mark {{ todo.title }} as
+                {{ todo.completed ? 'incomplete' : 'complete' }}
               </span>
-              @if (todo.description) {
-                <span
-                  class="truncate text-xs text-on-surface-variant"
-                  [class.line-through]="todo.completed"
-                >
-                  {{ todo.description }}
-                </span>
-              }
-            </div>
+            </mat-checkbox>
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="createdAt">
+          <mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            sortActionDescription="Sort by creation date"
+          >
+            Created
+          </mat-header-cell>
+          <mat-cell *matCellDef="let todo" data-testid="todo-created">
+            {{ todo.createdAt | date: 'MMM d, y' }}
+          </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="actions">
+          <mat-header-cell *matHeaderCellDef></mat-header-cell>
+          <mat-cell *matCellDef="let todo" class="!pl-0">
             <button
               mat-icon-button
-              class="shrink-0 !text-error"
+              [attr.aria-label]="'Edit ' + todo.title"
+              (click)="edited.emit(todo)"
+            >
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              class="!text-error"
               [attr.aria-label]="'Delete ' + todo.title"
               (click)="removed.emit(todo.id)"
             >
               <mat-icon>delete</mat-icon>
             </button>
-          </li>
-        } @empty {
-          <li class="mx-auto w-full max-w-md">
-            <div
-              class="flex gap-4 rounded-xl border border-outline-variant bg-surface-container-low p-4"
+          </mat-cell>
+        </ng-container>
+        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row
+          *matRowDef="let row; columns: displayedColumns"
+          data-testid="todo-row"
+        ></mat-row>
+      </mat-table>
+      @if (!todos().length) {
+        <div class="mx-auto w-full max-w-md">
+          <div
+            class="flex gap-4 rounded-xl border border-outline-variant bg-surface-container-low p-4"
+          >
+            <mat-icon class="mt-0.5 shrink-0 text-on-surface-variant"
+              >inbox</mat-icon
             >
-              <mat-icon class="mt-0.5 shrink-0 text-on-surface-variant"
-                >inbox</mat-icon
-              >
-              <div class="flex flex-col gap-1">
-                <p class="text-sm font-medium leading-none text-on-surface">
-                  No todos yet
-                </p>
-                <p class="text-sm text-on-surface-variant">
-                  Add your first todo above to get started.
-                </p>
-              </div>
+            <div class="flex flex-col gap-1">
+              <p class="text-sm font-medium leading-none text-on-surface">
+                No todos yet
+              </p>
+              <p class="text-sm text-on-surface-variant">
+                Add your first todo above to get started.
+              </p>
             </div>
-          </li>
-        }
-      </ul>
+          </div>
+        </div>
+      }
     }
   `,
   host: {
@@ -96,6 +175,39 @@ import { Todo } from '../../models/todo';
 export class TodoList {
   todos = input<Todo[]>([]);
   loading = input<boolean>(false);
+  /** Current server-side sort, synced into MatSort so the header arrows stay accurate. */
+  activeSort = input<{ sortBy: string; sortDir: 'asc' | 'desc' }>();
   toggled = output<Todo>();
   removed = output<string>();
+  edited = output<Todo>();
+  sorted = output<Sort>();
+
+  readonly displayedColumns = [
+    'title',
+    'description',
+    'completed',
+    'createdAt',
+    'actions',
+  ];
+
+  private readonly sort = viewChild(MatSort);
+
+  constructor() {
+    // Sync the server-side sort into MatSort so the header arrows reflect the
+    // initial state. Material 22's sort() TOGGLES direction when the id matches
+    // the active header and ALWAYS emits sortChange, so this only runs while no
+    // header is active (initial load and after a cleared sort) — afterwards the
+    // store is driven solely by the user's header clicks.
+    effect(() => {
+      const sort = this.sort();
+      const active = this.activeSort();
+      if (sort && active && !sort.active) {
+        sort.sort({
+          id: active.sortBy,
+          start: active.sortDir,
+          disableClear: false,
+        });
+      }
+    });
+  }
 }
