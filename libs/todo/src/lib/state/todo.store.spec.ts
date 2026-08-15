@@ -4,7 +4,7 @@ import { ApplicationRef } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { of, throwError } from 'rxjs';
 
-import { Todo, TodoPage } from '../models/todo';
+import { Todo, TodoPageDto } from '../models/todo';
 import { TodoService } from '../services/todo.service';
 import { TodoStore } from './todo.store';
 
@@ -25,7 +25,7 @@ const mockTodos: Todo[] = [
   },
 ];
 
-const mockPage: TodoPage = {
+const mockPage: TodoPageDto = {
   items: mockTodos,
   totalCount: 2,
   page: 1,

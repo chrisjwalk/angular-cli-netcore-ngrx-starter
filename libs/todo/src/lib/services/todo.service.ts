@@ -4,7 +4,7 @@ import { Injectable, inject } from '@angular/core';
 import {
   CreateTodoRequest,
   Todo,
-  TodoPage,
+  TodoPageDto,
   TodoQuery,
   UpdateTodoRequest,
 } from '../models/todo';
@@ -14,7 +14,7 @@ export class TodoService {
   private readonly http = inject(HttpClient);
 
   getAll(params: TodoQuery) {
-    return this.http.get<TodoPage>('/api/todos', { params: { ...params } });
+    return this.http.get<TodoPageDto>('/api/todos', { params: { ...params } });
   }
 
   create(todo: CreateTodoRequest) {

@@ -5,7 +5,7 @@ import {
 } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { Todo, TodoPage, TodoQuery } from '../models/todo';
+import { Todo, TodoPageDto, TodoQuery } from '../models/todo';
 import { TodoService } from './todo.service';
 
 describe('TodoService', () => {
@@ -33,8 +33,13 @@ describe('TodoService', () => {
       sortDir: 'asc',
       filter: 'buy',
     };
-    const page: TodoPage = { items: [], totalCount: 12, page: 2, pageSize: 5 };
-    let result: TodoPage | undefined;
+    const page: TodoPageDto = {
+      items: [],
+      totalCount: 12,
+      page: 2,
+      pageSize: 5,
+    };
+    let result: TodoPageDto | undefined;
 
     service.getAll(query).subscribe((value) => (result = value));
 

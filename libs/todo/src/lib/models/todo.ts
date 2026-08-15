@@ -21,7 +21,8 @@ export type TodoQuery = {
   filter: string;
 };
 
-export type TodoPage = {
+/** Response envelope of the paged GET /api/todos (mirrors the C# TodoPageDto). */
+export type TodoPageDto = {
   items: Todo[];
   totalCount: number;
   page: number;

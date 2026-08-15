@@ -90,10 +90,10 @@ export function withTodoFeature() {
         patchState(store, { sortBy, sortDir, page: 1 });
       },
 
-      updateFilter: rxMethod<string>(
-        pipe(
+      updateFilter: rxMethod<string>((source$) =>
+        source$.pipe(
           debounceTime(300),
-          tap((filter) => patchState(store, { filter, page: 1 })),
+          tap((filter: string) => patchState(store, { filter, page: 1 })),
         ),
       ),
 
