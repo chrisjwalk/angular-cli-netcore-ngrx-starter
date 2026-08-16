@@ -137,7 +137,15 @@ export default defineConfig(({ mode }) => {
           highlighter: 'shiki',
           shikiOptions: {
             highlighter: {
-              additionalLangs: ['bash', 'shell', 'yaml', 'mermaid'],
+              // cs/sql cover the recipe catalog's C#/SQL code blocks
+              additionalLangs: [
+                'bash',
+                'shell',
+                'yaml',
+                'cs',
+                'sql',
+                'mermaid',
+              ],
               skipLangs: ['mermaid'],
             },
           },

@@ -33,5 +33,10 @@ export const routes: Route[] = [
     loadChildren: () =>
       import('./content/content.routes').then((m) => m.contentRoutes),
   },
+  {
+    path: 'recipes',
+    loadChildren: () =>
+      import('./recipes/recipes.routes').then((m) => m.recipesRoutes),
+  },
   { path: '**', redirectTo: '' },
 ];

@@ -1,5 +1,5 @@
 ---
-title: Error handling (layered: local UI + notifications)
+title: 'Error handling (layered: local UI + notifications)'
 area: frontend
 canonical: [libs/todo/src/lib/components/todo-page/todo-page.ts, libs/auth/src/lib/state/auth.interceptor.ts, libs/shared/src/lib/state/notification.store.ts, apps/web-app/src/app/app.ts]
 updated: 2026-08-16

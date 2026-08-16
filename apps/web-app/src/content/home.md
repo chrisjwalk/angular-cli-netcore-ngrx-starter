@@ -9,6 +9,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 - **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
 - **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
 - **Markdown content pages** — [Analog.js](https://analogjs.org) content feature renders pages from Markdown files with frontmatter support (see the [About](/about) page for a live demo)
+- **Recipe browser** — the repo's [recipe catalog](docs/README.md) is browsable in the running app at [`/recipes`](/recipes), served from the same files via an Analog content route
 - **Counter micro frontend** — the Counter feature runs as a separate [Module Federation](https://module-federation.io/) remote (`counter-remote`), demonstrating micro-frontend architecture with shared singleton libraries
 - **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
 - **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
