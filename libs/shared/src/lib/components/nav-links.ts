@@ -30,4 +30,10 @@ export const NAV_LINKS: NavLink[] = [
     hint: 'Content',
     label: 'Content',
   },
+  {
+    routerLink: '/recipes',
+    icon: 'menu_book',
+    hint: 'Recipes',
+    label: 'Recipes',
+  },
 ];
