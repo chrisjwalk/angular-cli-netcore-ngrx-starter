@@ -116,11 +116,11 @@ pnpm format:write && pnpm format:check
 
 ## Pitfalls
 
-| Symptom                           | Cause / fix                                                                             |
-| --------------------------------- | --------------------------------------------------------------------------------------- |
-| NG04014 in the browser            | Missing barrel export — `export *` each new component from `src/index.ts`               |
-| Coverage threshold failure        | 80% per file — every new file needs a spec                                              |
-| Feature unreachable               | Forgot `NAV_LINKS` entry or the lazy route in `app.routes.ts`                           |
-| NG0203 in the MFE remote          | `@ngrx/signals/events` inlined by the federation plugin — avoid it in MFE-shared stores |
-| `unknown` type in rxMethod pipe   | Use an explicit arrow + parameter annotation, not a bare `pipe()`                       |
-| `mat-error` not showing on submit | Call `markAllAsTouched()` when the form is invalid before emitting (see signal-forms)   |
+| Symptom                           | Cause / fix                                                                                                                                                       |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| NG04014 in the browser            | Missing barrel export — `export *` each new component from `src/index.ts`                                                                                         |
+| Coverage threshold failure        | 80% per file — every new file needs a spec                                                                                                                        |
+| Feature unreachable               | Forgot `NAV_LINKS` entry or the lazy route in `app.routes.ts`                                                                                                     |
+| NG0203 in the MFE remote          | `@ngrx/signals/events` inlined by the federation plugin — avoid it in MFE-shared stores                                                                           |
+| `unknown` type in rxMethod pipe   | Use an explicit arrow + parameter annotation, not a bare `pipe()`                                                                                                 |
+| `mat-error` not showing on submit | Signal forms have no NgControl — guard `mat-error` with `@if (touched && invalid)` and call `markAsTouched()` in `submission.onInvalid` (see signal-forms recipe) |
