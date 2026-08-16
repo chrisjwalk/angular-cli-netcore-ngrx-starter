@@ -67,4 +67,29 @@ test.describe('Recipes page', () => {
       await expect(page.getByTestId('app-recipes')).toBeVisible();
     },
   );
+
+  test(
+    'should navigate via a Related link to another recipe',
+    { timeout: 60_000 },
+    async ({ page }) => {
+      await page.goto('/recipes/signal-store');
+
+      // Related links are written as bare <name>.md in the markdown (correct
+      // on GitHub); the marked extension rewrites them to /recipes/<name>.
+      const related = page
+        .getByTestId('lib-page-container')
+        .getByRole('link', { name: 'Server-side CRUD' });
+      await expect(related).toBeVisible({ timeout: 60_000 });
+      await expect(related).toHaveAttribute('href', '/recipes/server-crud');
+
+      await related.click();
+
+      await expect(page).toHaveURL(/\/recipes\/server-crud$/);
+      await expect(
+        page
+          .getByTestId('lib-page-container')
+          .getByRole('heading', { name: /Server-side CRUD/ }),
+      ).toBeVisible({ timeout: 60_000 });
+    },
+  );
 });

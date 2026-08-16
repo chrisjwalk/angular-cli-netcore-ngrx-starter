@@ -22,7 +22,7 @@ interface RecipeAttributes {
     <div
       class="border-b border-outline-variant/30 bg-surface-container-low dark:bg-surface-container"
     >
-      <div class="max-w-6xl mx-auto px-8 py-10">
+      <div class="max-w-[1440px] mx-auto px-8 py-10">
         <a
           href="/recipes"
           class="mb-3 inline-block text-xs font-semibold uppercase tracking-widest text-primary no-underline hover:underline"

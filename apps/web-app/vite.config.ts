@@ -1,10 +1,28 @@
 /// <reference types="vitest" />
 
 import { resolve } from 'path';
+import type { MarkedExtension } from 'marked';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
+
+// Recipe `Related` links are bare <name>.md (correct when browsing on GitHub);
+// rewrite them to the app's /recipes/<name> routes when rendering in-app.
+// Only bare kebab-case filenames match — paths like docs/README.md fall
+// through to the default markdown link handling.
+const recipeLinksExtension = {
+  name: 'recipe-links',
+  level: 'inline',
+  // The built-in link tokenizer matches first; rewrite the href after
+  // tokenization instead. Only bare kebab-case filenames match — paths like
+  // docs/README.md stay untouched.
+  walkTokens(token: { type: string; href?: string }) {
+    if (token.type === 'link' && /^[a-z0-9-]+\.md$/.test(token.href ?? '')) {
+      token.href = `/recipes/${token.href!.slice(0, -3)}`;
+    }
+  },
+} as unknown as MarkedExtension;
 
 const angVer = '~22.0.5';
 const cdkMatVer = '~22.0.3';
@@ -135,6 +153,9 @@ export default defineConfig(({ mode }) => {
         },
         content: {
           highlighter: 'shiki',
+          markedOptions: {
+            extensions: [recipeLinksExtension],
+          },
           shikiOptions: {
             highlighter: {
               // cs/sql cover the recipe catalog's C#/SQL code blocks
