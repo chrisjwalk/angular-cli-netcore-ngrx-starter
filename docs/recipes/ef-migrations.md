@@ -1,36 +1,37 @@
 ---
-title: EF Core migrations
+title: EF Core migrations (Identity)
 area: backend
-canonical: [apps/api/Api/Migrations, apps/api/Api/Program.cs, apps/api/Api/Services/TodoSeeder.cs, .config/dotnet-tools.json]
-updated: 2026-08-15
+canonical: [apps/api/Api/Migrations, apps/api/Api/DbContext.cs, apps/api/Api/Program.cs, .github/workflows/deploy.yml]
+updated: 2026-08-16
 ---
 
 # EF Core migrations
 
-Migrations are applied at startup, seeded in development, and opt-in in production. The `USE_SQLITE` flag gives e2e and offline dev a self-contained database.
+Two Identity migrations (`InitialCreate`, `AddRefreshTokens`) plus the model snapshot. Migrations are **not** applied at startup and **not** run by CI — applying them is a manual, documented step.
 
 ## Commands
 
 ```bash
-# dotnet-ef is a local tool (see .config/dotnet-tools.json); restore with `dotnet tool restore`
-# The env var is required: Program.cs fail-fasts on missing Jwt:* outside Development,
-# and dotnet-ef builds the app host to discover AppDbContext.
-ASPNETCORE_ENVIRONMENT=Development dotnet dotnet-ef migrations add <Name> --project apps/api/Api
+# dotnet-ef is not pinned as a local tool; install it matching the SDK major:
+dotnet tool install --global dotnet-ef
+
+# The env var matters: Program.cs fail-fasts on missing Jwt:* config, and
+# appsettings.Development.json supplies it (plus the Azure SQL connection string).
+ASPNETCORE_ENVIRONMENT=Development dotnet ef database update --project apps/api/Api
 ```
 
-## Startup strategy (Program.cs)
+## Applying migrations
 
-- **Development**: `Migrate()` on every startup + seed 12 demo todos when the table is empty (`TodoSeeder.DemoTodos`).
-- **Production**: opt in via `RUN_EF_MIGRATIONS=true` App Service setting — deploy.yml has no post-deploy execution context. Single-instance only; use a migration job if scaling out.
-- **`USE_SQLITE=true`**: SQLite file in the OS temp dir with `EnsureCreated()` (SQL Server migrations are provider-specific) — used by the Playwright e2e suite so tests don't depend on Azure SQL.
-- Development migration failures are logged as warnings, not fatal — the dev loop survives an unreachable database; production fails fast.
+- **Development** — the dev DB is Azure SQL via `AZURE_SQL_CONNECTIONSTRING`; run `database update` by hand after pulling a schema change.
+- **Production** — deploy.yml explicitly notes it does not run migrations; apply manually against the App Service DB.
+- `dotnet ef` host-builds the app to discover `AppDbContext`, which is why the Jwt config must resolve (see the fail-fast in `Program.cs`).
 
 ## Conventions & gotchas
 
-- Migrations reconcile pre-existing schema/model drift (e.g. nullability from before `Nullable` was enabled) — review generated `AlterColumn`/`DropIndex` operations before committing.
-- Tests never run migrations; they use SQLite in-memory + `EnsureCreated()` (see testing recipe).
-- Regenerate rather than hand-edit when changing column types: `dotnet dotnet-ef migrations remove` then re-add (removal probes the DB, so it needs connectivity — with an unreachable DB, delete the files and regenerate).
+- Entities live in `apps/api/Api/DbContext.cs` (`AppDbContext : IdentityDbContext<AppUser>` + `RefreshTokens`); config in `OnModelCreating`.
+- Review generated `AlterColumn`/`DropIndex` operations before committing — migrations can reconcile pre-existing schema/model drift (e.g. nullability from before `Nullable` was enabled).
+- Regenerate rather than hand-edit when changing column types: `dotnet ef migrations remove` then re-add.
 
 ## Related
 
-- [Minimal APIs + EF Core](minimal-api-ef.md) · [Testing](testing.md) · [Deployment & CI](deployment.md)
+- [Minimal APIs](minimal-api-ef.md) · [Deployment & CI](deployment.md) · [JWT auth](auth-jwt.md)

@@ -2,7 +2,7 @@
 title: JWT auth with refresh rotation
 area: fullstack
 canonical: [apps/api/Api/Endpoints/AuthEndpoints.cs, apps/api/Api/Services/TokenService.cs, libs/auth/src/lib/state/auth.store.ts, libs/auth/src/lib/state/auth.interceptor.ts]
-updated: 2026-08-15
+updated: 2026-08-16
 ---
 
 # JWT auth with refresh rotation
@@ -21,9 +21,9 @@ ASP.NET Core Identity with custom JWT bearer endpoints and rotating refresh toke
 - Account endpoints (`/api/account/*` via `MapIdentityApi`) are rate-limited by the `account` policy (10 req/min/IP); login/refresh have their own wiring in `AuthEndpoints`.
 - `ClockSkew = TimeSpan.Zero` — tokens expire exactly on schedule.
 - CORS allows `*.azurestaticapps.net` + localhost with credentials (cookie exchange for preview deployments).
-- The error interceptor (see error-handling recipe) deliberately leaves 401s alone — the auth interceptor owns the refresh flow.
-- Program.cs fail-fasts in non-Development when `Jwt:*` config is missing — that's what keeps misconfigured prod deployments loud instead of 500ing at request time.
+- 401s are owned solely by the auth interceptor — nothing else in the app treats them (see http-interceptors recipe).
+- Program.cs fail-fasts when `Jwt:*` config is missing — in **all** environments (`appsettings.Development.json` supplies dev values). That keeps misconfigured deployments loud instead of 500ing at request time.
 
 ## Related
 
-- [Error handling](error-handling.md) · [Minimal APIs + EF Core](minimal-api-ef.md) · [Deployment & CI](deployment.md)
+- [HTTP interceptors](http-interceptors.md) · [Minimal APIs](minimal-api-ef.md) · [Deployment & CI](deployment.md)

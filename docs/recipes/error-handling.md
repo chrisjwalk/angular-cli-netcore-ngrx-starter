@@ -1,31 +1,32 @@
 ---
-title: Error handling (layered: local UI, interceptor, ErrorHandler)
+title: Error handling (layered: local UI + notifications)
 area: frontend
-canonical: [apps/web-app/src/app/http-error.interceptor.ts, apps/web-app/src/app/error-handler.ts, apps/web-app/src/app/app.config.ts, libs/todo/src/lib/components/todo-page/todo-page.ts, libs/shared/src/lib/state/notification.store.ts]
-updated: 2026-08-15
+canonical: [libs/todo/src/lib/components/todo-page/todo-page.ts, libs/auth/src/lib/state/auth.interceptor.ts, libs/shared/src/lib/state/notification.store.ts, apps/web-app/src/app/app.ts]
+updated: 2026-08-16
 ---
 
 # Error handling
 
 Three layers, each with a distinct job:
 
-1. **Local inline UI** — feature-level domain errors: `mutationError` state with dismiss, `rxResource.error()` banners with retry (see `todo-page.ts`), form validation messages.
-2. **HTTP error interceptor** — unexpected request failures (status `0`/network and `5xx`) routed into the `NotificationStore` as toasts.
-3. **Global `ErrorHandler`** — unhandled exceptions reported to the same notification center.
+1. **Per-feature inline errors** — `mutationError` dismissible banner and `rxResource` error banner with retry (see `todo-page.ts`), form validation via `mat-error`.
+2. **Auth flow** — the auth interceptor owns 401s: refresh, retry once, logout on failure (see http-interceptors recipe).
+3. **Notification center** — the app-wide surface for non-request events: `sw-update` notifications with a reload action; kinds are `'sw-update' | 'auth' | 'error' | 'info'`.
 
 ## Canonical implementation
 
-- `apps/web-app/src/app/http-error.interceptor.ts` — notifies only on `0`/`5xx`; `400`/`401`/`403`/`404`/`429` belong to their owning layers. **Always rethrows** so `authInterceptor`'s refresh and feature `tapResponse`/`resource.error()` still run.
-- `apps/web-app/src/app/error-handler.ts` — skips `HttpErrorResponse` (already notified), uses `runInInjectionContext(this.injector, ...)` because `handleError()` runs outside any injection context.
-- `apps/web-app/src/app/app.config.ts` — interceptor registered **last** (outermost); `NotificationStore`/`SwUpdateStore` root-provided there.
+- `libs/todo/src/lib/components/todo-page/todo-page.ts` — the two banner patterns: dismissible mutation error, and a resource-error banner wired to `store.reload()`
+- `libs/auth/src/lib/state/auth.interceptor.ts` — refresh + retry on 401, logout + rethrow on refresh failure
+- `libs/shared/src/lib/state/notification.store.ts` — `add()` (auto-assigns id/read/createdAt, schedules `autoDismissMs`), `markRead`, `markAllRead`, `dismiss`
+- `apps/web-app/src/app/app.ts` — provides `NotificationStore` + `SwUpdateStore` at the App level
 
 ## Conventions & gotchas
 
-- Notification stores are root-provided in `app.config.ts` — do not also list them in `App`'s component providers: that shadows the root instance and the bell would never show what the interceptor writes.
-- Interceptor order matters: `[apiBaseUrlInterceptor, authInterceptor, httpErrorInterceptor]` — the error interceptor is outermost, sees every error, never swallows one.
-- The toast message derives from the `HttpErrorResponse` (`status === 0` → "check your connection").
-- `autoDismissMs: 8000` matches the other notification kinds' UX.
+- **Provide `NotificationStore`/`SwUpdateStore` exactly once (App providers).** Re-providing them in a feature shadows the instance the toolbar bell reads — notifications would silently vanish.
+- 400/404s are feature concerns (`mutationError` / resource errors), not toasts — nothing global rewrites them.
+- `SwUpdateStore` demonstrates action notifications: `action: { label: 'Reload', handler }`.
+- Mutation errors are cleared on success in `tapResponse.next`, so a retry that succeeds removes the banner.
 
 ## Related
 
-- [SignalStore state](signal-store.md) · [PWA & service worker](pwa.md)
+- [HTTP interceptors](http-interceptors.md) · [Notification center](notifications.md) · [PWA & service worker](pwa.md) · [SignalStore state](signal-store.md)

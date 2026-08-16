@@ -2,7 +2,7 @@
 title: Deployment & CI
 area: devops
 canonical: [.github/workflows/ci.yml, .github/workflows/preview.yml, .github/workflows/deploy.yml, apps/web-app/src/staticwebapp.config.json]
-updated: 2026-08-15
+updated: 2026-08-16
 ---
 
 # Deployment & CI
@@ -18,7 +18,7 @@ Three pipelines: CI on every push/PR (lint → test → build → pack → e2e w
 
 ## Conventions & gotchas
 
-- **EF migrations** are applied at app startup, gated by `RUN_EF_MIGRATIONS=true` in the App Service settings (see ef-migrations recipe); the deploy workflow has no post-deploy execution context.
+- **EF migrations are not run by the pipeline** — deploy.yml notes it explicitly; production applies are a manual step (see ef-migrations recipe).
 - Preview deployments are static-only — the API is CORS-whitelisted for `*.azurestaticapps.net` origins.
 - The deploy triggers on `workflow_run` after CI succeeds on main — only green builds deploy.
 - OIDC secrets needed: `AZURE_CLIENT_ID`, `AZURE_TENANT_ID`, `AZURE_SUBSCRIPTION_ID`, `AZURE_WEBAPP_NAME`.

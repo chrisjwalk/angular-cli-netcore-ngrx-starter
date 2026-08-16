@@ -1,39 +1,42 @@
 ---
-title: Minimal APIs + EF Core
+title: Minimal APIs (in-memory + EF patterns)
 area: backend
-canonical: [apps/api/Api/Endpoints/TodoEndpoints.cs, apps/api/Api/Endpoints/AuthEndpoints.cs, apps/api/Api/DbContext.cs, apps/api/Api/Services/TodoRepository.cs]
-updated: 2026-08-15
+canonical: [apps/api/Api/Endpoints/TodoEndpoints.cs, apps/api/Api/Endpoints/AuthEndpoints.cs, apps/api/Api/DbContext.cs, apps/api/Api/Program.cs]
+updated: 2026-08-16
 ---
 
-# Minimal APIs + EF Core
+# Minimal APIs
 
-All new API surface is minimal-API endpoint groups (extension methods on `IEndpointRouteBuilder`); controllers are legacy. Entities live directly in `DbContext.cs`.
+All new API surface is minimal-API endpoint groups (extension methods on `IEndpointRouteBuilder`); controllers are legacy (only `MapControllers()` + the Identity `MapIdentityApi` account group). Two persistence flavors coexist: in-memory (todos) and EF Core (auth/Identity).
 
 ## Canonical implementation
 
-- `apps/api/Api/Endpoints/TodoEndpoints.cs` — the canonical group shape:
+- `apps/api/Api/Endpoints/TodoEndpoints.cs` — the in-memory CRUD group:
 
 ```csharp
 public static IEndpointRouteBuilder MapTodoEndpoints(this IEndpointRouteBuilder app)
 {
   var group = app.MapGroup("/api/todos").WithTags("Todos");
-  group.MapGet("", async ([AsParameters] TodoQuery query, TodoRepository repo) => { ... });
+  group.MapGet("", (TodoRepository repo) => Results.Ok(repo.GetAll()));
+  group.MapPost("", (CreateTodoRequest req, TodoRepository repo) => ...);
   return app;
 }
 ```
 
-- DTOs are positional records in the same file; `Results.*` typed returns (`Results.Ok/Created/NotFound/ValidationProblem`).
-- `apps/api/Api/DbContext.cs` — `AppDbContext : IdentityDbContext<AppUser>` plus `DbSet<TodoItem>`; config in `OnModelCreating`.
-- `apps/api/Api/Services/TodoRepository.cs` — scoped repositories; sort whitelists as `Expression` maps.
+- DTOs are positional records in the same file; `Results.*` typed returns (`Results.Created/Ok/NotFound/NoContent`).
+- `apps/api/Api/Endpoints/AuthEndpoints.cs` — EF-backed login/refresh/logout over ASP.NET Core Identity (`AddIdentityCore<AppUser>().AddEntityFrameworkStores<AppDbContext>()`).
+- `apps/api/Api/DbContext.cs` — `IdentityDbContext<AppUser>` plus `RefreshTokens`; config in `OnModelCreating`.
+- `apps/api/Api/Program.cs` — registration order: `AddDbContext` (SQL Server), Identity, singleton `TodoRepository`, `MapAuthEndpoints`/`MapTodoEndpoints`.
 
 ## Conventions & gotchas
 
-- Query params bind via a positional record + `[AsParameters]`; validate manually and return `Results.ValidationProblem` with per-field string arrays.
-- `.NET 10` ships `AddValidation()`/`[ValidatableType]`, but the analyzer flags it experimental (error-level ASP0029) — this repo uses explicit handler validation instead.
-- `DateTimeOffset` columns cannot be ordered by SQLite (the xUnit provider) — audit fields use UTC `DateTime`; `DateTimeOffset` is fine when never sorted (`RefreshToken.ExpiresAt`).
-- Register endpoint groups in `Program.cs`: `app.MapTodoEndpoints();`.
-- Rate limiting exists per-policy (the `account` policy guards login/register); auth-gating uses `.RequireAuthorization()` on the group.
+- Health checks split by readiness: `/health/live` excludes all tagged checks (process up only), `/health/ready` includes the SQL check.
+- Rate limiting: the `account` policy (10 req/min/IP fixed window) guards the Identity account group; rejection status is 429.
+- `Program.cs` fail-fasts on missing `Jwt:*` config in **all** environments — `appsettings.Development.json` supplies dev values.
+- CORS is preview-deployment-shaped: `*.azurestaticapps.net` + localhost, with credentials for the HttpOnly cookie exchange.
+- PATCH partial updates: nullable request fields mean "unchanged" (record `with` expression in the repository).
+- Swagger UI is served at `/swagger`.
 
 ## Related
 
-- [Server-side CRUD](server-crud.md) · [EF migrations](ef-migrations.md) · [JWT auth](auth-jwt.md) · [Testing](testing.md)
+- [Server-side CRUD](server-crud.md) · [EF migrations](ef-migrations.md) · [JWT auth](auth-jwt.md)

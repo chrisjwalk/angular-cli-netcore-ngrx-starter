@@ -6,7 +6,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 ## Features
 
-- **Server-side CRUD reference** — the Todos feature demonstrates the canonical enterprise pattern: EF Core persistence, server-side pagination, sorting, and filtering with NgRx SignalStore and stable signal-based forms
+- **Todos CRUD demo** — the Todos feature demonstrates the canonical full-stack CRUD loop: a .NET minimal API with an in-memory repository, an NgRx SignalStore driving an `rxResource`, and per-feature error banners
 - **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
 - **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
 - **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
@@ -127,7 +127,7 @@ Builds the Angular app and publishes the .NET project to `/dist`, ready to deplo
 
 ## Recipes
 
-A [recipe catalog](docs/README.md) documents every pattern in this repo — feature libraries, SignalStore, server-side CRUD, signal forms, error handling, EF migrations, auth, testing, theming, MFEs, and deployment. Each recipe points at its canonical implementation files; the code is the source of truth.
+A [recipe catalog](docs/README.md) documents every pattern in this repo — feature libraries, SignalStore, CRUD, signal forms, error handling, notifications, route guards, HTTP interceptors, EF migrations, auth, testing, content pages, PWA, theming, MFEs, deployment, and dependency updates. Each recipe points at its canonical implementation files; the code is the source of truth.
 
 ## Contributing
 
