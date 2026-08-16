@@ -60,9 +60,12 @@ export class Recipes {
   readonly layoutStore = inject(LayoutStore);
 
   readonly recipes: RecipeEntry[] = injectContentFiles<RecipeAttributes>()
-    .filter((file) => file.slug.startsWith('recipes/'))
+    // Filter on `filename` (full path), not `slug` — the slug is only the
+    // last path segment, and in dev the symlink resolves to the real
+    // docs/recipes path, so both key shapes only share the `/recipes/` dir.
+    .filter((file) => file.filename.includes('/recipes/'))
     .map((file) => ({
-      slug: file.slug.replace(/^recipes\//, ''),
+      slug: file.slug,
       title: file.attributes.title ?? file.slug,
       area: file.attributes.area,
     }))

@@ -10,13 +10,13 @@ vi.mock('@analogjs/content', async (importOriginal) => {
     ...actual,
     injectContentFiles: () => [
       {
-        filename: 'recipes/signal-store.md',
-        slug: 'recipes/signal-store',
+        filename: '/src/content/recipes/signal-store.md',
+        slug: 'signal-store',
         attributes: { title: 'NgRx SignalStore patterns', area: 'frontend' },
       },
       {
-        filename: 'recipes/ef-migrations.md',
-        slug: 'recipes/ef-migrations',
+        filename: '/src/content/recipes/ef-migrations.md',
+        slug: 'ef-migrations',
         attributes: {
           title: 'EF Core migrations (Identity)',
           area: 'backend',

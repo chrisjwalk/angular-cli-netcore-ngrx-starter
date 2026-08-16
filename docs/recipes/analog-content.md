@@ -22,6 +22,7 @@ Pages render from Markdown files with frontmatter via Analog's content feature (
 
 - **There is no automatic file-based slug routing** — dropping a `.md` into `content/` lists it via `injectContentFiles()` but doesn't create a page; every content area needs explicit routes. A param-based route (`{ path: ':slug' }` + `injectContent({ param: 'slug', subdirectory: ... })`) covers a whole directory of files with one component.
 - The content plugin only discovers `src/content/**/*.md` (hardcoded in @analogjs/platform) — files elsewhere must be reached via a symlink, which tinyglobby follows (`followSymbolicLinks: true`).
+- **Filter content files by `filename`, not `slug`** — `slug` is only the last path segment (bare filename), and in dev Vite resolves symlinks to their real paths, so map keys differ between dev (`/home/.../docs/recipes/x.md`) and build (`/src/content/recipes/x.md`); the `/recipes/` directory segment in `filename` is the stable discriminator.
 - **README → home.md sync is real now**: `.lintstagedrc.cjs` runs `pnpm update-readme` (`sed -n '/^# /,$p' README.md > apps/web-app/src/assets/home.md`) on README commits; `content/home.md` (the rendered copy) is hand-maintained and must be kept in sync manually.
 - `assets/home.md` is precached by the PWA and Tailwind-scanned — always regenerate with `pnpm update-readme` after README edits.
 - The vitest setup mocks `injectContent`/`injectContentFiles` (`libs/home/src/lib/home/home.spec.ts`, `apps/web-app/src/app/recipes/*.spec.ts`) since the real loader needs the Vite content pipeline.

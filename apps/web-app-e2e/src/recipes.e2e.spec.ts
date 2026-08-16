@@ -19,9 +19,9 @@ test.describe('Recipes page', () => {
       await expect(page.getByTestId('app-recipes')).toBeVisible({
         timeout: 60_000,
       });
-      await expect(page.getByRole('link', { name: /SignalStore/ })).toBeVisible(
-        { timeout: 60_000 },
-      );
+      await expect(
+        page.getByRole('link', { name: 'NgRx SignalStore patterns' }),
+      ).toBeVisible({ timeout: 60_000 });
 
       expect(consoleErrors, 'Browser console errors').toEqual([]);
     },
@@ -36,8 +36,11 @@ test.describe('Recipes page', () => {
       await expect(page.getByTestId('app-recipe')).toBeVisible({
         timeout: 60_000,
       });
+      // The hero h1 repeats the title, so scope to the markdown body's container
       await expect(
-        page.getByRole('heading', { name: /SignalStore patterns/i }),
+        page
+          .getByTestId('lib-page-container')
+          .getByRole('heading', { name: /SignalStore patterns/i }),
       ).toBeVisible({ timeout: 60_000 });
 
       // Regression: content not found when the slug doesn't resolve
@@ -50,11 +53,17 @@ test.describe('Recipes page', () => {
     { timeout: 60_000 },
     async ({ page }) => {
       await page.goto('/recipes');
-      await page.getByRole('link', { name: /SignalStore/ }).click();
+      await page
+        .getByRole('link', { name: 'NgRx SignalStore patterns' })
+        .click();
 
       await expect(page).toHaveURL(/\/recipes\/signal-store$/);
 
-      await page.getByRole('link', { name: /recipes/i }).click();
+      // Scope to the page's back link — the toolbar nav also matches "Recipes"
+      await page
+        .getByTestId('app-recipe')
+        .getByRole('link', { name: /recipes/i })
+        .click();
       await expect(page.getByTestId('app-recipes')).toBeVisible();
     },
   );
