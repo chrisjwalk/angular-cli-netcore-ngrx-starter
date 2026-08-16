@@ -39,6 +39,7 @@ These are written for both humans and coding agents: drop the relevant recipe (o
 
 The repo's Claude skills codify _procedures_ (scaffolding, updates) that complement these recipes:
 
+- `.claude/skills/recipes/SKILL.md` — dispatch into this catalog: map a task to its recipe(s), load them + their canonical files, and follow the conventions
 - `.claude/skills/create-signalstore/SKILL.md` — store generation patterns
 - `.claude/skills/create-mfe/SKILL.md` — micro-frontend scaffolding
 - `.claude/skills/create-feature/SKILL.md` — full feature scaffolding
