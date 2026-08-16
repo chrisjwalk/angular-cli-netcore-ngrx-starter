@@ -18,7 +18,8 @@ skill is the procedure.
 ## Step 0 – Ask the user
 
 1. Feature name and route path (e.g. `products` at `/products`)?
-2. Data shape and whether it is **API-backed** (own endpoints + EF entity) or client-only?
+2. Data shape and whether it is **API-backed** (own minimal-API endpoint group,
+   in-memory repository first; EF only if persistence is required) or client-only?
 3. Auth-gated (`requiresLoginCanActivateFn` from `@myorg/auth`) or public?
 4. Needs an e2e spec?
 
@@ -54,9 +55,7 @@ automatically.
 
 ## Step 3 – Service, store, models
 
-- Models: plain types (`libs/todo/src/lib/models/todo.ts`); name the paged
-  envelope `TodoPageDto`-style (`<Feature>PageDto`) to avoid barrel collisions
-  with the page component
+- Models: plain types (`libs/todo/src/lib/models/todo.ts`)
 - Service: all HTTP in `services/<feature>.service.ts` (`providedIn: 'root'`)
 - Store: follow the `create-signalstore` skill (feature-first `signalStoreFeature`,
   rxResource reads with computed params, rxMethod + tapResponse mutations)
@@ -66,12 +65,14 @@ automatically.
 - Add a `NAV_LINKS` entry in `libs/shared/src/lib/components/nav-links.ts`
 - Add a lazy route in `apps/web-app/src/app/app.routes.ts`:
   `loadChildren: () => import('@myorg/<feature>').then((m) => m.<feature>Routes)`
+- Auth-gated child routes: `canActivate: [requiresLoginCanActivateFn]` (see
+  `libs/weather-forecast/src/lib/lib.routes.ts` and `docs/recipes/auth-guards.md`)
 - Export everything from the barrel (`NG04014` is the symptom of a missing export)
 
 ## Step 5 – Specs (80% per-file coverage gate)
 
 - Store spec: spy the service **before** creating the store (rxResource fetches
-  immediately); `await appRef.whenStable()`; real ~350ms waits for debounced
+  immediately); `await appRef.whenStable()`; use real waits for timer-driven
   flows — fake timers + `whenStable` hang on pending timers
 - Component specs: Testing Library `render` + `getByTestId`;
   `componentOutputs: { x: { emit: vi.fn() } }`; plain value/textContent
@@ -84,25 +85,24 @@ automatically.
 
 ## Step 6 – Optional: API endpoint group
 
-- Entity in `apps/api/Api/DbContext.cs` + `OnModelCreating` config; migration
-  via `ASPNETCORE_ENVIRONMENT=Development dotnet dotnet-ef migrations add <Name>
---project apps/api/Api` (see `docs/recipes/ef-migrations.md`)
 - `apps/api/Api/Endpoints/<Feature>Endpoints.cs`: static
   `Map<Feature>Endpoints` group, positional record DTOs, `Results.*` returns,
-  explicit `Results.ValidationProblem` validation, expression-map sort
-  whitelists (see `docs/recipes/minimal-api-ef.md`); register in `Program.cs`
-- xUnit tests in `apps/api/Api.Test` on SQLite in-memory (see
-  `TodoRepositoryTests.cs`) — `DateTimeOffset` columns cannot be ordered by
-  SQLite; use UTC `DateTime` for sortable audit fields
-- Server-side paging UI gotchas (Material 22 + rxResource) are documented in
-  `docs/recipes/server-crud.md` — read before wiring MatSort/MatPaginator
+  in-memory repository (record + `ConcurrentDictionary` singleton, like
+  `TodoEndpoints.cs`) — register the group and the repository in `Program.cs`
+  (see `docs/recipes/minimal-api-ef.md`)
+- xUnit tests in `apps/api/Api.Test` over the repository (plain xUnit, no DB —
+  see `UnitTest.cs`)
+- Persistence required? Entity in `apps/api/Api/DbContext.cs` +
+  `OnModelCreating` config, migration via
+  `ASPNETCORE_ENVIRONMENT=Development dotnet ef migrations add <Name> --project apps/api/Api`
+  (see `docs/recipes/ef-migrations.md`)
 
 ## Step 7 – Optional: e2e spec
 
 `apps/web-app-e2e/src/<feature>.e2e.spec.ts` — serial mode for mutating specs,
 testid-scoped assertions, `expect(...).toPass()` for post-fetch renders (see
-`todo.e2e.spec.ts`). The e2e API runs on SQLite with seeded data; no DB
-provisioning needed.
+`weather-forecast.e2e.spec.ts`). The playwright `webServer` already boots the
+API (`/health/live`), counter-remote, and the app — no DB provisioning needed.
 
 ## Step 8 – Verify
 
@@ -116,10 +116,11 @@ pnpm format:write && pnpm format:check
 
 ## Pitfalls
 
-| Symptom                         | Cause / fix                                                               |
-| ------------------------------- | ------------------------------------------------------------------------- |
-| NG04014 in the browser          | Missing barrel export — `export *` each new component from `src/index.ts` |
-| Coverage threshold failure      | 80% per file — every new file needs a spec                                |
-| Feature unreachable             | Forgot `NAV_LINKS` entry or the lazy route in `app.routes.ts`             |
-| Paginator reverts to page 1     | rxResource value dip or MatSort re-creation — see server-crud recipe      |
-| `unknown` type in rxMethod pipe | Use an explicit arrow + parameter annotation, not a bare `pipe()`         |
+| Symptom                           | Cause / fix                                                                             |
+| --------------------------------- | --------------------------------------------------------------------------------------- |
+| NG04014 in the browser            | Missing barrel export — `export *` each new component from `src/index.ts`               |
+| Coverage threshold failure        | 80% per file — every new file needs a spec                                              |
+| Feature unreachable               | Forgot `NAV_LINKS` entry or the lazy route in `app.routes.ts`                           |
+| NG0203 in the MFE remote          | `@ngrx/signals/events` inlined by the federation plugin — avoid it in MFE-shared stores |
+| `unknown` type in rxMethod pipe   | Use an explicit arrow + parameter annotation, not a bare `pipe()`                       |
+| `mat-error` not showing on submit | Call `markAllAsTouched()` when the form is invalid before emitting (see signal-forms)   |
