@@ -6,6 +6,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 ## Features
 
+- **Server-side CRUD reference** — the Todos feature demonstrates the canonical enterprise pattern: EF Core persistence, server-side pagination, sorting, and filtering with NgRx SignalStore and stable signal-based forms
 - **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
 - **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
 - **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
@@ -18,7 +19,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 **Frontend**
 
-- [Angular 21](https://angular.dev) — zoneless change detection, standalone components, signals
+- [Angular 22](https://angular.dev) — zoneless change detection, standalone components, signals
 - [NgRx Signal Store](https://ngrx.io/guide/signals) — reactive state management
 - [Angular Material](https://material.angular.io) — UI component library
 - [Analog.js](https://analogjs.org) — Vite-native Angular meta-framework; used for file-based Markdown content pages
@@ -123,6 +124,10 @@ pnpm build:prod
 ```
 
 Builds the Angular app and publishes the .NET project to `/dist`, ready to deploy to Azure App Service.
+
+## Recipes
+
+A [recipe catalog](docs/README.md) documents every pattern in this repo — feature libraries, SignalStore, server-side CRUD, signal forms, error handling, EF migrations, auth, testing, theming, MFEs, and deployment. Each recipe points at its canonical implementation files; the code is the source of truth.
 
 ## Contributing
 
