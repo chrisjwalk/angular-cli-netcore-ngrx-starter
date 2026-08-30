@@ -1,4 +1,10 @@
 {
+  "routes": [
+    {
+      "route": "/*.md",
+      "statusCode": 404
+    }
+  ],
   "navigationFallback": {
     "rewrite": "/index.html",
     "exclude": [

@@ -26,6 +26,11 @@ Bin/
 obj/
 Obj/
 
+# MSBuild on Linux/WSL can create build-host dirs whose names contain a
+# literal backslash ("bin\Debug") — the backslash is escaped in the pattern.
+**/bin\\Debug/
+**/bin\\Release/
+
 # Visual Studio 2015 cache/options directory
 .vs/
 

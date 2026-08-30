@@ -6,10 +6,12 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 ## Features
 
+- **Todos CRUD demo** — the Todos feature demonstrates the canonical full-stack CRUD loop: a .NET minimal API with an in-memory repository, an NgRx SignalStore driving an `rxResource`, and per-feature error banners
 - **Authentication** — register, login, and logout with JWT bearer tokens backed by ASP.NET Core Identity
 - **Notification center** — persistent notification panel with unread count, mark-as-read, dismiss, and action support (e.g. one-click reload on SW update)
 - **PWA / service worker** — offline support; notifies users when a new app version is available with an in-app prompt to reload
 - **Markdown content pages** — [Analog.js](https://analogjs.org) content feature renders pages from Markdown files with frontmatter support (see the [About](/about) page for a live demo)
+- **Recipe browser** — the repo's [recipe catalog](docs/README.md) is browsable in the running app at [`/recipes`](/recipes), served from the same files via an Analog content route
 - **Counter micro frontend** — the Counter feature runs as a separate [Module Federation](https://module-federation.io/) remote (`counter-remote`), demonstrating micro-frontend architecture with shared singleton libraries
 - **Debug page** (`/debug`) — trigger test notifications and inspect service worker update state during development
 - **PR preview deployments** — every pull request gets a live preview URL via Azure Static Web Apps
@@ -18,7 +20,7 @@ A full-stack demo using an [Nx monorepo](https://nx.dev) with [Angular](https://
 
 **Frontend**
 
-- [Angular 21](https://angular.dev) — zoneless change detection, standalone components, signals
+- [Angular 22](https://angular.dev) — zoneless change detection, standalone components, signals
 - [NgRx Signal Store](https://ngrx.io/guide/signals) — reactive state management
 - [Angular Material](https://material.angular.io) — UI component library
 - [Analog.js](https://analogjs.org) — Vite-native Angular meta-framework; used for file-based Markdown content pages
@@ -123,6 +125,10 @@ pnpm build:prod
 ```
 
 Builds the Angular app and publishes the .NET project to `/dist`, ready to deploy to Azure App Service.
+
+## Recipes
+
+A [recipe catalog](docs/README.md) documents every pattern in this repo — feature libraries, SignalStore, CRUD, signal forms, error handling, notifications, route guards, HTTP interceptors, EF migrations, auth, testing, content pages, PWA, theming, MFEs, deployment, and dependency updates. Each recipe points at its canonical implementation files; the code is the source of truth.
 
 ## Contributing
 
