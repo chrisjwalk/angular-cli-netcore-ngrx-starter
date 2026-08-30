@@ -1,7 +1,6 @@
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 const angVer = '~22.0.5';
 const cdkMatVer = '~22.0.3';
@@ -180,9 +179,6 @@ export default defineConfig(({ mode }) => ({
     },
   },
   plugins: [
-    // Resolves @myorg/* workspace paths so the dev-server dependency scan
-    // (and non-rolldown resolution paths) can find them.
-    tsconfigPaths(),
     // @module-federation/vite crashes when server.watch is boolean false (Vite 8 + Nx default).
     {
       name: 'normalize-server-watch',
@@ -218,6 +214,13 @@ export default defineConfig(({ mode }) => ({
   ].filter(Boolean),
   resolve: {
     tsconfigPaths: true,
+  },
+  // Workspace libs are source, not deps — exclude them from the dependency
+  // scan so the esbuild scanner doesn't fail to resolve their @myorg/* paths
+  // (vite's native tsconfigPaths resolution covers build/dev transforms, not
+  // the optimizer scan).
+  optimizeDeps: {
+    exclude: ['@myorg/counter'],
   },
   server: {
     port: 4201,

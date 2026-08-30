@@ -6,7 +6,6 @@ import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 // Recipe `Related` links are bare <name>.md (correct when browsing on GitHub);
 // rewrite them to the app's /recipes/<name> routes when rendering in-app.
@@ -106,11 +105,21 @@ export default defineConfig(({ mode }) => {
     },
     optimizeDeps: {
       include: ['front-matter'],
+      // Workspace libs are source, not deps — exclude them from the dependency
+      // scan so the esbuild scanner doesn't fail to resolve their @myorg/* paths
+      // (vite's native tsconfigPaths resolution covers build/dev transforms, not
+      // the optimizer scan).
+      exclude: [
+        '@myorg/auth',
+        '@myorg/counter',
+        '@myorg/home',
+        '@myorg/login',
+        '@myorg/shared',
+        '@myorg/todo',
+        '@myorg/weather-forecast',
+      ],
     },
     plugins: [
-      // Resolves @myorg/* workspace paths so the dev-server dependency scan
-      // (and non-rolldown resolution paths) can find them.
-      tsconfigPaths(),
       // @module-federation/vite crashes when server.watch is boolean false (Vite 8 + Nx default).
       // This pre-enforce plugin ensures server.watch is an object before federation's config hook.
       {
