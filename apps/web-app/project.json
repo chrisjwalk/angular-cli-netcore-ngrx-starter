@@ -11,7 +11,8 @@
       "cache": true,
       "defaultConfiguration": "production",
       "options": {
-        "cwd": "apps/web-app"
+        "cwd": ".",
+        "config": "apps/web-app/vite.config.mts"
       },
       "configurations": {
         "development": {
@@ -33,7 +34,8 @@
       "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "cwd": "apps/web-app",
+        "cwd": ".",
+        "config": "apps/web-app/vite.config.mts",
         "port": 4200
       },
       "dependsOn": [
@@ -65,7 +67,8 @@
       "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "cwd": "apps/web-app",
+        "cwd": ".",
+        "config": "apps/web-app/vite.config.mts",
         "port": 4200
       },
       "configurations": {

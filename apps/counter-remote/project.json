@@ -10,7 +10,8 @@
       "cache": true,
       "defaultConfiguration": "production",
       "options": {
-        "cwd": "apps/counter-remote"
+        "cwd": ".",
+        "config": "apps/counter-remote/vite.config.mts"
       },
       "configurations": {
         "development": {
@@ -29,7 +30,8 @@
       "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "cwd": "apps/counter-remote"
+        "cwd": ".",
+        "config": "apps/counter-remote/vite.config.mts"
       },
       "configurations": {
         "development": {

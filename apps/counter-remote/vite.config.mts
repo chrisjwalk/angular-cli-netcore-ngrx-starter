@@ -1,9 +1,18 @@
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 
-const angVer = '~22.0.5';
-const cdkMatVer = '~22.0.3';
+// Shared-singleton version pins — must satisfy the installed versions or the
+// federation runtime warns and may load duplicate module copies.
+const angVer = '~22.1.4';
+const cdkMatVer = '~22.1.4';
+
+// The command-style vite targets run from the workspace root and pass this
+// file via --config. The analog plugins default their workspaceRoot to
+// process.cwd(), so pin it explicitly — fileReplacements (preview builds),
+// content discovery, and tsconfig resolution all resolve against it.
+const workspaceRoot = resolve(import.meta.dirname, '../..');
 
 const sharedDeps = {
   // Angular core
@@ -210,7 +219,7 @@ export default defineConfig(({ mode }) => ({
     // build` command target), nitro otherwise defaults to prerendering '/',
     // which forces an SSR environment build against a main.server.ts this
     // remote doesn't have.
-    analog({ ssr: false, prerender: { routes: [] } }),
+    analog({ workspaceRoot, ssr: false, prerender: { routes: [] } }),
   ].filter(Boolean),
   resolve: {
     tsconfigPaths: true,
