@@ -13,7 +13,7 @@
     "isolatedModules": true
   },
   "include": [
-    "vite.config.ts",
+    "vite.config.mts",
     "src/**/*.test.ts",
     "src/**/*.spec.ts",
     "src/**/*.d.ts"

@@ -23,7 +23,7 @@ Four layers: vitest unit specs per lib, an app-level integration spec, xUnit tes
 - `TodoService` specs use `HttpTestingController` + `expectOne((req) => req.url === '/api/todos')` (query strings break bare URL matching).
 - E2E specs exist per feature (home, content, counter, login, weather-forecast, navigation, mfe-integration, pwa-update) — follow the nearest one when adding a feature.
 - Playwright browsers are version-pinned; after a Playwright bump run `pnpm exec playwright install chromium firefox`.
-- The vitest alias in `vite.config.ts` stubs `counter-remote/Routes` with local routes so the integration spec stays MFE-free.
+- The vitest alias in `vite.config.mts` stubs `counter-remote/Routes` with local routes so the integration spec stays MFE-free.
 
 ## Related
 

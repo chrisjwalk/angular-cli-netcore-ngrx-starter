@@ -7,24 +7,21 @@
   "tags": [],
   "targets": {
     "build": {
-      "executor": "@analogjs/platform:vite",
-      "options": {
-        "configFile": "apps/web-app/vite.config.ts",
-        "main": "apps/web-app/src/main.ts",
-        "outputPath": "dist/apps/web-app/client",
-        "tsConfig": "apps/web-app/tsconfig.app.json"
-      },
+      "command": "vite build",
+      "cache": true,
       "defaultConfiguration": "production",
+      "options": {
+        "cwd": "apps/web-app"
+      },
       "configurations": {
         "development": {
-          "mode": "development"
+          "args": ["--mode", "development"]
         },
         "production": {
-          "sourcemap": false,
-          "mode": "production"
+          "args": ["--mode", "production"]
         },
         "preview": {
-          "mode": "production"
+          "args": ["--mode", "production"]
         }
       },
       "outputs": [
@@ -32,11 +29,11 @@
       ]
     },
     "serve": {
-      "executor": "@analogjs/platform:vite-dev-server",
+      "command": "vite",
       "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "web-app:build",
+        "cwd": "apps/web-app",
         "port": 4200
       },
       "dependsOn": [
@@ -56,29 +53,27 @@
       ],
       "configurations": {
         "development": {
-          "buildTarget": "web-app:build:development",
-          "hmr": true
+          "args": ["--mode", "development"]
         },
         "production": {
-          "buildTarget": "web-app:build:production"
+          "args": ["--mode", "production"]
         }
       }
     },
     "serve-e2e": {
-      "executor": "@analogjs/platform:vite-dev-server",
+      "command": "vite",
       "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "web-app:build",
+        "cwd": "apps/web-app",
         "port": 4200
       },
       "configurations": {
         "development": {
-          "buildTarget": "web-app:build:development",
-          "hmr": true
+          "args": ["--mode", "development"]
         },
         "production": {
-          "buildTarget": "web-app:build:production"
+          "args": ["--mode", "production"]
         }
       }
     },
