@@ -6,21 +6,19 @@
   "tags": ["type:app"],
   "targets": {
     "build": {
-      "executor": "@analogjs/platform:vite",
-      "options": {
-        "configFile": "apps/counter-remote/vite.config.ts",
-        "main": "apps/counter-remote/src/main.ts",
-        "outputPath": "dist/apps/counter-remote",
-        "tsConfig": "apps/counter-remote/tsconfig.app.json"
-      },
+      "command": "vite build",
+      "cache": true,
       "defaultConfiguration": "production",
+      "options": {
+        "cwd": ".",
+        "config": "apps/counter-remote/vite.config.mts"
+      },
       "configurations": {
         "development": {
-          "mode": "development"
+          "args": ["--mode", "development"]
         },
         "production": {
-          "sourcemap": false,
-          "mode": "production"
+          "args": ["--mode", "production"]
         }
       },
       "outputs": [
@@ -28,19 +26,19 @@
       ]
     },
     "serve": {
-      "executor": "@analogjs/platform:vite-dev-server",
+      "command": "vite",
       "continuous": true,
       "defaultConfiguration": "development",
       "options": {
-        "buildTarget": "counter-remote:build",
-        "port": 4201
+        "cwd": ".",
+        "config": "apps/counter-remote/vite.config.mts"
       },
       "configurations": {
         "development": {
-          "buildTarget": "counter-remote:build:development"
+          "args": ["--mode", "development"]
         },
         "production": {
-          "buildTarget": "counter-remote:build:production"
+          "args": ["--mode", "production"]
         }
       }
     },

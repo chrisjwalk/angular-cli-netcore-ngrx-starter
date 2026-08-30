@@ -1,27 +1,21 @@
+import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 
-// These options were migrated by @nx/vite:convert-to-inferred from the project.json file.
-const configValues = { default: {}, development: {}, production: {} };
+// Shared-singleton version pins — must satisfy the installed versions or the
+// federation runtime warns and may load duplicate module copies.
+const angVer = '~22.1.4';
+const cdkMatVer = '~22.1.4';
 
-// Determine the correct configValue to use based on the configuration
-const nxConfiguration = process.env.NX_TASK_TARGET_CONFIGURATION ?? 'default';
-
-const options = {
-  ...configValues.default,
-  ...(configValues[nxConfiguration] ?? {}),
-};
-
-const angVer = '~22.0.5';
-const cdkMatVer = '~22.0.3';
+// The command-style vite targets run from the workspace root and pass this
+// file via --config. The analog plugins default their workspaceRoot to
+// process.cwd(), so pin it explicitly — fileReplacements (preview builds),
+// content discovery, and tsconfig resolution all resolve against it.
+const workspaceRoot = resolve(import.meta.dirname, '../..');
 
 const sharedDeps = {
   // Angular core
-  // Note: @angular/animations is not shared — counter-remote doesn't use
-  // Angular animations. Removing it prevents the federation plugin from
-  // bundling @angular/core internals into a loadShare that has its own
-  // _injectImplementation (causing NG0203).
   // import:false — prevents a loadShare that bundles @angular/core internals
   // (assertInInjectionContext with its own _injectImplementation), causing NG0203
   '@angular/common': { singleton: true, requiredVersion: angVer },
@@ -34,10 +28,6 @@ const sharedDeps = {
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser/animations': {
-    singleton: true,
-    requiredVersion: angVer,
-  },
-  '@angular/platform-browser-dynamic': {
     singleton: true,
     requiredVersion: angVer,
   },
@@ -178,7 +168,7 @@ const sharedDeps = {
   // buggy loadShare imports for sub-path modules. It's bundled directly.
   '@ngrx/signals': {
     singleton: true,
-    requiredVersion: '~21.1.0',
+    requiredVersion: '~22.0.0',
     import: false,
   },
   // Utilities
@@ -187,7 +177,7 @@ const sharedDeps = {
 };
 
 export default defineConfig(({ mode }) => ({
-  root: __dirname,
+  root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/counter-remote',
   build: {
     target: ['chrome89'],
@@ -225,10 +215,21 @@ export default defineConfig(({ mode }) => ({
         },
         shared: sharedDeps,
       }),
-    analog({ ssr: false }),
+    // prerender.routes: [] — with the Vite environments API (used by the `vite
+    // build` command target), nitro otherwise defaults to prerendering '/',
+    // which forces an SSR environment build against a main.server.ts this
+    // remote doesn't have.
+    analog({ workspaceRoot, ssr: false, prerender: { routes: [] } }),
   ].filter(Boolean),
   resolve: {
     tsconfigPaths: true,
+  },
+  // Workspace libs are source, not deps — exclude them from the dependency
+  // scan so the esbuild scanner doesn't fail to resolve their @myorg/* paths
+  // (vite's native tsconfigPaths resolution covers build/dev transforms, not
+  // the optimizer scan).
+  optimizeDeps: {
+    exclude: ['@myorg/counter'],
   },
   server: {
     port: 4201,

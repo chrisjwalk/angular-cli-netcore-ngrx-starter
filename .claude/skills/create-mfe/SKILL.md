@@ -37,7 +37,8 @@ MF singletons so only one copy of each runs in the browser.
 pnpm nx generate @analogjs/platform:app my-remote --directory=apps/my-remote
 ```
 
-Replace the generated `vite.config.ts` with the template in Step 3. **Keep** the
+Replace the generated `vite.config.ts` with the template in Step 3 (saved as
+`vite.config.mts`). **Keep** the
 generated app shell files (`src/main.ts`, `src/app/app.ts`,
 `src/app/app.config.ts`, `src/app/app.routes.ts`) — the remote needs these to
 run as a standalone app via `nx serve` and in Playwright. Wire `app.routes.ts`
@@ -105,9 +106,9 @@ pnpm add -D @module-federation/vite
 
 ---
 
-## Step 3 – Configure the remote's `vite.config.ts`
+## Step 3 – Configure the remote's `vite.config.mts`
 
-Copy `apps/counter-remote/vite.config.ts` as your starting point. After copying,
+Copy `apps/counter-remote/vite.config.mts` as your starting point. After copying,
 update these remote-specific values:
 
 | Field                           | Example                                |
@@ -188,8 +189,10 @@ const angVer = '~21.2.15';
 const cdkMatVer = '~21.2.13';
 
 const sharedDeps = {
-  // Angular core — no import:false needed
-  '@angular/animations': { singleton: true, requiredVersion: angVer },
+  // Angular core — no import:false needed.
+  // Note: @angular/animations and @angular/platform-browser-dynamic are
+  // deprecated in Angular 22 (animations folded into @angular/core; JIT
+  // bootstrap retired) — do NOT share them.
   '@angular/common': { singleton: true, requiredVersion: angVer },
   '@angular/common/http': { singleton: true, requiredVersion: angVer },
   '@angular/compiler': { singleton: true, requiredVersion: angVer },
@@ -197,7 +200,6 @@ const sharedDeps = {
   '@angular/forms': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser': { singleton: true, requiredVersion: angVer },
   '@angular/platform-browser/animations': { singleton: true, requiredVersion: angVer },
-  '@angular/platform-browser-dynamic': { singleton: true, requiredVersion: angVer },
   '@angular/router': { singleton: true, requiredVersion: angVer },
 
   // CDK sub-paths — import:false prevents NG0912 (see note above)
@@ -251,13 +253,13 @@ const sharedDeps = {
 
 ---
 
-## Step 4 – Configure the host's `vite.config.ts`
+## Step 4 – Configure the host's `vite.config.mts`
 
 Add the remote to the host's federation config. The host's `sharedDeps` does
 **not** need `import: false` — the host is the provider of these modules.
 
 ```typescript
-// In apps/web-app/vite.config.ts
+// In apps/web-app/vite.config.mts
 
 mode !== 'test' &&
   federation({
@@ -341,7 +343,7 @@ type generics, or `export type`.
 Fix: enable `fastCompile: mode === 'test'` in the host's `analog()` call.
 
 ```typescript
-// apps/web-app/vite.config.ts
+// apps/web-app/vite.config.mts
 analog({
   ssr: false,
   static: true,
@@ -377,7 +379,7 @@ of route` at test runtime. Always check what `libs/my-feature/src/index.ts`
 ### Wire the alias in the host's vite.config (test mode only)
 
 ```typescript
-// apps/web-app/vite.config.ts
+// apps/web-app/vite.config.mts
 import { resolve } from 'path';
 
 resolve: {
@@ -520,7 +522,7 @@ warnings in the browser console.
 | `NG0912` for Material/CDK components                                                 | Remote's loadShare virtual module has a top-level `import` that double-evaluates modules                                                            | Add `import: false` to all CDK/Material entries in the **remote's** `sharedDeps`                                           |
 | `NG0912` for workspace lib components                                                | Workspace lib bundled into both host and remote                                                                                                     | Remove the workspace lib from MF shared config; bundle it into the remote directly                                         |
 | `[MISSING_EXPORT] "SomeExport"` build error                                          | `@myorg/*` workspace lib added to MF shared config; Rolldown can't enumerate `export *` from TS path aliases                                        | Never put `@myorg/*` libs in MF shared config                                                                              |
-| `SyntaxError: Unexpected identifier` / `[PARSE_ERROR] Missing initializer` in vitest | Files reachable only via dynamic MFE import are not in `tsconfig.spec.json`'s program; OXC falls through to JS mode and chokes on TypeScript syntax | Add `fastCompile: mode === 'test'` to `analog()` in the host's `vite.config.ts`                                            |
+| `SyntaxError: Unexpected identifier` / `[PARSE_ERROR] Missing initializer` in vitest | Files reachable only via dynamic MFE import are not in `tsconfig.spec.json`'s program; OXC falls through to JS mode and chokes on TypeScript syntax | Add `fastCompile: mode === 'test'` to `analog()` in the host's `vite.config.mts`                                           |
 | `NG04014: Invalid configuration of route` in vitest                                  | Test stub imports a component not exported from the lib's barrel → `undefined` in route `component` field                                           | Re-export the lib's real routes: `export { myFeatureRoutes } from '@myorg/my-feature'`                                     |
 | Remote files missing from preview / production deploy                                | Copy step ran before host build; host build wiped the output directory                                                                              | Build both apps first, then copy the remote output into the host's dist folder                                             |
 | Remote assets return `index.html` in Azure SWA                                       | `navigationFallback` rewrites all unknown paths                                                                                                     | Add `/my-remote/*` AND `/my-remote/assets/*` (two separate entries); never use `/**` — SWA only allows one `*` per segment |

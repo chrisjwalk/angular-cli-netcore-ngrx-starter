@@ -2,6 +2,15 @@
 @import './_tokens.css';
 @plugin '@tailwindcss/typography';
 @source '../assets/*.md';
+/*
+ * Explicit sources for everything outside apps/web-app that the app renders:
+ * workspace lib components and the markdown content served by the recipe
+ * browser. (Tailwind v4 auto-detection is based on the process cwd, which is
+ * the app dir now that the serve/build targets run `vite` directly — the old
+ * nx executors ran from the workspace root and scanned these implicitly.)
+ */
+@source '../../../../libs';
+@source '../../../../docs';
 
 /*
  * Override the built-in dark: variant so it respects both OS preference

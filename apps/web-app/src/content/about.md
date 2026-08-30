@@ -47,7 +47,7 @@ The "On this page" panel above this content is built from `content.toc` in the c
 
 ## Syntax Highlighting
 
-Code blocks are highlighted at build time using [Shiki](https://shiki.style/), configured in `vite.config.ts`:
+Code blocks are highlighted at build time using [Shiki](https://shiki.style/), configured in `vite.config.mts`:
 
 ```typescript
 analog({

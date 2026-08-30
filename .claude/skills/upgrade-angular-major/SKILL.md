@@ -71,7 +71,7 @@ new migrations and commit the instruction files alongside.
 
 ## Step 5 – Known breaking-change sweep (from real history)
 
-- `apps/web-app/vite.config.ts` **and** `apps/counter-remote/vite.config.ts`:
+- `apps/web-app/vite.config.mts` **and** `apps/counter-remote/vite.config.mts`:
   bump the `angVer` / `cdkMatVer` shared-deps variables to the new major
 - Migrate any `@angular/forms/signals/compat` usage to the stable
   `@angular/forms/signals` API (see `docs/recipes/signal-forms.md`)

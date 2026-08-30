@@ -13,7 +13,7 @@ The Counter feature runs as a separate Module Federation remote (`counter-remote
 
 - `apps/counter-remote` — a standalone Analog app exposing one route file (`./Routes`); the host lazy-loads it via `loadChildren: () => import('counter-remote/Routes')`
 - `apps/web-app/src/test-stubs/counter-remote-routes.ts` — vitest alias (`counter-remote/Routes` → stub) keeps the integration spec MFE-free
-- `apps/web-app/vite.config.ts` — `federation({ remotes })` + `mfeSharedDeps`; `COUNTER_REMOTE_ENTRY` env var points the prod build at the co-deployed remote
+- `apps/web-app/vite.config.mts` — `federation({ remotes })` + `mfeSharedDeps`; `COUNTER_REMOTE_ENTRY` env var points the prod build at the co-deployed remote
 
 ## Conventions & gotchas
 
