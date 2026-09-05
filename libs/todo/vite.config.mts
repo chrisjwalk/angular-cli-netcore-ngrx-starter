@@ -6,12 +6,9 @@ import { baseConfig } from '../../vite.config.mjs';
 
 export default defineConfig({
   ...baseConfig,
-  root: __dirname,
+  root: import.meta.dirname,
   cacheDir: '../../node_modules/.vite/libs/todo',
-  plugins: [
-    ...(baseConfig.plugins ?? []),
-    nxCopyAssetsPlugin(['*.md']),
-  ],
+  plugins: [...(baseConfig.plugins ?? []), nxCopyAssetsPlugin(['*.md'])],
   test: {
     ...(baseConfig.test as UserConfig['test']),
     name: 'todo',
