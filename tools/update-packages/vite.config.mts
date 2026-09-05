@@ -4,7 +4,7 @@ import { defineConfig } from 'vitest/config';
 const name = 'update-packages';
 
 export default defineConfig({
-  root: __dirname,
+  root: import.meta.dirname,
   plugins: [nxViteTsPaths()],
   test: {
     watch: false,

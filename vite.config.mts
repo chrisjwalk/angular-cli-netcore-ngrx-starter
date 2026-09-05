@@ -19,7 +19,7 @@ function virtualPwaRegisterStub(): Plugin {
 }
 
 export const baseConfig = {
-  root: __dirname,
+  root: import.meta.dirname,
   plugins: [angular(), nxViteTsPaths(), virtualPwaRegisterStub()],
   test: {
     watch: false,

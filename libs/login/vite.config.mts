@@ -6,7 +6,7 @@ const name = 'login';
 
 export default defineConfig({
   ...baseConfig,
-  root: __dirname,
+  root: import.meta.dirname,
   test: {
     ...baseConfig.test,
     outputFile: {

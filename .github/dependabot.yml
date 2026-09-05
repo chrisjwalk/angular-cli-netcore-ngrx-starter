@@ -17,6 +17,10 @@ updates:
         patterns: ["@angular/material", "@angular/cdk"]
       all-deps:
         patterns: ["*"]
+    ignore:
+      # TS 7 calls TS APIs removed from nx 23.1.1; wait for a compatible nx before proposing majors
+      - dependency-name: "typescript"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
