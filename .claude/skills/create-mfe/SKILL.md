@@ -455,7 +455,7 @@ entries.
 // apps/web-app-e2e/playwright.config.ts
 webServer: [
   {
-    command: 'npx nx run api:serve',
+    command: 'npx nx run Api:serve',
     url: 'http://localhost:60253/health/live',
     reuseExistingServer: !process.env.CI,
     cwd: workspaceRoot,

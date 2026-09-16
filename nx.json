@@ -11,7 +11,10 @@
       "!{projectRoot}/vite.config.[mt]s",
       "!{projectRoot}/src/test-setup.[jt]s",
       "!{projectRoot}/test-setup.[jt]s",
-      "!{projectRoot}/**/*.cy.[jt]s?(x)"
+      "!{projectRoot}/**/*.cy.[jt]s?(x)",
+      "!{projectRoot}/**/*.Tests/**/*",
+      "!{projectRoot}/**/bin/**/*",
+      "!{projectRoot}/**/obj/**/*"
     ],
     "sharedGlobals": ["{workspaceRoot}/azure-pipelines.yml"]
   },
@@ -51,6 +54,7 @@
         "targetName": "lint"
       }
     },
+    "@nx/dotnet"
   ],
   "generators": {
     "@nx/angular:application": {

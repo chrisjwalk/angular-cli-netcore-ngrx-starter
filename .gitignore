@@ -55,3 +55,7 @@ vitest.config.*.timestamp*
 .claude/settings.local.json
 .nx/migrate-runs
 .nx/polygraph
+# .NET
+**/bin/
+**/obj/
+/artifacts/

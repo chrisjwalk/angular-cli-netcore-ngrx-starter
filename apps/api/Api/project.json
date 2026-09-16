@@ -1,0 +1,57 @@
+{
+  "name": "Api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "dotnet run"
+      }
+    },
+    "publish": {
+      "dependsOn": ["build:release"],
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "{projectRoot}",
+        "args": [
+          "--nologo",
+          "--no-build",
+          "--no-dependencies",
+          "--no-restore",
+          "--configuration",
+          "Release",
+          "--output",
+          "../../../dist"
+        ],
+        "command": "dotnet publish"
+      },
+      "configurations": {
+        "release": {
+          "args": [
+            "--nologo",
+            "--no-build",
+            "--no-dependencies",
+            "--no-restore",
+            "--configuration",
+            "Release",
+            "--output",
+            "../../../dist"
+          ]
+        },
+        "debug": {
+          "args": [
+            "--nologo",
+            "--no-dependencies",
+            "--no-restore",
+            "--configuration",
+            "Debug",
+            "--output",
+            "../../../dist"
+          ]
+        }
+      }
+    }
+  }
+}
