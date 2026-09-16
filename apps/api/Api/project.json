@@ -9,6 +9,10 @@
         "command": "dotnet run"
       }
     },
+    // Publishes to workspace-root dist/, where deploy.yml expects the .NET
+    // output next to the SPA at dist/apps/web-app/client/. {workspaceRoot}
+    // does not interpolate inside run-commands `args` (it resolved to an
+    // empty string), so the path is relative to the target's cwd.
     "publish": {
       "dependsOn": ["build:release"],
       "executor": "nx:run-commands",
