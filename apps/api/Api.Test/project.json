@@ -1,0 +1,21 @@
+{
+  "name": "Api.Test",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "{workspaceRoot}/apps/api",
+        "commands": [
+          "dotnet test --nologo --configuration Release --logger trx --collect \"Code_Coverage\" --results-directory TestResults",
+          "dotnet coverage merge --nologo --output coverage.xml --output-format xml **/*.coverage"
+        ],
+        "env": {
+          "DOTNET_COVERAGE_TELEMETRY_OPTOUT": "1",
+          "DOTNET_COVERAGE_NOLOGO": "1"
+        }
+      }
+    }
+  }
+}

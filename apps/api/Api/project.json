@@ -1,0 +1,61 @@
+{
+  "name": "Api",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "targets": {
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "dotnet run"
+      }
+    },
+    // Publishes to workspace-root dist/, where deploy.yml expects the .NET
+    // output next to the SPA at dist/apps/web-app/client/. {workspaceRoot}
+    // does not interpolate inside run-commands `args` (it resolved to an
+    // empty string), so the path is relative to the target's cwd.
+    "publish": {
+      "dependsOn": ["build:release"],
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "cwd": "{projectRoot}",
+        "args": [
+          "--nologo",
+          "--no-build",
+          "--no-dependencies",
+          "--no-restore",
+          "--configuration",
+          "Release",
+          "--output",
+          "../../../dist"
+        ],
+        "command": "dotnet publish"
+      },
+      "configurations": {
+        "release": {
+          "args": [
+            "--nologo",
+            "--no-build",
+            "--no-dependencies",
+            "--no-restore",
+            "--configuration",
+            "Release",
+            "--output",
+            "../../../dist"
+          ]
+        },
+        "debug": {
+          "args": [
+            "--nologo",
+            "--no-dependencies",
+            "--no-restore",
+            "--configuration",
+            "Debug",
+            "--output",
+            "../../../dist"
+          ]
+        }
+      }
+    }
+  }
+}

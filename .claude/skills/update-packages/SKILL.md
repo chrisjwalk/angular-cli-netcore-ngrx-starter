@@ -67,8 +67,8 @@ The script will:
 pnpm install --no-frozen-lockfile
 ```
 
-If the install fails, check for postinstall build errors (e.g. tsconfig
-issues in `tools/builders/dotnet-builder`).
+If the install fails, check the `preinstall` `dotnet restore` output (e.g.
+NU1xxx package resolution errors in `apps/api`).
 
 ### 5. Run migrations (only if migrations.json was updated)
 
@@ -83,7 +83,7 @@ nx reset
 nx run-many -t build,test
 ```
 
-All 9 projects must pass before committing.
+All 13 projects must pass before committing.
 
 ### 7. Commit
 

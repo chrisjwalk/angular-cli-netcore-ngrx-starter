@@ -2,7 +2,7 @@
 title: Testing (unit, integration, e2e)
 area: testing
 canonical: [libs/todo/src/lib/state/todo.store.spec.ts, libs/todo/src/lib/components/todo-page/todo-page.spec.ts, apps/web-app/src/app/app.integration.spec.ts, apps/api/Api.Test/UnitTest.cs, apps/web-app-e2e/src/weather-forecast.e2e.spec.ts, apps/web-app-e2e/playwright.config.ts]
-updated: 2026-08-16
+updated: 2026-09-15
 ---
 
 # Testing
@@ -14,8 +14,8 @@ Four layers: vitest unit specs per lib, an app-level integration spec, xUnit tes
 - **Store specs** — `libs/todo/src/lib/state/todo.store.spec.ts`: `TestBed` with `TodoStore` + `provideHttpClient`/`Testing`; spy the service **before** creating the store (rxResource fetches immediately); `await appRef.whenStable()`
 - **Component specs** — Testing Library `render` + `getByTestId`; inputs via `inputs: {...}`, outputs via `componentOutputs: { x: { emit: vi.fn() } }`; no jest-dom matchers — use `element.value`/`textContent` assertions
 - **Integration** — `apps/web-app/src/app/app.integration.spec.ts` boots the real `App` + `routes`; provide `NotificationStore` + `SwUpdateStore` (they're App providers); new features get a navigation test here
-- **API tests** — `apps/api/Api.Test/UnitTest.cs`: plain xUnit over the in-memory `TodoRepository` (no DB, no provider needed)
-- **E2E** — `playwright.config.ts` `webServer` trio: `api:serve` (waits on `/health/live`), `counter-remote:serve`, `web-app:serve-e2e` — CI switches to production variants; mutating specs run serial with generous timeouts
+- **API tests** — `apps/api/Api.Test/UnitTest.cs`: plain xUnit over the in-memory `TodoRepository` (no DB, no provider needed); run with `nx test Api.Test`
+- **E2E** — `playwright.config.ts` `webServer` trio: `Api:serve` (waits on `/health/live`), `counter-remote:serve`, `web-app:serve-e2e` — CI switches to production variants; mutating specs run serial with generous timeouts
 
 ## Conventions & gotchas
 

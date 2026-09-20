@@ -27,7 +27,7 @@ export default defineConfig({
   /* Run your local dev server before starting the tests */
   webServer: [
     {
-      command: 'npx nx run api:serve',
+      command: 'npx nx run Api:serve',
       url: 'http://localhost:60253/health/live',
       reuseExistingServer: !process.env['CI'],
       cwd: workspaceRoot,
