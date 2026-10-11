@@ -2,8 +2,9 @@
 name: update-packages
 description: >
   Update all npm packages to their latest versions using the update-packages
-  script. Use this when asked to update, upgrade, or consolidate dependencies,
-  or to close dependabot PRs.
+  script, fix open dependabot alerts, and close covered dependabot PRs. Use this
+  when asked to update, upgrade, or consolidate dependencies, or to close
+  dependabot PRs/alerts.
 ---
 
 ## Update Packages Workflow
@@ -68,7 +69,9 @@ pnpm install --no-frozen-lockfile
 ```
 
 If the install fails, check the `preinstall` `dotnet restore` output (e.g.
-NU1xxx package resolution errors in `apps/api`).
+NU1xxx package resolution errors in `apps/api`). If it fails with
+`ERR_PNPM_NO_MATCHING_VERSION` for a version that does exist on the registry,
+run `pnpm cache delete` and retry (stale metadata).
 
 ### 5. Run migrations (only if migrations.json was updated)
 
@@ -76,7 +79,40 @@ NU1xxx package resolution errors in `apps/api`).
 npx nx migrate --run-migrations
 ```
 
-### 6. Run all tests
+### 6. Fix remaining dependabot alerts
+
+The update fixes most alerts by itself — GitHub dismisses them automatically
+once the vulnerable version leaves the default branch. Find what's left:
+
+```bash
+gh api repos/<owner>/<repo>/dependabot/alerts --paginate \
+  --jq '.[] | select(.state=="open") | "\(.security_advisory.severity)\t\(.dependency.package.name)\t\(.security_advisory.ghsa_id)"'
+pnpm audit
+```
+
+For each remaining vulnerable package:
+
+1. Find the installed version and its dependents: `pnpm why -r <pkg>`
+2. Raise the floor of the matching override in `pnpm-workspace.yaml`
+   (overrides live there, **not** in package.json), or add a new entry:
+   `'<pkg>': '>=<patched-version>'`
+3. If raising a floor doesn't change the lockfile resolution (pnpm keeps the
+   stale resolution because it still satisfies the floor), add an upper bound
+   to force re-resolution, e.g. `'>=1.1.17 <2'`.
+4. If the patched version isn't published yet (advisory
+   `first_patched_version` is null, or the version doesn't exist on the
+   registry), leave the alert open and note it in the PR — nothing to do until
+   upstream ships a fix.
+5. Reinstall (`pnpm install --no-frozen-lockfile`) and re-run `pnpm audit`
+   until only unfixable findings remain.
+
+Also watch the `preinstall` `dotnet restore` output for NU1903 warnings
+(vulnerable NuGet packages). Fix by bumping the parent that pins the vulnerable
+version (e.g. Swashbuckle pinning Microsoft.OpenApi), or adding a direct
+`PackageReference` at the patched version. Verify with `dotnet restore <sln>`
+and `dotnet list <proj> package --include-transitive`.
+
+### 7. Run all tests
 
 ```bash
 nx reset
@@ -85,21 +121,25 @@ nx run-many -t build,test
 
 All 13 projects must pass before committing.
 
-### 7. Commit
+### 8. Commit
 
 ```bash
 git add -A
-git commit -m "chore: update all packages to latest (closes #<issue-number>)"
+git commit -m "chore: update all packages to latest, fix open dependabot alerts (closes #<issue-number>)"
 ```
 
-### 8. Push and open PR
+### 9. Push and open PR
 
 ```bash
 git push origin feat/consolidate-deps-<issue-number>
-gh pr create --title "chore: update all packages to latest" --body "Closes #<issue-number> ..."
+gh pr create --title "chore: update all packages to latest, fix open dependabot alerts" \
+  --body "Closes #<issue-number> ..."
 ```
 
-### 9. Close stale dependabot PRs
+List in the PR body which alerts were fixed and which remain (with their GHSA
+IDs), e.g. fixes with no published patched version yet.
+
+### 10. Close stale dependabot PRs
 
 Close any open dependabot PRs that are now covered by this update:
 
@@ -109,14 +149,15 @@ gh pr close <number> --comment "Covered by consolidated update PR" --delete-bran
 ```
 
 Leave open any dependabot PRs for packages that were intentionally omitted
-(e.g. TypeScript major version bumps).
+(e.g. TypeScript major version bumps) or whose fix isn't published yet.
 
 ## Notes
 
 - Use `--minor-only` by default to skip major version bumps — run them separately
   once you've confirmed they are safe (e.g. no breaking changes affecting the codebase)
 - Use `--omit <pkg>` for additional specific packages to skip beyond major bumps
-- If a package is a transitive dep not shown by `pnpm outdated`, use
-  `pnpm.overrides` in `package.json` to force the version
+- If a package is a transitive dep not shown by `pnpm outdated`, raise/add an
+  override in `pnpm-workspace.yaml` to force the version
 - After merging, watch for new dependabot PRs — dependabot may recreate stale
-  ones; close them if the package was already updated
+  ones; close them if the package was already updated. Fixed alerts dismiss
+  automatically after merge; verify the repo Security tab afterwards.
