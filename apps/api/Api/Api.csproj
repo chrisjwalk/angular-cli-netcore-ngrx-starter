@@ -16,6 +16,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.2" />
+    <!-- Direct ref lifts the vulnerable 9.0.4 pulled transitively via Microsoft.Data.SqlClient (GHSA-846f-f764-76mx) -->
+    <PackageReference Include="System.Security.Cryptography.Pkcs" Version="9.0.21" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="10.3.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="10.3.0" />
   </ItemGroup>
