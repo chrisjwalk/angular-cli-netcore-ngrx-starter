@@ -78,7 +78,7 @@
     "marked-highlight": "^2.2.1",
     "marked-mangle": "1.1.14",
     "marked-shiki": "^1.2.1",
-    "mermaid": "11.17.2",
+    "mermaid": "12.2.0",
     "ngx-markdown": "22.1.1",
     "prismjs": "^1.29.0",
     "rxjs": "7.8.2",
@@ -125,11 +125,11 @@
     "@trivago/prettier-plugin-sort-imports": "6.0.2",
     "@types/node": "26.6.5",
     "@typescript-eslint/utils": "8.72.0",
-    "@vitest/coverage-v8": "4.1.12",
-    "@vitest/ui": "4.1.12",
+    "@vitest/coverage-v8": "5.0.5",
+    "@vitest/ui": "5.0.5",
     "angular-eslint": "22.6.0",
     "autoprefixer": "10.6.1",
-    "dotenv": "17.4.2",
+    "dotenv": "18.0.9",
     "esbuild": "0.28.2",
     "eslint": "10.13.0",
     "eslint-config-prettier": "10.1.8",
@@ -147,8 +147,8 @@
     "typescript": "6.0.3",
     "typescript-eslint": "8.72.0",
     "vite": "8.3.5",
-    "vite-plugin-pwa": "1.3.0",
-    "vitest": "4.1.12"
+    "vite-plugin-pwa": "2.0.0",
+    "vitest": "5.0.5"
   },
   "pnpm": {}
 }
