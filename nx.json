@@ -126,5 +126,8 @@
   },
   "defaultProject": "web-app",
   "defaultBase": "origin/main",
-  "analytics": false
+  "analytics": false,
+  "affected": {
+    "legacy": true
+  }
 }
