@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitest/config';
+import { nxReadySignal } from '@nx/vite/plugins/nx-ready-signal.plugin';
 
 const name = 'update-packages';
 
@@ -7,7 +8,7 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   root: import.meta.dirname,
-  plugins: [],
+  plugins: [nxReadySignal()],
   test: {
     watch: false,
     globals: true,

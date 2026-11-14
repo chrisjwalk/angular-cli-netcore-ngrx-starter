@@ -2,6 +2,7 @@ import { resolve } from 'path';
 import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
+import { nxReadySignal } from '@nx/vite/plugins/nx-ready-signal.plugin';
 
 // Shared-singleton version pins — must satisfy the installed versions or the
 // federation runtime warns and may load duplicate module copies.
@@ -220,6 +221,7 @@ export default defineConfig(({ mode }) => ({
     // which forces an SSR environment build against a main.server.ts this
     // remote doesn't have.
     analog({ workspaceRoot, ssr: false, prerender: { routes: [] } }),
+    nxReadySignal(),
   ].filter(Boolean),
   resolve: {
     tsconfigPaths: true,
