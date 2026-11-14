@@ -108,7 +108,11 @@
         "port": 4200,
         "staticFilePath": "dist/apps/web-app/client",
         "spa": true
-      }
+      },
+      "readyWhen": {
+        "signal": true
+      },
+      "dependsOn": ["build"]
     },
     "update-readme": {
       "executor": "nx:run-commands",
