@@ -10,6 +10,7 @@
       "command": "vite build",
       "cache": true,
       "defaultConfiguration": "production",
+      "outputs": ["{workspaceRoot}/dist/apps/web-app"],
       "options": {
         "cwd": ".",
         "config": "apps/web-app/vite.config.mts"
@@ -24,35 +25,28 @@
         "preview": {
           "args": ["--mode", "production"]
         }
-      },
-      "outputs": [
-        "{workspaceRoot}/dist/apps/web-app"
-      ]
+      }
     },
     "serve": {
       "command": "vite",
       "continuous": true,
       "defaultConfiguration": "development",
+      "dependsOn": [
+        {
+          "target": "serve",
+          "projects": ["api"],
+          "params": "forward"
+        },
+        {
+          "target": "serve",
+          "projects": ["counter-remote"]
+        }
+      ],
       "options": {
         "cwd": ".",
         "config": "apps/web-app/vite.config.mts",
         "port": 4200
       },
-      "dependsOn": [
-        {
-          "target": "serve",
-          "projects": [
-            "api"
-          ],
-          "params": "forward"
-        },
-        {
-          "target": "serve",
-          "projects": [
-            "counter-remote"
-          ]
-        }
-      ],
       "configurations": {
         "development": {
           "args": ["--mode", "development"]
@@ -88,18 +82,16 @@
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     },
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/{projectRoot}"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/apps/web-app",
-        "coverage": true
+        "coverage": true,
+        "coverage.reportsDirectory": "../../coverage/apps/web-app"
       }
     },
     "serve-static": {

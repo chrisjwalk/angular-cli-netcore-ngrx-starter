@@ -7,20 +7,18 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/libs/home"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/libs/home",
-        "coverage": true
+        "coverage": true,
+        "coverage.reportsDirectory": "../../coverage/libs/home"
       }
     },
     "lint": {
       "executor": "@nx/eslint:lint",
-      "outputs": [
-        "{options.outputFile}"
-      ]
+      "outputs": ["{options.outputFile}"]
     }
   }
 }

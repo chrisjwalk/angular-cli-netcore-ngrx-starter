@@ -9,6 +9,7 @@
       "command": "vite build",
       "cache": true,
       "defaultConfiguration": "production",
+      "outputs": ["{workspaceRoot}/dist/apps/counter-remote"],
       "options": {
         "cwd": ".",
         "config": "apps/counter-remote/vite.config.mts"
@@ -20,10 +21,7 @@
         "production": {
           "args": ["--mode", "production"]
         }
-      },
-      "outputs": [
-        "{workspaceRoot}/dist/apps/counter-remote"
-      ]
+      }
     },
     "serve": {
       "command": "vite",
@@ -43,10 +41,8 @@
       }
     },
     "test": {
-      "executor": "@nx/vitest:test",
-      "outputs": ["{projectRoot}/../../coverage/apps/counter-remote"],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/apps/counter-remote"
+        "coverage.reportsDirectory": "../../coverage/apps/counter-remote"
       }
     },
     "lint": {
