@@ -1,11 +1,13 @@
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { defineConfig } from 'vitest/config';
 
 const name = 'update-packages';
 
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   root: import.meta.dirname,
-  plugins: [nxViteTsPaths()],
+  plugins: [],
   test: {
     watch: false,
     globals: true,
