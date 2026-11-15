@@ -31,6 +31,7 @@ node_modules
 /coverage
 coverage.xml
 /junit
+/.vitest
 /libpeerconnection.log
 npm-debug.log
 yarn-error.log
