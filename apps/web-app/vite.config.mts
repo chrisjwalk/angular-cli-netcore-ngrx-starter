@@ -6,6 +6,7 @@ import { defineConfig } from 'vite';
 import analog from '@analogjs/platform';
 import { federation } from '@module-federation/vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import { nxReadySignal } from '@nx/vite/plugins/nx-ready-signal.plugin';
 
 // Recipe `Related` links are bare <name>.md (correct when browsing on GitHub);
 // rewrite them to the app's /recipes/<name> routes when rendering in-app.
@@ -260,6 +261,7 @@ export default defineConfig(({ mode }) => {
           ],
         },
       }),
+      nxReadySignal(),
     ],
     server: {
       proxy: {

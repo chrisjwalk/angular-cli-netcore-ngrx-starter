@@ -7,17 +7,25 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/libs/shared"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/libs/shared",
-        "coverage": true
+        "coverage": true,
+        "coverage.reportsDirectory": "../../coverage/libs/shared"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.cjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

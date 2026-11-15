@@ -1,11 +1,14 @@
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 import { defineConfig } from 'vitest/config';
+import { nxReadySignal } from '@nx/vite/plugins/nx-ready-signal.plugin';
 
 const name = 'update-packages';
 
 export default defineConfig({
+  resolve: {
+    tsconfigPaths: true,
+  },
   root: import.meta.dirname,
-  plugins: [nxViteTsPaths()],
+  plugins: [nxReadySignal()],
   test: {
     watch: false,
     globals: true,

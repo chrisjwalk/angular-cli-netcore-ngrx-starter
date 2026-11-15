@@ -3,8 +3,6 @@
 import angular from '@analogjs/vite-plugin-angular';
 import { Plugin } from 'vite';
 
-import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
-
 function virtualPwaRegisterStub(): Plugin {
   return {
     name: 'virtual-pwa-register-stub',
@@ -20,7 +18,9 @@ function virtualPwaRegisterStub(): Plugin {
 
 export const baseConfig = {
   root: import.meta.dirname,
-  plugins: [angular(), nxViteTsPaths(), virtualPwaRegisterStub()],
+  // nxViteTsPaths was removed in Nx 24; Vite 8 resolves tsconfig paths natively.
+  resolve: { tsconfigPaths: true },
+  plugins: [angular(), virtualPwaRegisterStub()],
   test: {
     watch: false,
     globals: true,

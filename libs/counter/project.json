@@ -7,17 +7,25 @@
   "tags": [],
   "targets": {
     "test": {
-      "executor": "@nx/vitest:test",
       "outputs": [
-        "{options.reportsDirectory}"
+        "{projectRoot}/{options.coverage.reportsDirectory}",
+        "{workspaceRoot}/coverage/libs/counter"
       ],
       "options": {
-        "reportsDirectory": "{projectRoot}/../../coverage/libs/counter",
-        "coverage": true
+        "coverage": true,
+        "coverage.reportsDirectory": "../../coverage/libs/counter"
       }
     },
     "lint": {
-      "executor": "@nx/eslint:lint"
+      "inputs": [
+        "default",
+        "{workspaceRoot}/.eslintrc.json",
+        "{workspaceRoot}/.eslintignore",
+        "{workspaceRoot}/eslint.config.cjs",
+        {
+          "externalDependencies": ["eslint"]
+        }
+      ]
     }
   }
 }

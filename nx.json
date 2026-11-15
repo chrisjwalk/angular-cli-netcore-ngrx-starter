@@ -24,21 +24,8 @@
       "dependsOn": ["^build"],
       "inputs": ["production", "^production"]
     },
-    "@nx/eslint:lint": {
-      "cache": true,
-      "inputs": [
-        "default",
-        "{workspaceRoot}/.eslintrc.json",
-        "{workspaceRoot}/.eslintignore",
-        "{workspaceRoot}/eslint.config.cjs"
-      ]
-    },
     "e2e-ci--**/*": {
       "dependsOn": ["^build"]
-    },
-    "@nx/vitest:test": {
-      "cache": true,
-      "inputs": ["default", "^production"]
     }
   },
   "plugins": [
@@ -54,7 +41,26 @@
         "targetName": "lint"
       }
     },
-    "@nx/dotnet"
+    "@nx/dotnet",
+    {
+      "plugin": "@nx/vitest",
+      "options": {
+        "testMode": "watch",
+        "testTargetName": "test"
+      },
+      "include": [
+        "apps/counter-remote/**/*",
+        "apps/web-app/**/*",
+        "libs/auth/**/*",
+        "libs/counter/**/*",
+        "libs/home/**/*",
+        "libs/login/**/*",
+        "libs/shared/**/*",
+        "libs/todo/**/*",
+        "libs/weather-forecast/**/*",
+        "tools/update-packages/**/*"
+      ]
+    }
   ],
   "generators": {
     "@nx/angular:application": {
@@ -86,12 +92,6 @@
     },
     "@schematics/angular:service": {
       "type": "service"
-    },
-    "@nx/angular:scam": {
-      "type": "component"
-    },
-    "@nx/angular:scam-directive": {
-      "type": "directive"
     },
     "@nx/angular:guard": {
       "typeSeparator": "."
@@ -126,5 +126,8 @@
   },
   "defaultProject": "web-app",
   "defaultBase": "origin/main",
-  "analytics": false
+  "analytics": false,
+  "affected": {
+    "legacy": true
+  }
 }
