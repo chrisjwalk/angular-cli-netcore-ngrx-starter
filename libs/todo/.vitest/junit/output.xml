@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuites name="vitest tests" tests="19" failures="0" errors="0" time="1.48107637">
+    <testsuite name="src/lib/components/todo-form/todo-form.spec.ts" timestamp="2026-11-21T15:49:04.429Z" hostname="Black-Ridge" tests="5" failures="0" errors="0" skipped="0" time="0.59988658">
+        <testcase classname="src/lib/components/todo-form/todo-form.spec.ts" name="TodoForm &gt; should create" time="0.420041542">
+        </testcase>
+        <testcase classname="src/lib/components/todo-form/todo-form.spec.ts" name="TodoForm &gt; should render title and description inputs" time="0.046062507">
+        </testcase>
+        <testcase classname="src/lib/components/todo-form/todo-form.spec.ts" name="TodoForm &gt; should emit create with trimmed values on submit" time="0.045600253">
+        </testcase>
+        <testcase classname="src/lib/components/todo-form/todo-form.spec.ts" name="TodoForm &gt; should not submit when the title is empty and show the error" time="0.052257896">
+        </testcase>
+        <testcase classname="src/lib/components/todo-form/todo-form.spec.ts" name="TodoForm &gt; should reset the form after a successful create" time="0.03165213">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/lib/components/todo-list/todo-list.spec.ts" timestamp="2026-11-21T15:49:04.435Z" hostname="Black-Ridge" tests="4" failures="0" errors="0" skipped="0" time="0.347072948">
+        <testcase classname="src/lib/components/todo-list/todo-list.spec.ts" name="TodoList &gt; should create" time="0.180372277">
+        </testcase>
+        <testcase classname="src/lib/components/todo-list/todo-list.spec.ts" name="TodoList &gt; should show empty state when no todos" time="0.020594029">
+        </testcase>
+        <testcase classname="src/lib/components/todo-list/todo-list.spec.ts" name="TodoList &gt; should render todo items" time="0.124978793">
+        </testcase>
+        <testcase classname="src/lib/components/todo-list/todo-list.spec.ts" name="TodoList &gt; should show skeleton when loading" time="0.018973827">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/lib/components/todo-page/todo-page.spec.ts" timestamp="2026-11-21T15:49:04.440Z" hostname="Black-Ridge" tests="1" failures="0" errors="0" skipped="0" time="0.441126316">
+        <testcase classname="src/lib/components/todo-page/todo-page.spec.ts" name="TodoPage &gt; should create" time="0.43717307">
+        </testcase>
+    </testsuite>
+    <testsuite name="src/lib/state/todo.store.spec.ts" timestamp="2026-11-21T15:49:04.442Z" hostname="Black-Ridge" tests="9" failures="0" errors="0" skipped="0" time="0.092990526">
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; should create" time="0.033572462">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; should have syncEnabled true after onInit hook" time="0.007076745">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; loading todos &gt; should load todos when sync is enabled" time="0.012815049">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; loading todos &gt; should capture loading error" time="0.007049131">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; loading todos &gt; should return empty list when sync is disabled" time="0.004844401">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; create &gt; should call service.create and reload" time="0.008617466">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; update &gt; should call service.update and reload" time="0.004534197">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; remove &gt; should call service.remove and reload" time="0.00623756">
+        </testcase>
+        <testcase classname="src/lib/state/todo.store.spec.ts" name="TodoStore &gt; toggle &gt; should call service.update with flipped completed and reload" time="0.004790446">
+        </testcase>
+    </testsuite>
+</testsuites>
